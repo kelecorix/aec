@@ -26,13 +26,13 @@ int main(int argc, char *argv[]) {
   if (site->cfg)
     printf("Config was read ok!\n");
 
-  site->conn = create_server_conn("127.0.0.1:5001");
+  site->conn = create_server_conn("127.0.0.1:4304");
   if (site->conn == 0)
     printf("OWFS connection established!\n");
   else
-    printf("OWFS connection not fins. Fire up OWFS server!");
+    printf("OWFS connection not fins. Fire up OWFS server!\n");
 
-  read_sensors(site);
+  //read_sensors(site);
 
   sleep(4);
 

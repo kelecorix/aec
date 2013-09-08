@@ -10,6 +10,7 @@ int splitString(char *string, char *items[], char splitChar);
 char* concat(char* str1, char* str2);
 int concat3(char *first, char *second, char *third);
 char* string_copy(const char* s);
+void trim_sp(char* input);
 
 
 #endif /*UTILS_C_*/

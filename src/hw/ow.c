@@ -59,7 +59,9 @@ float get_data(OWNET_HANDLE conn, char* filename, int lim) {
 
     }
 
-    float d = atof(data);
+    // уберем лидирующие пробелы
+    char *datat = ltrim(data);
+    float d = atof(datat);
 
     // Проверим или данные входят в рабочий диапазон
     // -55 .. +125
@@ -107,12 +109,13 @@ int read_sensors(Site* site) {
   char *s_temp_evapor2 = getStr(site->cfg, (void *) key);
 
   // double a = get_data(conn, "/mnt/1wire/21.F2FBE3467CC2/temperature");
-  s_temp_in = "21.F2FBE3467CC2"; // для тестов
+  s_temp_in = "28.4AEC29CDBAAB"; // для тестов
 
   // для чтения на Raspberry Pi, через сервер "/bus.0/21.F2FBE3467CC2/temperature"
 
   site->temp_out = get_data(conn, concat(mnt, s_temp_out), 100);
   site->temp_in = get_data(conn, concat(mnt, s_temp_in), 100);
+  //site->temp_in = get_data(conn, s_temp_in, 100);
   site->temp_mix = get_data(conn, concat(mnt, s_temp_mix), 100);
   site->temp_evapor1 = get_data(conn, concat(mnt, s_temp_evapor1), 100);
   site->temp_evapor2 = get_data(conn, concat(mnt, s_temp_evapor2), 100);

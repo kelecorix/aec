@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include "utils.h"
 
 /*
@@ -51,11 +52,11 @@ int splitString(char *string, char *items[], char splitChar) {
 }
 
 /* Smart strings concatenation*/
-char* concat(char* str1, char* str2){
+char* concat(char* str1, char* str2) {
 
   /* Create a new string with a needed length */
   int size = strlen(str1) + strlen(str2);
-  char* new = calloc((size+1),sizeof(char));
+  char* new = calloc((size + 1), sizeof(char));
 
   /* Concat the strings */
   strcat(new, str1);
@@ -63,7 +64,7 @@ char* concat(char* str1, char* str2){
   return new;
 }
 
-int concat3 (char *first, char *second, char *third) {
+int concat3(char *first, char *second, char *third) {
 
   char *total;
 
@@ -71,7 +72,7 @@ int concat3 (char *first, char *second, char *third) {
 
 }
 
-char* string_copy(const char* s){
+char* string_copy(const char* s) {
   char* result;
   int l;
 
@@ -86,10 +87,44 @@ char* string_copy(const char* s){
   return result;
 }
 
-void strip_n(char* s){
-
+void strip_n(char* s) {
   char *pos;
-  if ((pos=strchr(s, '\n')) != NULL)
-      *pos = '\0';
-
+  if ((pos = strchr(s, '\n')) != NULL)
+    *pos = '\0';
 }
+
+void strip_breaks(char* str) {
+  char *write = str, *read = str;
+  do
+    while ((*read) == '\n')
+      read++;
+  while ((*write++ = *read++));
+}
+
+void strip_tabs(char* str) {
+  char *write = str, *read = str;
+  do
+    while ((*read) == '\t')
+      read++;
+  while ((*write++ = *read++));
+}
+
+char *ltrim(char *s)
+{
+    while(isspace(*s)) s++;
+    return s;
+}
+
+char *rtrim(char *s)
+{
+    char* back = s + strlen(s);
+    while(isspace(*--back));
+    *(back+1) = '\0';
+    return s;
+}
+
+char *trim(char *s)
+{
+    return rtrim(ltrim(s));
+}
+
