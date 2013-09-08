@@ -38,8 +38,8 @@ typedef struct Site {
   time_t time_uvo; // время включения охлаждения с помощью вентиляторов
   ConfigTable* cfg; // configuration for this particular  site
 
-  OWNET_HANDLE conn; //
-  char* mount_point; // path to mounted owfs, i.e "/mnt/1wire/"
+  OWNET_HANDLE conn;
+  char* mount_point;
 
   int (*set_mode)(struct Site*, int value);
   int (*set_ten)(struct Site*, int value);

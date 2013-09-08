@@ -28,7 +28,7 @@ Site* site_new(char* filename) {
   site->conn = NULL;
 
   // Для тестирования на эмуляторе
-  site->mount_point = "/mnt/11wire/";
+  site->mount_point = "/mnt/1wire/";
   //site->mount_point = "/bus.0/";
 
   site->cfg = read_config(filename);

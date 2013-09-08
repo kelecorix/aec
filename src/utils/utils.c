@@ -85,3 +85,11 @@ char* string_copy(const char* s){
 
   return result;
 }
+
+void strip_n(char* s){
+
+  char *pos;
+  if ((pos=strchr(s, '\n')) != NULL)
+      *pos = '\0';
+
+}

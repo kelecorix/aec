@@ -13,7 +13,6 @@ OWNET_HANDLE create_server_conn(char *addr) {
   owh = OWNET_init(addr);
   if (owh < 0) {
     printf("OWNET_init(%s) failed.\n", addr); //TODO: писать в лог о проблемах
-    return NULL;
   }
 
   return owh;

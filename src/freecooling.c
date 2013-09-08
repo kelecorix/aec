@@ -27,8 +27,10 @@ int main(int argc, char *argv[]) {
     printf("Config was read ok!\n");
 
   site->conn = create_server_conn("127.0.0.1:5001");
-  if (site->conn)
-    printf("Connection established!\n");
+  if (site->conn == 0)
+    printf("OWFS connection established!\n");
+  else
+    printf("OWFS connection not fins. Fire up OWFS server!");
 
   read_sensors(site);
 

@@ -51,6 +51,10 @@ void makeOptional(ConfigTable* cfg, char key[]) {
 const char getStr(ConfigTable* cfg, const char *key) {
   char *value;
   value = hashmapGet(cfg->mTable, (void *) key);
+
+  //remove /n from value
+  strip_n(value);
+
   if (value)
     return value;
   else

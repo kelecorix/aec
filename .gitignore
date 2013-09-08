@@ -22,7 +22,10 @@ freecooling
 
 # Emacs related
 *.*~
+#*#
+.#~
 
 # Eclipse related
 .cproject
 .project
+/Debug
