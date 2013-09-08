@@ -32,6 +32,7 @@ int main(int argc, char *argv[]) {
   else
     printf("OWFS connection not fins. Fire up OWFS server!\n");
 
+
   //read_sensors(site);
 
   sleep(4);

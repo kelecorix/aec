@@ -109,13 +109,13 @@ void strip_tabs(char* str) {
   while ((*write++ = *read++));
 }
 
-char *ltrim(char *s)
+char* ltrim(char *s)
 {
     while(isspace(*s)) s++;
     return s;
 }
 
-char *rtrim(char *s)
+char* rtrim(char *s)
 {
     char* back = s + strlen(s);
     while(isspace(*--back));
@@ -123,7 +123,7 @@ char *rtrim(char *s)
     return s;
 }
 
-char *trim(char *s)
+char* trim(char *s)
 {
     return rtrim(ltrim(s));
 }
