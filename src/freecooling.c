@@ -8,7 +8,6 @@
 #include "hw/throttle.h"
 #include "hw/vent.h"
 #include "hw/ow.h"
-
 #include "ui/lcd.h"
 #include "ui/buttons.h"
 #include "ui/keyboard.h"
@@ -32,27 +31,24 @@ int main(int argc, char *argv[]) {
   else
     printf("OWFS connection not fins. Fire up OWFS server!\n");
 
-
-  //read_sensors(site);
-
   sleep(4);
 
   //Workers Воркеры - выполняют параллельно свои операции
 
-//    if (pthread_create(&threadL, NULL, run, (void*) site)) {
-//      fprintf(stderr, "Error creating algo thread\n");
-//      return 1;
-//    }
+  if (pthread_create(&threadL, NULL, run, (void*) site)) {
+    fprintf(stderr, "Error creating algo thread\n");
+    return 1;
+  }
 
-//    if (pthread_create(&threadU, NULL, run_ui, (void*) site)) {
-//      fprintf(stderr, "Error creating UI thread\n");
-//      return 1;
-//    }
+  if (pthread_create(&threadU, NULL, run_ui, (void*) site)) {
+    fprintf(stderr, "Error creating UI thread\n");
+    return 1;
+  }
 
 // ждем пока потоками завершаться
 // по идде сюда не должно дойти
-//pthread_join(threadL, NULL);
-  //pthread_join(threadU, NULL);
+  pthread_join(threadL, NULL);
+  pthread_join(threadU, NULL);
 
   return EXIT_SUCCESS;
 

@@ -6,6 +6,7 @@
 Throttle* throttle_new() {
   Throttle* th = malloc(sizeof(Throttle));
   th->mode = 0;
+  th->exist = 1; // TODO: Проверка наличия заслонки
   return th;
 }
 

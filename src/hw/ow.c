@@ -115,7 +115,6 @@ int read_sensors(Site* site) {
 
   site->temp_out = get_data(conn, concat(mnt, s_temp_out), 100);
   site->temp_in = get_data(conn, concat(mnt, s_temp_in), 100);
-  //site->temp_in = get_data(conn, s_temp_in, 100);
   site->temp_mix = get_data(conn, concat(mnt, s_temp_mix), 100);
   site->temp_evapor1 = get_data(conn, concat(mnt, s_temp_evapor1), 100);
   site->temp_evapor2 = get_data(conn, concat(mnt, s_temp_evapor2), 100);

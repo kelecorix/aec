@@ -66,12 +66,16 @@ int site_mode_uvo(Site* site) {
 
   if ((site->temp_out) > temp_dew) {
     //да
-    site->th->set_position(site->th, 255);
-    site->th->time_start = time(NULL);
+    if (site->th->exist){
+      site->th->set_position(site->th, 255);
+      site->th->time_start = time(NULL);
+    }
   } else {
     //нет
-    site->th->set_position(site->th, 0);
-    site->th->time_start = time(NULL);
+    if (site->th->exist){
+      site->th->set_position(site->th, 0);
+      site->th->time_start = time(NULL);
+    }
   }
 
   while (1) {
