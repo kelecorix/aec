@@ -40,23 +40,23 @@ int site_mode_uvo(Site* site) {
     site_mode_fail_uvo(site);
   }
 
-  if ((site->temp_out) > temp_dew) {
+  if ((site->temp_out) > temp_dew) { //температура на улице выше температуры росы
     //да
     if (site->th->exist){
-      site->th->set_position(site->th, 255);
+      site->th->set_position(site->th, 255); //переведем заслонку в положение улица
       site->th->time_start = time(NULL);
     }
   } else {
     //нет
     if (site->th->exist){
-      site->th->set_position(site->th, 0);
+      site->th->set_position(site->th, 0); //переведем заслонку в положение сайт
       site->th->time_start = time(NULL);
     }
   }
+  printf("Pered While regim UVO\n");
 
   while (1) {
 
-    printf("While regim UVO\n");
     // читаем датчики
     ret = read_sensors(site);
     if (ret != 0) {
@@ -65,7 +65,9 @@ int site_mode_uvo(Site* site) {
     }
 
     if (difftime(time(NULL), site->time_pre) >= 30) { //секунды
-
+      site->time_pre = time(NULL);
+      printf("*********RESENIE V UVO***********\n");      
+      printf("in = %2.2f out = %2.2f\n",site->temp_in,site->temp_out);
       // start using ventilation
       if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1) {
         // yes
@@ -212,9 +214,10 @@ int site_mode_uvo(Site* site) {
       }
 
     } else {
+      usleep(100000);
       continue;
     }
-
+    usleep(100000);
   }
 
   return 1;
