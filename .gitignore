@@ -29,3 +29,4 @@ freecooling2
 # Eclipse related
 .cproject
 .project
+/Debug
