@@ -30,6 +30,7 @@ int site_mode_uvo(Site* site) {
   int a, v, ret;
   char *key = "temp_dew"; // температура росы
   float temp_dew = atof(getStr(site->cfg, (void *) key));
+  printf("Temp dew %f\n", temp_dew);
 
   // читаем датчики
   ret = read_sensors(site);
