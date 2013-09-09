@@ -37,11 +37,13 @@ int main(int argc, char *argv[]) {
 
   if (pthread_create(&threadL, NULL, run, (void*) site)) {
     fprintf(stderr, "Error creating algo thread\n");
+    printf("Error creating algo thread\n");
     return 1;
   }
 
   if (pthread_create(&threadU, NULL, run_ui, (void*) site)) {
     fprintf(stderr, "Error creating UI thread\n");
+    printf("Error creating UI thread\n");
     return 1;
   }
 
