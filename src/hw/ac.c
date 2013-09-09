@@ -3,13 +3,6 @@
 #include <stdio.h>
 #include "ac.h"
 
-AC* ac_new() {
-  AC* ac = malloc(sizeof(AC));
-  ac->mode=0;
-  ac->error=NO_ERROR;
-  return ac;
-}
-
 void ac_free() {
 
   //TODO: очистим ресурсы памяти
@@ -70,4 +63,17 @@ long ac_moto_work(AC* ac) {
 
   return moto;
 
+}
+
+AC* ac_new() {
+  AC* ac = malloc(sizeof(AC));
+  ac->mode = 0;
+  ac->error = NO_ERROR;
+
+  ac->ac_start = ac_time_work;
+  ac->ac_stop = ac_stop;
+  ac->ac_time_work = ac_start;
+  ac->ac_moto_work = ac_moto_work;
+
+  return ac;
 }

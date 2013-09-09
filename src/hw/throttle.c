@@ -3,17 +3,6 @@
 #include <stdio.h>
 #include "throttle.h"
 
-Throttle* throttle_new() {
-  Throttle* th = malloc(sizeof(Throttle));
-  th->mode = 0;
-  th->exist = 1; // TODO: Проверка наличия заслонки
-  return th;
-}
-
-void throttle_free() {
-  //TODO: очистим ресурсы памяти
-}
-
 /*
  * Изменим режим заслонки 
  */
@@ -43,4 +32,20 @@ int set_position(Throttle* th, int val) {
   }
 
 }
+
+void throttle_free() {
+  //TODO: очистим ресурсы памяти
+}
+
+Throttle* throttle_new() {
+  Throttle* th = malloc(sizeof(Throttle));
+  th->mode = 0;
+  th->exist = 1; // TODO: Проверка наличия заслонки
+
+  th->set_mode = set_mode;
+  th->set_position = set_position;
+
+  return th;
+}
+
 

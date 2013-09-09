@@ -43,7 +43,7 @@ typedef struct Site {
 
   int (*set_mode)(struct Site*, int value);
   int (*set_ten)(struct Site*, int value);
-  double (*ac_time_work)(struct Site*);
+  double (*get_ac_time_work)(struct Site*);
 
 } Site;
 

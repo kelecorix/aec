@@ -8,34 +8,6 @@
 #include "ow.h"
 #include "../config/config.h"
 
-//TODO: Переписать в виде синглетона
-//TODO: Добавить мьютексы для многопоточного доступа к переменным
-
-Site* site_new(char* filename) {
-
-  Site* site = malloc(sizeof(Site));
-  //initialize hardware
-  int i;
-  for (i = 0; i < 2; i++) {
-    site->acs[i] = ac_new();
-    site->vents[i] = vent_new();
-  }
-
-  site->th = throttle_new();
-
-  site->penalty = 0;
-  site->temp_in_prev = 0;
-  site->conn = NULL;
-
-  // Для тестирования на эмуляторе
-  site->mount_point = "/mnt/1wire/";
-  //site->mount_point = "/bus.0/";
-
-  site->cfg = read_config(filename);
-
-  return site;
-}
-
 void site_free() {
 
   //TODO: очистим ресурсы памяти
@@ -793,3 +765,38 @@ int set_mode(Site* site, int val) {
   return 0;
 }
 
+int set_ten(Site* site, int val){
+
+  return 0;
+
+}
+
+//TODO: Переписать в виде синглетона
+//TODO: Добавить мьютексы для многопоточного доступа к переменным
+Site* site_new(char* filename) {
+
+  Site* site = malloc(sizeof(Site));
+  //initialize hardware
+  int i;
+  for (i = 0; i < 2; i++) {
+    site->acs[i] = ac_new();
+    site->vents[i] = vent_new();
+  }
+
+  site->th = throttle_new();
+
+  site->penalty = 0;
+  site->temp_in_prev = 0;
+  site->conn = NULL;
+
+  // Для тестирования на эмуляторе
+  site->mount_point = "/mnt/1wire/";
+  //site->mount_point = "/bus.0/";
+
+  site->cfg = read_config(filename);
+
+  site->set_mode = set_mode;
+  site->set_ten = set_ten;
+  //site->get_ac_time_work = get_time_work;
+  return site;
+}
