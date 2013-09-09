@@ -47,16 +47,16 @@ float get_data(OWNET_HANDLE conn, char* filename, int lim) {
 
     // Считываение прошло нормально
 
-    if (data == "") { //компилятор ругается
+    if (data == " ") { //компилятор ругается
       // пытаемся считать еще несколько раз
       int i;
       for (i=0; i<lim; i++){
         OWNET_read(conn, full_path, &data);
-        if (data != "")
+        if (data != " ")
           break;
       }
 
-      if (data == ""){
+      if (data == " "){
         // все еще пусто после повторных опросов
         return -100.f; // вернем ошибку
       }

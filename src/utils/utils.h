@@ -13,6 +13,6 @@ char* string_copy(const char* s);
 char* trim(char *s);
 char* ltrim(char *s);
 char* rtrim(char *s);
-
+void strip_n(char* s);
 
 #endif /*UTILS_C_*/

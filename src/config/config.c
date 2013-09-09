@@ -39,12 +39,12 @@ bool isStatic(ConfigTable* cfg, char key[]) {
 
 /*Make a key static*/
 void makeStatic(ConfigTable* cfg, char key[]) {
-  hashmapPut(cfg->mStatic, key, 1);
+  hashmapPut(cfg->mStatic, key, "1");
 }
 
 /*Make a key optional*/
 void makeOptional(ConfigTable* cfg, char key[]) {
-  hashmapPut(cfg->mStatic, key, 1);
+  hashmapPut(cfg->mStatic, key, "1");
 }
 
 /*Get string parameter from table */
@@ -113,11 +113,11 @@ ConfigTable* readConfig(char *filename) {
 
       if (tokens[0] == '$static')
       {
-        hashmapPut(cfg->mStatic, tokens[1], '1');
-        hashmapPut(cfg->mOptional, tokens[1], '0');
+        hashmapPut(cfg->mStatic, tokens[1], "1");
+        hashmapPut(cfg->mOptional, tokens[1], "0");
       } else {
-        hashmapPut(cfg->mOptional, tokens[1], '1');
-        hashmapPut(cfg->mStatic, tokens[1], '0');
+        hashmapPut(cfg->mOptional, tokens[1], "1");
+        hashmapPut(cfg->mStatic, tokens[1], "0");
       }
     }
 
