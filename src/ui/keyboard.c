@@ -1,6 +1,13 @@
 #include "buttons.h"
 #include "ui.h"
 
+KB* kb_new(addr){
+
+  KB* kb = malloc(sizeof(KB));
+  kb->address=addr;
+  return kb;
+}
+
 int keyboard(int menu_current) {
 
   printf("current menu:  %d\n", menu_current);

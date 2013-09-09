@@ -14,46 +14,24 @@ const unsigned char rusTable[64] = { 0x41, 0xA0, 0x42, 0xA1, 0xE0, 0x45, 0xA3,
     0xBB, 0xBC, 0xBD, 0x6F, 0xBE, 0x70, 0x63, 0xBF, 0x79, 0xE4, 0x78, 0xE5,
     0xC0, 0xC1, 0xE6, 0xC2, 0xC3, 0xC4, 0xC5, 0xC6, 0xC7 };
 
-//Define pin nr for EN and RS
-#define LCD_RS 0x20
-#define LCD_EN 0x80
-
-//Define LCD settings
-#define CMD_SCMD 0x04   //Set Cursor Move Direction:
-#define SCMD_ID  0x02   //- Increment the Cursor After Each Byte Written to Display if Set
-#define SCMD_S   0x01   //- Shift Display when Byte Written to Display
-#define CMD_EDC  0x08   //Enable Display/Cursor
-#define EDC_D    0x04   //- Turn Display On
-#define EDC_C    0x02   //- Turn Cursor On
-#define EDC_B    0x01   //- Cursor Blink On
-#define CMD_MCSD 0x10	//Move Cursor/Shift Display
-#define MCSD_SC  0x08   //- Display Shift On(1)/Off(0)
-#define MCSD_RL  0x04   //- Direction of Shift Right(1)/Left(0)
-#define CMD_SIL  0x20   //Set Interface Length
-#define SIL_DL   0x10   //- Set Data Interface Length 8
-#define SIL_N    0x08   //- Number of Display Lines 2(=4)
-#define SIL_F    0x04   //- Character Font 5x10
-#define CMD_MCD  0x80   //Move Cursor to Display Address
-#define CMD_CAH	 0x01   //Clear and Home
-#define CMD_HME  0x02	  //Move home
-// cursor position to DDRAM mapping
-
-#define LCD_LINE0_DDRAMADDR		0x00
-#define LCD_LINE1_DDRAMADDR		0x40
-#define LCD_LINE2_DDRAMADDR		0x10
-#define LCD_LINE3_DDRAMADDR		0x50
-#define LCD_DDRAM           7	//DB7: set DD RAM address
 static int fd;
 static char *fileName = "/dev/i2c-1";
-static int address = 0x3C;
 static int lcd_connected = -1; // -1 = unknown, 0 = not connected, 1 = connected
 
-void LCD_setup() {
+LCD* lcd_new( addr) {
+  LCD* lcd = malloc(sizeof(LCD));
+  lcd->addres = addr;
+  return lcd;
+}
+
+void LCD_setup(LCD* lcd) {
   if ((fd = open(fileName, O_RDWR)) < 0) {
     printf("Failed to open the i2c bus\n");
     lcd_connected = 0;
     return;
   }
+
+  int address = lcd->addres;
 
   if (ioctl(fd, I2C_SLAVE, address) < 0) {
     printf("Failed to acquire bus access and/or talk to slave.\n");
@@ -61,13 +39,13 @@ void LCD_setup() {
     return;
   }
   lcd_connected = 1;
-  lcd_reset();
-  lcd_init();
+  lcd_reset(lcd);
+  lcd_init(lcd);
 }
 
-void write_lcd(int bits) {
-  PutBitsOnPins(bits + LCD_EN);
-  PutBitsOnPins(bits);
+void write_lcd(LCD* lcd, int bits) {
+  PutBitsOnPins(lcd, bits + LCD_EN);
+  PutBitsOnPins(lcd, bits);
   usleep(500);
 }
 
@@ -78,7 +56,7 @@ void lcd_string(char *s) {
   }
 }
 
-void lcd_line(char *s, int c) {
+void lcd_line(LCD* lcd, char *s, int c) {
   //c линия в какую будем писать
   int i;
   int wyw_s = 0;
@@ -135,15 +113,15 @@ void lcd_line(char *s, int c) {
   }
 }
 
-void write_char(char letter) {
+void write_char(LCD* lcd, char letter) {
 
-  write_lcd((((int) letter >> 4) & 0x0F) | LCD_RS);
-  write_lcd(((int) letter & 0x0F) | LCD_RS);
+  write_lcd(lcd, (((int) letter >> 4) & 0x0F) | LCD_RS);
+  write_lcd(lcd, ((int) letter & 0x0F) | LCD_RS);
 }
 
-void PutBitsOnPins(char bits) {
+void PutBitsOnPins(LCD* lcd, char bits) {
   if (lcd_connected == -1) {
-    LCD_setup();
+    LCD_setup(lcd);
   }
   if (lcd_connected == 1) {
     char buf[1];
@@ -156,28 +134,28 @@ void PutBitsOnPins(char bits) {
   }
 }
 
-void lcd_clear() {
+void lcd_clear(LCD* lcd) {
   write_nibbles(CMD_CAH);
 }
 
-void lcd_reset() {
-  PutBitsOnPins(0xFF);
+void lcd_reset(LCD* lcd) {
+  PutBitsOnPins(lcd, 0xFF);
   usleep(5000);
-  PutBitsOnPins(0x03 + LCD_EN);
-  PutBitsOnPins(0x03);
+  PutBitsOnPins(lcd, 0x03 + LCD_EN);
+  PutBitsOnPins(lcd, 0x03);
   usleep(5000);
-  PutBitsOnPins(0x03 + LCD_EN);
-  PutBitsOnPins(0x03);
+  PutBitsOnPins(lcd, 0x03 + LCD_EN);
+  PutBitsOnPins(lcd, 0x03);
   usleep(500);
-  PutBitsOnPins(0x03 + LCD_EN);
-  PutBitsOnPins(0x03);
+  PutBitsOnPins(lcd, 0x03 + LCD_EN);
+  PutBitsOnPins(lcd, 0x03);
   usleep(500);
-  PutBitsOnPins(0x02 + LCD_EN);
-  PutBitsOnPins(0x02);
+  PutBitsOnPins(lcd, 0x02 + LCD_EN);
+  PutBitsOnPins(lcd, 0x02);
   usleep(500);
 }
 
-void lcd_init() {
+void lcd_init(LCD* lcd) {
   write_nibbles(CMD_SIL | SIL_N);
   write_nibbles(CMD_EDC);
   write_nibbles(CMD_CAH);
@@ -185,13 +163,13 @@ void lcd_init() {
   write_nibbles(CMD_EDC | EDC_D);
 }
 
-void write_nibbles(int bits) {
-  write_lcd((bits >> 4) & 0x0F);
-  write_lcd(bits & 0x0F);
+void write_nibbles(LCD* lcd, int bits) {
+  write_lcd(lcd, (bits >> 4) & 0x0F);
+  write_lcd(lcd, bits & 0x0F);
   usleep(500);
 }
 
-void cursor_go(int str) {
+void cursor_go(LCD* lcd, int str) {
 
   int DDRAMAddr;
   switch (str) {
@@ -216,6 +194,6 @@ void cursor_go(int str) {
 
   //LCDsendCommand(1<<LCD_DDRAM | DDRAMAddr);
 
-  write_nibbles(1 << LCD_DDRAM | DDRAMAddr);
+  write_nibbles(lcd, 1 << LCD_DDRAM | DDRAMAddr);
 
 }
