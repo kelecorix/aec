@@ -29,7 +29,7 @@ int site_mode_uvo(Site* site) {
 
   int a, v, ret;
   char *key = "temp_dew"; // температура росы
-  double temp_dew = atof(getStr(site->cfg, (void *) key));
+  float temp_dew = atof(getStr(site->cfg, (void *) key));
 
   // читаем датчики
   ret = read_sensors(site);
@@ -70,7 +70,7 @@ int site_mode_uvo(Site* site) {
       } else {
         //no
         char *key = "temp_fail";
-        double temp_fail = atof(getStr(site->cfg, (void *) key));
+        float temp_fail = atof(getStr(site->cfg, (void *) key));
 
         if ((site->temp_in) >= temp_fail) {
 
@@ -82,7 +82,7 @@ int site_mode_uvo(Site* site) {
 
           // температура нормальная
           char *key = "temp_support";
-          double temp_support = atof(getStr(site->cfg, (void *) key));
+          float temp_support = atof(getStr(site->cfg, (void *) key));
 
           if (site->temp_in >= (temp_support - 2)
               && site->temp_in <= (temp_support) + 2) {
@@ -171,7 +171,7 @@ int site_mode_uvo(Site* site) {
               }
 
               char *key = "temp_heat";
-              double temp_heat = atof(getStr(site->cfg, (void *) key));
+              float temp_heat = atof(getStr(site->cfg, (void *) key));
 
               if ((site->temp_in) < temp_heat) {
                 // переходим в режим обогрева
@@ -321,10 +321,10 @@ int site_mode_ac(Site* site) {
       if (num_ac_tmp > 0) {
         //да
         char *key = "temp_support";
-        double temp_support = atof(getStr(site->cfg, (void *) key));
+        float temp_support = atof(getStr(site->cfg, (void *) key));
 
         *key = "temp_fail";
-        double temp_fail = atof(getStr(site->cfg, (void *) key));
+        float temp_fail = atof(getStr(site->cfg, (void *) key));
 
         if ((temp_support - site->temp_out) >= (site->penalty + 2)) {
           // переходим в УВО
@@ -403,7 +403,7 @@ int site_mode_heat(Site* site) {
             site->time_pre = time(NULL);
 
             char *key = "temp_support";
-            double temp_support = atof(getStr(site->cfg, (void *) key));
+            float temp_support = atof(getStr(site->cfg, (void *) key));
 
             if (site->temp_in >= temp_support) {
               //да
@@ -600,7 +600,7 @@ int site_mode_fail_uvo(Site* site) {
       if (num_ac_tmp > 0) {
         //да
         char *key = "temp_support";
-        double temp_support = atof(getStr(site->cfg, (void *) key));
+        float temp_support = atof(getStr(site->cfg, (void *) key));
 
         if ((temp_support - site->temp_out) >= (site->penalty + 2)) {
           if (site->temp_in <= temp_support - 2) {
@@ -723,7 +723,7 @@ int site_mode_fail_ac(Site* site) {
     }
 
     char *key = "temp_support";
-    double temp_support = atof(getStr(site->cfg, (void *) key));
+    float temp_support = atof(getStr(site->cfg, (void *) key));
 
     if (site->temp_in > temp_support - 2) {
       //Переходим на уво
@@ -747,7 +747,7 @@ int site_mode_fail_ac(Site* site) {
     }
 
     *key = "temp_heat";
-    double temp_heat = atof(getStr(site->cfg, (void *) key));
+    float temp_heat = atof(getStr(site->cfg, (void *) key));
 
     if (site->temp_in < temp_heat) {
       site_mode_heat(site);
