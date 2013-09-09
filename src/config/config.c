@@ -56,7 +56,7 @@ char* getStr(ConfigTable* cfg, const char *key) {
   strip_n(value);
 
   if (value){
-    printf("Current value %s\n", value);
+    //printf("Current value %s\n", value);
     return value;}
   else
     return "";

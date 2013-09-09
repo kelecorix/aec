@@ -56,6 +56,7 @@ int site_mode_uvo(Site* site) {
 
   while (1) {
 
+    printf("While regim UVO\n");
     // читаем датчики
     ret = read_sensors(site);
     if (ret != 0) {
