@@ -5,6 +5,7 @@
 #include "lcd.h"
 #include "keyboard.h"
 #include "../hw/site.h"
+#include "../config/config.h"
 
 void run_ui(Site* site) {
 
@@ -52,7 +53,7 @@ void run_ui(Site* site) {
 
     key = "a_keyb";
     char *a_keyb = getStr(site->cfg, (void *) key);
-    int kb_addr = strtol(a_lcd, (char **)NULL, 16);
+    int kb_addr = strtol(a_keyb, (char **)NULL, 16);
     KB* kb = kb_new(kb_addr);
 
     //display_mode = keyboard();
@@ -65,16 +66,17 @@ void run_ui(Site* site) {
 
 void display(Site* site, LCD* lcd, int display_mode) {
 
-  char tmp_value[50], tmp_time[50], tmp_temp_ulica[50],
-       tmp_temp_sayt[50], tmp_temp_miks[50], tmp_temp_kond[50],
-       buffer[200];
-  char* host;
-  int mem_tot, i_cpu_load, cpu_interval = 0, tek_znach = 25;
-  long double b[7];
+  char tmp_value[50], tmp_time[50], tmp_temp_out[50],
+       tmp_temp_in[50], tmp_temp_mix[50], tmp_temp_evapor1[50],
+       tmp_temp_evapor2[50], buffer[200];
+  //char* host;
+  //int mem_tot, i_cpu_load, cpu_interval = 0;
+  int tek_znach = 25;
+  //long double b[7];
   time_t rawtime;
   struct tm * timeinfo;
   //-----
-  char *key;
+  //char *key;
 
   switch (display_mode) {
     case 1000:
@@ -92,14 +94,22 @@ void display(Site* site, LCD* lcd, int display_mode) {
           timeinfo->tm_sec);
       //0xEF градус
       //TODO: добавить вывод всех необходимых параметров
-      sprintf(tmp_temp_ulica, "Улица  = %2.2f°C", site->temp_out);
+      if (site->temp_out != -100.0) {
+        sprintf(tmp_temp_out, "Улица  = %2.2f°C", site->temp_out);
+      } else {
+        sprintf(tmp_temp_out, "Улица  =  Ошибка");
+      } 
+      if (site->temp_in != -100.0) {
+        sprintf(tmp_temp_in, "Сайт   = %2.2f°C", site->temp_in);
+      } else {
+        sprintf(tmp_temp_in, "Сайт   =  Ошибка");
+      }
       //lcd_line("Улица  = 20.00°C",0);
-      lcd_line(lcd, tmp_temp_ulica, 0);
-      lcd_line(lcd, "Сайт   = 18.00°C", 1);
-      lcd_line(lcd, "Миксер = 18.00°C", 2);
-      //lcd_line(lcd, "Миксер = 18.00°C", 3);
+      lcd_line(lcd, tmp_temp_out, 0);
+      lcd_line(lcd, tmp_temp_in, 1);
+      lcd_line(lcd, "Состояние работы", 2);
       lcd_line(lcd, tmp_time, 3);
-      //lcd_line(">CPU<[MEM][NET][UPT]",2);
+
       break;
     case 2000:
       time(&rawtime);
@@ -109,9 +119,25 @@ void display(Site* site, LCD* lcd, int display_mode) {
           1 + timeinfo->tm_mon, timeinfo->tm_hour, timeinfo->tm_min,
           timeinfo->tm_sec);
       //0xEF градус
-      lcd_line(lcd, "Улица  = 20.00°C", 0);
-      lcd_line(lcd, "Сайт   = 18.00°C", 1);
-      lcd_line(lcd, "Конд   =  8.00°C", 2);
+      if (site->temp_evapor1 != -100.0) {
+        sprintf(tmp_temp_evapor1, "Конд1  = %2.2f°C", site->temp_evapor1);
+      } else {
+        sprintf(tmp_temp_evapor1, "Конд1  =  Ошибка");
+      } 
+      if (site->temp_evapor2 != -100.0) {
+        sprintf(tmp_temp_evapor2, "Конд2   = %2.2f°C", site->temp_evapor2);
+      } else {
+        sprintf(tmp_temp_evapor2, "Конд2   =  Ошибка");
+      }
+      if (site->temp_mix != -100.0) {
+        sprintf(tmp_temp_mix, "Миксер = %2.2f°C", site->temp_mix);
+      } else {
+        sprintf(tmp_temp_mix, "Миксер =  Ошибка");
+      }
+      
+      lcd_line(lcd, tmp_temp_evapor1, 0);
+      lcd_line(lcd, tmp_temp_evapor2, 1);
+      lcd_line(lcd, tmp_temp_mix, 2);
       lcd_line(lcd, tmp_time, 3);
       //lcd_line(">CPU<[MEM][NET][UPT]",2);
       break;
