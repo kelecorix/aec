@@ -7,11 +7,11 @@
  * Изменим режим заслонки 
  */
 static int set_mode(Throttle* th, int val) {
-
   // accept only 0,1
   // принимаем только 0,1
   if ((val == 1) || (val == 0)) {
     th->position = val;
+    //TODO:Управляем оборудованием
     return 1;
   } else {
     // wrong value
@@ -21,16 +21,15 @@ static int set_mode(Throttle* th, int val) {
 }
 
 int set_position(Throttle* th, int val) {
-
   if (val >= 0 && val <= 255) {
     th->position = val;
+    //TODO:Управляем оборудованием
     return 1;
   } else {
     // wrong value
     // неправильное значение
     return 0;
   }
-
 }
 
 void throttle_free() {
