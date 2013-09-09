@@ -19,7 +19,7 @@ void run_ui(Site* site) {
   int out_curr = 40; // текущий вывод, смеситель и кондиционер попеременно
 
   //int display_mode = mode_intro;
-  display(lcd, 1000);
+  display(site, lcd, 1000);
 
   //usleep(5000000);
   usleep(500000);

@@ -10,6 +10,8 @@
 #include <sys/ioctl.h>
 #include <string.h>
 
+#define I2C_FILE_NAME "/dev/i2c-0"
+
 void i2cOpen();
 void i2cClose();
 void i2cSetAddress(int address);

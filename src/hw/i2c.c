@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <sys/ioctl.h>
 #include <string.h>
+#include "i2c.h"
 
 // I2C Linux device handle
 int g_i2cFile;
@@ -13,7 +14,7 @@ int g_i2cFile;
 // open the Linux device
 void i2cOpen()
 {
-  g_i2cFile = open("/dev/i2c-0", O_RDWR);
+  g_i2cFile = open(I2C_FILE_NAME, O_RDWR);
   if (g_i2cFile < 0) {
     perror("i2cOpen");
     exit(1);
