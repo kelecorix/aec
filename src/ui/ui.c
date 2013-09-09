@@ -125,9 +125,9 @@ void display(Site* site, LCD* lcd, int display_mode) {
         sprintf(tmp_temp_evapor1, "Конд1  =  Ошибка");
       } 
       if (site->temp_evapor2 != -100.0) {
-        sprintf(tmp_temp_evapor2, "Конд2   = %2.2f°C", site->temp_evapor2);
+        sprintf(tmp_temp_evapor2, "Конд2  = %2.2f°C", site->temp_evapor2);
       } else {
-        sprintf(tmp_temp_evapor2, "Конд2   =  Ошибка");
+        sprintf(tmp_temp_evapor2, "Конд2  =  Ошибка");
       }
       if (site->temp_mix != -100.0) {
         sprintf(tmp_temp_mix, "Миксер = %2.2f°C", site->temp_mix);
@@ -139,7 +139,6 @@ void display(Site* site, LCD* lcd, int display_mode) {
       lcd_line(lcd, tmp_temp_evapor2, 1);
       lcd_line(lcd, tmp_temp_mix, 2);
       lcd_line(lcd, tmp_time, 3);
-      //lcd_line(">CPU<[MEM][NET][UPT]",2);
       break;
     case 10:
       //mem_load = (int)(((double)mem_used()/(double)mem_tot)*100);
