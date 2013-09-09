@@ -53,7 +53,7 @@ void run_ui(Site* site) {
     key = "a_keyb";
     char *a_keyb = getStr(site->cfg, (void *) key);
     int kb_addr = strtol(a_lcd, (char **)NULL, 16);
-    KB* kb = lcd_new(kb_addr);
+    KB* kb = kb_new(kb_addr);
 
     //display_mode = keyboard();
     menu_curr = keyboard(menu_curr);

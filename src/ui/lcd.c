@@ -31,8 +31,9 @@ void LCD_setup(LCD* lcd) {
     return;
   }
 
-  int addr = lcd->addres;
-  printf("LCD addr: %d", lcd->addres);
+  //int addr = lcd->addres;
+  int addr = 0x3c;
+  printf("LCD addr: %d", addr);
   if (ioctl(fd, I2C_SLAVE, addr) < 0) {
     printf("Failed to acquire bus access and/or talk to slave.\n");
     lcd_connected = 0;
@@ -49,19 +50,19 @@ void write_lcd(LCD* lcd, int bits) {
   usleep(500);
 }
 
-void lcd_string(char *s) {
+/*void lcd_string(char *s) {
   int i;
   for (i = 0; i < strlen(s); i++) {
-    write_char(s[i]);
+    //write_char(lcd, s[i]);
   }
 }
-
+*/
 void lcd_line(LCD* lcd, char *s, int c) {
   //c линия в какую будем писать
   int i;
   int wyw_s = 0;
   unsigned char zap;
-  cursor_go(c);
+  cursor_go(lcd, c);
   //printf("%s\n",s);
   for (i = 0; i < strlen(s); i++) {
     if (((int) s[i] < 32) || ((int) s[i] > 125)) {
@@ -74,7 +75,7 @@ void lcd_line(LCD* lcd, char *s, int c) {
         }
 
         //printf("index_mas = %d",(unsigned char)s[i+1] - 0x90);
-        write_char(zap);
+        write_char(lcd, zap);
         wyw_s++;
         i++;
       }
@@ -85,7 +86,7 @@ void lcd_line(LCD* lcd, char *s, int c) {
           zap = 0xb5;
         }
 
-        write_char(zap);
+        write_char(lcd, zap);
         wyw_s++;
         i++;
       }
@@ -95,20 +96,20 @@ void lcd_line(LCD* lcd, char *s, int c) {
         if ((unsigned char) s[i + 1] == 0xb0) {
           zap = 0xdf;
         }
-        write_char(zap);
+        write_char(lcd, zap);
         wyw_s++;
         i++;
       }
 
     } else {
-      write_char(s[i]);
+      write_char(lcd, s[i]);
       wyw_s++;
     }
   }
   //printf("wyw_s = %d\n",wyw_s);
   if (wyw_s < 17) {
     for (i = 0; i < 16 - wyw_s; i++) {
-      write_char(' ');
+      write_char(lcd, ' ');
     }
   }
 }
@@ -135,7 +136,7 @@ void PutBitsOnPins(LCD* lcd, char bits) {
 }
 
 void lcd_clear(LCD* lcd) {
-  write_nibbles(CMD_CAH);
+  write_nibbles(lcd, CMD_CAH);
 }
 
 void lcd_reset(LCD* lcd) {
@@ -156,11 +157,11 @@ void lcd_reset(LCD* lcd) {
 }
 
 void lcd_init(LCD* lcd) {
-  write_nibbles(CMD_SIL | SIL_N);
-  write_nibbles(CMD_EDC);
-  write_nibbles(CMD_CAH);
-  write_nibbles(CMD_SCMD | SCMD_ID);
-  write_nibbles(CMD_EDC | EDC_D);
+  write_nibbles(lcd, CMD_SIL | SIL_N);
+  write_nibbles(lcd, CMD_EDC);
+  write_nibbles(lcd, CMD_CAH);
+  write_nibbles(lcd, CMD_SCMD | SCMD_ID);
+  write_nibbles(lcd, CMD_EDC | EDC_D);
 }
 
 void write_nibbles(LCD* lcd, int bits) {
