@@ -65,8 +65,8 @@ void run_ui(Site* site) {
 
 void display(Site* site, LCD* lcd, int display_mode) {
 
-  char tmp_value[20], tmp_time[20], tmp_temp_ulica[20],
-       tmp_temp_sayt[20], tmp_temp_miks[20], tmp_temp_kond[20],
+  char tmp_value[50], tmp_time[50], tmp_temp_ulica[50],
+       tmp_temp_sayt[50], tmp_temp_miks[50], tmp_temp_kond[50],
        buffer[200];
   char* host;
   int mem_tot, i_cpu_load, cpu_interval = 0, tek_znach = 25;
@@ -97,6 +97,7 @@ void display(Site* site, LCD* lcd, int display_mode) {
       lcd_line(lcd, tmp_temp_ulica, 0);
       lcd_line(lcd, "Сайт   = 18.00°C", 1);
       lcd_line(lcd, "Миксер = 18.00°C", 2);
+      //lcd_line(lcd, "Миксер = 18.00°C", 3);
       lcd_line(lcd, tmp_time, 3);
       //lcd_line(">CPU<[MEM][NET][UPT]",2);
       break;
