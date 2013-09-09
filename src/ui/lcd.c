@@ -18,7 +18,7 @@ static int fd;
 static char *fileName = "/dev/i2c-1";
 static int lcd_connected = -1; // -1 = unknown, 0 = not connected, 1 = connected
 
-LCD* lcd_new( addr) {
+LCD* lcd_new(int addr) {
   LCD* lcd = malloc(sizeof(LCD));
   lcd->addres = addr;
   return lcd;
@@ -31,8 +31,8 @@ void LCD_setup(LCD* lcd) {
     return;
   }
 
-  //int addr = lcd->addres;
-  int addr = 0x3c;
+  int addr = lcd->addres;
+  //int addr = 0x3c;
   printf("LCD addr: %d", addr);
   if (ioctl(fd, I2C_SLAVE, addr) < 0) {
     printf("Failed to acquire bus access and/or talk to slave.\n");

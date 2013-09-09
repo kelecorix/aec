@@ -13,7 +13,7 @@ void run_ui(Site* site) {
   char *key = "a_lcd";
   char *a_lcd = getStr(site->cfg, (void *) key);
   int addr = strtol(a_lcd, (char **)NULL, 16);
-
+  printf("LCD addr = %d\n",addr);
   LCD* lcd = lcd_new(addr);
 
   int menu_curr = 0; // текущее меню
