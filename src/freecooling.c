@@ -41,6 +41,8 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
+  sleep(4);
+
   if (pthread_create(&threadU, NULL, run_ui, (void*) site)) {
     fprintf(stderr, "Error creating UI thread\n");
     printf("Error creating UI thread\n");
