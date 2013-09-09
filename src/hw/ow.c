@@ -1,6 +1,9 @@
 #include <string.h>
 #include <ownetapi.h>
 #include <stddef.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include "ow.h"
 #include "../hw/site.h"
 #include "../utils/utils.h"
@@ -44,7 +47,7 @@ float get_data(OWNET_HANDLE conn, char* filename, int lim) {
 
     // Считываение прошло нормально
 
-    if (data == "") {
+    if (data == "") { //компилятор ругается
       // пытаемся считать еще несколько раз
       int i;
       for (i=0; i<lim; i++){
@@ -114,11 +117,72 @@ int read_sensors(Site* site) {
 
   // для чтения на Raspberry Pi, через сервер "/bus.0/21.F2FBE3467CC2/temperature"
 
-  site->temp_out = get_data(conn, concat(mnt, s_temp_out), 100);
-  site->temp_in = get_data(conn, concat(mnt, s_temp_in), 100);
-  site->temp_mix = get_data(conn, concat(mnt, s_temp_mix), 100);
-  site->temp_evapor1 = get_data(conn, concat(mnt, s_temp_evapor1), 100);
-  site->temp_evapor2 = get_data(conn, concat(mnt, s_temp_evapor2), 100);
+  char buf[100];
+  char buf1[100];
+  char buf2[100];
+  char buf3[100];
+  char buf4[100];
+  char str1[100];
+  
+  int ret;
+  struct stat st;
+  if ((ret = stat(s_temp_out,&st)) != 0) {
+    site->temp_out = get_data(conn, concat(mnt, s_temp_out), 100);
+  } else {
+    FILE *f = fopen(s_temp_out,"r");
+    fgets(buf,sizeof(buf),f);
+    site->temp_out = atof(buf);
+    fclose(f);
+
+  }
+    printf("temp_out = %2.2f ret = %d\n",site->temp_out, ret);
+  
+  sprintf(str1,"%s",s_temp_in);  
+  if ((ret = stat(str1,&st)) != 0) {
+    site->temp_in = get_data(conn, concat(mnt, s_temp_in), 100);
+  } else {
+    FILE *f1 = fopen(s_temp_in,"r");
+    fgets(buf,sizeof(buf1),f1);
+    site->temp_in = atof(buf1);
+    fclose(f1);
+  }
+  printf("temp_in = %2.2f ret = %d\n",site->temp_in, ret);  
+  
+  if (stat(s_temp_mix,&st) != 0) {
+    site->temp_mix = get_data(conn, concat(mnt, s_temp_mix), 100);
+  } else {
+    FILE *f2 = fopen(s_temp_in,"r");
+    fgets(buf,sizeof(buf2),f2);
+    site->temp_mix = atof(buf2);
+    fclose(f2);
+  }
+  
+  printf("temp_mix = %2.2f\n",site->temp_mix);  
+  
+  
+  if (stat(s_temp_evapor1,&st) != 0) {
+    site->temp_evapor1 = get_data(conn, concat(mnt, s_temp_evapor1), 100);
+  } else {
+    FILE *f3 = fopen(s_temp_evapor1,"r");
+    fgets(buf,sizeof(buf3),f3);
+    site->temp_evapor1 = atof(buf3);
+    fclose(f3);
+  }
+  
+  printf("temp_evapor1 = %2.2f\n",site->temp_evapor1);  
+  
+  
+  if (stat(s_temp_evapor2,&st) != 0) {
+    site->temp_evapor2 = get_data(conn, concat(mnt, s_temp_evapor2), 100);
+  } else {
+    FILE *f4 = fopen(s_temp_evapor2,"r");
+    fgets(buf,sizeof(buf4),f4);
+    site->temp_evapor2 = atof(buf4);
+    fclose(f4);
+  }
+  
+  printf("temp_evapor2 = %2.2f\n",site->temp_evapor2);  
+
 
   return 0;
 
