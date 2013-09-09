@@ -10,5 +10,8 @@
 #include <sys/ioctl.h>
 #include <string.h>
 
+void i2cOpen();
+void i2cClose();
+void i2cSetAddress(int address);
 
 #endif /* I2C_H_ */
