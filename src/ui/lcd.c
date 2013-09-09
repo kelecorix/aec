@@ -31,9 +31,7 @@ void LCD_setup(LCD* lcd) {
     return;
   }
 
-  int address = lcd->addres;
-
-  if (ioctl(fd, I2C_SLAVE, address) < 0) {
+  if (ioctl(fd, I2C_SLAVE, lcd->addres) < 0) {
     printf("Failed to acquire bus access and/or talk to slave.\n");
     lcd_connected = 0;
     return;
