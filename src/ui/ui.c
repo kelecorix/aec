@@ -84,6 +84,7 @@ void display(Site* site, LCD* lcd, int display_mode) {
           1 + timeinfo->tm_mon, timeinfo->tm_hour, timeinfo->tm_min,
           timeinfo->tm_sec);
       //0xEF градус
+      //TODO: добавить вывод всех необходимых параметров
       sprintf(tmp_temp_ulica, "Улица  = %2.2f°C", site->temp_out);
       //lcd_line("Улица  = 20.00°C",0);
       lcd_line(lcd, tmp_temp_ulica, 0);
