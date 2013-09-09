@@ -39,6 +39,7 @@ float get_data(OWNET_HANDLE conn, char* filename, int lim) {
     if (length < 0) {
       // произошла ошибка доступа к серверу
       printf("OWNET_read error!\n");
+      return -100.f;
     }
 
     // Считываение прошло нормально
