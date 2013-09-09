@@ -16,6 +16,7 @@ void site_free() {
 void run(Site* site) {
 
   //Cтартуем с режима УВО
+  printf("Logic module started!")
   site_mode_uvo(site);
 
 }
