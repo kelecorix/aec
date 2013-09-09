@@ -7,6 +7,7 @@
 
 void run_ui(Site* site) {
 
+  printf("Running ui module\n");
   //прочитаем адрес из конфигурации
   char *key = "a_lcd";
   char *a_lcd = getStr(site->cfg, (void *) key);

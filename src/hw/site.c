@@ -16,7 +16,7 @@ void site_free() {
 void run(Site* site) {
 
   //Cтартуем с режима УВО
-  printf("Logic module started!")
+  printf("Logic module started!\n");
   site_mode_uvo(site);
 
 }
@@ -817,8 +817,8 @@ Site* site_new(char* filename) {
   site->conn = NULL;
 
   // Для тестирования на эмуляторе
-  site->mount_point = "/mnt/1wire/";
-  //site->mount_point = "/bus.0/";
+  //site->mount_point = "/mnt/1wire/";
+  site->mount_point = "/bus.0/";
 
   site->cfg = read_config(filename);
 

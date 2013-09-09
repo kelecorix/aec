@@ -109,7 +109,7 @@ int read_sensors(Site* site) {
   char *s_temp_evapor2 = getStr(site->cfg, (void *) key);
 
   // double a = get_data(conn, "/mnt/1wire/21.F2FBE3467CC2/temperature");
-  s_temp_in = "28.4AEC29CDBAAB"; // для тестов
+  // s_temp_in = "28.4AEC29CDBAAB"; // для тестов
 
   // для чтения на Raspberry Pi, через сервер "/bus.0/21.F2FBE3467CC2/temperature"
 
