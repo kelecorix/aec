@@ -5,22 +5,6 @@
 #include "lcd.h"
 #include "../hw/site.h"
 
-char tmp_value[20];
-char tmp_time[20];
-char tmp_temp_ulica[20];
-char tmp_temp_sayt[20];
-char tmp_temp_miks[20];
-char tmp_temp_kond[20];
-int mem_tot;
-long double b[7];
-int cpu_interval = 0;
-int i_cpu_load;
-char* host;
-time_t rawtime;
-struct tm * timeinfo;
-char buffer[200];
-int tek_znach = 25;
-
 void run_ui(Site* site) {
 
   //прочитаем адрес из конфигурации
@@ -30,9 +14,10 @@ void run_ui(Site* site) {
 
   LCD* lcd = lcd_new(addr);
 
-  int tek_menu = 0;
-  int tek_znach = 0;
-  int tek_vyvod = 40; //будем выводить то миксер то кондишку
+  int menu_curr = 0; // текущее меню
+  int val_curr = 0;  // текущее значение
+  int out_curr = 40; // текущий вывод, смеситель и кондиционер попеременно
+
   //int display_mode = mode_intro;
   display(lcd, 1000);
 
@@ -41,41 +26,48 @@ void run_ui(Site* site) {
 
   //display_mode = mode_OSN;
 
-  for (;;) {
+  while (1) {
 
     /***********************************************************
      * Выводим по переменно температуру миксера или кондиционера
-     * tek_menu == 0    - миксер
-     * tek_menu == 2000 - кондиционер
+     * menu_curr == 0    - миксер
+     * menu_curr == 2000 - кондиционер
      */
-    if (tek_vyvod == 0) {
-      if (tek_menu == 0 || tek_menu == 2000) {
-        if (tek_menu == 0) {
-          tek_menu = 2000;
+
+    if (out_curr == 0) {
+      if (menu_curr == 0 || menu_curr == 2000) {
+        if (menu_curr == 0) {
+          menu_curr = 2000;
         } else {
-          tek_menu = 0;
+          menu_curr = 0;
         }
 
       }
-      tek_vyvod = 40;
+      out_curr = 40;
     }
-    /**********************************************************
-     *
-     */
 
-    display(lcd, tek_menu);
+    display(site, lcd, menu_curr);
 
     //display_mode = keyboard();
-    tek_menu = keyboard(tek_menu);
+    menu_curr = keyboard(menu_curr);
     //printf("%d\n",tek_menu);
-    tek_vyvod--;
+    out_curr--;
     usleep(10000);
-
   }
-
 }
 
-void display(LCD* lcd, int display_mode) {
+void display(Site* site, LCD* lcd, int display_mode) {
+
+  char tmp_value[20], tmp_time[20], tmp_temp_ulica[20],
+       tmp_temp_sayt[20], tmp_temp_miks[20], tmp_temp_kond[20],
+       buffer[200];
+  char* host;
+  int mem_tot, i_cpu_load, cpu_interval = 0, tek_znach = 25;
+  long double b[7];
+  time_t rawtime;
+  struct tm * timeinfo;
+  //-----
+  char *key;
 
   switch (display_mode) {
     case 1000:
@@ -92,7 +84,7 @@ void display(LCD* lcd, int display_mode) {
           1 + timeinfo->tm_mon, timeinfo->tm_hour, timeinfo->tm_min,
           timeinfo->tm_sec);
       //0xEF градус
-      sprintf(lcd, tmp_temp_ulica, "Улица  = %2.2f°C", 25.22);
+      sprintf(tmp_temp_ulica, "Улица  = %2.2f°C", site->temp_out);
       //lcd_line("Улица  = 20.00°C",0);
       lcd_line(lcd, tmp_temp_ulica, 0);
       lcd_line(lcd, "Сайт   = 18.00°C", 1);
