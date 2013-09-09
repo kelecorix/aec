@@ -16,8 +16,8 @@ typedef struct Throttle {
   time_t time_stop;
   long time_work;
 
-  int (*set_mode)(struct AC*, int val);
-  int (*set_position)(struct AC*, int val);
+  int (*set_mode)(struct Throttle*, int val);
+  int (*set_position)(struct Throttle*, int val);
 
 } Throttle;
 

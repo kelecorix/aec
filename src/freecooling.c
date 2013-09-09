@@ -15,7 +15,7 @@
 
 int main(int argc, char *argv[]) {
 
-  pthread_t threadL, threadU, threadC;
+  pthread_t threadL, threadU;
   int retL, retU;
   void *ret;
   char *filename = "freecooling.conf";
@@ -47,8 +47,8 @@ int main(int argc, char *argv[]) {
 
 // ждем пока потоками завершаться
 // по идде сюда не должно дойти
-  pthread_join(threadL, NULL);
-  pthread_join(threadU, NULL);
+  pthread_join(threadL, retL);
+  pthread_join(threadU, retU);
 
   return EXIT_SUCCESS;
 
