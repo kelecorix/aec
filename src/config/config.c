@@ -48,7 +48,7 @@ void makeOptional(ConfigTable* cfg, char key[]) {
 }
 
 /*Get string parameter from table */
-const char getStr(ConfigTable* cfg, const char *key) {
+char* getStr(ConfigTable* cfg, const char *key) {
   char *value;
   value = hashmapGet(cfg->mTable, (void *) key);
 
