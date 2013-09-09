@@ -3,6 +3,7 @@
 
 #include "ui.h"
 #include "lcd.h"
+#include "keyboard.h"
 #include "../hw/site.h"
 
 void run_ui(Site* site) {
@@ -11,7 +12,7 @@ void run_ui(Site* site) {
   //прочитаем адрес из конфигурации
   char *key = "a_lcd";
   char *a_lcd = getStr(site->cfg, (void *) key);
-  int addr = atoi(a_lcd);
+  int addr = strtol(a_lcd, (char **)NULL, 16);
 
   LCD* lcd = lcd_new(addr);
 
@@ -48,6 +49,11 @@ void run_ui(Site* site) {
     }
 
     display(site, lcd, menu_curr);
+
+    key = "a_keyb";
+    char *a_keyb = getStr(site->cfg, (void *) key);
+    int kb_addr = strtol(a_lcd, (char **)NULL, 16);
+    KB* kb = lcd_new(kb_addr);
 
     //display_mode = keyboard();
     menu_curr = keyboard(menu_curr);
