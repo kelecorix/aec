@@ -23,6 +23,7 @@ void run(Site* site) {
 
 /* Режим охлаждения УВО */
 int site_mode_uvo(Site* site) {
+  printf("Режим охлаждения УВО!\n");
   site->mode = 1;
   site->time_pre = time(NULL);
 
@@ -219,7 +220,7 @@ int site_mode_uvo(Site* site) {
 
 /* Режим охлаждения кондиционером */
 int site_mode_ac(Site* site) {
-
+  printf("Режим охлаждения кондиционером!\n");
   site->mode = 2;
   site->time_pre = time(NULL);
 
@@ -355,7 +356,7 @@ int site_mode_ac(Site* site) {
 
 /* Режим догрева сайта */
 int site_mode_heat(Site* site) {
-
+  printf("Режим догрева сайта!\n");
   site->mode = 3;
 
   int a, v;
@@ -532,6 +533,7 @@ int site_mode_heat(Site* site) {
  * Авария вентиляторов - Авария датчиков -
  * Авария заслонки - Авария охлаждения кондиционером */
 int site_mode_fail_uvo(Site* site) {
+  printf("Режим авария УВО!\n");
   site->mode = 4;
   site->time_pre = time(NULL);
 
@@ -628,7 +630,7 @@ int site_mode_fail_uvo(Site* site) {
 
 /* Авария кондиционеров - Охлаждение УВО */
 int site_mode_fail_ac(Site* site) {
-
+  printf("Режим авария кондиционеров!\n");
   site->mode = 5;
 
   site->time_pre = time(NULL);
@@ -759,6 +761,8 @@ int site_mode_fail_ac(Site* site) {
 
 /* Превышена температура аварии - Аварийный режим охлаждения*/
 int site_mode_fail_gen(Site* site) {
+
+  printf("Общий аварийный режим!\n");
   site->mode = 6;
   return 1;
 }
