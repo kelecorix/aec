@@ -85,6 +85,7 @@ void i2cTestHardware() {
       val = 0b00000001;
       shift=0;
     }
+    sleep(2);
   }
 
   sleep(10);
