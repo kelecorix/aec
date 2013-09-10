@@ -10,8 +10,6 @@
 #include <sys/ioctl.h>
 #include <string.h>
 
-#define PCF8574 0b0100000  //PCF8574 ID code
-#define PCF8574A 0b0111000 //PCF8574A ID code
 #define I2C_FILE_NAME "/dev/i2c-1"
 
 void i2cOpen();
