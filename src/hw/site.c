@@ -834,6 +834,10 @@ Site* site_new(char* filename) {
     site->vents[i] = vent_new();
   }
 
+  // Укажем конкретный тип для вентилятора
+  site->vents[0]->type = 0; // приточный
+  site->vents[1]->type = 1;
+
   site->th = throttle_new();
 
   site->penalty = 0;

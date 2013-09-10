@@ -16,8 +16,17 @@ static int set_mode(Vent* vent, int val) {
   // accept only 0,1
   // принимаем только 0,1
   if ((val == 1) || (val == 0)) {
+    int addr, value;
+    if (vent->type == 0)
+      addr = getStr(site->cfg, (void *) "a_vent_in");
+    else
+      addr = getStr(site->cfg, (void *) "a_vent_out");
+    if(val==1)
+      value = 0x8F; // максимальное значение
+    else
+      value = 0xFF; // минимальное значение
+    set_i2c_register(g_i2cFile, addr, 0, vent->steps[value]);
     vent->mode = val;
-    // TODO: Управляем оборудованием
     return 1;
   } else {
     // wrong value
@@ -29,13 +38,12 @@ static int set_mode(Vent* vent, int val) {
 // Установим количество оборотов, 8 шагов управлен  ия скоростью
 int set_turns(Vent* vent, int val) {
   if (val >= 0 && val <= 8) {
-    //TODO: Управление оборудование
-//    int addr;
-//    if (vent->type == 0)
-//      addr = getStr(site->cfg, (void *) "a_vent_in");
-//    else
-//      addr = getStr(site->cfg, (void *) "a_vent_out");
-//    set_i2c_register(g_i2cFile, addr, 0, vent->steps[val]);
+    int addr;
+    if (vent->type == 0)
+      addr = getStr(site->cfg, (void *) "a_vent_in");
+    else
+      addr = getStr(site->cfg, (void *) "a_vent_out");
+    set_i2c_register(g_i2cFile, addr, 0, vent->steps[val]);
     vent->turns = val;
     return 1;
   } else {

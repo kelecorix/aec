@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
   void *ret;
   char *filename = "freecooling.conf";
 
-  Site* site = site_new(filename);
+  site = site_new(filename);
 
   if (site->cfg)
     printf("Config was read ok!\n");

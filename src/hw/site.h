@@ -51,6 +51,8 @@ typedef struct Site {
 
 } Site;
 
+extern Site* site; // global variable
+
 // Режимы работы 
 int site_mode_uvo(Site* site);
 int site_mode_ac(Site* site);
