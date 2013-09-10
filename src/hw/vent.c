@@ -25,7 +25,7 @@ static int set_mode(Vent* vent, int val) {
       value = 0x8F; // максимальное значение
     else
       value = 0xFF; // минимальное значение
-    set_i2c_register(g_i2cFile, addr, 0, vent->steps[value]);
+    //set_i2c_register(g_i2cFile, addr, 0, vent->steps[value]);
     vent->mode = val;
     return 1;
   } else {
@@ -43,7 +43,7 @@ int set_turns(Vent* vent, int val) {
       addr = getStr(site->cfg, (void *) "a_vent_in");
     else
       addr = getStr(site->cfg, (void *) "a_vent_out");
-    set_i2c_register(g_i2cFile, addr, 0, vent->steps[val]);
+    //set_i2c_register(g_i2cFile, addr, 0, vent->steps[val]);
     vent->turns = val;
     return 1;
   } else {

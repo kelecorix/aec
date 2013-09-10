@@ -47,7 +47,7 @@ int site_mode_uvo(Site* site) {
   if ((site->temp_out) > temp_dew) { //температура на улице выше температуры росы
     //да
     if (site->th->exist) {
-      site->th->set_position(site->th, 255); //переведем заслонку в положение улица
+      site->th->set_position(site->th, 8); //переведем заслонку в положение улица
       site->th->time_start = time(NULL);
     }
   } else {
@@ -105,7 +105,6 @@ int site_mode_uvo(Site* site) {
                 if (site->vents[v]->mode == 1)
                   site->vents[v]->set_mode(site->vents[v], 0);
               }
-
             } else {
 
               //обнуляем данные TODO: проставить время окончания, высчитать время работы, записать в лог, затем обнулить
@@ -123,9 +122,8 @@ int site_mode_uvo(Site* site) {
 
                 for (v = 0; v < 2; v++) {
                   if (site->vents[v]->mode == 1)
-                    site->vents[v]->set_turns(site->vents[v], 255);
+                    site->vents[v]->set_turns(site->vents[v], 8);
                 }
-
               }
 
               if (site->power == 0) {
@@ -141,7 +139,6 @@ int site_mode_uvo(Site* site) {
                 //питание есть
                 // переходим в режим охлаждения кондиционером
                 site_mode_ac(site);
-
               }
 
             }
@@ -206,17 +203,11 @@ int site_mode_uvo(Site* site) {
                 site->penalty++;
                 // переходим в режим охлаждения кондиционером
                 site_mode_ac(site);
-
               }
-
             }
-
           }
-
         }
-
       }
-
     } else {
       usleep(100000);
       continue;
@@ -225,7 +216,6 @@ int site_mode_uvo(Site* site) {
   }
 
   return 1;
-
 }
 
 /* Режим охлаждения кондиционером */
@@ -249,7 +239,7 @@ int site_mode_ac(Site* site) {
 
   int num_ac_tmp = num_ac;
 
-  if (site->th->position == 255) {
+  if (site->th->position == 8) {
 
     site->th->set_position(site->th, 0);
     site->th->time_start = time(NULL);
@@ -381,7 +371,7 @@ int site_mode_heat(Site* site) {
     site->vents[v]->error = ERROR_HEAT;
   }
 
-  if (site->th->position == 255) {
+  if (site->th->position == 8) {
     // улица
     site->th->set_position(site->th, 0);
     site->th->time_start = time(NULL);
@@ -443,7 +433,7 @@ int site_mode_heat(Site* site) {
               // TODO: Проверить по описанию
               if (site->vents[0]->mode == 0 || site->vents[1]->mode == 0) {
                 site->vents[0]->set_mode(site->vents[0], 1);
-                site->vents[0]->set_turns(site->vents[0], 255);
+                site->vents[0]->set_turns(site->vents[0], 8);
                 site->vents[0]->time_start = time(NULL);
               }
 
@@ -653,8 +643,8 @@ int site_mode_fail_ac(Site* site) {
 
   int a, v;
 
-  if (site->th->position != 255) {
-    site->th->set_position(site->th, 255);
+  if (site->th->position != 8) {
+    site->th->set_position(site->th, 8);
     site->th->time_start = time(NULL);
   }
 
@@ -695,9 +685,7 @@ int site_mode_fail_ac(Site* site) {
 
           site->th_check = 1;
           continue;
-
         }
-
     }
 
     site->time_pre = time(NULL);
@@ -713,7 +701,6 @@ int site_mode_fail_ac(Site* site) {
         site->vents[v]->set_turns(site->vents[v], 8); // 100%
         site->vents[v]->time_start = time(NULL);
       }
-
     }
 
     //работаем с вытяжным
@@ -724,7 +711,6 @@ int site_mode_fail_ac(Site* site) {
         // Заглушка, можем уйти в бесконечный цикл
         // site_mode_ac(site);
       }
-
     }
 
     // проверяем кондиционеры
@@ -742,7 +728,6 @@ int site_mode_fail_ac(Site* site) {
     if (site->temp_in > temp_support - 2) {
       //Переходим на уво
       site_mode_uvo(site);
-
     }
 
     // выключим вениляцию
