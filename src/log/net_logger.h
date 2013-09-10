@@ -8,7 +8,6 @@
 #include "logger.h"
 
 typedef struct NetLogWriter {
-  LogWriter base;
   char* server;
   int port;
 } NetLogWriter;

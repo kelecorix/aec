@@ -7,6 +7,7 @@
 #include "vent.h"
 #include "ow.h"
 #include "../config/config.h"
+#include "../log/logger.h"
 
 void site_free() {
 
@@ -17,6 +18,7 @@ void run(Site* site) {
 
   //Cтартуем с режима УВО
   printf("Logic module started!\n");
+  write_log(site->logger->eventLOG, "Начало работы");
   site_mode_uvo(site);
 
 }
@@ -24,6 +26,7 @@ void run(Site* site) {
 /* Режим охлаждения УВО */
 int site_mode_uvo(Site* site) {
   printf("Режим охлаждения УВО!\n");
+  write_log(site->logger->eventLOG, "Режим охлаждения УВО");
   site->mode = 1;
   site->time_pre = time(NULL);
 
@@ -227,6 +230,7 @@ int site_mode_uvo(Site* site) {
 /* Режим охлаждения кондиционером */
 int site_mode_ac(Site* site) {
   printf("Режим охлаждения кондиционером!\n");
+  write_log(site->logger->eventLOG, "Режим охлаждения кондиционером");
   site->mode = 2;
   site->time_pre = time(NULL);
 
@@ -363,6 +367,7 @@ int site_mode_ac(Site* site) {
 /* Режим догрева сайта */
 int site_mode_heat(Site* site) {
   printf("Режим догрева сайта!\n");
+  write_log(site->logger->eventLOG, "Режим догрева сайта");
   site->mode = 3;
 
   int a, v;
@@ -540,6 +545,7 @@ int site_mode_heat(Site* site) {
  * Авария заслонки - Авария охлаждения кондиционером */
 int site_mode_fail_uvo(Site* site) {
   printf("Режим авария УВО!\n");
+  write_log(site->logger->eventLOG, "Режим авария УВО");
   site->mode = 4;
   site->time_pre = time(NULL);
 
@@ -637,6 +643,7 @@ int site_mode_fail_uvo(Site* site) {
 /* Авария кондиционеров - Охлаждение УВО */
 int site_mode_fail_ac(Site* site) {
   printf("Режим авария кондиционеров!\n");
+  write_log(site->logger->eventLOG, "Режим авария кондиционеров");
   site->mode = 5;
 
   site->time_pre = time(NULL);
@@ -769,6 +776,7 @@ int site_mode_fail_ac(Site* site) {
 int site_mode_fail_gen(Site* site) {
 
   printf("Общий аварийный режим!\n");
+  write_log(site->logger->eventLOG, "Общий аварийный режим");
   site->mode = 6;
   return 1;
 }
@@ -808,6 +816,11 @@ int set_ten(Site* site, int val) {
 
 }
 
+// Запишем текущее состояние параметров
+int write_current(){
+  return 0;
+}
+
 //TODO: Переписать в виде синглетона
 //TODO: Добавить мьютексы для многопоточного доступа к переменным
 Site* site_new(char* filename) {
@@ -835,5 +848,8 @@ Site* site_new(char* filename) {
   site->set_mode = set_mode;
   site->set_ten = set_ten;
   //site->get_ac_time_work = get_time_work;
+
+  site->logger = create_logger();
+
   return site;
 }

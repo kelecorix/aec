@@ -10,6 +10,7 @@
 #include "vent.h"
 #include "ow.h"
 #include "../config/config.h"
+#include "../log/logger.h"
 
 typedef struct Site {
 
@@ -40,6 +41,8 @@ typedef struct Site {
 
   OWNET_HANDLE conn;
   char* mount_point;
+
+  Logger* logger;
 
   int (*set_mode)(struct Site*, int value);
   int (*set_ten)(struct Site*, int value);

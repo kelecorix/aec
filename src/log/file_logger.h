@@ -8,11 +8,12 @@
 #include "logger.h"
 
 typedef struct FileLogWriter {
-  LogWriter base;
   FILE *fp;
+  char* filename;
 } FileLogWriter;
 
 FileLogWriter* create_filelog(char* filename);
 int close_filelog(FileLogWriter* flog);
+int write_log(FileLogWriter* flw, char* message);
 
 #endif /* FILE_LOGGER_H_ */
