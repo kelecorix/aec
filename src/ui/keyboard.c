@@ -1,10 +1,10 @@
 #include "buttons.h"
 #include "ui.h"
 
-KB* kb_new(addr){
+KB* kb_new( addr) {
 
   KB* kb = malloc(sizeof(KB));
-  kb->address=addr;
+  kb->address = addr;
   return kb;
 }
 

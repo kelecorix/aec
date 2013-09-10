@@ -12,8 +12,7 @@
 int g_i2cFile;
 
 // open the Linux device
-void i2cOpen()
-{
+void i2cOpen() {
   g_i2cFile = open(I2C_FILE_NAME, O_RDWR);
   if (g_i2cFile < 0) {
     perror("i2cOpen");
@@ -22,14 +21,12 @@ void i2cOpen()
 }
 
 // close the Linux device
-void i2cClose()
-{
+void i2cClose() {
   close(g_i2cFile);
 }
 
 // set the I2C slave address for all subsequent I2C device transfers
-void i2cSetAddress(int address)
-{
+void i2cSetAddress(int address) {
   if (ioctl(g_i2cFile, I2C_SLAVE, address) < 0) {
     perror("i2cSetAddress");
     exit(1);

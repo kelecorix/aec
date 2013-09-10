@@ -7,7 +7,6 @@
 #include "../utils/hashmap.h"
 #include "../utils/utils.h"
 
-
 ConfigTable* config_table_new() {
   ConfigTable* cfg = malloc(sizeof(ConfigTable));
   cfg->mTable = hashmapCreate(30, str_hash_fn, hashmapIntEquals);
@@ -55,10 +54,10 @@ char* getStr(ConfigTable* cfg, const char *key) {
   //remove /n from value
   strip_n(value);
 
-  if (value){
+  if (value) {
     //printf("Current value %s\n", value);
-    return value;}
-  else
+    return value;
+  } else
     return "";
 }
 

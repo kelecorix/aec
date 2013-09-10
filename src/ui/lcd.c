@@ -51,12 +51,12 @@ void write_lcd(LCD* lcd, int bits) {
 }
 
 /*void lcd_string(char *s) {
-  int i;
-  for (i = 0; i < strlen(s); i++) {
-    //write_char(lcd, s[i]);
-  }
-}
-*/
+ int i;
+ for (i = 0; i < strlen(s); i++) {
+ //write_char(lcd, s[i]);
+ }
+ }
+ */
 void lcd_line(LCD* lcd, char *s, int c) {
   //c линия в какую будем писать
   int i;

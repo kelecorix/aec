@@ -4,5 +4,4 @@
 void initButtons();
 int checkButton();
 
-
 #endif /*BUTTONS_H_*/

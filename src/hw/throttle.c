@@ -47,4 +47,3 @@ Throttle* throttle_new() {
   return th;
 }
 
-

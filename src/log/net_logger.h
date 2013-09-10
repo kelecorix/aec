@@ -9,8 +9,8 @@
 
 typedef struct NetLogWriter {
   LogWriter base;
-  char*   server;
-  int     port;
+  char* server;
+  int port;
 } NetLogWriter;
 
 NetLogWriter* create_netlog(char* server, int port);

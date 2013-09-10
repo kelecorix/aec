@@ -9,7 +9,6 @@
 #include "keyboard.h"
 #include "../hw/site.h"
 
-
 #define mode_OSN 1
 #define mode_MEM 2
 #define mode_NET 3
@@ -20,7 +19,7 @@
 typedef struct Params {
 
   LCD* lcd;
-  KB*  keyboard;
+  KB* keyboard;
 
 } Params;
 

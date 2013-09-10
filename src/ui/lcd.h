@@ -38,7 +38,6 @@
 #define LCD_LINE2_DDRAMADDR   0x10
 #define LCD_LINE3_DDRAMADDR   0x50
 #define LCD_DDRAM             7 //DB7: set DD RAM address
-
 typedef struct LCD {
 
   Site* site;

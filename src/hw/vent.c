@@ -40,8 +40,8 @@ int set_turns(Vent* vent, int val) {
 
 Vent* vent_new() {
   Vent* vent = malloc(sizeof(Vent));
-  vent->mode=0;
-  vent->error=NOERROR;
+  vent->mode = 0;
+  vent->error = NOERROR;
 
   vent->set_mode = set_mode;
   vent->set_turns = set_turns;

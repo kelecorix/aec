@@ -30,7 +30,7 @@ int site_mode_uvo(Site* site) {
   int a, v, ret;
   char *key = "temp_dew"; // температура росы
   char *value = getStr(site->cfg, (void *) key);
-  float temp_dew = strtof (value, NULL);
+  float temp_dew = strtof(value, NULL);
   printf("Temp dew %f\n", temp_dew);
 
   // читаем датчики
@@ -42,13 +42,13 @@ int site_mode_uvo(Site* site) {
 
   if ((site->temp_out) > temp_dew) { //температура на улице выше температуры росы
     //да
-    if (site->th->exist){
+    if (site->th->exist) {
       site->th->set_position(site->th, 255); //переведем заслонку в положение улица
       site->th->time_start = time(NULL);
     }
   } else {
     //нет
-    if (site->th->exist){
+    if (site->th->exist) {
       site->th->set_position(site->th, 0); //переведем заслонку в положение сайт
       site->th->time_start = time(NULL);
     }
@@ -66,8 +66,8 @@ int site_mode_uvo(Site* site) {
 
     if (difftime(time(NULL), site->time_pre) >= 30) { //секунды
       site->time_pre = time(NULL);
-      printf("*********RESENIE V UVO***********\n");      
-      printf("in = %2.2f out = %2.2f\n",site->temp_in,site->temp_out);
+      printf("*********RESENIE V UVO***********\n");
+      printf("in = %2.2f out = %2.2f\n", site->temp_in, site->temp_out);
       // start using ventilation
       if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1) {
         // yes
@@ -99,7 +99,7 @@ int site_mode_uvo(Site* site) {
               //выключим вентиляцию
               for (v = 0; v < 2; v++) {
                 if (site->vents[v]->mode == 1)
-                  site->vents[v]->set_mode(site->vents[v],0);
+                  site->vents[v]->set_mode(site->vents[v], 0);
               }
 
             } else {
@@ -119,7 +119,7 @@ int site_mode_uvo(Site* site) {
 
                 for (v = 0; v < 2; v++) {
                   if (site->vents[v]->mode == 1)
-                    site->vents[v]->set_turns(site->vents[v],255);
+                    site->vents[v]->set_turns(site->vents[v], 255);
                 }
 
               }
@@ -150,7 +150,7 @@ int site_mode_uvo(Site* site) {
             //выключим вентиляцию
             for (v = 0; v < 2; v++) {
               if (site->vents[v]->mode == 1)
-                site->vents[v]->time_start=0;
+                site->vents[v]->time_start = 0;
             }
 
             if (site->temp_in < temp_support - 2) {
@@ -161,8 +161,8 @@ int site_mode_uvo(Site* site) {
 
                 for (v = 0; v < 2; v++) {
                   if (site->vents[v]->mode == 1)
-                    site->vents[v]->set_mode(site->vents[v],0);
-                    site->vents[v]->set_turns(site->vents[v],0);
+                    site->vents[v]->set_mode(site->vents[v], 0);
+                  site->vents[v]->set_turns(site->vents[v], 0);
                 }
               }
 
@@ -171,7 +171,7 @@ int site_mode_uvo(Site* site) {
                 //выключим вентиляцию
                 for (a = 0; a < 2; a++) {
                   if (site->acs[a]->mode == 1)
-                    site->acs[v]->set_mode(site->acs[v],0);
+                    site->acs[v]->set_mode(site->acs[v], 0);
                 }
               }
 
@@ -246,7 +246,7 @@ int site_mode_ac(Site* site) {
 
   if (site->th->position == 255) {
 
-    site->th->set_position(site->th,0);
+    site->th->set_position(site->th, 0);
     site->th->time_start = time(NULL);
 
   }
@@ -281,14 +281,14 @@ int site_mode_ac(Site* site) {
             //выключим вентиляцию
             for (v = 0; v < 2; v++) {
               if (site->vents[v]->mode == 1)
-                site->vents[v]->set_mode(site->vents[v],0);
+                site->vents[v]->set_mode(site->vents[v], 0);
             }
 
             //TODO: Проверить по описанию
             for (a = 0; a < 2; a++) {
               if (site->acs[a]->mode == 1)
-                site->acs[a]->set_mode(site->acs[a],0);
-                site->acs[a]->time_start = time(NULL);
+                site->acs[a]->set_mode(site->acs[a], 0);
+              site->acs[a]->time_start = time(NULL);
             }
 
           }
@@ -299,7 +299,7 @@ int site_mode_ac(Site* site) {
           // выключим кондиционирование
           for (a = 0; a < 2; a++) {
             if (site->acs[a]->mode == 1)
-              site->acs[a]->set_mode(site->acs[a],0);
+              site->acs[a]->set_mode(site->acs[a], 0);
           }
 
         }
@@ -315,7 +315,7 @@ int site_mode_ac(Site* site) {
             // выключим кондиционирование
             for (a = 0; a < 2; a++) {
               if (site->acs[a]->mode == 1)
-                site->acs[a]->set_mode(site->acs[a],0);
+                site->acs[a]->set_mode(site->acs[a], 0);
             }
           }
 
@@ -419,7 +419,7 @@ int site_mode_heat(Site* site) {
                 continue; // продолжаем цикл догрева
               } else {
 
-                site->vents[0]->set_turns(site->vents[0],0);// обороты приточного
+                site->vents[0]->set_turns(site->vents[0], 0); // обороты приточного
 
                 //выключим вентиляцию
                 for (v = 0; v < 2; v++) {
@@ -436,7 +436,7 @@ int site_mode_heat(Site* site) {
 
               // TODO: Проверить по описанию
               if (site->vents[0]->mode == 0 || site->vents[1]->mode == 0) {
-                site->vents[0]->set_mode(site->vents[0],1);
+                site->vents[0]->set_mode(site->vents[0], 1);
                 site->vents[0]->set_turns(site->vents[0], 255);
                 site->vents[0]->time_start = time(NULL);
               }
@@ -464,7 +464,7 @@ int site_mode_heat(Site* site) {
                 } else {
                   //нет
                   site->ten = 0;
-                  site->vents[0]->set_turns(site->vents[0],0);
+                  site->vents[0]->set_turns(site->vents[0], 0);
                   site->vents[0]->error = ERROR;
 
                   site_mode_ac(site); // Авария вентиляции - охлаждение кондиционером
@@ -583,7 +583,7 @@ int site_mode_fail_uvo(Site* site) {
             }
             // TODO: Проверить по описанию
             for (a = 0; a < 2; a++) {
-              site->acs[a]->set_mode(site->acs[a],1);
+              site->acs[a]->set_mode(site->acs[a], 1);
               site->acs[a]->time_start = time(NULL);
             }
           }
@@ -597,7 +597,7 @@ int site_mode_fail_uvo(Site* site) {
           if (site->acs[a]->is_diff == 0) {
             // Авария кондиционера
             num_ac_tmp--;
-            site->acs[a]->set_mode(site->acs[a],0);
+            site->acs[a]->set_mode(site->acs[a], 0);
           }
         }
       }
@@ -660,7 +660,7 @@ int site_mode_fail_ac(Site* site) {
     if (ret != 0) {
       //Ошибка чтения датчиков
       for (v = 0; v < 2; v++) {
-        site->vents[v]->set_mode(site->vents[v],1);
+        site->vents[v]->set_mode(site->vents[v], 1);
         site->vents[v]->set_turns(site->vents[v], 8); // 100%
         site->vents[v]->time_start = time(NULL);
       }
@@ -801,7 +801,7 @@ int set_mode(Site* site, int val) {
   return 0;
 }
 
-int set_ten(Site* site, int val){
+int set_ten(Site* site, int val) {
 
   // TODO: Управляем оборудованием
   return 0;

@@ -8,10 +8,8 @@
 #include "file_logger.h"
 #include "net_logger.h"
 
-
 /** The log writer object */
 typedef struct LogWriter {
-
 
 } LogWriter;
 

@@ -13,8 +13,8 @@ void run_ui(Site* site) {
   //прочитаем адрес из конфигурации
   char *key = "a_lcd";
   char *a_lcd = getStr(site->cfg, (void *) key);
-  int addr = strtol(a_lcd, (char **)NULL, 16);
-  printf("LCD addr = %d\n",addr);
+  int addr = strtol(a_lcd, (char **) NULL, 16);
+  printf("LCD addr = %d\n", addr);
   LCD* lcd = lcd_new(addr);
 
   int menu_curr = 0; // текущее меню
@@ -53,7 +53,7 @@ void run_ui(Site* site) {
 
     key = "a_keyb";
     char *a_keyb = getStr(site->cfg, (void *) key);
-    int kb_addr = strtol(a_keyb, (char **)NULL, 16);
+    int kb_addr = strtol(a_keyb, (char **) NULL, 16);
     KB* kb = kb_new(kb_addr);
 
     //display_mode = keyboard();
@@ -66,9 +66,8 @@ void run_ui(Site* site) {
 
 void display(Site* site, LCD* lcd, int display_mode) {
 
-  char tmp_value[50], tmp_time[50], tmp_temp_out[50],
-       tmp_temp_in[50], tmp_temp_mix[50], tmp_temp_evapor1[50],
-       tmp_temp_evapor2[50], buffer[200];
+  char tmp_value[50], tmp_time[50], tmp_temp_out[50], tmp_temp_in[50],
+      tmp_temp_mix[50], tmp_temp_evapor1[50], tmp_temp_evapor2[50], buffer[200];
   //char* host;
   //int mem_tot, i_cpu_load, cpu_interval = 0;
   int tek_znach = 25;
@@ -98,7 +97,7 @@ void display(Site* site, LCD* lcd, int display_mode) {
         sprintf(tmp_temp_out, "Улица  = %2.2f°C", site->temp_out);
       } else {
         sprintf(tmp_temp_out, "Улица  =  Ошибка");
-      } 
+      }
       if (site->temp_in != -100.0) {
         sprintf(tmp_temp_in, "Сайт   = %2.2f°C", site->temp_in);
       } else {
@@ -123,7 +122,7 @@ void display(Site* site, LCD* lcd, int display_mode) {
         sprintf(tmp_temp_evapor1, "Конд1  = %2.2f°C", site->temp_evapor1);
       } else {
         sprintf(tmp_temp_evapor1, "Конд1  =  Ошибка");
-      } 
+      }
       if (site->temp_evapor2 != -100.0) {
         sprintf(tmp_temp_evapor2, "Конд2  = %2.2f°C", site->temp_evapor2);
       } else {
@@ -134,7 +133,7 @@ void display(Site* site, LCD* lcd, int display_mode) {
       } else {
         sprintf(tmp_temp_mix, "Миксер =  Ошибка");
       }
-      
+
       lcd_line(lcd, tmp_temp_evapor1, 0);
       lcd_line(lcd, tmp_temp_evapor2, 1);
       lcd_line(lcd, tmp_temp_mix, 2);
