@@ -17,9 +17,7 @@ OWNET_HANDLE create_server_conn(char *addr) {
   if (owh < 0) {
     printf("OWNET_init(%s) failed.\n", addr); //TODO: писать в лог о проблемах
   }
-
   return owh;
-
 }
 
 int close_server_conn(OWNET_HANDLE conn) {
@@ -76,7 +74,6 @@ float get_data(OWNET_HANDLE conn, char* mnt, char* filename, int lim) {
           // все еще пусто после повторных опросов
           return -100.f; // вернем ошибку
         }
-
       }
 
       // уберем лидирующие пробелы
@@ -103,7 +100,6 @@ int list_sensors(Site* site, char *tokens[]) {
   int ret = splitString(dirs, tokens, ',');
 
   return 0;
-
 }
 
 int read_sensors(Site* site) {
@@ -123,8 +119,8 @@ int read_sensors(Site* site) {
   site->temp_evapor1 = get_data(conn, mnt, s_temp_evapor1, 100);
   site->temp_evapor2 = get_data(conn, mnt, s_temp_evapor2, 100);
 
-  printf("temp_out = %2.2f", site->temp_out);
-  printf("temp_in = %2.2f", site->temp_in);
+  printf("temp_out = %2.2f\n", site->temp_out);
+  printf("temp_in = %2.2f\n", site->temp_in);
   printf("temp_mix = %2.2f\n", site->temp_mix);
   printf("temp_evapor1 = %2.2f\n", site->temp_evapor1);
   printf("temp_evapor2 = %2.2f\n", site->temp_evapor2);
