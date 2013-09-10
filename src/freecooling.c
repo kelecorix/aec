@@ -16,46 +16,46 @@
 
 int main(int argc, char *argv[]) {
 
-  pthread_t threadL, threadU;
-  int retL, retU;
-  void *ret;
-  char *filename = "freecooling.conf";
+//  pthread_t threadL, threadU;
+//  int retL, retU;
+//  void *ret;
+//  char *filename = "freecooling.conf";
+//
+//  site = site_new(filename);
+//
+//  if (site->cfg)
+//    printf("Config was read ok!\n");
+//
+//  site->conn = create_server_conn("127.0.0.1:4304");
+//  if (site->conn == 0)
+//    printf("OWFS connection established!\n");
+//  else
+//    printf("OWFS connection not fins. Fire up OWFS server!\n");
+//
+//  sleep(4);
+//
+//  //Workers Воркеры - выполняют параллельно свои операции
+//
+//  if (pthread_create(&threadL, NULL, run, (void*) site)) {
+//    fprintf(stderr, "Error creating algo thread\n");
+//    printf("Error creating algo thread\n");
+//    return 1;
+//  }
+//
+//  sleep(4);
+//
+//  if (pthread_create(&threadU, NULL, run_ui, (void*) site)) {
+//    fprintf(stderr, "Error creating UI thread\n");
+//    printf("Error creating UI thread\n");
+//    return 1;
+//  }
+//
+//// ждем пока потоками завершаться
+//// по идде сюда не должно дойти
+//  pthread_join(threadL, retL);
+//  pthread_join(threadU, retU);
 
-  site = site_new(filename);
-
-  if (site->cfg)
-    printf("Config was read ok!\n");
-
-  site->conn = create_server_conn("127.0.0.1:4304");
-  if (site->conn == 0)
-    printf("OWFS connection established!\n");
-  else
-    printf("OWFS connection not fins. Fire up OWFS server!\n");
-
-  sleep(4);
-
-  //Workers Воркеры - выполняют параллельно свои операции
-
-  if (pthread_create(&threadL, NULL, run, (void*) site)) {
-    fprintf(stderr, "Error creating algo thread\n");
-    printf("Error creating algo thread\n");
-    return 1;
-  }
-
-  sleep(4);
-
-  if (pthread_create(&threadU, NULL, run_ui, (void*) site)) {
-    fprintf(stderr, "Error creating UI thread\n");
-    printf("Error creating UI thread\n");
-    return 1;
-  }
-
-// ждем пока потоками завершаться
-// по идде сюда не должно дойти
-  pthread_join(threadL, retL);
-  pthread_join(threadU, retU);
-
-  //i2cTestHardware();
+  i2cTestHardware();
 
   return EXIT_SUCCESS;
 
