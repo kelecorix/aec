@@ -69,22 +69,23 @@ void i2cTestHardware() {
   i2cOpen();
 
   int steps[10] = { 0xFF, 0xED, 0xDF, 0xDE, 0xDC, 0xBF, 0xBE, 0x7F, 0x7E, 0x9F,
-      0x8F, 0x3F };
+      0x8F};
 
   i2cSetAddress(addrFan1);
   set_i2c_register(g_i2cFile, addrFan1, 0, steps[2]);
   set_i2c_register(g_i2cFile, addrFan2, 0, steps[2]);
-  set_i2c_register(g_i2cFile, addrTh, 0, 0x37);
-  sleep(5);
-  set_i2c_register(g_i2cFile, addrTh, 0, 0);
+  set_i2c_register(g_i2cFile, addrTh, 0, 0xFF);
+  set_i2c_register(g_i2cFile, addrRel, 0, 0b00000000);
+  sleep(10);
+  set_i2c_register(g_i2cFile, addrTh, 0, 0xDC);
   sleep(10);
   set_i2c_register(g_i2cFile, addrFan1, 0, steps[6]);
   set_i2c_register(g_i2cFile, addrFan2, 0, steps[6]);
-  set_i2c_register(g_i2cFile, addrTh, 0, 0xFF);
+  set_i2c_register(g_i2cFile, addrTh, 0, 0xED);
   sleep(10);
   set_i2c_register(g_i2cFile, addrFan1, 0, steps[0]);
   set_i2c_register(g_i2cFile, addrFan2, 0, steps[0]);
-  set_i2c_register(g_i2cFile, addrTh, 0, 0);
+  set_i2c_register(g_i2cFile, addrTh, 0, 0x8F);
 
   i2cClose();
 

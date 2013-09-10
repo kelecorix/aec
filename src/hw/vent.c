@@ -26,11 +26,17 @@ static int set_mode(Vent* vent, int val) {
   }
 }
 
-// Установим количество оборотов, 8 шагов управления скоростью
+// Установим количество оборотов, 8 шагов управлен  ия скоростью
 int set_turns(Vent* vent, int val) {
   if (val >= 0 && val <= 8) {
+    //TODO: Управление оборудование
+//    int addr;
+//    if (vent->type == 0)
+//      addr = getStr(site->cfg, (void *) "a_vent_in");
+//    else
+//      addr = getStr(site->cfg, (void *) "a_vent_out");
+//    set_i2c_register(g_i2cFile, addr, 0, vent->steps[val]);
     vent->turns = val;
-    // TODO: Управляем оборудованием
     return 1;
   } else {
     // wrong value
