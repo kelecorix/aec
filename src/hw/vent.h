@@ -4,6 +4,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "i2c.h"
 
 typedef enum {
   NOERROR, ERROR, ERROR_HEAT

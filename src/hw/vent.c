@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "vent.h"
+#include "i2c.h"
 
 void vent_free() {
   //TODO: очистим ресурсы памяти

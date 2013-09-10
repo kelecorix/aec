@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "ac.h"
+#include "i2c.h"
 
 void ac_free() {
 //TODO: очистим ресурсы памяти

@@ -6,6 +6,7 @@
 #include "throttle.h"
 #include "vent.h"
 #include "ow.h"
+#include "i2c.h"
 #include "../config/config.h"
 #include "../log/logger.h"
 

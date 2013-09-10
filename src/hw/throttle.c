@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "throttle.h"
+#include "i2c.h"
 
 /*
  * Изменим режим заслонки 
