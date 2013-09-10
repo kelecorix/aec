@@ -32,8 +32,7 @@ int site_mode_uvo(Site* site) {
   site->time_pre = time(NULL);
 
   int a, v, ret;
-  char *key = "temp_dew"; // температура росы
-  char *value = getStr(site->cfg, (void *) key);
+  char *value = getStr(site->cfg, (void *) "temp_dew");
   float temp_dew = strtof(value, NULL);
   printf("Temp dew %f\n", temp_dew);
 
@@ -78,8 +77,7 @@ int site_mode_uvo(Site* site) {
 
       } else {
         //no
-        char *key = "temp_fail";
-        float temp_fail = strtof(getStr(site->cfg, (void *) key), NULL);
+        float temp_fail = strtof(getStr(site->cfg, (void *) "temp_fail"), NULL);
 
         if ((site->temp_in) >= temp_fail) {
 
@@ -90,8 +88,7 @@ int site_mode_uvo(Site* site) {
         } else {
 
           // температура нормальная
-          char *key = "temp_support";
-          float temp_support = strtof(getStr(site->cfg, (void *) key), NULL);
+          float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"), NULL);
 
           if (site->temp_in >= (temp_support - 2)
               && site->temp_in <= (temp_support) + 2) {
@@ -176,8 +173,7 @@ int site_mode_uvo(Site* site) {
                 }
               }
 
-              char *key = "temp_heat";
-              float temp_heat = strtof(getStr(site->cfg, (void *) key), NULL);
+              float temp_heat = strtof(getStr(site->cfg, (void *) "temp_heat"), NULL);
 
               if ((site->temp_in) < temp_heat) {
                 // переходим в режим обогрева
@@ -234,8 +230,7 @@ int site_mode_ac(Site* site) {
     site->acs[a]->is_diff = 0;
   }
 
-  char *key = "num_ac";
-  int num_ac = atoi(getStr(site->cfg, (void *) key));
+  int num_ac = atoi(getStr(site->cfg, (void *) "num_ac"));
 
   int num_ac_tmp = num_ac;
 
@@ -321,11 +316,9 @@ int site_mode_ac(Site* site) {
       // еще есть живые кондиционеры?
       if (num_ac_tmp > 0) {
         //да
-        char *key = "temp_support";
-        float temp_support = strtof(getStr(site->cfg, (void *) key), NULL);
+        float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"), NULL);
 
-        *key = "temp_fail";
-        float temp_fail = strtof(getStr(site->cfg, (void *) key), NULL);
+        float temp_fail = strtof(getStr(site->cfg, (void *) "temp_fail"), NULL);
 
         if ((temp_support - site->temp_out) >= (site->penalty + 2)) {
           // переходим в УВО
@@ -404,8 +397,7 @@ int site_mode_heat(Site* site) {
 
             site->time_pre = time(NULL);
 
-            char *key = "temp_support";
-            float temp_support = strtof(getStr(site->cfg, (void *) key), NULL);
+            float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"), NULL);
 
             if (site->temp_in >= temp_support) {
               //да
@@ -549,8 +541,7 @@ int site_mode_fail_uvo(Site* site) {
     site->acs[a]->is_diff = 0;
   }
 
-  char *key = "num_ac";
-  int num_ac = atoi(getStr(site->cfg, (void *) key));
+  int num_ac = atoi(getStr(site->cfg, (void *)  "num_ac"));
 
   int num_ac_tmp = num_ac;
 
@@ -602,8 +593,7 @@ int site_mode_fail_uvo(Site* site) {
       // Eще есть живые кондиционеры?
       if (num_ac_tmp > 0) {
         //да
-        char *key = "temp_support";
-        float temp_support = strtof(getStr(site->cfg, (void *) key), NULL);
+        float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"), NULL);
 
         if ((temp_support - site->temp_out) >= (site->penalty + 2)) {
           if (site->temp_in <= temp_support - 2) {
@@ -722,8 +712,7 @@ int site_mode_fail_ac(Site* site) {
       }
     }
 
-    char *key = "temp_support";
-    float temp_support = strtof(getStr(site->cfg, (void *) key), NULL);
+    float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"), NULL);
 
     if (site->temp_in > temp_support - 2) {
       //Переходим на уво
@@ -745,8 +734,7 @@ int site_mode_fail_ac(Site* site) {
       site->acs[a]->time_stop = time(NULL);
     }
 
-    *key = "temp_heat";
-    float temp_heat = strtof(getStr(site->cfg, (void *) key), NULL);
+    float temp_heat = strtof(getStr(site->cfg, (void *) "temp_heat"), NULL);
 
     if (site->temp_in < temp_heat) {
       site_mode_heat(site);
