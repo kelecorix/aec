@@ -63,19 +63,6 @@ int set_i2c_register(int file, unsigned char addr, unsigned char reg,
 
 void i2cTestHardware() {
 
-//  int val = 0b00000001;
-//   int i, shift=0;
-//   for (i = 0; i < 64; i++, shift++) {
-//     if ((i % 8) == 0) {
-//          val = 0b00000001;
-//          shift=0;
-//      }
-//     //set_i2c_register(g_i2cFile, addrRel, 0, val << shift);
-//     printf("%d\n", val<<shift);
-//
-//    // sleep(3);
-//   }
-
   // Fan 0 приточный
   int addrFan1 = 0b00100000, addrFan2 = 0b00100001, addrTh = 0b00100010,
       addrRel = 0b00111011;
@@ -90,6 +77,7 @@ void i2cTestHardware() {
   set_i2c_register(g_i2cFile, addrFan2, 0, steps[2]);
   set_i2c_register(g_i2cFile, addrTh, 0, 0xFF);
 
+  // Тестируем реле или лампочки на RPi
   int val = 0b00000001;
   int i, shift =0;
   for (i = 0; i < 64; i++, shift++) {
