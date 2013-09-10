@@ -13,4 +13,6 @@ typedef struct NetLogWriter {
   int     port;
 } NetLogWriter;
 
+NetLogWriter* create_netlog(char* server, int port);
+
 #endif /* NET_LOGGER_H_ */
