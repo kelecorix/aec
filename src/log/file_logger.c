@@ -8,7 +8,7 @@ FileLogWriter* create_filelog(char* filename) {
 
   FileLogWriter* log = malloc(sizeof(FileLogWriter));
 
-  FILE fp = fopen(filename, "w");
+  FILE *fp = fopen(filename, "w");
   if (!fp) {
     fprintf(stderr, "could not open log file %s", filename);
     return NULL;
@@ -17,5 +17,12 @@ FileLogWriter* create_filelog(char* filename) {
   log->fp = fp;
 
   return log;
+
+}
+
+int close_filelog(FileLogWriter* flog){
+
+  fclose(flog->fp);
+  return 0;
 
 }

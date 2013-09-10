@@ -13,5 +13,6 @@ typedef struct FileLogWriter {
 } FileLogWriter;
 
 FileLogWriter* create_filelog(char* filename);
+int close_filelog(FileLogWriter* flog);
 
 #endif /* FILE_LOGGER_H_ */

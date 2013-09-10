@@ -24,38 +24,3 @@ void logger_free() {
   //TODO: очистим ресурсы памяти
 }
 
-int dump_full_log(char *name) {
-
-  return 0;
-
-}
-
-int dump_fail_log(char *name) {
-
-  return 0;
-
-}
-
-int dump_data_log(char *name) {
-
-  return 0;
-
-}
-
-int send_full_log(char *name) {
-
-  return 0;
-
-}
-
-int sent_fail_log(char *name) {
-
-  return 0;
-
-}
-
-int sent_data_log(char *name) {
-
-  return 0;
-
-}
