@@ -3,8 +3,13 @@
 #include <stdlib.h>
 #include <time.h>
 #include "logger.h"
+#include "file_logger.h"
+#include "net_logger.h"
 
-Logger* create_logger() {
+
+Logger* create_logger(){
+
+
 
 }
 

@@ -5,22 +5,22 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+#include "file_logger.h"
+#include "net_logger.h"
 
-//Logger
+
+/** The log writer object */
+typedef struct LogWriter {
+
+
+} LogWriter;
+
 typedef struct Logger {
-
-  int mode; // 0 - typical. 1 - debug, 2 - deep debug
-
-  // Saving data on SD
-  int (*dump_full_log)(char *name);
-  int (*dump_fail_log)(char *name);
-  int (*dump_data_log)(char *name);
-
-  // Sending data over network
-  int (*send_full_log)(char *name);
-  int (*sent_fail_log)(char *name);
-  int (*sent_data_log)(char *name);
-
+  int level;
+  FileLogWriter dataLOG;   // журналирование данных
+  FileLogWriter eventLOG;  // журналирование событий
+  NetLogWriter dataLOG_n;  // удаленное журналирование данны
+  NetLogWriter eventLOG_n; // удаленное журанлирование собыйти
 } Logger;
 
 #endif /*LOG_H_*/
