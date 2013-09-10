@@ -72,8 +72,8 @@ void i2cTestHardware() {
       0x8F, 0x3F };
 
   i2cSetAddress(addrFan1);
-  set_i2c_register(g_i2cFile, addrFan1, 0, steps[5]);
-  set_i2c_register(g_i2cFile, addrFan2, 0, steps[5]);
+  set_i2c_register(g_i2cFile, addrFan1, 0, steps[4]);
+  set_i2c_register(g_i2cFile, addrFan2, 0, steps[4]);
   sleep(5);
   set_i2c_register(g_i2cFile, addrFan1, 0, steps[0]);
   set_i2c_register(g_i2cFile, addrFan2, 0, steps[0]);
