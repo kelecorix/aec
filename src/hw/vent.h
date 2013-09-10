@@ -4,6 +4,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "i2c.h"
 
 typedef enum {
   NOERROR, ERROR, ERROR_HEAT
@@ -14,10 +15,9 @@ typedef struct Vent {
 
   int mode; // 0 - OFF/ВЫКЛ, 1 - ON/ВКЛ
   int turns; // обороты, значения мз таблицы 
-
+  long time_work;
   time_t time_start;
   time_t time_stop;
-  long time_work;
 
   vent_error error;
 

@@ -18,11 +18,16 @@
 
 # Makefile stuff
 freecooling
+freecooling2
 *.d
 
 # Emacs related
 *.*~
+#*#
+.#*
 
 # Eclipse related
 .cproject
 .project
+.setting
+/Debug
