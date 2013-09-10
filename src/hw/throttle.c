@@ -4,6 +4,9 @@
 #include "throttle.h"
 #include "i2c.h"
 
+//int steps[10] = { 0xFF, 0xED, 0xDF, 0xDE, 0xDC, 0xBF, 0xBE, 0x7F, 0x7E, 0x9F,
+//     0x8F};
+
 /*
  * Изменим режим заслонки 
  */
@@ -12,12 +15,12 @@ static int set_mode(Throttle* th, int val) {
   // принимаем только 0,1
   if ((val == 1) || (val == 0)) {
     int addr, value;
-    addr = getStr(site->cfg, (void *) "a_throttle");
+    //addr = getStr(site->cfg, (void *) "a_throttle");
     if (val == 1)
       value = 0x8F; // максимальное значение
     else
       value = 0xFF; // минимальное значение
-    //set_i2c_register(g_i2cFile, addr, 0, th->steps[value]);
+    //set_i2c_register(g_i2cFile, addr, 0, steps[value]);
     th->position = val;
     return 1;
   } else {
@@ -30,8 +33,8 @@ static int set_mode(Throttle* th, int val) {
 int set_position(Throttle* th, int val) {
   if (val >= 0 && val <= 8) {
     int addr;
-    addr = getStr(site->cfg, (void *) "a_vent_in");
-    //set_i2c_register(g_i2cFile, addr, 0, th->steps[val]);
+    //addr = getStr(site->cfg, (void *) "a_vent_in");
+    //set_i2c_register(g_i2cFile, addr, 0, steps[val]);
     th->position = val;
     return 1;
   } else {

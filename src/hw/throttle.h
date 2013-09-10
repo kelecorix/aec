@@ -16,9 +16,6 @@ typedef struct Throttle {
   time_t time_start;
   time_t time_stop;
 
-  int steps[10] = {0xFF, 0xED, 0xDF, 0xDE, 0xDC, 0xBF, 0xBE, 0x7F, 0x7E, 0x9F,
-         0x8F};
-
   int (*set_mode)(struct Throttle*, int val);
   int (*set_position)(struct Throttle*, int val);
 

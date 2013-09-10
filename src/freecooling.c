@@ -16,23 +16,23 @@
 
 int main(int argc, char *argv[]) {
 
-//  pthread_t threadL, threadU;
-//  int retL, retU;
-//  void *ret;
-//  char *filename = "freecooling.conf";
-//
-//  site = site_new(filename);
-//
-//  if (site->cfg)
-//    printf("Config was read ok!\n");
-//
-//  site->conn = create_server_conn("127.0.0.1:4304");
-//  if (site->conn == 0)
-//    printf("OWFS connection established!\n");
-//  else
-//    printf("OWFS connection not fins. Fire up OWFS server!\n");
-//
-//  sleep(4);
+  pthread_t threadL, threadU;
+  int retL, retU;
+  void *ret;
+  char *filename = "freecooling.conf";
+
+  Site* site = site_new(filename);
+
+  if (site->cfg)
+    printf("Config was read ok!\n");
+
+  site->conn = create_server_conn("127.0.0.1:4304");
+  if (site->conn == 0)
+    printf("OWFS connection established!\n");
+  else
+    printf("OWFS connection not fins. Fire up OWFS server!\n");
+
+  sleep(4);
 //
 //  //Workers Воркеры - выполняют параллельно свои операции
 //

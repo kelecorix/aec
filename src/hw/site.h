@@ -4,10 +4,10 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "site.h"
-#include "ac.h"
 #include "throttle.h"
 #include "vent.h"
+#include "site.h"
+#include "ac.h"
 #include "ow.h"
 #include "i2c.h"
 #include "../config/config.h"
@@ -50,8 +50,6 @@ typedef struct Site {
   double (*get_ac_time_work)(struct Site*);
 
 } Site;
-
-extern Site* site; // global variable
 
 // Режимы работы 
 int site_mode_uvo(Site* site);

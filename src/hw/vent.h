@@ -22,9 +22,6 @@ typedef struct Vent {
 
   vent_error error;
 
-  int steps[10] = { 0xFF, 0xED, 0xDF, 0xDE, 0xDC, 0xBF, 0xBE, 0x7F, 0x7E, 0x9F,
-       0x8F};
-
   int (*set_mode)(struct Vent*, int val);
   int (*set_turns)(struct Vent*, int val);
 
