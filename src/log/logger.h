@@ -17,10 +17,10 @@ typedef struct LogWriter {
 
 typedef struct Logger {
   int level;
-  FileLogWriter dataLOG;   // журналирование данных
-  FileLogWriter eventLOG;  // журналирование событий
-  NetLogWriter dataLOG_n;  // удаленное журналирование данны
-  NetLogWriter eventLOG_n; // удаленное журанлирование собыйти
+  FileLogWriter* dataLOG;   // журналирование данных
+  FileLogWriter* eventLOG;  // журналирование событий
+  NetLogWriter* dataLOG_n;  // удаленное журналирование данны
+  NetLogWriter* eventLOG_n; // удаленное журанлирование событий
 } Logger;
 
 #endif /*LOG_H_*/
