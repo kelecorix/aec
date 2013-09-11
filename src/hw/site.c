@@ -779,6 +779,19 @@ int site_mode_fail_gen(Site* site) {
   printf("Общий аварийный режим!\n");
   write_log(site->logger->eventLOG, "Общий аварийный режим");
   site->mode = 6;
+
+  if (site->temp_in - site->temp_out){
+    //да
+    // Охлаждаем УВО
+    site_mode_uvo(site);
+
+  } else {
+    //нет
+    // Охлаждаем кондиционерами
+    site_mode_ac(site);
+
+  }
+
   return 1;
 }
 
