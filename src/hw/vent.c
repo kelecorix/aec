@@ -21,6 +21,7 @@ static int set_mode(Vent* vent, int val) {
   // принимаем только 0,1
   if ((val == 1) || (val == 0)) {
     int addr, value;
+    printf("Включим вент\n");
     if (vent->type == 0)
       addr = getStr(site->cfg, (void *) "a_vent_in");
     else
@@ -29,6 +30,7 @@ static int set_mode(Vent* vent, int val) {
       value = 0x8F; // максимальное значение
     else
       value = 0xFF; // минимальное значение
+    printf("Управляем регистром, адрес %d, значение\n", addr, steps[value]);
     set_i2c_register(g_i2cFile, addr, 0, steps[value]);
     vent->mode = val;
     return 1;
