@@ -16,7 +16,8 @@ static int set_mode(Throttle* th, int val) {
   // принимаем только 0,1
   if ((val == 1) || (val == 0)) {
     int addr, value;
-    addr = getStr(site->cfg, (void *) "a_throttle");
+    //addr = getStr(site->cfg, (void *) "a_throttle");
+    addr = 0b00100010;
     if (val == 1)
       value = 0x8F; // максимальное значение
     else
