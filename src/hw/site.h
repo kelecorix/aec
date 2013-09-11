@@ -33,6 +33,9 @@ typedef struct Site {
   float temp_mix;     // температура камеры смешения
   float temp_evapor1; // температуры испарителя 1го кондиционера
   float temp_evapor2; // температуры испарителя 2го кондиционера
+  int tacho1;         // данные таходатчика 1
+  int tacho2;         // данные таходатчика 2
+  int th_r; // положение заслонки считанное
 
   int penalty; // штраф
   int th_check; // throttle check - флаг проверки заслонки
@@ -53,6 +56,11 @@ typedef struct Site {
 
 // Режимы работы 
 int site_mode_uvo(Site* site);
+void sub_uvo_pen(Site* site);
+void sub_uvo_vent(Site* site);
+void sub_uvo_pow(Site* site);
+void sub_uvo_th(Site* site);
+void sub_uvo_fail(Site* site);
 int site_mode_ac(Site* site);
 int site_mode_heat(Site* site);
 int site_mode_fail_uvo(Site* site);
@@ -61,5 +69,7 @@ int site_mode_fail_mix(Site* site);
 int read_sensors();
 ConfigTable* read_config(char* filename);
 void run(Site* site);
+
+
 
 #endif /*SITE_C_*/
