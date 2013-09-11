@@ -14,16 +14,18 @@ static int steps[10] = { 0xFF, 0xED, 0xDF, 0xDE, 0xDC, 0xBF, 0xBE, 0x7F, 0x7E, 0
 static int set_mode(Throttle* th, int val) {
   // accept only 0,1
   // принимаем только 0,1
+  i2cOpen();
   if ((val == 1) || (val == 0)) {
     int addr, value;
-    //addr = getStr(site->cfg, (void *) "a_throttle");
-    addr = 0b00100010;
+    addr = getStr(site->cfg, (void *) "a_throttle");
+    //addr = 0b00100010;
     if (val == 1)
       value = 0x8F; // максимальное значение
     else
       value = 0xFF; // минимальное значение
     set_i2c_register(g_i2cFile, addr, 0, steps[value]);
     th->position = val;
+    i2cClose();
     return 1;
   } else {
     // wrong value
@@ -33,11 +35,13 @@ static int set_mode(Throttle* th, int val) {
 }
 
 int set_position(Throttle* th, int val) {
+  i2cOpen();
   if (val >= 0 && val <= 8) {
     int addr;
     addr = getStr(site->cfg, (void *) "a_vent_in");
     set_i2c_register(g_i2cFile, addr, 0, steps[val]);
     th->position = val;
+    i2cClose();
     return 1;
   } else {
     // wrong value
