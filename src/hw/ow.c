@@ -119,11 +119,21 @@ int read_sensors(Site* site) {
   site->temp_evapor1 = get_data(conn, mnt, s_temp_evapor1, 100);
   site->temp_evapor2 = get_data(conn, mnt, s_temp_evapor2, 100);
 
+<<<<<<< Updated upstream
   printf("temp_out = %2.2f\n", site->temp_out);
   printf("temp_in = %2.2f\n", site->temp_in);
   printf("temp_mix = %2.2f\n", site->temp_mix);
   printf("temp_evapor1 = %2.2f\n", site->temp_evapor1);
   printf("temp_evapor2 = %2.2f\n", site->temp_evapor2);
+=======
+  site->acs[0]->temp = site->temp_evapor1;
+  site->acs[1]->temp = site->temp_evapor2;
+  //printf("temp_out = %2.2f\n", site->temp_out);
+  //printf("temp_in = %2.2f\n", site->temp_in);
+  //printf("temp_mix = %2.2f\n", site->temp_mix);
+  //printf("temp_evapor1 = %2.2f\n", site->temp_evapor1);
+  //printf("temp_evapor2 = %2.2f\n", site->temp_evapor2);
+>>>>>>> Stashed changes
 
   return 0;
 
