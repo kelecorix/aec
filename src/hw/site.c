@@ -1055,8 +1055,7 @@ int set_mode(Site* site, int val) {
 
 int set_ten(Site* site, int val) {
 
-  int addr, value;
-
+// TODO: Управляем оборудованием
   return 0;
 
 }
@@ -1075,7 +1074,7 @@ Site* site_new(char* filename) {
   int i;
   for (i = 0; i < 2; i++)
   {
-    site->acs[i] = ac_new(i);
+    site->acs[i] = ac_new();
     site->vents[i] = vent_new();
   }
 
