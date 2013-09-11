@@ -75,7 +75,7 @@ int site_mode_uvo(Site* site) {
       continue;
     }
 
-    printf("*******************Принятие решения Режим УВО********************"):
+    printf("*******************Принятие решения Режим УВО********************\n");
     site->time_pre = time(NULL);
 
     if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1)
@@ -124,7 +124,7 @@ void sub_uvo_vent(Site* site) {
       printf("Вентиляторы включены\n");
       if ((time(NULL) - site->vents[0]->time_start) > 30)
       {
-        if (site->vents[0]->turns == site->tacho1)
+        if ((site->vents[0]->turns != site->tacho1) || (site->vents[1]->turns != site->tacho2))
         {
           for (v = 0; v < 2; v++)
           {

@@ -54,6 +54,8 @@ typedef struct Site {
 
 } Site;
 
+extern Site* site;
+
 // Режимы работы 
 int site_mode_uvo(Site* site);
 void sub_uvo_pen(Site* site);

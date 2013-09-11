@@ -17,5 +17,6 @@ void i2cClose();
 void i2cSetAddress(int address);
 void i2cTestHardware();
 
+extern int g_i2cFile;
 
 #endif /* I2C_H_ */
