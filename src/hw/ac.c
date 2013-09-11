@@ -60,6 +60,7 @@ long ac_moto_work(AC* ac) {
  */
 static int set_mode(AC* ac, int val) {
 
+  i2cOpen();
   // accept only 0,1
   // принимаем только 0,1
   if ((val == 1) || (val == 0)) {
@@ -80,6 +81,7 @@ static int set_mode(AC* ac, int val) {
       value ^= (0 << 2) ; // минимальное значение
     set_i2c_register(g_i2cFile, addr, 0, value);
     ac->mode = val;
+    i2cClose();
     return 1;
   } else {
     // wrong value
