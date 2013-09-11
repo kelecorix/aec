@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "ac.h"
 #include "i2c.h"
+#include "site.h"
 
 void ac_free() {
 //TODO: очистим ресурсы памяти
@@ -63,13 +64,21 @@ static int set_mode(AC* ac, int val) {
   // принимаем только 0,1
   if ((val == 1) || (val == 0)) {
     int addr, value;
-    // Прочитаем предыдущее значение регистра
-    //value
+    // check bit
+    // bit = number & (1 << x);
+
+//    if(ac->num == 1){
+//      addr = getStr(site->cfg, (void *) "a_ac1_current");
+//    }
+    if(ac->num == 2){
+      addr = getStr(site->cfg, (void *) "a_ac2_current");
+    }
+
     if(val==1)
-      value = (value << 2); // максимальное значение
+      value |= (1 << 2); // максимальное значение
     else
-      value = ~(value << 2) ; // минимальное значение
-    //set_i2c_register(g_i2cFile, addr, 0, value);
+      value ^= (0 << 2) ; // минимальное значение
+    set_i2c_register(g_i2cFile, addr, 0, value);
     ac->mode = val;
     return 1;
   } else {
@@ -79,7 +88,7 @@ static int set_mode(AC* ac, int val) {
   }
 }
 
-AC* ac_new() {
+AC* ac_new(int i) {
   AC* ac = malloc(sizeof(AC));
   ac->mode = 0;
   ac->error = NO_ERROR;
@@ -89,6 +98,7 @@ AC* ac_new() {
   ac->ac_time_work = ac_start;
   ac->ac_moto_work = ac_moto_work;
   ac->set_mode = set_mode;
+  ac->num =i;
 
   return ac;
 }
