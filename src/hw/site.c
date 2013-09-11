@@ -39,10 +39,12 @@ int site_mode_uvo(Site* site) {
     site_mode_fail_uvo(site);
   }
 
+  printf("Переведем заслонку site->temp_out = %f temp_dew = %f\n",site->temp_out, temp_dew);
   if ((site->temp_out) > temp_dew)
   {
     if (site->th->exist)
     {
+      printf("переведем заслонку в положение улица\n");
       site->th->set_position(site->th, 8); //переведем заслонку в положение улица
       site->th->time_start = time(NULL);
     }
@@ -51,11 +53,13 @@ int site_mode_uvo(Site* site) {
   {
     if (site->th->exist)
     {
+      printf("переведем заслонку в положение сайт\n");
       site->th->set_position(site->th, 0); //переведем заслонку в положение сайт
       site->th->time_start = time(NULL);
     }
   }
 
+  printf("Перед while UVO");
   while (1)
   {
     ret = read_sensors(site);
@@ -68,25 +72,26 @@ int site_mode_uvo(Site* site) {
 
     if (difftime(time(NULL), site->time_pre) <= 30)
     {
-      break;
+      continue;
     }
 
+    printf("*******************Принятие решения Режим УВО********************"):
     site->time_pre = time(NULL);
 
     if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1)
     {
+      printf("Вентиляторы включены");
       if ((site->vents[0]->turns == 8 || site->vents[1]->turns == 8) && ((time(NULL) - site->time_uvo) >= 300))
       {
+        printf("Вентиляторы вращаются на максимум и проработали 300 сек\n");
         sub_uvo_fail(site);
         sub_uvo_vent(site);
-      }
-      else
-      {
+      } else {
+        printf("вентиляторы не на максимуме или не прошло 300 сек\n");
         sub_uvo_vent(site);
       }
-    }
-    else
-    {
+    } else {
+      printf("Вентиляторы не включены");
       sub_uvo_fail(site);
       sub_uvo_vent(site);
     }
@@ -101,10 +106,13 @@ void sub_uvo_vent(Site* site) {
   float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"), NULL);
   float temp_heat = strtof(getStr(site->cfg, (void *) "temp_heat"), NULL);
 
+  printf("Среда позваляет работать на вентиляторах?\n");
   if ((temp_support - site->temp_out) >= 2)
   {
+    printf("Да позваляет\n");
     if ((site->acs[0]->mode == 1) || (site->acs[1]->mode == 1))
     {
+      printf("Кондиционеры были включены выключим\n");
       for (a = 0; a < 2; a++)
       {
         site->acs[a]->set_mode(site->acs[a], 0);
@@ -113,6 +121,7 @@ void sub_uvo_vent(Site* site) {
 
     if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1)
     {
+      printf("Вентиляторы включены\n");
       if ((time(NULL) - site->vents[0]->time_start) > 30)
       {
         if (site->vents[0]->turns == site->tacho1)
@@ -134,7 +143,7 @@ void sub_uvo_vent(Site* site) {
 
       if ((time(NULL) - site->time_uvo) >= 1800)
       {
-        site->penalty++;
+        site->penalty = 0;
       }
 
       int curr_turns = site->vents[0]->turns;
