@@ -26,7 +26,7 @@ int write_log(FileLogWriter* flw, char* message) {
   printf("Запишем данные в журнал %s\n", flw->filename);
   time_t timer;
   struct tm* tm_info;
-  char *date;
+  char date[50];
 
   timer = time(NULL);
   printf("Получили текущее время\n");
