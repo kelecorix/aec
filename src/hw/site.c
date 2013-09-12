@@ -28,6 +28,7 @@ int site_mode_uvo(Site* site) {
   //write_log(site->logger->eventLOG, "Режим охлаждения УВО");
   site->mode = 1;
   site->time_pre = time(NULL);
+  site->time_uvo = 0;
 
   int ret;
   float temp_dew = strtof(getStr(site->cfg, (void *) "temp_dew"), NULL);
@@ -424,11 +425,12 @@ void sub_uvo_fail(Site* site) {
     
     printf("sub_uvo_fail site->temp_in = %f temp_support = %f\n", site->temp_in, temp_support);
     
-    if (site->temp_in >= (temp_support - 2) && site->temp_in <= (temp_support) + 2)
+    if ((site->temp_in >= (temp_support - 2)) && (site->temp_in <= (temp_support) + 2))
     {
       printf("Температура в пределах site->temp_in >= temp_support - 2 И site->temp_in <= temp_support + 2\n");
       printf("Перейдем sub_uvo_vent\n");
       //sub_uvo_vent(site);
+      // передадим исполнение в основную ветку
     }
     else
     {
