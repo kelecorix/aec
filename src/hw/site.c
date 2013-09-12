@@ -690,6 +690,7 @@ int site_mode_ac(Site* site) {
 
 /* Режим догрева сайта */
 int site_mode_heat(Site* site) {
+
   printf("Режим догрева сайта!\n");
   write_log(site->logger->eventLOG, "Режим догрева сайта"); //падает при повторном вызове
   site->mode = 3;
@@ -714,11 +715,46 @@ int site_mode_heat(Site* site) {
   }
   //сайт
 
+  int i, th_pos_read;
+  if (site->th_r_exists)
+  {
+    while (i < 300)
+    {
+      int ret;
+      ret = read_sensors(site);
+      if (ret != 0)
+      {
+        //Ошибка чтения датчиков
+        site_mode_fail_uvo(site);
+      }
+
+      if (((time(NULL) - site->th->time_start) >= 30) && site->th_r_exists)
+      {
+        if (difftime(time(NULL), site->th->time_start) >= 30)
+        {
+          printf("Настало время проверить перевилась ли заслонка site->th_check = %d\n", site->th_check);
+          //да Необходимо проверить перевилась ли заслонка
+          // не было проверки закслонки
+          printf("site->th->position = %d th_pos_read = %d", site->th->position, th_pos_read);
+          if (site->th->position == th_pos_read)
+          {
+            printf("да заслонка исправна\n");
+            break;
+          }
+          else
+          {
+            printf("заслонка не исправна\n");
+            site_mode_fail_uvo(site);
+          }
+        }
+        i++;
+        sleep(1);
+      }
+    }
+  }
+
   while (1)
-  { // sensors was read - ok
-
-    int th_pos_read;
-
+  {
     // читаем датчики
     int ret;
     ret = read_sensors(site);
@@ -731,178 +767,109 @@ int site_mode_heat(Site* site) {
     if (difftime(time(NULL), site->time_pre) <= 30)
     { //секунды
       usleep(10000);
-      printf("ЦИКЛ time %d site->time_pre %d diff %f\n", time(NULL), site->time_pre, difftime(time(NULL), site->time_pre));
+      //printf("ЦИКЛ time %d site->time_pre %d diff %f\n", time(NULL), site->time_pre, difftime(time(NULL), site->time_pre));
       continue;
     }
     else
     {
       printf("*****************Принятие решения ДОГРЕВ*******************\n");
-      if ((difftime(time(NULL), site->th->time_start) >= 30) && (site->th_check == 0))
-      {
-        printf("Настало время проверить перевилась ли заслонка site->th_check = %d\n", site->th_check);
-        //да Необходимо проверить перевилась ли заслонка
-        // не было проверки закслонки
-        printf("site->th->position = %d th_pos_read = %d", site->th->position, th_pos_read);
-        if (site->th->position == th_pos_read)
+      site->time_pre = time(NULL);
+
+      float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"), NULL);
+
+      if (site->temp_in >= temp_support - 4)
+      { //TODO необходимо ввести параметр до какой температуры греть
+        //да
+        printf("Сайт нагрели %f\n выключим ТЭН temp_mix %f", site->temp_in, site->temp_mix);
+        site->ten = 0;
+
+        if (site->temp_mix > 60)
         {
-          printf("да заслонка исправна\n");
-          //да заслонка исправна
-          site->th_check = 1;
-
-          site->time_pre = time(NULL);
-
-          float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"), NULL);
-
-          if (site->temp_in >= temp_support - 4)
-          { //TODO необходимо ввести параметр до какой температуры греть
-            //да
-            printf("Сайт нагрели %f\n выключим ТЭН temp_mix %f", site->temp_in, site->temp_mix);
-            site->ten = 0;
-
-            if (site->temp_mix > 60)
-            {
-              printf("ТЭН не остыл еще продолжим вентиляцию\n");
-              continue; // продолжаем цикл догрева
-            }
-            else
-            {
-              printf("ТЭН остыл выключим вентиляцию\n");
-              site->vents[0]->set_turns(site->vents[0], 0); // обороты приточного
-
-              //выключим вентиляцию
-              //for (v = 0; v < 2; v++) {
-              //  if (site->vents[v]->mode == 1)
-              //    site->vents[v]->set_mode(site->vents[v], 0);
-              //}
-              printf("Перейдем в режим охлаждения УВО\n");
-              site_mode_uvo(site); // режим охлаждения уво
-
-            }
-
-          }
-          else
-          {
-            //нет
-            printf("Нужно греть сайт\n");
-            // TODO: Проверить по описанию
-            if (site->vents[0]->mode == 0)
-            {
-              site->vents[0]->set_mode(site->vents[0], 1);
-              site->vents[0]->set_turns(site->vents[0], 10);
-              site->vents[0]->time_start = time(NULL);
-            }
-
-            if (difftime(time(NULL), site->vents[0]) > 30)
-            {
-              printf("Проверим вращается ли вентилятор\n");
-              //да
-
-              if (site->th->position == th_pos_read)
-              { //НЕТО проверяется нужно обороты вентилятора
-                printf("Да вращается\n");
-                //да
-                site->vents[0]->time_start = time(NULL);
-                if ((site->ten == 1) && site->vents[0]->error == ERROR_HEAT)
-                {
-                  printf("Пока неизвестно вращается ли вентилятор\n");
-                  //да
-                  continue;
-
-                }
-                else
-                {
-                  //нет
-                  printf("Да вращается включим ТЭН\n");
-                  site->ten = 1;
-                  continue;
-
-                }
-
-              }
-              else
-              {
-                printf("АВАРИЯ вентилятора Авария вентиляции - охлаждение кондиционером\n");
-                //нет
-                site->ten = 0;
-                site->vents[0]->set_turns(site->vents[0], 0);
-                site->vents[0]->error = ERROR;
-
-                site_mode_ac(site); // Авария вентиляции - охлаждение кондиционером
-
-              }
-
-            }
-            else
-            {
-              printf("Время проверки работает ли вентилятор еще не настало\n");
-              //нет
-              //if (((site->ten == 1) && site->vents[0]->error == ERROR_HEAT)
-              //    || ((site->ten == 1) && site->vents[1]->error == ERROR_HEAT)) {
-              //
-              //  //да
-              //  continue;
-
-              //} else {
-              //нет
-              //  site->set_ten(site, 1);
-              //  continue;
-
-              //}
-              continue;
-            }
-
-          }
-
+          printf("ТЭН не остыл еще продолжим вентиляцию\n");
+          continue; // продолжаем цикл догрева
         }
         else
         {
-          //нет
-          printf("Заслонка неисправна\n");
-          site->ten = 0;
-          if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1)
-          {
-            //да
+          printf("ТЭН остыл выключим вентиляцию\n");
+          site->vents[0]->set_turns(site->vents[0], 0); // обороты приточного
 
-            if (site->temp_mix > 60)
-            {
-              continue; // продолжаем цикл догрева
-            }
-            else
-            {
-
-              site->vents[0]->set_turns(site->vents[0], 0); // обороты приточного
-
-              //выключим вентиляцию
-              for (v = 0; v < 2; v++)
-              {
-                if (site->vents[v]->mode == 1)
-                  site->vents[v]->set_mode(site->vents[v], 0);
-              }
-
-              site_mode_ac(site); // Авария заслонки- охлаждение кондиционером
-
-            }
-
-          }
-          else
-          {
-            //нет
-            site_mode_ac(site); // Авария заслонки- охлаждение кондиционером
-
-          }
-
+          //выключим вентиляцию
+          //for (v = 0; v < 2; v++) {
+          //  if (site->vents[v]->mode == 1)
+          //    site->vents[v]->set_mode(site->vents[v], 0);
+          //}
+          printf("Перейдем в режим охлаждения УВО\n");
+          site_mode_uvo(site); // режим охлаждения уво
         }
-
       }
       else
       {
         //нет
-        printf("Время проверки заслонки еще не настало\n");
-        continue; // продолжаем цикл догрева
+        printf("Нужно греть сайт\n");
+        // TODO: Проверить по описанию
+        if (site->vents[0]->mode == 0)
+        {
+          site->vents[0]->set_mode(site->vents[0], 1);
+          site->vents[0]->set_turns(site->vents[0], 10);
+          site->vents[0]->time_start = time(NULL);
+        }
+
+        if (difftime(time(NULL), site->vents[0]) > 30)
+        {
+          printf("Проверим вращается ли вентилятор\n");
+          //да
+
+          if ((site->vents[0]->turns == site->tacho1) || (site->tacho1_exists != 1))
+          {
+            printf("Да вращается\n");
+            //да
+            site->vents[0]->time_start = time(NULL);
+            if ((site->ten == 1) && site->vents[0]->error == ERROR_HEAT)
+            {
+              printf("Пока неизвестно вращается ли вентилятор\n");
+              //да
+              continue;
+
+            }
+            else
+            {
+              //нет
+              printf("Да вращается включим ТЭН\n");
+              site->ten = 1;
+              continue;
+            }
+          }
+          else
+          {
+            printf("АВАРИЯ вентилятора Авария вентиляции - охлаждение кондиционером\n");
+            //нет
+            site->ten = 0;
+            site->vents[0]->set_turns(site->vents[0], 0);
+            site->vents[0]->error = ERROR;
+
+            site_mode_ac(site); // Авария вентиляции - охлаждение кондиционером
+          }
+        }
+        else
+        {
+          printf("Время проверки работает ли вентилятор еще не настало\n");
+          //нет
+          //if (((site->ten == 1) && site->vents[0]->error == ERROR_HEAT)
+          //    || ((site->ten == 1) && site->vents[1]->error == ERROR_HEAT)) {
+          //
+          //  //да
+          //  continue;
+
+          //} else {
+          //нет
+          //  site->set_ten(site, 1);
+          //  continue;
+
+          //}
+          continue;
+        }
       }
-
-    } //else принятия решения
-
+    }
   }
 
   return 1;
@@ -1184,7 +1151,7 @@ int site_mode_fail_ac(Site* site) {
 int site_mode_fail_gen(Site* site) {
 
   printf("Общий аварийный режим!\n");
-  //write_log(site->logger->eventLOG, "Общий аварийный режим");
+//write_log(site->logger->eventLOG, "Общий аварийный режим");
   site->mode = 6;
 
   if (site->temp_in - site->temp_out)
@@ -1278,7 +1245,7 @@ Site* site_new(char* filename) {
   site->set_mode = set_mode;
   site->set_ten = set_ten;
 //site->get_ac_time_work = get_time_work;
- // printf("Попытаемся создать журнал\n");
+// printf("Попытаемся создать журнал\n");
   site->logger = create_logger();
 
   return site;
