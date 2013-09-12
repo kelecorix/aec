@@ -17,11 +17,10 @@ static int set_mode(Throttle* th, int val) {
   if ((val == 1) || (val == 0)) {
     int addr, value;
     addr = strtol(getStr(site->cfg, (void *) "a_throttle"), NULL, 16);
-    //addr = 0b00100010;
     if (val == 1)
-      value = 0x8F; // максимальное значение
+      value = 8; // максимальное значение
     else
-      value = 0xFF; // минимальное значение
+      value = 1; // минимальное значение
     printf("Управляем регистром, адрес %x, значение %d, %x\n", addr, val, value);
     set_i2c_register(g_i2cFile, addr, steps[value], steps[value]);
     th->position = val;
