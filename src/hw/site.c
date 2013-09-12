@@ -25,7 +25,8 @@ void run(Site* site) {
   printf("Управляем регистром, адрес %x\n", addr);
   set_i2c_register(g_i2cFile, addr, 0, 0x00);
   i2cClose();
-  site_mode_uvo(site);
+
+  //site_mode_uvo(site);
 }
 
 /* Режим охлаждения УВО */
