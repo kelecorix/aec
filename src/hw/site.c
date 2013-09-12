@@ -22,6 +22,7 @@ void run(Site* site) {
   // Установим значение регистра реле в 0
   i2cOpen();
   int addr = strtol(getStr(site->cfg, "a_relay"), NULL, 2);
+  printf("Управляем регистром, адрес %x\n", addr);
   set_i2c_register(g_i2cFile, addr, 0, 0b11111111);
   i2cClose();
   site_mode_uvo(site);
