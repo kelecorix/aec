@@ -29,37 +29,37 @@ int main(int argc, char *argv[]) {
   if (site->cfg)
     printf("Config was read ok!\n");
 
-//  site->conn = create_server_conn("127.0.0.1:4304");
-//  if (site->conn == 0)
-//    printf("OWFS connection established!\n");
-//  else
-//    printf("OWFS connection not fins. Fire up OWFS server!\n");
-//
-//  sleep(4);
-//
-//  //Workers Воркеры - выполняют параллельно свои операции
-//
-//  if (pthread_create(&threadL, NULL, run, (void*) site)) {
-//    fprintf(stderr, "Error creating algo thread\n");
-//    printf("Error creating algo thread\n");
-//    return 1;
-//  }
-//
-//  sleep(4);
-//
-//  if (pthread_create(&threadU, NULL, run_ui, (void*) site)) {
-//    fprintf(stderr, "Error creating UI thread\n");
-//    printf("Error creating UI thread\n");
-//    return 1;
-//  }
-//
-//// ждем пока потоками завершаться
-//// по идде сюда не должно дойти
-//  pthread_join(threadL, retL);
-//  pthread_join(threadU, retU);
+  site->conn = create_server_conn("127.0.0.1:4304");
+  if (site->conn == 0)
+    printf("OWFS connection established!\n");
+  else
+    printf("OWFS connection not fins. Fire up OWFS server!\n");
+
+  sleep(4);
+
+  //Workers Воркеры - выполняют параллельно свои операции
+
+  if (pthread_create(&threadL, NULL, run, (void*) site)) {
+    fprintf(stderr, "Error creating algo thread\n");
+    printf("Error creating algo thread\n");
+    return 1;
+  }
+
+  sleep(4);
+
+  if (pthread_create(&threadU, NULL, run_ui, (void*) site)) {
+    fprintf(stderr, "Error creating UI thread\n");
+    printf("Error creating UI thread\n");
+    return 1;
+  }
+
+// ждем пока потоками завершаться
+// по идде сюда не должно дойти
+  pthread_join(threadL, retL);
+  pthread_join(threadU, retU);
 
   // Для тестов оборудования
-  i2cTestHardware();
+  //i2cTestHardware();
 
   return EXIT_SUCCESS;
 

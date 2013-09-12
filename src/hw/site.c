@@ -23,8 +23,21 @@ void run(Site* site) {
   i2cOpen();
   int addr = strtol(getStr(site->cfg, "a_relay"), NULL, 16);
   printf("Управляем регистром, адрес %x\n", addr);
-  set_i2c_register(g_i2cFile, addr, 0, 0x00);
+//  set_i2c_register(g_i2cFile, addr, 0xFF, 0xFF);
+
+  int val = 0xFF;
+     char buf[1];
+     int i, bit = 2;
+     for (i = 0; i < 128; i++) {
+       val ^= (1 << bit);
+       printf("Value: %x\n", val);
+       set_i2c_register(g_i2cFile, addr, val, val);
+       sleep(2);
+     }
+
   i2cClose();
+
+
 
   //site_mode_uvo(site);
 }

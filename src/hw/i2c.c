@@ -136,9 +136,6 @@ void i2cTestHardware() {
      val ^= (1 << bit);
      printf("Value: %x\n", val);
      set_i2c_register(g_i2cFile, addrRel, val, val);
-     //sprintf(buf[0],"%s", val);
-     //ioctl(g_i2cFile, I2C_SLAVE, addrRel);
-     //write(g_i2cFile, buf, 1);
      sleep(2);
    }
 
