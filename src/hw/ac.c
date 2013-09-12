@@ -67,10 +67,14 @@ static int set_mode(AC* ac, int val) {
   unsigned char rvalue;
 
   //прочитаем текущее состояние регистра
-  get_i2c_register(g_i2cFile, addr, 0, &rvalue);
-  printf("Значение регистра %s\n", rvalue);
+  if(get_i2c_register(g_i2cFile, addr, 0, &value)) {
+    printf("Unable to get register!\n");
+  }
+  else {
+    printf("Addr %d: %d (%x)\n", addr, (int)rvalue, (int)rvalue);
+  }
 
-  value = strtol(rvalue, NULL, 2);
+  value = (int)rvalue;
 
   if ((val == 1) || (val == 0)) {
    printf("Изменим сост. кондиц\n");
