@@ -128,10 +128,10 @@ void i2cTestHardware() {
 //  }
 
   // Тестируем реле или лампочки на RPi
-   int val = 0b00000000;
+   int val = 0b11111111;
    int i, bit = 2;
    for (i = 0; i < 64; i++) {
-     val ^= (1 << bit);
+     val |= (0 << bit);
      set_i2c_register(g_i2cFile, addrRel, 0, val);
      sleep(1);
    }
