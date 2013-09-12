@@ -1170,7 +1170,7 @@ Site* site_new(char* filename) {
   int i;
   for (i = 0; i < 2; i++)
   {
-    site->acs[i] = ac_new();
+    site->acs[i] = ac_new(i);
     site->vents[i] = vent_new();
   }
 
