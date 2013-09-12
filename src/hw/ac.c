@@ -63,7 +63,7 @@ static int set_mode(AC* ac, int val) {
   i2cOpen();
 
   int addr, value, bit;
-  addr = 0b00111011;
+  addr = strtol(getStr(site->cfg, "a_relay"), NULL, 16);
   unsigned char rvalue;
 
   //прочитаем текущее состояние регистра
