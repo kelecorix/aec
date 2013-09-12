@@ -30,7 +30,7 @@ int write_log(FileLogWriter* flw, char* message) {
 
   timer = time(NULL);
   printf("Получили текущее время\n");
-  tm_info = localtime(timer);
+  tm_info = localtime(&timer);
   printf("Получиили локальное время\n");
 
   strftime(date, 25, "%Y:%m:%d %H:%M:%S", tm_info);
