@@ -36,9 +36,10 @@ void run(Site* site) {
 //     }
   i2cClose();
 
-  site->th->set_mode(site->th, 0);
+ // По умолчанию
+ site->th->set_mode(site->th, 0);
 
-  //site_mode_uvo(site);
+  site_mode_uvo(site);
 }
 
 /* Режим охлаждения УВО */
@@ -293,6 +294,10 @@ int sub_uvo_pen(Site* site) {
         site->vents[v]->set_mode(site->vents[v], 0);
         site->vents[v]->set_turns(site->vents[v],0);
       }
+    }
+
+    if((temp_support - site->temp_out) <= 2){
+      site_mode_ac(site);
     }
 
     if (site->acs[0]->mode == 1 || site->acs[1]->mode == 1)
