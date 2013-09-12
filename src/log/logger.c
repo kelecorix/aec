@@ -8,7 +8,7 @@
 
 Logger* create_logger() {
 
-  printf("Создадим необходимые журналы");
+  printf("Создадим необходимые журналы\n");
   Logger* log = malloc(sizeof(Logger));
   log->dataLOG = create_filelog("data.log"); //TODO: считать путь из конфига
   //log->dataLOG_n = create_netlog("", 80); //TODO: считать параметры из конфига
