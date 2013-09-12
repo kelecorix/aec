@@ -65,9 +65,10 @@ static int set_mode(AC* ac, int val) {
   // принимаем только 0,1
   int addr, value, bit;
   addr = 0b00111011;
-  value = 0b11111111;
+  char *rvalue;
   //прочитаем текущее состояние регистра
-  get_i2c_register(g_i2cFile, addr, 0, value);
+  get_i2c_register(g_i2cFile, addr, 0, rvalue);
+  value = strtol(rvalue, NULL, 2);
   if ((val == 1) || (val == 0)) {
     printf("Изменим сост. кондиц\n");
 
@@ -81,6 +82,7 @@ static int set_mode(AC* ac, int val) {
       value |= (1 << bit); // максимальное значение
     else
       value &= ~(1 << bit) ; // минимальное значение
+
     printf("Управляем регистром, адрес %d, значение %d, %d \n", addr, val, value);
     set_i2c_register(g_i2cFile, addr, 0, value);
     ac->mode = val;
