@@ -30,9 +30,14 @@ int site_mode_uvo(Site* site) {
   site->time_pre = time(NULL);
   site->time_uvo = time(NULL);
 
-  int ret,res;
+  int a,ret,res;
   float temp_dew = strtof(getStr(site->cfg, (void *) "temp_dew"), NULL);
 
+  //По умолчанию: кондиц. вкл.
+  for(a=0;a<2;a++)
+  {
+    site->acs[a]->set_mode(site->acs[a], 1);
+  }
 
   //остановим вентиляторы
   site->vents[0]->set_turns(site->vents[0], 0);
