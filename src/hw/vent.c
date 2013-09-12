@@ -28,9 +28,9 @@ static int set_mode(Vent* vent, int val) {
     else
       addr = getStr(site->cfg, (void *) "a_vent_out");
     if(val==1)
-      value = 0x8F; // максимальное значение
+      value = 0; // максимальное значение
     else
-      value = 0xFF; // минимальное значение
+      value = 8; // минимальное значение
     i2cSetAddress(addr);
     printf("Управляем регистром, адрес %d, значение\n", addr, steps[value]);
     set_i2c_register(g_i2cFile, addr, 0, steps[value]);
