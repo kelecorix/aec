@@ -1278,7 +1278,7 @@ Site* site_new(char* filename) {
   site->set_mode = set_mode;
   site->set_ten = set_ten;
 //site->get_ac_time_work = get_time_work;
-
+  printf("Попытаемся создать журнал");
   site->logger = create_logger();
 
   return site;
