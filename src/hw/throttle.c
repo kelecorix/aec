@@ -16,7 +16,7 @@ static int set_mode(Throttle* th, int val) {
   i2cOpen();
   if ((val == 1) || (val == 0)) {
     int addr, value;
-    addr = getStr(site->cfg, (void *) "a_throttle");
+    addr = strtol(getStr(site->cfg, (void *) "a_throttle"), NULL, 16);
     //addr = 0b00100010;
     if (val == 1)
       value = 0x8F; // максимальное значение
@@ -38,7 +38,7 @@ int set_position(Throttle* th, int val) {
   i2cOpen();
   if (val >= 0 && val <= 8) {
     int addr;
-    addr = getStr(site->cfg, (void *) "a_throttle");
+    addr = strtol(getStr(site->cfg, (void *) "a_throttle"), NULL, 16);
     set_i2c_register(g_i2cFile, addr, steps[val], steps[val]);
     th->position = val;
     i2cClose();
