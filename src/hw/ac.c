@@ -65,7 +65,7 @@ static int set_mode(AC* ac, int val) {
   // принимаем только 0,1
   int addr, value, bit;
   addr = 0b00111011;
-  char *rvalue;
+  char *rvalue="0";
   //прочитаем текущее состояние регистра
   //get_i2c_register(g_i2cFile, addr, 0, rvalue);
   value = strtol(rvalue, NULL, 2);
