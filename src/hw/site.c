@@ -753,6 +753,7 @@ int site_mode_heat(Site* site) {
     }
   }
 
+  printf("Перед ЦИКЛ time %d site->time_pre %d diff %f\n", time(NULL), site->time_pre, difftime(time(NULL), site->time_pre));
   while (1)
   {
     // читаем датчики
@@ -763,8 +764,6 @@ int site_mode_heat(Site* site) {
       //Ошибка чтения датчиков
       site_mode_fail_uvo(site);
     }
-
-    printf("Перед ЦИКЛ time %d site->time_pre %d diff %f\n", time(NULL), site->time_pre, difftime(time(NULL), site->time_pre));
 
     if (difftime(time(NULL), site->time_pre) <= 30)
     { //секунды
@@ -1205,9 +1204,40 @@ int set_mode(Site* site, int val) {
 
 int set_ten(Site* site, int val) {
 
-// TODO: Управляем оборудованием
-  return 0;
+  i2cOpen();
 
+    int addr, value, bit=0;
+    addr = strtol(getStr(site->cfg, "a_relay"), NULL, 16);
+    unsigned char rvalue;
+    char buf[1];
+
+    if (ioctl(g_i2cFile, I2C_SLAVE, addr) < 0) {
+       printf("Failed to acquire bus access and/or talk to slave.\n");
+     }
+
+    if (read(g_i2cFile, buf, 1) != 1) {
+        printf("Error reading from i2c\n");
+    }
+
+    value = (int)buf[0];
+
+    if ((val == 1) || (val == 0)) {
+      if(val==1)
+        value |= (1 << bit); // установим бит
+      else
+        value &= ~(1 << bit) ; // очистим бит
+
+      //printf("Управляем регистром, адрес %x, значение %d, %x , бит %d , номер %d\n", addr, val, value, bit, ac->num);
+      set_i2c_register(g_i2cFile, addr, value, value);
+      site->ten = val;
+      i2cClose();
+      return 1;
+    } else {
+      // wrong value
+      // неправильное значение
+      return 0;
+    }
+  return 0;
 }
 
 // Запишем текущее состояние параметров
