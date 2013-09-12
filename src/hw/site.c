@@ -1151,7 +1151,6 @@ Site* site_new(char* filename) {
   for (i = 0; i < 2; i++)
   {
     site->acs[i] = ac_new();
-    site->acs[1]->num = i;
     site->vents[i] = vent_new();
   }
 

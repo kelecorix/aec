@@ -66,7 +66,7 @@ static int set_mode(AC* ac, int val) {
   int addr, value;
 
   if ((val == 1) || (val == 0)) {
-    printf("Изменим сост. вент\n");
+    printf("Изменим сост. кондиц\n");
     // check bit
     // bit = number & (1 << x);
 
