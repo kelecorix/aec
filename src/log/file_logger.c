@@ -16,14 +16,14 @@ FileLogWriter* create_filelog(char* filename) {
     fprintf(stderr, "could not open log file %s", filename);
     return NULL;
   }
-  log->fp = fp;
+  log->fp = &fp;
 
   return log;
 }
 
 int write_log(FileLogWriter* flw, char* message) {
 
-  printf("Запишем данные в журнал\n");
+  printf("Запишем данные в журнал\n %s", flw->filename);
   time_t timer;
   struct tm* tm_info;
   char *date;
