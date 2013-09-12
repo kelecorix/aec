@@ -91,9 +91,11 @@ int site_mode_uvo(Site* site) {
       if ((site->vents[0]->turns == 8 || site->vents[1]->turns == 8) && ((time(NULL) - site->time_uvo) >= 300))
       {
         printf("Вентиляторы вращаются на максимум и проработали 300 сек\n");
-        res = sub_uvo_fail(site);
-        if (res==0)
+        res = sub_uvo_fail(site); // 1 - EXIT_FAILURE - не попали в ошибку
+        if (res)
           sub_uvo_vent(site);
+        else
+          continue;
       } else {
         printf("вентиляторы не на максимуме или не прошло 300 сек\n");
         sub_uvo_vent(site);
@@ -101,9 +103,11 @@ int site_mode_uvo(Site* site) {
     } else {
       printf("Вентиляторы не включены\n");
       
-      res = sub_uvo_fail(site);
+      res = sub_uvo_fail(site); // 1 - EXITE_FAILURE - не попали в ошибку
       if(res)
         sub_uvo_vent(site);
+      else
+        continue;
     }
   }
 
@@ -279,6 +283,10 @@ int sub_uvo_pen(Site* site) {
       printf("Переходим в режим догрева\n");
       site_mode_heat(site);
     }
+    else
+    {
+      return EXIT_SUCCESS; //вернем 0, чтоб перейти обратно в УВО
+    }
   }
   
   else
@@ -434,7 +442,7 @@ int sub_uvo_fail(Site* site) {
       printf("Перейдем sub_uvo_vent\n");
       //sub_uvo_vent(site);
       // передадим исполнение в основную ветку
-      return EXIT_SUCCESS;
+      return EXIT_FAILURE;
     }
     else
     {
