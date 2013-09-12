@@ -71,7 +71,7 @@ static int set_mode(AC* ac, int val) {
     printf("Unable to get register!\n");
   }
   else {
-    printf("Addr %d: %d (%x)\n", addr, (int)rvalue, (int)rvalue);
+    printf("Addr %x: %d (%x)\n", addr, (int)rvalue, (int)rvalue);
   }
 
   value = (int)rvalue;
@@ -90,7 +90,7 @@ static int set_mode(AC* ac, int val) {
     else
       value &= ~(1 << bit) ; // очистим бит
 
-    printf("Управляем регистром, адрес %d, значение %d, %d \n", addr, val, value);
+    printf("Управляем регистром, адрес %x, значение %d, %x \n", addr, val, value);
     set_i2c_register(g_i2cFile, addr, 0, value);
     ac->mode = val;
     i2cClose();
