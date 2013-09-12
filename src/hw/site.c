@@ -265,11 +265,11 @@ int sub_uvo_pen(Site* site) {
     printf("Температура ниже поддержания - 2\n");
     if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1)
     {
-      printf("Выключим векнтиляторы\n");
+      printf("Выключим вентиляторы\n");
       for (v = 0; v < 2; v++)
       {
-        //site->vents[v]->set_turns = 0;
-        site->vents[v]->set_mode = 0;
+        site->vents[v]->set_turns(site ->vents[v],0);
+        site->vents[v]->set_mode(site->vents[v], 0);
       }
     }
 
