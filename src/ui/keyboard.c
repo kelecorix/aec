@@ -10,7 +10,7 @@ KB* kb_new( addr) {
 
 int keyboard(int menu_current) {
 
-  printf("current menu:  %d\n", menu_current);
+  //printf("current menu:  %d\n", menu_current);
   switch (checkButton()) {
     case 4:
       //меню при повторном нажатии выход из меню
