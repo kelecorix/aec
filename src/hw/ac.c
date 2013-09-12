@@ -85,7 +85,7 @@ static int set_mode(AC* ac, int val) {
   value = (int)buf[0];
 
   if ((val == 1) || (val == 0)) {
-   printf("Изменим сост. кондиц\n");
+   //printf("Изменим сост. кондиц\n");
 
     if(ac->num == 0){
       bit = 2;
@@ -98,7 +98,7 @@ static int set_mode(AC* ac, int val) {
     else
       value &= ~(1 << bit) ; // очистим бит
 
-    printf("Управляем регистром, адрес %x, значение %d, %x , бит %d , номер %d\n", addr, val, value, bit, ac->num);
+    //printf("Управляем регистром, адрес %x, значение %d, %x , бит %d , номер %d\n", addr, val, value, bit, ac->num);
     set_i2c_register(g_i2cFile, addr, value, value);
     ac->mode = val;
     i2cClose();

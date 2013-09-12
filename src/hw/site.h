@@ -29,6 +29,7 @@ typedef struct Site {
 
   float temp_in;      // температура сайта
   float temp_in_prev; // предыдущая температура сайта
+  float temp_in_prev_prev;//пред. предыдущая температура сайта
   float temp_out;     // температура окружающей среды
   float temp_mix;     // температура камеры смешения
   float temp_evapor1; // температуры испарителя 1го кондиционера
@@ -36,6 +37,10 @@ typedef struct Site {
   int tacho1;         // данные таходатчика 1
   int tacho2;         // данные таходатчика 2
   int th_r; // положение заслонки считанное
+
+  int th_r_exists;       // существует адрес считывания положения заслонки
+  int tacho1_exists;   // таходатчик1 существует
+  int tacho2_exists;   // таходатчик2 существует
 
   int penalty; // штраф
   int th_check; // throttle check - флаг проверки заслонки

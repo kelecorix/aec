@@ -46,15 +46,15 @@ static int set_mode(Vent* vent, int val) {
 
 // Установим количество оборотов, 8 шагов управлен  ия скоростью
 int set_turns(Vent* vent, int val) {
-  if (val >= 0 && val <= 8) {
+  if (val >= 0 && val <= 10) {
     i2cOpen();
     int addr;
-    printf("Изменим сост. вент\n");
+    //printf("Изменим сост. вент\n");
     if (vent->type == 0)
       addr = strtol(getStr(site->cfg, (void *) "a_vent_in"), NULL, 16);
     else
       addr = strtol(getStr(site->cfg, (void *) "a_vent_out"), NULL, 16);
-    printf("Управляем регистром, адрес %d, значение %d, %d \n", addr, val, steps[val]);
+    //printf("Управляем регистром, адрес %d, значение %d, %d \n", addr, val, steps[val]);
     i2cSetAddress(addr);
     set_i2c_register(g_i2cFile, addr, 0, steps[val]);
     vent->turns = val;
