@@ -49,7 +49,7 @@ int set_turns(Vent* vent, int val) {
   if (val >= 0 && val <= 8) {
     i2cOpen();
     int addr;
-    printf("Включим вент\n");
+    printf("Изменим сост. вент\n");
     if (vent->type == 0)
       addr = strtol(getStr(site->cfg, (void *) "a_vent_in"), NULL, 16);
     else

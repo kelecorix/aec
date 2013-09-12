@@ -63,22 +63,25 @@ static int set_mode(AC* ac, int val) {
   i2cOpen();
   // accept only 0,1
   // принимаем только 0,1
+  int addr, value;
+
   if ((val == 1) || (val == 0)) {
-    int addr, value;
+    printf("Изменим сост. вент\n");
     // check bit
     // bit = number & (1 << x);
 
-//    if(ac->num == 1){
-//      addr = getStr(site->cfg, (void *) "a_ac1_current");
-//    }
-    if(ac->num == 2){
+    if(ac->num == 0){
+      addr = getStr(site->cfg, (void *) "a_ac1_current");
+    }
+    if(ac->num == 1){
       addr = getStr(site->cfg, (void *) "a_ac2_current");
     }
 
     if(val==1)
       value |= (1 << 2); // максимальное значение
     else
-      value ^= (0 << 2) ; // минимальное значение
+      value |= (0 << 2) ; // минимальное значение
+    printf("Управляем регистром, адрес %d, значение %d, %d \n", addr, val, value);
     set_i2c_register(g_i2cFile, addr, 0, value);
     ac->mode = val;
     i2cClose();
