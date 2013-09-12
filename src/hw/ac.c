@@ -88,10 +88,10 @@ static int set_mode(AC* ac, int val) {
    printf("Изменим сост. кондиц\n");
 
     if(ac->num == 0){
-      bit = 3;
+      bit = 6;
     }
     if(ac->num == 1){
-      bit = 2;
+      bit = 7;
     }
     if(val==1)
       value |= (1 << bit); // установим бит
