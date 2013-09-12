@@ -29,6 +29,7 @@ void run(Site* site) {
 //     char buf[1];
 //     int i, bit = 2;
 //     for (i = 0; i < 128; i++) {
+//       val ^= (1 << bit);
 //       printf("Value: %x\n", val);
 //       set_i2c_register(g_i2cFile, addr, val, val);
 //       sleep(2);
