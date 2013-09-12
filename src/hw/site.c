@@ -30,7 +30,7 @@ int site_mode_uvo(Site* site) {
   site->time_pre = time(NULL);
   site->time_uvo = 0;
 
-  int ret;
+  int ret,res;
   float temp_dew = strtof(getStr(site->cfg, (void *) "temp_dew"), NULL);
 
 
@@ -91,8 +91,9 @@ int site_mode_uvo(Site* site) {
       if ((site->vents[0]->turns == 8 || site->vents[1]->turns == 8) && ((time(NULL) - site->time_uvo) >= 300))
       {
         printf("Вентиляторы вращаются на максимум и проработали 300 сек\n");
-        sub_uvo_fail(site);
-        sub_uvo_vent(site);
+        res = sub_uvo_fail(site);
+        if (res==0)
+          sub_uvo_vent(site);
       } else {
         printf("вентиляторы не на максимуме или не прошло 300 сек\n");
         sub_uvo_vent(site);
@@ -100,8 +101,9 @@ int site_mode_uvo(Site* site) {
     } else {
       printf("Вентиляторы не включены\n");
       
-      sub_uvo_fail(site);
-      sub_uvo_vent(site);
+      res = sub_uvo_fail(site);
+      if(res)
+        sub_uvo_vent(site);
     }
   }
 
@@ -237,7 +239,7 @@ void sub_uvo_vent(Site* site) {
   }
 }
 
-void sub_uvo_pen(Site* site) {
+int sub_uvo_pen(Site* site) {
 
   printf("Мы в sub_uvo_pen\n");
   int a, v;
@@ -305,6 +307,7 @@ void sub_uvo_pen(Site* site) {
     }
   }
   printf("Выход из sub_uvo_pen\n");
+  return EXIT_SUCCESS;
 }
 
 void sub_uvo_pow(Site* site) {
@@ -407,7 +410,7 @@ void sub_uvo_th(Site* site) {
 
 }
 
-void sub_uvo_fail(Site* site) {
+int sub_uvo_fail(Site* site) {
 
   printf("sub_uvo_fail\n");
   float temp_fail = strtof(getStr(site->cfg, (void *) "temp_fail"), NULL);
@@ -431,12 +434,13 @@ void sub_uvo_fail(Site* site) {
       printf("Перейдем sub_uvo_vent\n");
       //sub_uvo_vent(site);
       // передадим исполнение в основную ветку
+      return EXIT_SUCCESS;
     }
     else
     {
       printf("Температура не в пределах\n");
       printf("Перейдем sub_uvo_pen\n");
-      sub_uvo_pen(site);
+      return sub_uvo_pen(site);
     }
   }
 }
