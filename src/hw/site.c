@@ -764,6 +764,8 @@ int site_mode_heat(Site* site) {
       site_mode_fail_uvo(site);
     }
 
+    printf("Перед ЦИКЛ time %d site->time_pre %d diff %f\n", time(NULL), site->time_pre, difftime(time(NULL), site->time_pre));
+
     if (difftime(time(NULL), site->time_pre) <= 30)
     { //секунды
       usleep(10000);
