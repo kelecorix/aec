@@ -100,7 +100,7 @@ int site_mode_uvo(Site* site) {
       printf("Вентиляторы не включены\n");
       
       sub_uvo_fail(site);
-      //sub_uvo_vent(site);
+      sub_uvo_vent(site);
     }
   }
 
@@ -428,7 +428,7 @@ void sub_uvo_fail(Site* site) {
     {
       printf("Температура в пределах site->temp_in >= temp_support - 2 И site->temp_in <= temp_support + 2\n");
       printf("Перейдем sub_uvo_vent\n");
-      sub_uvo_vent(site);
+      //sub_uvo_vent(site);
     }
     else
     {
