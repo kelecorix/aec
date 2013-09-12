@@ -61,9 +61,10 @@ int set_i2c_register(int file, unsigned char addr, unsigned char reg,
 }
 
 int get_i2c_register(int file,
-                            unsigned char addr,
-                            unsigned char reg,
-                            unsigned char *val) {
+                     unsigned char addr,
+                     unsigned char reg,
+                     unsigned char *val) {
+
     unsigned char inbuf, outbuf;
     struct i2c_rdwr_ioctl_data packets;
     struct i2c_msg messages[2];
@@ -148,6 +149,6 @@ void i2cTestHardware() {
 //  set_i2c_register(g_i2cFile, addrFan2, 0, steps[0]);
 //  set_i2c_register(g_i2cFile, addrTh, 0, 0x8F);
 //
-//  i2cClose();
+  i2cClose();
 
 }
