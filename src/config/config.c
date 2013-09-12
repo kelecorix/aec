@@ -9,9 +9,9 @@
 
 ConfigTable* config_table_new() {
   ConfigTable* cfg = malloc(sizeof(ConfigTable));
-  cfg->mTable = hashmapCreate(31, str_hash_fn, hashmapIntEquals);
-  cfg->mStatic = hashmapCreate(31, str_hash_fn, hashmapIntEquals);
-  cfg->mOptional = hashmapCreate(31, str_hash_fn, hashmapIntEquals);
+  cfg->mTable = hashmapCreate(32, str_hash_fn, hashmapIntEquals);
+  cfg->mStatic = hashmapCreate(32, str_hash_fn, hashmapIntEquals);
+  cfg->mOptional = hashmapCreate(32, str_hash_fn, hashmapIntEquals);
   return cfg;
 }
 
