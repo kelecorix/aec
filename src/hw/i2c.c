@@ -60,7 +60,7 @@ int set_i2c_register(int file, unsigned char addr, unsigned char reg,
   return 0;
 }
 
-static int get_i2c_register(int file,
+int get_i2c_register(int file,
                             unsigned char addr,
                             unsigned char reg,
                             unsigned char *val) {
