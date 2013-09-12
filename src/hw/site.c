@@ -1209,7 +1209,7 @@ int set_ten(Site* site, int val) {
 
   int addr, value, bit = 0;
   addr = strtol(getStr(site->cfg, "a_relay"), NULL, 16);
-
+  printf("Изменим тен");
   char buf[1];
 
   if (ioctl(g_i2cFile, I2C_SLAVE, addr) < 0)
@@ -1231,7 +1231,7 @@ int set_ten(Site* site, int val) {
     else
       value &= ~(1 << bit); // очистим бит
 
-    //printf("Управляем регистром, адрес %x, значение %d, %x , бит %d , номер %d\n", addr, val, value, bit, ac->num);
+    printf("Управляем регистром, адрес %x, значение %d, %x , бит %d \n", addr, val, value, bit);
     set_i2c_register(g_i2cFile, addr, value, value);
     site->ten = val;
     i2cClose();
