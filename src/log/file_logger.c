@@ -23,6 +23,7 @@ FileLogWriter* create_filelog(char* filename) {
 
 int write_log(FileLogWriter* flw, char* message) {
 
+  printf("Запишем данные в журнал");
   time_t timer;
   struct tm* tm_info;
   char *date;
