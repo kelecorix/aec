@@ -816,7 +816,7 @@ int site_mode_heat(Site* site) {
           site->vents[0]->time_start = time(NULL);
         }
 
-        if (difftime(time(NULL), site->vents[0]) > 2) //TODO: 30
+        if (difftime(time(NULL), site->vents[0]) > 30) //TODO: 30
         {
           printf("Проверим вращается ли вентилятор\n");
           //да
@@ -837,7 +837,7 @@ int site_mode_heat(Site* site) {
             {
               //нет
               printf("Да вращается включим ТЭН\n");
-              set_ten(site->ten, 1);
+              set_ten(site, 1);
               continue;
             }
           }
