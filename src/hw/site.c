@@ -39,7 +39,7 @@ void run(Site* site) {
 
 
 
-  site_mode_uvo(site);
+  //site_mode_uvo(site);
 }
 
 /* Режим охлаждения УВО */
