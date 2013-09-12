@@ -28,7 +28,7 @@ int site_mode_uvo(Site* site) {
   //write_log(site->logger->eventLOG, "Режим охлаждения УВО");
   site->mode = 1;
   site->time_pre = time(NULL);
-  site->time_uvo = 0;
+  site->time_uvo = time(NULL);
 
   int ret,res;
   float temp_dew = strtof(getStr(site->cfg, (void *) "temp_dew"), NULL);
@@ -268,7 +268,8 @@ int sub_uvo_pen(Site* site) {
       printf("Выключим векнтиляторы\n");
       for (v = 0; v < 2; v++)
       {
-        site->vents[v]->set_turns(site->vents[v], 0);
+        //site->vents[v]->set_turns = 0;
+        site->vents[v]->set_mode = 0;
       }
     }
 
