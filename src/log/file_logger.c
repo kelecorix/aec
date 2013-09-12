@@ -6,7 +6,7 @@
 
 FileLogWriter* create_filelog(char* filename) {
 
-  printf("Создадим новый журнал, %s\n", filename);
+  //printf("Создадим новый журнал, %s\n", filename);
   FileLogWriter* log = malloc(sizeof(FileLogWriter));
 
   log->filename = filename;
@@ -21,18 +21,18 @@ FileLogWriter* create_filelog(char* filename) {
 
 int write_log(FileLogWriter* flw, char* message) {
 
-  printf("Запишем данные в журнал %s\n", flw->filename);
+  //printf("Запишем данные в журнал %s\n", flw->filename);
   time_t timer;
   struct tm* tm_info;
   char date[50];
 
   timer = time(NULL);
-  printf("Получили текущее время\n");
+  //printf("Получили текущее время\n");
   tm_info = localtime(&timer);
-  printf("Получиили локальное время\n");
+  //printf("Получиили локальное время\n");
 
   strftime(date, 25, "%Y:%m:%d %H:%M:%S", tm_info);
-  printf("Дата %s\n", date);
+  //printf("Дата %s\n", date);
   fprintf(flw->fp, date);
 
 //  strcpy(str_send_log, tmp_time);
@@ -52,8 +52,6 @@ int write_log(FileLogWriter* flw, char* message) {
 }
 
 int close_filelog(FileLogWriter* flog) {
-
   fclose(flog->fp);
   return 0;
-
 }
