@@ -21,7 +21,7 @@ void run(Site* site) {
   write_log(site->logger->eventLOG, "Начало работы");
   // Установим значение регистра реле в 0
   i2cOpen();
-  set_i2c_register(g_i2cFile, 0b00111011, 0, 0b11111111);
+  set_i2c_register(g_i2cFile, 0b00111011, 0, 0b00000000);
   i2cClose();
   site_mode_uvo(site);
 }

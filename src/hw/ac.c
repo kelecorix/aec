@@ -86,9 +86,9 @@ static int set_mode(AC* ac, int val) {
       bit = 2;
     }
     if(val==1)
-      value |= (1 << bit); // максимальное значение
+      value |= (1 << bit); // установим бит
     else
-      value &= ~(1 << bit) ; // минимальное значение
+      value &= ~(1 << bit) ; // очистим бит
 
     printf("Управляем регистром, адрес %d, значение %d, %d \n", addr, val, value);
     set_i2c_register(g_i2cFile, addr, 0, value);
