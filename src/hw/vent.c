@@ -31,7 +31,7 @@ static int set_mode(Vent* vent, int val) {
       value = 0; // максимальное значение
     else
       value = 8; // минимальное значение
-    i2cSetAddress(addr);
+    //i2cSetAddress(addr);
     printf("Управляем регистром, адрес %d, значение\n", addr, steps[value]);
     set_i2c_register(g_i2cFile, addr, 0, steps[value]);
     vent->mode = val;

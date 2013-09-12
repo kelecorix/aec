@@ -268,7 +268,7 @@ int sub_uvo_pen(Site* site) {
       printf("Выключим вентиляторы\n");
       for (v = 0; v < 2; v++)
       {
-        site->vents[v]->set_turns(site ->vents[v],0);
+        //site->vents[v]->set_turns(site ->vents[v],0);
         site->vents[v]->set_mode(site->vents[v], 0);
       }
     }
