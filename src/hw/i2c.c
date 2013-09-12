@@ -133,7 +133,7 @@ void i2cTestHardware() {
    int i, bit = 2;
    for (i = 0; i < 128; i++) {
      val ^= (1 << bit);
-     printf("Value: %x", val);
+     printf("Value: %x\n", val);
      set_i2c_register(g_i2cFile, addrRel, 0, val);
      sleep(2);
    }
