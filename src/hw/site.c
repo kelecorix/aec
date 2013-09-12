@@ -816,7 +816,7 @@ int site_mode_heat(Site* site) {
           site->vents[0]->time_start = time(NULL);
         }
 
-        if (difftime(time(NULL), site->vents[0]) > 30)
+        if (difftime(time(NULL), site->vents[0]) > 2) //TODO: 30
         {
           printf("Проверим вращается ли вентилятор\n");
           //да
@@ -1209,7 +1209,7 @@ int set_ten(Site* site, int val) {
 
   int addr, value, bit = 0;
   addr = strtol(getStr(site->cfg, "a_relay"), NULL, 16);
-  printf("Изменим тен");
+  printf("Изменим тен\n");
   char buf[1];
 
   if (ioctl(g_i2cFile, I2C_SLAVE, addr) < 0)
