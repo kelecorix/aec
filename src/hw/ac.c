@@ -67,7 +67,7 @@ static int set_mode(AC* ac, int val) {
   unsigned char rvalue;
 
   //прочитаем текущее состояние регистра
-  if(get_i2c_register(g_i2cFile, addr, 0, &value)) {
+  if(get_i2c_register(g_i2cFile, addr, 0, &rvalue)) {
     printf("Unable to get register!\n");
   }
   else {
