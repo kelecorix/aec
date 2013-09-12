@@ -121,7 +121,7 @@ void i2cTestHardware() {
           val = 0b00000000;
           bit=0;
         }
-    val |= (1 << bit);
+    val ^= (1 << bit);
     set_i2c_register(g_i2cFile, addrRel, 0, val);
 
     sleep(1);
