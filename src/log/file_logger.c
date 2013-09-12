@@ -32,6 +32,7 @@ int write_log(FileLogWriter* flw, char* message) {
   tm_info = localtime(&timer);
 
   strftime(date, 25, "%Y:%m:%d %H:%M:%S", tm_info);
+  printf("Дата %s", date);
   fprintf(flw->fp, date);
 
 //  strcpy(str_send_log, tmp_time);
