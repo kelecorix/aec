@@ -88,7 +88,8 @@ int site_mode_uvo(Site* site) {
     if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1)
     {
       printf("Вентиляторы включены принятие решения\n");
-      if ((site->vents[0]->turns == 8 || site->vents[1]->turns == 8) && ((time(NULL) - site->time_uvo) >= 300))
+      printf("Время разница: %d\n", (time(NULL) - site->time_uvo));
+      if ((site->vents[0]->turns == 8 || site->vents[1]->turns == 8) && ((time(NULL) - site->time_uvo) >= 60))
       {
         printf("Вентиляторы вращаются на максимум и проработали 300 сек\n");
         res = sub_uvo_fail(site); // 1 - EXIT_FAILURE - не попали в ошибку
