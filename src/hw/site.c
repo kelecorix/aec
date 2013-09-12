@@ -753,7 +753,8 @@ int site_mode_heat(Site* site) {
     }
   }
 
-  printf("Перед ЦИКЛ time %d site->time_pre %d diff %f\n", time(NULL), site->time_pre, difftime(time(NULL), site->time_pre));
+  printf("Перед ЦИКЛ ДОГРЕВ time %d site->time_pre %d diff %f\n", time(NULL), site->time_pre,
+      difftime(time(NULL), site->time_pre));
   while (1)
   {
     // читаем датчики
@@ -782,7 +783,7 @@ int site_mode_heat(Site* site) {
       { //TODO необходимо ввести параметр до какой температуры греть
         //да
         printf("Сайт нагрели %f\n выключим ТЭН temp_mix %f", site->temp_in, site->temp_mix);
-        site->ten = 0;
+        set_ten(site->ten, 0);
 
         if (site->temp_mix > 60)
         {
@@ -836,7 +837,7 @@ int site_mode_heat(Site* site) {
             {
               //нет
               printf("Да вращается включим ТЭН\n");
-              site->ten = 1;
+              set_ten(site->ten, 1);
               continue;
             }
           }
@@ -844,7 +845,7 @@ int site_mode_heat(Site* site) {
           {
             printf("АВАРИЯ вентилятора Авария вентиляции - охлаждение кондиционером\n");
             //нет
-            site->ten = 0;
+            set_ten(site->ten,0);
             site->vents[0]->set_turns(site->vents[0], 0);
             site->vents[0]->error = ERROR;
 
@@ -1206,37 +1207,42 @@ int set_ten(Site* site, int val) {
 
   i2cOpen();
 
-    int addr, value, bit=0;
-    addr = strtol(getStr(site->cfg, "a_relay"), NULL, 16);
-    unsigned char rvalue;
-    char buf[1];
+  int addr, value, bit = 0;
+  addr = strtol(getStr(site->cfg, "a_relay"), NULL, 16);
+  unsigned char rvalue;
+  char buf[1];
 
-    if (ioctl(g_i2cFile, I2C_SLAVE, addr) < 0) {
-       printf("Failed to acquire bus access and/or talk to slave.\n");
-     }
+  if (ioctl(g_i2cFile, I2C_SLAVE, addr) < 0)
+  {
+    printf("Failed to acquire bus access and/or talk to slave.\n");
+  }
 
-    if (read(g_i2cFile, buf, 1) != 1) {
-        printf("Error reading from i2c\n");
-    }
+  if (read(g_i2cFile, buf, 1) != 1)
+  {
+    printf("Error reading from i2c\n");
+  }
 
-    value = (int)buf[0];
+  value = (int) buf[0];
 
-    if ((val == 1) || (val == 0)) {
-      if(val==1)
-        value |= (1 << bit); // установим бит
-      else
-        value &= ~(1 << bit) ; // очистим бит
+  if ((val == 1) || (val == 0))
+  {
+    if (val == 1)
+      value |= (1 << bit); // установим бит
+    else
+      value &= ~(1 << bit); // очистим бит
 
-      //printf("Управляем регистром, адрес %x, значение %d, %x , бит %d , номер %d\n", addr, val, value, bit, ac->num);
-      set_i2c_register(g_i2cFile, addr, value, value);
-      site->ten = val;
-      i2cClose();
-      return 1;
-    } else {
-      // wrong value
-      // неправильное значение
-      return 0;
-    }
+    //printf("Управляем регистром, адрес %x, значение %d, %x , бит %d , номер %d\n", addr, val, value, bit, ac->num);
+    set_i2c_register(g_i2cFile, addr, value, value);
+    site->ten = val;
+    i2cClose();
+    return 1;
+  }
+  else
+  {
+    // wrong value
+    // неправильное значение
+    return 0;
+  }
   return 0;
 }
 
