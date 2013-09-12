@@ -28,8 +28,8 @@ int write_log(FileLogWriter* flw, char* message) {
   struct tm* tm_info;
   char *date;
 
-  time(&timer);
-  tm_info = localtime(&timer);
+  timer = time(NULL);
+  tm_info = localtime(timer);
 
   strftime(date, 25, "%Y:%m:%d %H:%M:%S", tm_info);
   printf("Дата %s\n", date);
