@@ -91,7 +91,7 @@ static int set_mode(AC* ac, int val) {
       value &= ~(1 << bit) ; // очистим бит
 
     printf("Управляем регистром, адрес %x, значение %d, %x \n", addr, val, value);
-    set_i2c_register(g_i2cFile, addr, 0, value);
+    set_i2c_register(g_i2cFile, addr, value, value);
     ac->mode = val;
     i2cClose();
     return 1;
