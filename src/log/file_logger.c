@@ -9,14 +9,12 @@ FileLogWriter* create_filelog(char* filename) {
   printf("Создадим новый журнал, %s\n", filename);
   FileLogWriter* log = malloc(sizeof(FileLogWriter));
 
-  FILE *fp;
   log->filename = filename;
-  fp = fopen(filename, "a");
-  if (!fp) {
+  log->fp = fopen(filename, "a");
+  if (!log->fp) {
     fprintf(stderr, "could not open log file %s", filename);
     return NULL;
   }
-  log->fp = &fp;
 
   return log;
 }
