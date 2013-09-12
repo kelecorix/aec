@@ -10,18 +10,17 @@ FileLogWriter* create_filelog(char* filename) {
 
   FILE *fp;
   log->filename = filename;
+  fp = fopen(filename, "a");
+  if (!fp) {
+    fprintf(stderr, "could not open log file %s", filename);
+    return NULL;
+  }
   log->fp = fp;
 
   return log;
 }
 
 int write_log(FileLogWriter* flw, char* message) {
-
-  flw->fp = fopen(flw->filename, "a");
-  if (!flw->fp) {
-    fprintf(stderr, "could not open log file %s", flw->filename);
-    return NULL;
-  }
 
   time_t timer;
   struct tm* tm_info;
@@ -33,10 +32,18 @@ int write_log(FileLogWriter* flw, char* message) {
   strftime(date, 25, "%Y:%m:%d %H:%M:%S", tm_info);
   fprintf(flw->fp, date);
 
+//  strcpy(str_send_log, tmp_time);
+//  strcat(str_send_log,"|1|");
+//  strcat(str_send_log,tmp_temp_sayt);
+//  strcat(str_send_log,tmp_temp_ulica);
+//  strcat(str_send_log,tmp_temp_miks);
+//  strcat(str_send_log,tmp_temp_kond0);
+//  strcat(str_send_log,tmp_temp_kond1);
+
   fprintf(flw->fp, " | ");
   fprintf(flw->fp, message);
   fprintf(flw->fp, "\n");
-  fclose(flw->fp);
+  //fclose(flw->fp);
 
   return 0;
 }

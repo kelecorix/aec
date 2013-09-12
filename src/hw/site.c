@@ -18,22 +18,13 @@ void site_free() {
 
 void run(Site* site) {
 
-  // write_log(site->logger->eventLOG, "Начало работы");
+  write_log(site->logger->eventLOG, "Начало работы");
+
   // Установим значение регистра реле в 0
   i2cOpen();
   int addr = strtol(getStr(site->cfg, "a_relay"), NULL, 16);
   printf("Управляем регистром, адрес %x\n", addr);
   set_i2c_register(g_i2cFile, addr, 0xFF, 0xFF);
-
-//  int val = 0xFF;
-//     char buf[1];
-//     int i, bit = 2;
-//     for (i = 0; i < 128; i++) {
-//       val ^= (1 << bit);
-//       printf("Value: %x\n", val);
-//       set_i2c_register(g_i2cFile, addr, val, val);
-//       sleep(2);
-//     }
   i2cClose();
 
   // По умолчанию
@@ -41,13 +32,14 @@ void run(Site* site) {
   site->th_r_exists = 0;
   site->tacho1_exists = 0;
   site->tacho2_exists = 0;
+
   site_mode_uvo(site);
 }
 
 /* Режим охлаждения УВО */
 int site_mode_uvo(Site* site) {
   printf("Режим охлаждения УВО!\n");
-  //write_log(site->logger->eventLOG, "Режим охлаждения УВО");
+  write_log(site->logger->eventLOG, "Режим охлаждения УВО");
   site->mode = 1;
   site->time_pre = time(NULL);
   site->time_uvo = time(NULL);
@@ -511,7 +503,7 @@ int site_mode_ac(Site* site) {
   //проверил основные моменты
   printf("Режим охлаждения кондиционером!\n");
 
-  //write_log(site->logger->eventLOG, "Режим охлаждения кондиционером"); //при повторном вызове падает Segmentation fault
+  write_log(site->logger->eventLOG, "Режим охлаждения кондиционером");
 
   site->mode = 2;
   site->time_pre = time(NULL);
@@ -699,7 +691,7 @@ int site_mode_ac(Site* site) {
 /* Режим догрева сайта */
 int site_mode_heat(Site* site) {
   printf("Режим догрева сайта!\n");
-  //write_log(site->logger->eventLOG, "Режим догрева сайта"); //падает при повторном вызове
+  write_log(site->logger->eventLOG, "Режим догрева сайта"); //падает при повторном вызове
   site->mode = 3;
 
   int a, v;
@@ -745,7 +737,7 @@ int site_mode_heat(Site* site) {
     else
     {
       printf("*****************Принятие решения ДОГРЕВ*******************\n");
-      if ((difftime(time(NULL), site->th->time_start) >= 30) && site->th_check == 0)
+      if ((difftime(time(NULL), site->th->time_start) >= 30) && (site->th_check == 0))
       {
         printf("Настало время проверить перевилась ли заслонка site->th_check = %d\n", site->th_check);
         //да Необходимо проверить перевилась ли заслонка
@@ -1083,7 +1075,7 @@ int site_mode_fail_ac(Site* site) {
     }
     else
     {
-      if ((difftime(time(NULL), site->th->time_start) >= 30) && site->th_check == 0)
+      if ((difftime(time(NULL), site->th->time_start) >= 30) && (site->th_check == 0))
 
         if (site->th->position != th_pos_read)
         {
@@ -1098,7 +1090,6 @@ int site_mode_fail_ac(Site* site) {
         }
         else
         {
-
           site->th_check = 1;
           continue;
         }

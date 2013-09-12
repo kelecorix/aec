@@ -10,17 +10,20 @@ Logger* create_logger() {
 
   Logger* log = malloc(sizeof(Logger));
   log->dataLOG = create_filelog("data.log"); //TODO: считать путь из конфига
-  log->dataLOG_n = create_netlog("", 80); //TODO: считать параметры из конфига
+  //log->dataLOG_n = create_netlog("", 80); //TODO: считать параметры из конфига
 
   log->eventLOG = create_filelog("event.log"); //TODO: считать путь из конфига
-  log->eventLOG_n = create_netlog("", 80); //TODO: считать параметры из конфига
+  //log->eventLOG_n = create_netlog("", 80); //TODO: считать параметры из конфига
 
   return log;
 
 }
 
-void logger_free() {
+void logger_free(Logger* logger) {
 
-  //TODO: очистим ресурсы памяти
+  close_filelog(logger->dataLOG);
+  close_filelog(logger->eventLOG);
+  free(logger->dataLOG);
+  free(logger->eventLOG);
 }
 
