@@ -125,8 +125,8 @@ ConfigTable* readConfig(char *filename) {
 
   }
 
-  //if (line)
-  //  free(line);
+  if (line)
+    free(line);
 
   return cfg;
 }
