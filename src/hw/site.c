@@ -18,7 +18,7 @@ void site_free() {
 
 void run(Site* site) {
 
-  write_log(site->logger->eventLOG, "Начало работы");
+  // write_log(site->logger->eventLOG, "Начало работы");
   // Установим значение регистра реле в 0
   i2cOpen();
   int addr = strtol(getStr(site->cfg, "a_relay"), NULL, 2);
