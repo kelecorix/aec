@@ -783,7 +783,7 @@ int site_mode_heat(Site* site) {
       { //TODO необходимо ввести параметр до какой температуры греть
         //да
         printf("Сайт нагрели %f\n выключим ТЭН temp_mix %f", site->temp_in, site->temp_mix);
-        set_ten(site->ten, 0);
+        set_ten(site, 0);
 
         if (site->temp_mix > 60)
         {
@@ -845,7 +845,7 @@ int site_mode_heat(Site* site) {
           {
             printf("АВАРИЯ вентилятора Авария вентиляции - охлаждение кондиционером\n");
             //нет
-            set_ten(site->ten,0);
+            set_ten(site,0);
             site->vents[0]->set_turns(site->vents[0], 0);
             site->vents[0]->error = ERROR;
 
@@ -1209,7 +1209,7 @@ int set_ten(Site* site, int val) {
 
   int addr, value, bit = 0;
   addr = strtol(getStr(site->cfg, "a_relay"), NULL, 16);
-  unsigned char rvalue;
+
   char buf[1];
 
   if (ioctl(g_i2cFile, I2C_SLAVE, addr) < 0)
