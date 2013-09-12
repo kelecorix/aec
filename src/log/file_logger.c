@@ -6,6 +6,7 @@
 
 FileLogWriter* create_filelog(char* filename) {
 
+  printf("Создадим новый журнал, %s", filename);
   FileLogWriter* log = malloc(sizeof(FileLogWriter));
 
   FILE *fp;
