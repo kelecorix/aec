@@ -65,6 +65,7 @@ static int set_mode(AC* ac, int val) {
   // принимаем только 0,1
   int addr, value, bit;
   addr = 0b00111011;
+  value = 0b00000000;
   if ((val == 1) || (val == 0)) {
     printf("Изменим сост. кондиц\n");
 
