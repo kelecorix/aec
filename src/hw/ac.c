@@ -70,7 +70,7 @@ static int set_mode(AC* ac, int val) {
   //get_i2c_register(g_i2cFile, addr, 0, rvalue);
   value = strtol(rvalue, NULL, 2);
   if ((val == 1) || (val == 0)) {
-//    printf("Изменим сост. кондиц\n");
+   printf("Изменим сост. кондиц\n");
 //
 //    if(ac->num == 0){
 //      bit = 3;
