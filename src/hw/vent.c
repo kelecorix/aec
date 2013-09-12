@@ -24,9 +24,9 @@ static int set_mode(Vent* vent, int val) {
     int addr, value;
     printf("Включим вент\n");
     if (vent->type == 0)
-      addr = getStr(site->cfg, (void *) "a_vent_in");
+      addr = strtol(getStr(site->cfg, (void *) "a_vent_in"), NULL, 16);
     else
-      addr = getStr(site->cfg, (void *) "a_vent_out");
+      addr = strtol(getStr(site->cfg, (void *) "a_vent_out"), NULL, 16);
     if(val==1)
       value = 0; // максимальное значение
     else
