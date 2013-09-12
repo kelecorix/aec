@@ -102,7 +102,7 @@ void i2cTestHardware() {
 
   // Fan 0 приточный
   int addrFan1 = 0b00100000, addrFan2 = 0b00100001, addrTh = 0b00100010,
-      addrRel = 0b00111011;
+      addrRel = 0x3b;
 
   i2cOpen();
 
