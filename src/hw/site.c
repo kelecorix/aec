@@ -766,7 +766,7 @@ int site_mode_heat(Site* site) {
       site_mode_fail_uvo(site);
     }
 
-    if (difftime(time(NULL), site->time_pre) <= 30)
+    if (difftime(time(NULL), site->time_pre) <= 2) //30
     { //секунды
       usleep(10000);
       //printf("ЦИКЛ time %d site->time_pre %d diff %f\n", time(NULL), site->time_pre, difftime(time(NULL), site->time_pre));
@@ -1227,9 +1227,9 @@ int set_ten(Site* site, int val) {
   if ((val == 1) || (val == 0))
   {
     if (val == 1)
-      value |= (1 << bit); // установим бит
-    else
       value &= ~(1 << bit); // очистим бит
+    else
+      value |= (1 << bit); // установим бит
 
     printf("Управляем регистром, адрес %x, значение %d, %x , бит %d \n", addr, val, value, bit);
     set_i2c_register(g_i2cFile, addr, value, value);
