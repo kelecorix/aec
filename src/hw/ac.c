@@ -65,16 +65,24 @@ static int set_mode(AC* ac, int val) {
   int addr, value, bit;
   addr = strtol(getStr(site->cfg, "a_relay"), NULL, 16);
   unsigned char rvalue;
-
+  char buf[1];
   //прочитаем текущее состояние регистра
-  if(get_i2c_register(g_i2cFile, addr, 0, &rvalue)) {
-    printf("Unable to get register!\n");
-  }
-  else {
-    printf("Addr %x: %d (%x)\n", addr, (int)rvalue, (int)rvalue);
+//  if(get_i2c_register(g_i2cFile, addr, 0, &rvalue)) {
+//    printf("Unable to get register!\n");
+//  }
+//  else {
+//    printf("Addr %x: %d (%x)\n", addr, (int)rvalue, (int)rvalue);
+//  }
+
+  if (ioctl(g_i2cFile, I2C_SLAVE, addr) < 0) {
+     printf("Failed to acquire bus access and/or talk to slave.\n");
+   }
+
+  if (read(g_i2cFile, buf, 1) != 1) {
+      printf("Error reading from i2c\n");
   }
 
-  value = (int)rvalue;
+  value = (int)buf[0];
 
   if ((val == 1) || (val == 0)) {
    printf("Изменим сост. кондиц\n");
