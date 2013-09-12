@@ -34,12 +34,11 @@ void run(Site* site) {
 //       set_i2c_register(g_i2cFile, addr, val, val);
 //       sleep(2);
 //     }
-
   i2cClose();
 
+  site->th->set_mode(site->th, 0);
 
-
-  site_mode_uvo(site);
+  //site_mode_uvo(site);
 }
 
 /* Режим охлаждения УВО */
