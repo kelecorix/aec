@@ -214,20 +214,18 @@ void sub_uvo_vent(Site* site) {
       {
         for (v = 0; v < 2; v++)
         {
+          site->vents[v]->set_mode(site->vents[v], 1);
           site->vents[v]->set_turns(site->vents[v], 8);
-          site->vents[v]->mode = 1;
           site->vents[v]->time_start = time(NULL);
-          site->vents[0]->turns = 8;
         }
       }
       else
       {
         for (v = 0; v < 2; v++)
         {
+          site->vents[v]->set_mode(site->vents[v], 1);
           site->vents[v]->set_turns(site->vents[v], 2);
-          site->vents[v]->mode = 1;
           site->vents[v]->time_start = time(NULL);
-          site->vents[0]->turns = 2;
         }
       }
 
@@ -268,8 +266,8 @@ int sub_uvo_pen(Site* site) {
       printf("Выключим вентиляторы\n");
       for (v = 0; v < 2; v++)
       {
-        //site->vents[v]->set_turns(site ->vents[v],0);
         site->vents[v]->set_mode(site->vents[v], 0);
+        site->vents[v]->set_turns(site->vents[v],0);
       }
     }
 

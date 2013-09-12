@@ -19,23 +19,23 @@ void vent_free() {
 static int set_mode(Vent* vent, int val) {
   // accept only 0,1
   // принимаем только 0,1
-  i2cOpen();
+  //i2cOpen();
   if ((val == 1) || (val == 0)) {
-    int addr, value;
-    printf("Включим вент\n");
-    if (vent->type == 0)
-      addr = strtol(getStr(site->cfg, (void *) "a_vent_in"), NULL, 16);
-    else
-      addr = strtol(getStr(site->cfg, (void *) "a_vent_out"), NULL, 16);
-    if(val==1)
-      value = 0; // максимальное значение
-    else
-      value = 8; // минимальное значение
-    //i2cSetAddress(addr);
-    printf("Управляем регистром, адрес %d, значение\n", addr, steps[value]);
-    set_i2c_register(g_i2cFile, addr, 0, steps[value]);
+//    int addr, value;
+//    printf("Включим вент\n");
+//    if (vent->type == 0)
+//      addr = strtol(getStr(site->cfg, (void *) "a_vent_in"), NULL, 16);
+//    else
+//      addr = strtol(getStr(site->cfg, (void *) "a_vent_out"), NULL, 16);
+//    if(val==1)
+//      value = 0; // максимальное значение
+//    else
+//      value = 8; // минимальное значение
+//    //i2cSetAddress(addr);
+//    printf("Управляем регистром, адрес %d, значение %d, %d \n", addr, val, steps[value]);
+//    set_i2c_register(g_i2cFile, addr, 0, steps[value]);
     vent->mode = val;
-    i2cClose();
+    //i2cClose();
     return 1;
   } else {
     // wrong value
