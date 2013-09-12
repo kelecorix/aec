@@ -105,13 +105,13 @@ void i2cTestHardware() {
 
   i2cOpen();
 
-  int steps[10] = { 0xFF, 0xED, 0xDF, 0xDE, 0xDC, 0xBF, 0xBE, 0x7F, 0x7E, 0x9F,
-      0x8F };
-
-  i2cSetAddress(addrFan1);
-  set_i2c_register(g_i2cFile, addrFan1, 0, steps[2]);
-  set_i2c_register(g_i2cFile, addrFan2, 0, steps[2]);
-  set_i2c_register(g_i2cFile, addrTh, 0, 0xFF);
+//  int steps[10] = { 0xFF, 0xED, 0xDF, 0xDE, 0xDC, 0xBF, 0xBE, 0x7F, 0x7E, 0x9F,
+//      0x8F };
+//
+//  i2cSetAddress(addrFan1);
+//  set_i2c_register(g_i2cFile, addrFan1, 0, steps[2]);
+//  set_i2c_register(g_i2cFile, addrFan2, 0, steps[2]);
+//  set_i2c_register(g_i2cFile, addrTh, 0, 0xFF);
 
   // Тестируем реле или лампочки на RPi
 //  int val = 0b00000000;
@@ -130,24 +130,24 @@ void i2cTestHardware() {
   // Тестируем реле или лампочки на RPi
    int val = 0b11111111;
    int i, bit = 2;
-   for (i = 0; i < 64; i++) {
+   for (i = 0; i < 128; i++) {
      val ^= (1 << bit);
      set_i2c_register(g_i2cFile, addrRel, 0, val);
-     sleep(1);
+     sleep(2);
    }
 
-  sleep(10);
-
-  set_i2c_register(g_i2cFile, addrTh, 0, 0xDC);
-  sleep(10);
-  set_i2c_register(g_i2cFile, addrFan1, 0, steps[6]);
-  set_i2c_register(g_i2cFile, addrFan2, 0, steps[6]);
-  set_i2c_register(g_i2cFile, addrTh, 0, 0xED);
-  sleep(10);
-  set_i2c_register(g_i2cFile, addrFan1, 0, steps[0]);
-  set_i2c_register(g_i2cFile, addrFan2, 0, steps[0]);
-  set_i2c_register(g_i2cFile, addrTh, 0, 0x8F);
-
-  i2cClose();
+//  sleep(10);
+//
+//  set_i2c_register(g_i2cFile, addrTh, 0, 0xDC);
+//  sleep(10);
+//  set_i2c_register(g_i2cFile, addrFan1, 0, steps[6]);
+//  set_i2c_register(g_i2cFile, addrFan2, 0, steps[6]);
+//  set_i2c_register(g_i2cFile, addrTh, 0, 0xED);
+//  sleep(10);
+//  set_i2c_register(g_i2cFile, addrFan1, 0, steps[0]);
+//  set_i2c_register(g_i2cFile, addrFan2, 0, steps[0]);
+//  set_i2c_register(g_i2cFile, addrTh, 0, 0x8F);
+//
+//  i2cClose();
 
 }
