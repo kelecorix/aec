@@ -54,14 +54,14 @@ int main(int argc, char *argv[]) {
 
   sleep(4);
 
-//  printf("Создадим поток журналирования\n");
-//  if(pthread_create(&threadL, NULL, run_logger, (void*) site)) {
-//    fprintf(stderr, "Error creating Logger thread\n");
-//    printf("Error creating Logger thread\n");
-//
-//  }
-//
-//  sleep(4);
+  printf("Создадим поток журналирования\n");
+  if(pthread_create(&threadL, NULL, run_logger, (void*) site)) {
+    fprintf(stderr, "Error creating Logger thread\n");
+    printf("Error creating Logger thread\n");
+
+  }
+
+  sleep(4);
 
 // ждем пока потоками завершаться
 // по идде сюда не должно дойти
