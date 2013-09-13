@@ -28,6 +28,6 @@ void logger_free(Logger* logger) {
   free(logger->eventLOG);
 }
 
-void run_logger(Site* site){
+void run_logger(){
 
 }
