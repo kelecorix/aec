@@ -54,17 +54,17 @@ void write_data_log(){
   strftime(date, 25, "%Y:%m:%d %H:%M:%S", tm_info);
   fprintf(fp, date);
   fprintf(fp, "|");
-  fprintf(fp, event_t);
+  fprintf(fp, itoa(event_t, NULL, 10));
   fprintf(fp, "|");
-  fprintf(fp, site->temp_in);
+  fprintf(fp, itoa(site->temp_in, NULL, 10));
   fprintf(fp, ";");
-  fprintf(fp, site->temp_out);
+  fprintf(fp, itoa(site->temp_out, NULL, 10));
   fprintf(fp, ";");
-  fprintf(fp, site->temp_mix);
+  fprintf(fp, itoa(site->temp_mix, NULL, 10));
   fprintf(fp, ";");
-  fprintf(fp, site->temp_evapor1);
+  fprintf(fp, itoa(site->temp_evapor1, NULL, 10));
   fprintf(fp, ";");
-  fprintf(fp, site->temp_evapor2);
+  fprintf(fp, itoa(site->temp_evapor2, NULL, 10));
 
 }
 
