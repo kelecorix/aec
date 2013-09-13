@@ -18,7 +18,7 @@ void site_free() {
 
 void run(Site* site) {
 
-  write_log(site->logger->eventLOG, "Начало работы");
+  //write_log(site->logger->eventLOG, "Начало работы");
 
   // Установим значение регистра реле в 0
   i2cOpen();
@@ -39,7 +39,7 @@ void run(Site* site) {
 /* Режим охлаждения УВО */
 int site_mode_uvo(Site* site) {
   printf("Режим охлаждения УВО!\n");
-  write_log(site->logger->eventLOG, "Режим охлаждения УВО");
+  //write_log(site->logger->eventLOG, "Режим охлаждения УВО");
   site->mode = 1;
   site->time_pre = time(NULL);
   site->time_uvo = time(NULL);
@@ -436,7 +436,7 @@ int site_mode_ac(Site* site) {
   //проверил основные моменты
   printf("Режим охлаждения кондиционером!\n");
 
-  write_log(site->logger->eventLOG, "Режим охлаждения кондиционером");
+  //write_log(site->logger->eventLOG, "Режим охлаждения кондиционером");
 
   site->mode = 2;
   site->time_pre = time(NULL);
@@ -611,7 +611,7 @@ int site_mode_ac(Site* site) {
 int site_mode_heat(Site* site) {
 
   printf("Режим догрева сайта!\n");
-  write_log(site->logger->eventLOG, "Режим догрева сайта"); //падает при повторном вызове
+  //write_log(site->logger->eventLOG, "Режим догрева сайта"); //падает при повторном вызове
   site->mode = 3;
 
   int a, v;
@@ -778,7 +778,7 @@ int site_mode_heat(Site* site) {
  * Авария заслонки - Авария охлаждения кондиционером */
 int site_mode_fail_uvo(Site* site) {
   printf("Режим авария УВО!\n");
-  write_log(site->logger->eventLOG, "Режим авария УВО");
+  //write_log(site->logger->eventLOG, "Режим авария УВО");
   site->mode = 4;
   site->time_pre = time(NULL);
 
@@ -875,7 +875,7 @@ int site_mode_fail_uvo(Site* site) {
 /* Авария кондиционеров - Охлаждение УВО */
 int site_mode_fail_ac(Site* site) {
   printf("Режим авария кондиционеров!\n");
-  write_log(site->logger->eventLOG, "Режим авария кондиционеров");
+  //write_log(site->logger->eventLOG, "Режим авария кондиционеров");
   site->mode = 5;
 
   site->time_pre = time(NULL);
