@@ -379,10 +379,12 @@ void sub_uvo_th(Site* site) {
           site->temp_mix, temp_dew, site->th->position);
       if (site->temp_mix >= temp_dew) {
         printf("Приоткроем заслонку %d\n", curr_pos);
-        site->th->set_position(site->th, curr_pos++);
+        curr_pos++;
+        site->th->set_position(site->th, curr_pos);
       } else {
         printf("Призакроем заслонку %d\n", curr_pos);
-        site->th->set_position(site->th, curr_pos--);
+        curr_pos--;
+        site->th->set_position(site->th, curr_pos);
       }
     }
   }
