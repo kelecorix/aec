@@ -14,8 +14,7 @@ NetLogWriter* create_netlog(char* server, int port) {
 
 }
 
-int close_netlog(NetLogWriter* nlog){
-
+int close_netlog(NetLogWriter* nlog) {
 
   return 0;
 }

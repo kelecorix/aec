@@ -75,28 +75,28 @@ static int set_mode(AC* ac, int val) {
 //  }
 
   if (ioctl(g_i2cFile, I2C_SLAVE, addr) < 0) {
-     printf("Failed to acquire bus access and/or talk to slave.\n");
-   }
-
-  if (read(g_i2cFile, buf, 1) != 1) {
-      printf("Error reading from i2c\n");
+    printf("Failed to acquire bus access and/or talk to slave.\n");
   }
 
-  value = (int)buf[0];
+  if (read(g_i2cFile, buf, 1) != 1) {
+    printf("Error reading from i2c\n");
+  }
+
+  value = (int) buf[0];
 
   if ((val == 1) || (val == 0)) {
-   //printf("Изменим сост. кондиц\n");
+    //printf("Изменим сост. кондиц\n");
 
-    if(ac->num == 0){
+    if (ac->num == 0) {
       bit = 2;
     }
-    if(ac->num == 1){
+    if (ac->num == 1) {
       bit = 1;
     }
-    if(val==1)
+    if (val == 1)
       value |= (1 << bit); // установим бит
     else
-      value &= ~(1 << bit) ; // очистим бит
+      value &= ~(1 << bit); // очистим бит
 
     //printf("Управляем регистром, адрес %x, значение %d, %x , бит %d , номер %d\n", addr, val, value, bit, ac->num);
     set_i2c_register(g_i2cFile, addr, value, value);
@@ -120,7 +120,7 @@ AC* ac_new(int i) {
   ac->ac_time_work = ac_start;
   ac->ac_moto_work = ac_moto_work;
   ac->set_mode = set_mode;
-  ac->num =i;
+  ac->num = i;
 
   return ac;
 }

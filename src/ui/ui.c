@@ -78,148 +78,148 @@ void display(Site* site, LCD* lcd, int display_mode) {
   //char *key;
 
   switch (display_mode) {
-    case 1000:
-      lcd_line(lcd, "     Меандр", 0);       // TODO: из конфига
-      lcd_line(lcd, "FreCooling v.0.1", 1);  // TODO: из конфига
-      lcd_line(lcd, "Raspberri PI I2C", 2);  // TODO: из конфига
-      lcd_line(lcd, "rev.h 0.1", 3);         // TODO: из конфига
-      break;
-    case 0:
-      time(&rawtime);
-      timeinfo = localtime(&rawtime);
-      //sprintf(tmp_value,"%2d%02d%2d %2d:%02d:%02d", timeinfo->tm_mday,1+timeinfo->tm_mon,1900+timeinfo->tm_year,timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
-      sprintf(tmp_time, "%2d/%02d  %2d:%02d:%02d", timeinfo->tm_mday,
-          1 + timeinfo->tm_mon, timeinfo->tm_hour, timeinfo->tm_min,
-          timeinfo->tm_sec);
-      //0xEF градус
-      //TODO: добавить вывод всех необходимых параметров
-      if (site->temp_out != -100.0) {
-        sprintf(tmp_temp_out, "Улица  = %2.2f°C", site->temp_out);
-      } else {
-        sprintf(tmp_temp_out, "Улица  =  Ошибка");
-      }
-      if (site->temp_in != -100.0) {
-        sprintf(tmp_temp_in, "Сайт   = %2.2f°C", site->temp_in);
-      } else {
-        sprintf(tmp_temp_in, "Сайт   =  Ошибка");
-      }
-      //lcd_line("Улица  = 20.00°C",0);
-      lcd_line(lcd, tmp_temp_out, 0);
-      lcd_line(lcd, tmp_temp_in, 1);
-      lcd_line(lcd, "Состояние работы", 2);
-      lcd_line(lcd, tmp_time, 3);
+  case 1000:
+    lcd_line(lcd, "     Меандр", 0);       // TODO: из конфига
+    lcd_line(lcd, "FreCooling v.0.1", 1);  // TODO: из конфига
+    lcd_line(lcd, "Raspberri PI I2C", 2);  // TODO: из конфига
+    lcd_line(lcd, "rev.h 0.1", 3);         // TODO: из конфига
+    break;
+  case 0:
+    time(&rawtime);
+    timeinfo = localtime(&rawtime);
+    //sprintf(tmp_value,"%2d%02d%2d %2d:%02d:%02d", timeinfo->tm_mday,1+timeinfo->tm_mon,1900+timeinfo->tm_year,timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
+    sprintf(tmp_time, "%2d/%02d  %2d:%02d:%02d", timeinfo->tm_mday,
+        1 + timeinfo->tm_mon, timeinfo->tm_hour, timeinfo->tm_min,
+        timeinfo->tm_sec);
+    //0xEF градус
+    //TODO: добавить вывод всех необходимых параметров
+    if (site->temp_out != -100.0) {
+      sprintf(tmp_temp_out, "Улица  = %2.2f°C", site->temp_out);
+    } else {
+      sprintf(tmp_temp_out, "Улица  =  Ошибка");
+    }
+    if (site->temp_in != -100.0) {
+      sprintf(tmp_temp_in, "Сайт   = %2.2f°C", site->temp_in);
+    } else {
+      sprintf(tmp_temp_in, "Сайт   =  Ошибка");
+    }
+    //lcd_line("Улица  = 20.00°C",0);
+    lcd_line(lcd, tmp_temp_out, 0);
+    lcd_line(lcd, tmp_temp_in, 1);
+    lcd_line(lcd, "Состояние работы", 2);
+    lcd_line(lcd, tmp_time, 3);
 
-      break;
-    case 2000:
-      time(&rawtime);
-      timeinfo = localtime(&rawtime);
-      //sprintf(tmp_value,"%2d%02d%2d %2d:%02d:%02d", timeinfo->tm_mday,1+timeinfo->tm_mon,1900+timeinfo->tm_year,timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
-      sprintf(tmp_time, "%2d/%02d  %2d:%02d:%02d", timeinfo->tm_mday,
-          1 + timeinfo->tm_mon, timeinfo->tm_hour, timeinfo->tm_min,
-          timeinfo->tm_sec);
-      //0xEF градус
-      if (site->temp_evapor1 != -100.0) {
-        sprintf(tmp_temp_evapor1, "Конд1  = %2.2f°C", site->temp_evapor1);
-      } else {
-        sprintf(tmp_temp_evapor1, "Конд1  =  Ошибка");
-      }
-      if (site->temp_evapor2 != -100.0) {
-        sprintf(tmp_temp_evapor2, "Конд2  = %2.2f°C", site->temp_evapor2);
-      } else {
-        sprintf(tmp_temp_evapor2, "Конд2  =  Ошибка");
-      }
-      if (site->temp_mix != -100.0) {
-        sprintf(tmp_temp_mix, "Миксер = %2.2f°C", site->temp_mix);
-      } else {
-        sprintf(tmp_temp_mix, "Миксер =  Ошибка");
-      }
+    break;
+  case 2000:
+    time(&rawtime);
+    timeinfo = localtime(&rawtime);
+    //sprintf(tmp_value,"%2d%02d%2d %2d:%02d:%02d", timeinfo->tm_mday,1+timeinfo->tm_mon,1900+timeinfo->tm_year,timeinfo->tm_hour, timeinfo->tm_min, timeinfo->tm_sec);
+    sprintf(tmp_time, "%2d/%02d  %2d:%02d:%02d", timeinfo->tm_mday,
+        1 + timeinfo->tm_mon, timeinfo->tm_hour, timeinfo->tm_min,
+        timeinfo->tm_sec);
+    //0xEF градус
+    if (site->temp_evapor1 != -100.0) {
+      sprintf(tmp_temp_evapor1, "Конд1  = %2.2f°C", site->temp_evapor1);
+    } else {
+      sprintf(tmp_temp_evapor1, "Конд1  =  Ошибка");
+    }
+    if (site->temp_evapor2 != -100.0) {
+      sprintf(tmp_temp_evapor2, "Конд2  = %2.2f°C", site->temp_evapor2);
+    } else {
+      sprintf(tmp_temp_evapor2, "Конд2  =  Ошибка");
+    }
+    if (site->temp_mix != -100.0) {
+      sprintf(tmp_temp_mix, "Миксер = %2.2f°C", site->temp_mix);
+    } else {
+      sprintf(tmp_temp_mix, "Миксер =  Ошибка");
+    }
 
-      lcd_line(lcd, tmp_temp_evapor1, 0);
-      lcd_line(lcd, tmp_temp_evapor2, 1);
-      lcd_line(lcd, tmp_temp_mix, 2);
-      lcd_line(lcd, tmp_time, 3);
-      break;
-    case 10:
-      //mem_load = (int)(((double)mem_used()/(double)mem_tot)*100);
-      lcd_line(lcd, "Меню настроек", 0);
-      lcd_line(lcd, "Улица          <", 1);
-      lcd_line(lcd, "Сайт", 2);
-      lcd_line(lcd, "Миксер", 3);
-      break;
-    case 20:
-      //mem_load = (int)(((double)mem_used()/(double)mem_tot)*100);
-      lcd_line(lcd, "Меню настроек", 0);
-      lcd_line(lcd, "Улица           ", 1);
-      lcd_line(lcd, "Сайт           <", 2);
-      lcd_line(lcd, "Миксер", 3);
-      break;
-    case 30:
-      //mem_load = (int)(((double)mem_used()/(double)mem_tot)*100);
-      lcd_line(lcd, "Меню настроек", 0);
-      lcd_line(lcd, "Улица           ", 1);
-      lcd_line(lcd, "Сайт            ", 2);
-      lcd_line(lcd, "Миксер         <", 3);
-      break;
-    case 40:
-      //mem_load = (int)(((double)mem_used()/(double)mem_tot)*100);
-      lcd_line(lcd, "Меню настроек", 0);
-      lcd_line(lcd, "Сайт            ", 1);
-      lcd_line(lcd, "Миксер          ", 2);
-      lcd_line(lcd, "Тен            <", 3);
-      break;
+    lcd_line(lcd, tmp_temp_evapor1, 0);
+    lcd_line(lcd, tmp_temp_evapor2, 1);
+    lcd_line(lcd, tmp_temp_mix, 2);
+    lcd_line(lcd, tmp_time, 3);
+    break;
+  case 10:
+    //mem_load = (int)(((double)mem_used()/(double)mem_tot)*100);
+    lcd_line(lcd, "Меню настроек", 0);
+    lcd_line(lcd, "Улица          <", 1);
+    lcd_line(lcd, "Сайт", 2);
+    lcd_line(lcd, "Миксер", 3);
+    break;
+  case 20:
+    //mem_load = (int)(((double)mem_used()/(double)mem_tot)*100);
+    lcd_line(lcd, "Меню настроек", 0);
+    lcd_line(lcd, "Улица           ", 1);
+    lcd_line(lcd, "Сайт           <", 2);
+    lcd_line(lcd, "Миксер", 3);
+    break;
+  case 30:
+    //mem_load = (int)(((double)mem_used()/(double)mem_tot)*100);
+    lcd_line(lcd, "Меню настроек", 0);
+    lcd_line(lcd, "Улица           ", 1);
+    lcd_line(lcd, "Сайт            ", 2);
+    lcd_line(lcd, "Миксер         <", 3);
+    break;
+  case 40:
+    //mem_load = (int)(((double)mem_used()/(double)mem_tot)*100);
+    lcd_line(lcd, "Меню настроек", 0);
+    lcd_line(lcd, "Сайт            ", 1);
+    lcd_line(lcd, "Миксер          ", 2);
+    lcd_line(lcd, "Тен            <", 3);
+    break;
 
-    case 11:
-      //mem_load = (int)(((double)mem_used()/(double)mem_tot)*100);
-      lcd_line(lcd, "Меню Улица", 0);
-      lcd_line(lcd, "Температура    <", 1);
-      lcd_line(lcd, "Дельта          ", 2);
-      lcd_line(lcd, "Ещё что то      ", 3);
-      break;
+  case 11:
+    //mem_load = (int)(((double)mem_used()/(double)mem_tot)*100);
+    lcd_line(lcd, "Меню Улица", 0);
+    lcd_line(lcd, "Температура    <", 1);
+    lcd_line(lcd, "Дельта          ", 2);
+    lcd_line(lcd, "Ещё что то      ", 3);
+    break;
 
-    case 12:
-      //mem_load = (int)(((double)mem_used()/(double)mem_tot)*100);
-      lcd_line(lcd, "Меню Улица", 0);
-      lcd_line(lcd, "Температура     ", 1);
-      lcd_line(lcd, "Дельта         <", 2);
-      lcd_line(lcd, "Ещё что то      ", 3);
-      break;
+  case 12:
+    //mem_load = (int)(((double)mem_used()/(double)mem_tot)*100);
+    lcd_line(lcd, "Меню Улица", 0);
+    lcd_line(lcd, "Температура     ", 1);
+    lcd_line(lcd, "Дельта         <", 2);
+    lcd_line(lcd, "Ещё что то      ", 3);
+    break;
 
-    case 13:
-      //mem_load = (int)(((double)mem_used()/(double)mem_tot)*100);
-      lcd_line(lcd, "Меню Улица", 0);
-      lcd_line(lcd, "Температура     ", 1);
-      lcd_line(lcd, "Дельта          ", 2);
-      lcd_line(lcd, "Ещё что то     <", 3);
-      break;
+  case 13:
+    //mem_load = (int)(((double)mem_used()/(double)mem_tot)*100);
+    lcd_line(lcd, "Меню Улица", 0);
+    lcd_line(lcd, "Температура     ", 1);
+    lcd_line(lcd, "Дельта          ", 2);
+    lcd_line(lcd, "Ещё что то     <", 3);
+    break;
 
-    case 110:
-      //mem_load = (int)(((double)mem_used()/(double)mem_tot)*100);
-      //printf("%d.00\n",tek_znach);
-      sprintf(buffer, "    %d.00  ", tek_znach);
-      lcd_line(lcd, "Меню Температура", 0);
-      lcd_line(lcd, "                ", 1);
-      lcd_line(lcd, buffer, 2);
-      lcd_line("                ", 3);
-      break;
+  case 110:
+    //mem_load = (int)(((double)mem_used()/(double)mem_tot)*100);
+    //printf("%d.00\n",tek_znach);
+    sprintf(buffer, "    %d.00  ", tek_znach);
+    lcd_line(lcd, "Меню Температура", 0);
+    lcd_line(lcd, "                ", 1);
+    lcd_line(lcd, buffer, 2);
+    lcd_line("                ", 3);
+    break;
 
-    case mode_NET:
-      lcd_line(lcd, " IP ADDRESS", 0);
-      //sprintf(tmp_value,"%s", net_address());
-      lcd_line(lcd, tmp_value, 1);
-      lcd_line(lcd, "      ", 2);
-      lcd_line(lcd, "[CPU][MEM]>NET<[UPT]", 3);
-      break;
+  case mode_NET:
+    lcd_line(lcd, " IP ADDRESS", 0);
+    //sprintf(tmp_value,"%s", net_address());
+    lcd_line(lcd, tmp_value, 1);
+    lcd_line(lcd, "      ", 2);
+    lcd_line(lcd, "[CPU][MEM]>NET<[UPT]", 3);
+    break;
 
-    case mode_UPT:
-      lcd_line(lcd, "    UP TIME", 0);
-      //sprintf(tmp_value,"%d sec",uptime());
-      lcd_line(lcd, tmp_value, 1);
-      lcd_line(lcd, "     ", 2);
-      lcd_line(lcd, "[CPU][MEM][NET]>UPT<", 3);
-      break;
+  case mode_UPT:
+    lcd_line(lcd, "    UP TIME", 0);
+    //sprintf(tmp_value,"%d sec",uptime());
+    lcd_line(lcd, tmp_value, 1);
+    lcd_line(lcd, "     ", 2);
+    lcd_line(lcd, "[CPU][MEM][NET]>UPT<", 3);
+    break;
 
-    default:
-      display_mode = mode_OSN;
+  default:
+    display_mode = mode_OSN;
 
   }
 

@@ -174,20 +174,20 @@ void cursor_go(LCD* lcd, int str) {
 
   int DDRAMAddr;
   switch (str) {
-    case 0:
-      DDRAMAddr = LCD_LINE0_DDRAMADDR;
-      break;
-    case 1:
-      DDRAMAddr = LCD_LINE1_DDRAMADDR;
-      break;
-    case 2:
-      DDRAMAddr = LCD_LINE2_DDRAMADDR;
-      break;
-    case 3:
-      DDRAMAddr = LCD_LINE3_DDRAMADDR;
-      break;
-    default:
-      DDRAMAddr = LCD_LINE0_DDRAMADDR;
+  case 0:
+    DDRAMAddr = LCD_LINE0_DDRAMADDR;
+    break;
+  case 1:
+    DDRAMAddr = LCD_LINE1_DDRAMADDR;
+    break;
+  case 2:
+    DDRAMAddr = LCD_LINE2_DDRAMADDR;
+    break;
+  case 3:
+    DDRAMAddr = LCD_LINE3_DDRAMADDR;
+    break;
+  default:
+    DDRAMAddr = LCD_LINE0_DDRAMADDR;
 
   }
 

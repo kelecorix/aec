@@ -118,7 +118,7 @@ int read_sensors(Site* site) {
   site->temp_mix = get_data(conn, mnt, s_temp_mix, 100);
   site->temp_evapor1 = get_data(conn, mnt, s_temp_evapor1, 100);
   site->temp_evapor2 = get_data(conn, mnt, s_temp_evapor2, 100);
-  
+
   site->acs[0]->temp = site->temp_evapor1;
   site->acs[1]->temp = site->temp_evapor2;
   //printf("temp_out = %2.2f\n", site->temp_out);

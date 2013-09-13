@@ -60,42 +60,40 @@ int set_i2c_register(int file, unsigned char addr, unsigned char reg,
   return 0;
 }
 
-int get_i2c_register(int file,
-                     unsigned char addr,
-                     unsigned char reg,
-                     unsigned char *val) {
+int get_i2c_register(int file, unsigned char addr, unsigned char reg,
+    unsigned char *val) {
 
-    unsigned char inbuf, outbuf;
-    struct i2c_rdwr_ioctl_data packets;
-    struct i2c_msg messages[2];
+  unsigned char inbuf, outbuf;
+  struct i2c_rdwr_ioctl_data packets;
+  struct i2c_msg messages[2];
 
-    /*
-     * In order to read a register, we first do a "dummy write" by writing
-     * 0 bytes to the register we want to read from.  This is similar to
-     * the packet in set_i2c_register, except it's 1 byte rather than 2.
-     */
-    outbuf = reg;
-    messages[0].addr  = addr;
-    messages[0].flags = 0;
-    messages[0].len   = sizeof(outbuf);
-    messages[0].buf   = &outbuf;
+  /*
+   * In order to read a register, we first do a "dummy write" by writing
+   * 0 bytes to the register we want to read from.  This is similar to
+   * the packet in set_i2c_register, except it's 1 byte rather than 2.
+   */
+  outbuf = reg;
+  messages[0].addr = addr;
+  messages[0].flags = 0;
+  messages[0].len = sizeof(outbuf);
+  messages[0].buf = &outbuf;
 
-    /* The data will get returned in this structure */
-    messages[1].addr  = addr;
-    messages[1].flags = I2C_M_RD/* | I2C_M_NOSTART*/;
-    messages[1].len   = sizeof(inbuf);
-    messages[1].buf   = &inbuf;
+  /* The data will get returned in this structure */
+  messages[1].addr = addr;
+  messages[1].flags = I2C_M_RD/* | I2C_M_NOSTART*/;
+  messages[1].len = sizeof(inbuf);
+  messages[1].buf = &inbuf;
 
-    /* Send the request to the kernel and get the result back */
-    packets.msgs      = messages;
-    packets.nmsgs     = 2;
-    if(ioctl(file, I2C_RDWR, &packets) < 0) {
-        perror("Unable to send data");
-        return 1;
-    }
-    *val = inbuf;
+  /* Send the request to the kernel and get the result back */
+  packets.msgs = messages;
+  packets.nmsgs = 2;
+  if (ioctl(file, I2C_RDWR, &packets) < 0) {
+    perror("Unable to send data");
+    return 1;
+  }
+  *val = inbuf;
 
-    return 0;
+  return 0;
 }
 
 void i2cTestHardware() {
@@ -114,7 +112,7 @@ void i2cTestHardware() {
 //  set_i2c_register(g_i2cFile, addrFan2, 0, steps[2]);
 //  set_i2c_register(g_i2cFile, addrTh, 0, 0xFF);
 
-  // Тестируем реле или лампочки на RPi
+// Тестируем реле или лампочки на RPi
 //  int val = 0b00000000;
 //  int i, bit =0;
 //  for (i = 0; i < 64; i++, bit++) {
@@ -128,16 +126,16 @@ void i2cTestHardware() {
 //    sleep(1);
 //  }
 
-  // Тестируем реле или лампочки на RPi
-   int val = 0xFF;
-   char buf[1];
-   int i, bit = 2;
-   for (i = 0; i < 128; i++) {
-     val ^= (1 << bit);
-     printf("Value: %x\n", val);
-     set_i2c_register(g_i2cFile, addrRel, val, val);
-     sleep(2);
-   }
+// Тестируем реле или лампочки на RPi
+  int val = 0xFF;
+  char buf[1];
+  int i, bit = 2;
+  for (i = 0; i < 128; i++) {
+    val ^= (1 << bit);
+    printf("Value: %x\n", val);
+    set_i2c_register(g_i2cFile, addrRel, val, val);
+    sleep(2);
+  }
 
 //  sleep(10);
 //

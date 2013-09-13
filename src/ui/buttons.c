@@ -46,59 +46,59 @@ int checkButton() {
     } else {
       //printf("%0x\n",(uint)buf[0]);
       switch ((uint) buf[0]) {
-        case 127:
-          if (preButton == 1) {
-            if (povtor != 0) {
-              povtor--;
-            } else {
-              povtor = povtor_old;
-              preButton = 0;
-            }
+      case 127:
+        if (preButton == 1) {
+          if (povtor != 0) {
+            povtor--;
+          } else {
+            povtor = povtor_old;
+            preButton = 0;
           }
-          if (preButton != 1) {
-            preButton = 1;
-            button = 1;
-          }
-          break;
+        }
+        if (preButton != 1) {
+          preButton = 1;
+          button = 1;
+        }
+        break;
 
-        case 191:
-          if (preButton != 2) {
-            preButton = 2;
-            button = 2;
-          }
-          break;
+      case 191:
+        if (preButton != 2) {
+          preButton = 2;
+          button = 2;
+        }
+        break;
 
-        case 223:
-          if (preButton == 3) {
-            if (povtor != 0) {
-              povtor--;
-            } else {
-              povtor = povtor_old;
-              preButton = 0;
-            }
+      case 223:
+        if (preButton == 3) {
+          if (povtor != 0) {
+            povtor--;
+          } else {
+            povtor = povtor_old;
+            preButton = 0;
           }
-          if (preButton != 3) {
-            preButton = 3;
-            button = 3;
-          }
-          break;
+        }
+        if (preButton != 3) {
+          preButton = 3;
+          button = 3;
+        }
+        break;
 
-        case 239:
-          if (preButton != 4) {
-            preButton = 4;
-            button = 4;
-          }
-          break;
+      case 239:
+        if (preButton != 4) {
+          preButton = 4;
+          button = 4;
+        }
+        break;
 
-        case 247:
-          if (preButton != 5) {
-            preButton = 5;
-            button = 5;
-          }
-          break;
+      case 247:
+        if (preButton != 5) {
+          preButton = 5;
+          button = 5;
+        }
+        break;
 
-        default:
-          preButton = 0;
+      default:
+        preButton = 0;
 
       }
     }

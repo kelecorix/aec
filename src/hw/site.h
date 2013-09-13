@@ -29,7 +29,7 @@ typedef struct Site {
 
   float temp_in;      // температура сайта
   float temp_in_prev; // предыдущая температура сайта
-  float temp_in_prev_prev;//пред. предыдущая температура сайта
+  float temp_in_prev_prev; //пред. предыдущая температура сайта
   float temp_out;     // температура окружающей среды
   float temp_mix;     // температура камеры смешения
   float temp_evapor1; // температуры испарителя 1го кондиционера
@@ -76,7 +76,5 @@ int site_mode_fail_mix(Site* site);
 int read_sensors();
 ConfigTable* read_config(char* filename);
 void run(Site* site);
-
-
 
 #endif /*SITE_C_*/

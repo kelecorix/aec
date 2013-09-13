@@ -14,7 +14,6 @@
 #include "ui/ui.h"
 #include "hw/i2c.h"
 
-
 Site* site;
 
 int main(int argc, char *argv[]) {
