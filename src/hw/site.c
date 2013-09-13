@@ -93,8 +93,7 @@ int site_mode_uvo(Site* site) {
       continue;
     }
 
-    printf(
-        "*******************Принятие решения Режим УВО********************\n");
+    printf("****************Принятие решения Режим УВО*****************\n");
     site->time_pre = time(NULL);
     printf("site->vents[0]->mode = %d site->vents[1]->mode = %d\n",
         site->vents[0]->mode, site->vents[1]->mode);
@@ -102,7 +101,7 @@ int site_mode_uvo(Site* site) {
       printf("Вентиляторы включены принятие решения\n");
       printf("Время разница: %d\n", (time(NULL) - site->time_uvo));
       float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
-          NULL);
+      NULL);
       if (((site->vents[0]->turns == 10 || site->vents[1]->turns == 10)
           && ((time(NULL) - site->time_uvo) >= 60))
           || (site->temp_in <= temp_support)) {
@@ -419,7 +418,7 @@ int sub_uvo_fail(Site* site) {
   } else {
     // температура нормальная
     float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
-        NULL);
+    NULL);
 
     printf("sub_uvo_fail site->temp_in = %f temp_support = %f\n", site->temp_in,
         temp_support);
@@ -576,7 +575,7 @@ int site_mode_ac(Site* site) {
         printf("Да еще есть кондиционеры num_ac_tmp = %d\n", num_ac_tmp);
         //да
         float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
-            NULL);
+        NULL);
 
         float temp_fail = strtof(getStr(site->cfg, (void *) "temp_fail"), NULL);
 
@@ -695,7 +694,7 @@ int site_mode_heat(Site* site) {
       site->time_pre = time(NULL);
 
       float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
-          NULL);
+      NULL);
 
       if (site->temp_in >= temp_support - 4) { //TODO: необходимо ввести параметр до какой температуры греть
                                                //да
