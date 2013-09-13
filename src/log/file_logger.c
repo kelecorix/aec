@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "logger.h"
+#include "../hw/site.h"
 
 FileLogWriter* create_filelog(char* filename) {
 
@@ -41,11 +42,12 @@ int write_log(FileLogWriter* flw, char* message) {
 
 void write_data_log(){
 
+
   FILE *fp = site->logger->dataLOG->fp;
 
   time_t timer;
   struct tm* tm_info;
-  char date[50];
+  char date[50], str[80]="";
   int event_t;           // event type, тип события
 
   timer = time(NULL);
@@ -54,17 +56,33 @@ void write_data_log(){
   strftime(date, 25, "%Y:%m:%d %H:%M:%S", tm_info);
   fprintf(fp, date);
   fprintf(fp, "|");
-  fprintf(fp, itoa(event_t, NULL, 10));
+  sprintf(str, "%d", event_t);
+  fprintf(fp, str);
   fprintf(fp, "|");
-  fprintf(fp, itoa(site->temp_in, NULL, 10));
+
+  memset(str, 0, sizeof(str));
+  sprintf(str, "%f",site->temp_in);
+  fprintf(fp, str);
   fprintf(fp, ";");
-  fprintf(fp, itoa(site->temp_out, NULL, 10));
+
+  memset(str, 0, sizeof(str));
+  sprintf(str, "%f", site->temp_out);
+  fprintf(fp, str);
   fprintf(fp, ";");
-  fprintf(fp, itoa(site->temp_mix, NULL, 10));
+
+  memset(str, 0, sizeof(str));
+  sprintf(str, "%f", site->temp_mix);
+  fprintf(fp, str);
   fprintf(fp, ";");
-  fprintf(fp, itoa(site->temp_evapor1, NULL, 10));
+
+  memset(str, 0, sizeof(str));
+  sprintf(str, "%f", site->temp_evapor1);
+  fprintf(fp, str);
   fprintf(fp, ";");
-  fprintf(fp, itoa(site->temp_evapor2, NULL, 10));
+
+  memset(str, 0, sizeof(str));
+  sprintf(str, "%f", site->temp_evapor2);
+  fprintf(fp, str);
 
 }
 
