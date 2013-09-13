@@ -19,7 +19,7 @@
 int main(int argc, char *argv[]) {
 
   pthread_t threadA, threadU, threadL;
-  int retL, retU;
+  int retA, retU, retL;
   void *ret;
   char *filename = "freecooling.conf";
 
@@ -54,17 +54,19 @@ int main(int argc, char *argv[]) {
 
   sleep(4);
 
-  if(pthread_create(&threadL, NULL, run_logger, (void*) site)) {
+  if(pthread_create(&threadL, NULL, run_logger, (void*) NULL)) {
     fprintf(stderr, "Error creating Logger thread\n");
     printf("Error creating Logger thread\n");
 
   }
 
+  sleep(4);
+
 // ждем пока потоками завершаться
 // по идде сюда не должно дойти
-  pthread_join(threadA, retU);
-  pthread_join(threadL, retL);
+  pthread_join(threadA, retA);
   pthread_join(threadU, retU);
+  pthread_join(threadL, retL);
 
 
   // Для тестов оборудования

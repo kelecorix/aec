@@ -30,6 +30,6 @@ void logger_free(Logger* logger) {
 void run_logger(){
   while(1){
     write_data_log();
-    usleep(10);
+    sleep(10);
   }
 }
