@@ -28,7 +28,9 @@ void logger_free(Logger* logger) {
 }
 
 void run_logger(){
+  printf("Запустим цикл логгера\n");
   while(1){
+    printf("Цикл работы логгера\n");
     write_data_log();
     sleep(10);
   }
