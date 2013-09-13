@@ -11,16 +11,17 @@ FileLogWriter* create_filelog(char* filename) {
   FileLogWriter* log = malloc(sizeof(FileLogWriter));
 
   log->filename = filename;
-  log->fp = fopen(filename, "a");
-  if (!log->fp) {
-    fprintf(stderr, "could not open log file %s", filename);
-    return NULL;
-  }
 
   return log;
 }
 
 int write_log(FileLogWriter* flw, char* message) {
+
+  flw->fp = fopen(flw->filename, "a");
+  if (!flw->fp) {
+     fprintf(stderr, "could not open log file %s", flw->filename);
+     return NULL;
+   }
 
   time_t timer;
   struct tm* tm_info;
