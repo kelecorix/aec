@@ -33,8 +33,8 @@ void run(Site* site) {
   site->tacho1_exists = 0;
   site->tacho2_exists = 0;
 
-  //site_mode_uvo(site);
-  site_mode_fail_uvo(site);
+  site_mode_uvo(site);
+  //site_mode_fail_uvo(site);
 }
 
 /* Режим охлаждения УВО */
