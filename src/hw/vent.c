@@ -46,6 +46,11 @@ static int set_mode(Vent* vent, int val) {
 
 // Установим количество оборотов, 8 шагов управлен  ия скоростью
 int set_turns(Vent* vent, int val) {
+
+  //int i;
+  //for(i=0;i<11;i++) {
+  //  printf("тест set_turns значение %d, steps %d \n",i, steps[i]);
+  //}
   if (val >= 0 && val <= 10) {
     i2cOpen();
     int addr;
@@ -54,7 +59,7 @@ int set_turns(Vent* vent, int val) {
       addr = strtol(getStr(site->cfg, (void *) "a_vent_in"), NULL, 16);
     else
       addr = strtol(getStr(site->cfg, (void *) "a_vent_out"), NULL, 16);
-    //printf("Управляем регистром, адрес %d, значение %d, %d \n", addr, val, steps[val]);
+    printf("Управляем регистром, адрес %d, значение %d, %d \n", addr, val, steps[val]);
     i2cSetAddress(addr);
     set_i2c_register(g_i2cFile, addr, 0, steps[val]);
     vent->turns = val;

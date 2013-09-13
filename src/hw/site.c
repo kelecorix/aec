@@ -68,7 +68,7 @@ int site_mode_uvo(Site* site) {
   printf("Переведем заслонку site->temp_out = %f temp_dew = %f\n", site->temp_out, temp_dew);
   if ((site->temp_out) > temp_dew)
   {
-    if (site->th->exist)
+    if (site->th->exist) //Это есть ли заслонка? или есть ли откуда читать
     {
       printf("переведем заслонку в положение улица\n");
       site->th->set_position(site->th, 10); //переведем заслонку в положение улица
@@ -396,22 +396,27 @@ void sub_uvo_pow(Site* site) {
 
 void sub_uvo_th(Site* site) {
 
+  printf("*********sub_uvo_th**************\n");
   int v;
   float temp_dew = strtof(getStr(site->cfg, (void *) "temp_dew"), NULL);
-
+  printf("sub_uvo_th temp_dew = %f site->temp_out = %f \n",temp_dew, site->temp_out);
   if (site->temp_out > temp_dew)
   {
+    printf("Где заслонка\n");
     // Заслонка выставлена на улицу
     if (site->th->position != 10)
     {
+      printf("Переводим заслонку на улицу\n");
       site->th->set_position(site->th, 10);
       site->th->set_mode(site->th, 1);
     }
   }
   else
   {
+    printf("Не настало ли время проверить работает ли заслонка? diff %d\n",(time(NULL) - site->th->time_start));
     if ((time(NULL) - site->th->time_start) >= 30)
     {
+      printf("Да настало, а есть ли откуда читать?\n");
       if (site->th_r_exists)
       {
         if (site->th->position == site->th_r)
@@ -440,17 +445,30 @@ void sub_uvo_th(Site* site) {
           site_mode_fail_uvo(site);
         }
       }
+      
     }
     else
     {
+      printf("Нет пока ненастало\n");
       int curr_pos = site->th->position;
+      printf("Температура в миксере %f температура росы %f site->th->position = %d\n",site->temp_mix, temp_dew, site->th->position);
       if (site->temp_mix >= temp_dew)
       {
-        site->th->set_position(site->th, curr_pos++);
+        printf("Приоткроем заслонку %d\n", curr_pos);
+        curr_pos++;
+        if(curr_pos > 10) {
+          curr_pos = 10;
+        }
+        site->th->set_position(site->th, curr_pos);
       }
       else
       {
-        site->th->set_position(site->th, curr_pos--);
+        printf("Призакроем заслонку %d\n", curr_pos);
+        curr_pos--;
+        if(curr_pos < 0) {
+          curr_pos = 0;
+        }
+        site->th->set_position(site->th, curr_pos);
       }
 
     }
@@ -645,7 +663,7 @@ int site_mode_ac(Site* site) {
 
         float temp_fail = strtof(getStr(site->cfg, (void *) "temp_fail"), NULL);
 
-        if ((temp_support - site->temp_out) >= (site->penalty + 2))
+        if ((temp_support - site->temp_out) > (site->penalty + 2))
         {
           printf(
               "Температура позволяет перейти на УВО переходим в УВО temp_support %f site->temp_out %f site->penalty %d \n",
