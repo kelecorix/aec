@@ -66,27 +66,27 @@ void write_data_log(Site* site){
   fprintf(fp, "|");
 
   memset(str, 0, sizeof(str));
-  sprintf(str, "%f",site->temp_in);
+  sprintf(str, "%g",site->temp_in);
   fprintf(fp, str);
   fprintf(fp, ";");
 
   memset(str, 0, sizeof(str));
-  sprintf(str, "%f", site->temp_out);
+  sprintf(str, "%g", site->temp_out);
   fprintf(fp, str);
   fprintf(fp, ";");
 
   memset(str, 0, sizeof(str));
-  sprintf(str, "%f", site->temp_mix);
+  sprintf(str, "%g", site->temp_mix);
   fprintf(fp, str);
   fprintf(fp, ";");
 
   memset(str, 0, sizeof(str));
-  sprintf(str, "%f", site->temp_evapor1);
+  sprintf(str, "%g", site->temp_evapor1);
   fprintf(fp, str);
   fprintf(fp, ";");
 
   memset(str, 0, sizeof(str));
-  sprintf(str, "%f", site->temp_evapor2);
+  sprintf(str, "%g", site->temp_evapor2);
   fprintf(fp, str);
 
   fclose(fp);
