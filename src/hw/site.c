@@ -28,7 +28,7 @@ void run(Site* site) {
   i2cClose();
 
   // По умолчанию
-  site->th->set_mode(site->th, 0);
+  site->th->set_position(site->th, 0);
   site->th_r_exists = 0;
   site->tacho1_exists = 0;
   site->tacho2_exists = 0;
@@ -345,7 +345,6 @@ void sub_uvo_th(Site* site, int fail) {
     if (site->th->position != 10) {
       printf("Переводим заслонку на улицу\n");
       site->th->set_position(site->th, 10);
-      site->th->set_mode(site->th, 1);
     }
   } else {
     printf("Не настало ли время проверить работает ли заслонка? diff %d\n",
