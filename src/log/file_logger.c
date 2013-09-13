@@ -88,6 +88,7 @@ void write_data_log(Site* site){
   memset(str, 0, sizeof(str));
   sprintf(str, "%g", site->temp_evapor2);
   fprintf(fp, str);
+  fprintf(fp, "\n");
 
   fclose(fp);
 }
