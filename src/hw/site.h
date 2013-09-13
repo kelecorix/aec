@@ -66,7 +66,7 @@ int site_mode_uvo(Site* site);
 int sub_uvo_pen(Site* site);
 void sub_uvo_vent(Site* site);
 void sub_uvo_pow(Site* site);
-void sub_uvo_th(Site* site);
+void sub_uvo_th(Site* site, int fail);
 int sub_uvo_fail(Site* site);
 int site_mode_ac(Site* site);
 int site_mode_heat(Site* site);
