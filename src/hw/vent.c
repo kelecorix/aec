@@ -48,7 +48,6 @@ Vent* vent_new() {
   vent->mode = 0;
   vent->error = NOERROR;
 
-  vent->set_mode = set_mode;
   vent->set_turns = set_turns;
   return vent;
 }

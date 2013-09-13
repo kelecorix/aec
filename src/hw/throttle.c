@@ -41,7 +41,6 @@ Throttle* throttle_new() {
   th->mode = 0;
   th->exist = 1; // Проверка наличия заслонки
 
-  th->set_mode = set_mode;
   th->set_position = set_position;
 
   return th;
