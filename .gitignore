@@ -31,3 +31,6 @@ freecooling2
 .project
 .setting
 /Debug
+
+# Log files
+*.log

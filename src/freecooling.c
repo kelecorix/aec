@@ -18,7 +18,7 @@ Site* site;
 
 int main(int argc, char *argv[]) {
 
-  pthread_t threadL, threadU;
+  pthread_t threadA, threadU, threadL;
   int retL, retU;
   void *ret;
   char *filename = "freecooling.conf";
@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
 
   //Workers Воркеры - выполняют параллельно свои операции
 
-  if (pthread_create(&threadL, NULL, run, (void*) site)) {
+  if (pthread_create(&threadA, NULL, run, (void*) site)) {
     fprintf(stderr, "Error creating algo thread\n");
     printf("Error creating algo thread\n");
     return 1;
@@ -52,10 +52,20 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
+  sleep(4);
+
+  if(pthread_create(&threadL, NULL, run_logger, (void*) site)) {
+    fprintf(stderr, "Error creating Logger thread\n");
+    printf("Error creating Logger thread\n");
+
+  }
+
 // ждем пока потоками завершаться
 // по идде сюда не должно дойти
+  pthread_join(threadA, retU);
   pthread_join(threadL, retL);
   pthread_join(threadU, retU);
+
 
   // Для тестов оборудования
   //i2cTestHardware();
