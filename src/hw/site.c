@@ -778,7 +778,7 @@ int site_mode_heat(Site* site) {
  * Авария вентиляторов - Авария датчиков -
  * Авария заслонки - Авария охлаждения кондиционером */
 int site_mode_fail_uvo(Site* site) {
-  printf("Режим авария УВО!\n");
+  printf("site_mode_fail_uvo: Режим авария УВО!\n");
   //write_log(site->logger->eventLOG, "Режим авария УВО");
   site->mode = 4;
   site->time_pre = time(NULL);
@@ -792,37 +792,47 @@ int site_mode_fail_uvo(Site* site) {
     site->acs[a]->is_diff = 0;
   }
 
+
   int num_ac = atoi(getStr(site->cfg, (void *) "num_ac"));
+
+  for (a = 0; a < num_ac; a++) {
+    site->acs[a]->set_mode(site->acs[a], 1);
+    site->acs[a]->time_start = time(NULL);
+    printf("site_mode_fail_uvo: Включили кондиционер КОНД_%d время включения %d\n", a, site->acs[a]->time_start);
+  }
+
 
   int num_ac_tmp = num_ac;
 
   while (1) { // sensors was read - ok
 
-    int ret;
+    int ret, a_cond;
     ret = read_sensors(site);
     if (ret != 0) {
-//Ошибка чтения датчиков
+      //Ошибка чтения датчиков
       continue;
     }
 
-    if (difftime(time(NULL), site->time_pre) <= 30) { //секунды
+    if (difftime(time(NULL), site->time_pre) <= 5) { //секунды
+      usleep(10000);
       continue;
     } else {
-
+      printf("site_mode_fail_uvo: ****************Авария УВО работаем на кондиционере принятие решения*******************\n");
       site->time_pre = time(NULL);
 
-      for (a = 0; a < 2; a++) {
-        if ((site->temp_in >= 10) && (site->acs[a]->mode == 1)) {
+      for (a_cond = 0; a_cond < num_ac; a_cond++) {
+        if (((site->temp_in - site->acs[a_cond]->temp) >= 10) && (site->acs[a_cond]->mode == 1)) {
           //да
+          printf("site_mode_fail_uvo: КОНД_%d набрал дельту site->temp_in = %f site->acs[a_cond]->temp = %f\n",a_cond,site->temp_in,site->acs[a_cond]->temp);
           if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1) {
-//да
-// выключим вентиляцию
+            //да
+            // выключим вентиляцию
             for (v = 0; v < 2; v++) {
               site->vents[v]->set_mode(site->vents[v], 0);
             }
-// TODO: Проверить по описанию
-            for (a = 0; a < 2; a++) {
-              site->acs[a]->set_mode(site->acs[a], 1);
+            // TODO: Проверить по описанию
+            for (a = 0; a < num_ac; a++) {
+              //site->acs[a]->set_mode(site->acs[a], 1);
               site->acs[a]->time_start = time(NULL);
             }
           }
@@ -830,41 +840,37 @@ int site_mode_fail_uvo(Site* site) {
 
         //600
         // отработан промежуток?
-        if ((difftime(time(NULL), site->acs[a]->time_start) > 600)
-            && (site->acs[a]->mode == 1)) {
-          //дельта набрана?
-          if (site->acs[a]->is_diff == 0) {
-// Авария кондиционера
-            num_ac_tmp--;
-            site->acs[a]->set_mode(site->acs[a], 0);
-          }
-        }
+        //if ((difftime(time(NULL), site->acs[a]->time_start) > 600)
+        //    && (site->acs[a]->mode == 1)) {
+        //  //дельта набрана?
+        //  if (site->acs[a]->is_diff == 0) {
+        //    // Авария кондиционера
+        //    num_ac_tmp--;
+        //    site->acs[a]->set_mode(site->acs[a], 0);
+        //  }
+        //}
       }
 
-// Eще есть живые кондиционеры?
-      if (num_ac_tmp > 0) {
         //да
-        float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
-        NULL);
-
-        if ((temp_support - site->temp_out) >= (site->penalty + 2)) {
-          if (site->temp_in <= temp_support - 2) {
-// переходим в УВО
-            site_mode_uvo(site);
-          } else {
-//продолжаем в текущем режиме
-            continue;
-          }
+      float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"), NULL);
+      printf("Проверим температуру в сайте может попробуем перейти на УВО\n");
+      printf("temp_support = %f site->temp_out = %f site->penalty = %d\n",temp_support, site->temp_out, site->penalty);
+      if ((temp_support - site->temp_out) >= (site->penalty + 2)) {
+        printf("Да температура на улице позволяет, а в сайте температура ниже поддержания - 2 site->temp_in = %f temp_support = %f\n",site->temp_in, temp_support);
+        if (site->temp_in < temp_support - 2) {
+        // переходим в УВО
+          printf("Да сайт позволяет\n");
+          site_mode_uvo(site);
         } else {
-          //продолжаем в текущем режиме
+          printf("Нет сайт не позволяет\n");
+        //продолжаем в текущем режиме
           continue;
         }
-
       } else {
-        // авария кондиционирования
-        // переходим на УВО
-        site_mode_uvo(site);
+        //продолжаем в текущем режиме
+        continue;
       }
+
     }
   }
 
