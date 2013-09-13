@@ -6,6 +6,7 @@
 #include "logger.h"
 #include "file_logger.h"
 #include "net_logger.h"
+#include "../hw/site.h"
 
 Logger* create_logger() {
 
@@ -27,11 +28,11 @@ void logger_free(Logger* logger) {
   free(logger->eventLOG);
 }
 
-void run_logger(){
+void run_logger(Site* site){
   printf("Запустим цикл логгера\n");
   while(1){
     printf("Цикл работы логгера\n");
-    write_data_log();
+    write_data_log(site);
     sleep(10);
   }
 }

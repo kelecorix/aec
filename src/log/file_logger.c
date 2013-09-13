@@ -40,7 +40,7 @@ int write_log(FileLogWriter* flw, char* message) {
   return 0;
 }
 
-void write_data_log(){
+void write_data_log(Site* site){
   printf("Write data to logger\n");
   FILE *fp = site->logger->dataLOG->fp;
 

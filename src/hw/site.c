@@ -9,7 +9,7 @@
 #include "i2c.h"
 #include "../config/config.h"
 #include "../log/logger.h"
-Site* site;
+//Site* site;
 
 void site_free() {
 
