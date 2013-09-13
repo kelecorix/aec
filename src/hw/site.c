@@ -371,24 +371,23 @@ void sub_uvo_th(Site* site, int fail) {
           }
         }
       }
-    } else {
-      printf("Нет пока ненастало\n");
-      int curr_pos = site->th->position;
-      printf(
+    }
+    int curr_pos = site->th->position;
+    printf(
           "Температура в миксере %f температура росы %f site->th->position = %d\n",
           site->temp_mix, temp_dew, site->th->position);
-      if (site->temp_mix >= temp_dew) {
-        //printf("Приоткроем заслонку %d\n", curr_pos);
-        curr_pos++;
-        site->th->set_position(site->th, curr_pos);
-        printf("Приоткроем заслонку %d\n", curr_pos);
-      } else {
-        //printf("Призакроем заслонку %d\n", curr_pos);
-        curr_pos--;
-        site->th->set_position(site->th, curr_pos);
-        printf("Приоткроем заслонку %d\n", curr_pos);
-      }
+    if (site->temp_mix >= temp_dew) {
+      //printf("Приоткроем заслонку %d\n", curr_pos);
+      curr_pos++;
+      site->th->set_position(site->th, curr_pos);
+      printf("Приоткроем заслонку %d\n", curr_pos);
+    } else {
+      //printf("Призакроем заслонку %d\n", curr_pos);
+      curr_pos--;
+      site->th->set_position(site->th, curr_pos);
+      printf("Приоткроем заслонку %d\n", curr_pos);
     }
+    
   }
 
   site->th->time_start = time(NULL);
@@ -625,7 +624,7 @@ int site_mode_heat(Site* site) {
   }
 
   printf("Проверим положение заслонки %d\n", site->th->position);
-  if (site->th->position == 10) {
+  if (site->th->position > 1) {
     // улица
     site->th->set_position(site->th, 0);
     site->th->time_start = time(NULL);
@@ -953,7 +952,9 @@ int site_mode_fail_ac(Site* site) {
       printf("site_mode_fail_ac: включим вентиляцию\n");
       // включим вентиляцию
 
-      if (site->temp_out <= site->temp_in) {
+      float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"), NULL);
+
+      if ((site->temp_out <= site->temp_in) && site->temp_in >= temp_support - 2) {
         for (v = 0; v < 2; v++) {
           if (site->vents[v]->mode == 0) {
               printf("Температура на улице ниже температуры в сайте включим вентиляторы\n");
@@ -993,9 +994,8 @@ int site_mode_fail_ac(Site* site) {
         }
       }
 
-      float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"), NULL);
 
-      printf("Проверим температура не ниже поддержания - 2");
+      printf("Проверим температура не ниже поддержания - 2\n");
       if (site->temp_in < temp_support - 2) {
       
         printf("Да ниже выключим вениляцию site->vents[v]->mode = %d\n",site->vents[v]->mode);
@@ -1021,10 +1021,11 @@ int site_mode_fail_ac(Site* site) {
           site_mode_heat(site);
         }
         
-        sub_uvo_th(site, 1); // Работа с залонкой
         continue;
         
       }
+      printf("Переход на функцию логики управления заслонкой\n");
+      sub_uvo_th(site, 1); // Работа с залонкой
     }
   }
   return 1;
