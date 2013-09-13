@@ -36,10 +36,6 @@ static int set_mode(Throttle* th, int val) {
 
 int set_position(Throttle* th, int val) {
 
-  int i;
-  for (i = 0; i < 11; i++) {
-    printf("set_position test значение %d, 0x%x\n", i, steps[i]);
-  }
   i2cOpen();
   if (val >= 0 && val <= 10) {
     int addr;
