@@ -42,7 +42,6 @@ int write_log(FileLogWriter* flw, char* message) {
 
 void write_data_log(){
 
-
   FILE *fp = site->logger->dataLOG->fp;
 
   time_t timer;
