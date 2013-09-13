@@ -218,13 +218,11 @@ void sub_uvo_vent(Site* site) {
       if ((site->temp_out > 20)
           && (site->vents[0]->error == ERROR || site->vents[1]->error == ERROR)) {
         for (v = 0; v < 2; v++) {
-          site->vents[v]->set_mode(site->vents[v], 1);
           site->vents[v]->set_turns(site->vents[v], 10);
           site->vents[v]->time_start = time(NULL);
         }
       } else {
         for (v = 0; v < 2; v++) {
-          site->vents[v]->set_mode(site->vents[v], 1);
           site->vents[v]->set_turns(site->vents[v], 2);
           site->vents[v]->time_start = time(NULL);
         }
@@ -260,7 +258,6 @@ int sub_uvo_pen(Site* site) {
     if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1) {
       printf("Выключим вентиляторы\n");
       for (v = 0; v < 2; v++) {
-        site->vents[v]->set_mode(site->vents[v], 0);
         site->vents[v]->set_turns(site->vents[v], 0);
       }
     }
@@ -367,8 +364,7 @@ void sub_uvo_th(Site* site, int fail) {
         } else {
           if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1) {
             for (v = 0; v < 2; v++) {
-              //site->vents[v]->set_turns(site->vents[v], 0);
-              site->vents[v]->set_mode(site->vents[v], 0);
+              site->vents[v]->set_turns(site->vents[v], 0);
             }
           }
           if (!fail) {
@@ -508,7 +504,7 @@ int site_mode_ac(Site* site) {
             //выключим вентиляцию
             for (v = 0; v < 2; v++) {
               if (site->vents[v]->mode == 1)
-                site->vents[v]->set_mode(site->vents[v], 0);
+                site->vents[v]->set_turns(site->vents[v], 0);
             }
 
             //site->acs[a_cond]->mode == 1;
@@ -836,7 +832,7 @@ int site_mode_fail_uvo(Site* site) {
             //да
             // выключим вентиляцию
             for (v = 0; v < 2; v++) {
-              site->vents[v]->set_mode(site->vents[v], 0);
+              site->vents[v]->set_turns(site->vents[v], 0);
             }
             // TODO: Проверить по описанию
             for (a = 0; a < num_ac; a++) {
@@ -919,7 +915,6 @@ int site_mode_fail_ac(Site* site) {
     if (ret != 0) {
       //Ошибка чтения датчиков
       for (v = 0; v < 2; v++) {
-        site->vents[v]->set_mode(site->vents[v], 1);
         site->vents[v]->set_turns(site->vents[v], 10); // 100%
         site->vents[v]->time_start = time(NULL);
       }
@@ -965,7 +960,6 @@ int site_mode_fail_ac(Site* site) {
               printf("Температура на улице ниже температуры в сайте включим вентиляторы\n");
               site->vents[v]->set_turns(site->vents[v], 10); // 100%
               site->vents[v]->time_start = time(NULL);
-              site->vents[v]->set_mode(site->vents[v], 1);
           }
         }
       } else {
@@ -974,7 +968,6 @@ int site_mode_fail_ac(Site* site) {
               printf("Температура на улице выше температуры в сайте выключим вентиляторы\n");
               site->vents[v]->set_turns(site->vents[v], 0); // 0%
               site->vents[v]->time_start = time(NULL);
-              site->vents[v]->set_mode(site->vents[v], 0);
           }
         }
       }
@@ -1010,7 +1003,6 @@ int site_mode_fail_ac(Site* site) {
         // выключим вениляцию
         for (v = 0; v < 2; v++) {
           if (site->vents[v]->mode == 1) {
-            site->vents[v]->set_mode(site->vents[v], 0);
             site->vents[v]->set_turns(site->vents[v], 0);
             site->vents[v]->time_stop = time(NULL);
    
