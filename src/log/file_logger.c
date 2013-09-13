@@ -9,7 +9,6 @@
 FileLogWriter* create_filelog(char* filename) {
 
   FileLogWriter* log = malloc(sizeof(FileLogWriter));
-
   log->filename = filename;
 
   return log;
@@ -36,19 +35,25 @@ int write_log(FileLogWriter* flw, char* message) {
   fprintf(flw->fp, "|");
   fprintf(flw->fp, message);
   fprintf(flw->fp, "\n");
-  fclose(flw->fp);
 
+  fclose(flw->fp);
   return 0;
 }
 
 void write_data_log(Site* site){
   printf("Write data to logger\n");
-  FILE *fp = site->logger->dataLOG->fp;
+
+  FILE* fp = site->logger->dataLOG->fp;
+  char *filename = site->logger->dataLOG->filename;
+  fp = fopen(filename, "a");
+    if (!fp) {
+       fprintf(stderr, "could not open log file %s", filename);
+     }
 
   time_t timer;
   struct tm* tm_info;
   char date[50], str[80]="";
-  int event_t;           // event type, тип события
+  int event_t=1;           // event type, тип события
 
   timer = time(NULL);
   tm_info = localtime(&timer);
@@ -84,6 +89,7 @@ void write_data_log(Site* site){
   sprintf(str, "%f", site->temp_evapor2);
   fprintf(fp, str);
 
+  fclose(fp);
 }
 
 int close_filelog(FileLogWriter* flog) {

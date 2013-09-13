@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
   if(pthread_create(&threadL, NULL, run_logger, (void*) site)) {
     fprintf(stderr, "Error creating Logger thread\n");
     printf("Error creating Logger thread\n");
-
+    return 1;
   }
 
   sleep(4);
@@ -68,7 +68,6 @@ int main(int argc, char *argv[]) {
   pthread_join(threadA, retA);
   pthread_join(threadU, retU);
   //pthread_join(threadL, retL);
-
 
   // Для тестов оборудования
   //i2cTestHardware();
