@@ -54,20 +54,20 @@ int main(int argc, char *argv[]) {
 
   sleep(4);
 
-  printf("Создадим поток журналирования\n");
-  if(pthread_create(&threadL, NULL, run_logger, (void*) NULL)) {
-    fprintf(stderr, "Error creating Logger thread\n");
-    printf("Error creating Logger thread\n");
-
-  }
-
-  sleep(4);
+//  printf("Создадим поток журналирования\n");
+//  if(pthread_create(&threadL, NULL, run_logger, (void*) NULL)) {
+//    fprintf(stderr, "Error creating Logger thread\n");
+//    printf("Error creating Logger thread\n");
+//
+//  }
+//
+//  sleep(4);
 
 // ждем пока потоками завершаться
 // по идде сюда не должно дойти
   pthread_join(threadA, retA);
   pthread_join(threadU, retU);
-  pthread_join(threadL, retL);
+  //pthread_join(threadL, retL);
 
 
   // Для тестов оборудования
