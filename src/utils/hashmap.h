@@ -1,7 +1,7 @@
 /*
  *  hashmap.c
  * 		Thread-safe hashmap, code adoptation 
- 	by Sergey Bushnyak, 2013
+ by Sergey Bushnyak, 2013
  */
 
 /*
@@ -44,8 +44,8 @@ typedef struct Hashmap Hashmap;
  * @param hash function which hashes keys
  * @param equals function which compares keys for equality
  */
-Hashmap* hashmapCreate(size_t initialCapacity,
-        int (*hash)(void* key), bool (*equals)(void* keyA, void* keyB));
+Hashmap* hashmapCreate(size_t initialCapacity, int (*hash)(void* key),
+bool (*equals)(void* keyA, void* keyB));
 
 /**
  * Frees the hash map. Does not free the keys or values themselves.
@@ -85,8 +85,8 @@ bool hashmapContainsKey(Hashmap* map, void* key);
  * If memory allocation fails, the callback is not called, this function
  * returns NULL, and errno is set to ENOMEM.
  */
-void* hashmapMemoize(Hashmap* map, void* key, 
-        void* (*initialValue)(void* key, void* context), void* context);
+void* hashmapMemoize(Hashmap* map, void* key,
+    void* (*initialValue)(void* key, void* context), void* context);
 
 /**
  * Removes an entry from the map. Returns the removed value or NULL if no
@@ -103,8 +103,8 @@ size_t hashmapSize(Hashmap* map);
  * Invokes the given callback on each entry in the map. Stops iterating if
  * the callback returns false.
  */
-void hashmapForEach(Hashmap* map, 
-        bool (*callback)(void* key, void* value, void* context), void* context);
+void hashmapForEach(Hashmap* map,
+bool (*callback)(void* key, void* value, void* context), void* context);
 
 /**
  * Concurrency support.

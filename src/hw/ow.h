@@ -7,7 +7,7 @@
 
 OWNET_HANDLE create_server_conn(char *addr);
 int close_server_conn(OWNET_HANDLE srv);
-float get_data(OWNET_HANDLE conn, char *filename, int lim);
+float get_data(OWNET_HANDLE conn, char *mnt, char *filename, int lim);
 int search_sensors(OWNET_HANDLE conn);
 
 #endif /* OW_H_ */

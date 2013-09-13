@@ -4,13 +4,19 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../src/log/logger.c 
+../src/log/file_logger.c \
+../src/log/logger.c \
+../src/log/net_logger.c 
 
 OBJS += \
-./src/log/logger.o 
+./src/log/file_logger.o \
+./src/log/logger.o \
+./src/log/net_logger.o 
 
 C_DEPS += \
-./src/log/logger.d 
+./src/log/file_logger.d \
+./src/log/logger.d \
+./src/log/net_logger.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

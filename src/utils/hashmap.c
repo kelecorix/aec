@@ -47,7 +47,7 @@ struct Hashmap {
 };
 
 Hashmap* hashmapCreate(size_t initialCapacity, int (*hash)(void* key),
-    bool (*equals)(void* keyA, void* keyB)) {
+bool (*equals)(void* keyA, void* keyB)) {
   assert(hash != NULL);
   assert(equals != NULL);
 
@@ -310,7 +310,7 @@ void* hashmapRemove(Hashmap* map, void* key) {
 }
 
 void hashmapForEach(Hashmap* map,
-    bool (*callback)(void* key, void* value, void* context), void* context) {
+bool (*callback)(void* key, void* value, void* context), void* context) {
   size_t i;
   for (i = 0; i < map->bucketCount; i++) {
     Entry* entry = map->buckets[i];

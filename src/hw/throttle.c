@@ -2,44 +2,71 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "throttle.h"
+#include "i2c.h"
+#include "site.h"
 
-Throttle* throttle_new() {
-  Throttle* th = malloc(sizeof(Throttle));
-  th->mode = 0;
-  return th;
+static int steps[11] = { 0xFF, 0xED, 0xDF, 0xDE, 0xDC, 0xBF, 0xBE, 0x7F, 0x7E,
+    0x9F, 0x8F };
+
+static int set_mode(Throttle* th, int val) {
+
+//  i2cOpen();
+//  if ((val == 1) || (val == 0)) {
+//    int addr, value;
+//    addr = strtol(getStr(site->cfg, (void *) "a_throttle"), NULL, 16);
+//    if (val == 1)
+//      value = 10; // максимальное значение
+//    else
+//      value = 0; // 1 минимальное значение вроде как 0
+//    printf("Заслонка set_mode, адрес %x, значение %d, %x , steps %x\n", addr,
+//        val, value, steps[value]);
+//    set_i2c_register(g_i2cFile, addr, steps[value], steps[value]);
+//    th->position = val;
+//    i2cClose();
+//    return 1;
+//  } else {
+//    // wrong value
+//    // неправильное значение
+//    return 0;
+//  }
+}
+
+int set_position(Throttle* th, int val) {
+
+  i2cOpen();
+  if (val >= 0 && val <= 10) {
+    int addr;
+    addr = strtol(getStr(site->cfg, (void *) "a_throttle"), NULL, 16);
+    printf("Заслонка set_position, адрес %x, значение %d, %d\n", addr, val,
+        steps[val]);
+    set_i2c_register(g_i2cFile, addr, steps[val], steps[val]);
+    th->position = val;
+    i2cClose();
+    if(val!=0){
+        th->mode = 1;
+      }else{
+        th->mode = 0;
+      }
+    return 1;
+  } else {
+    // wrong value
+    // неправильное значение
+    return 0;
+  }
 }
 
 void throttle_free() {
   //TODO: очистим ресурсы памяти
 }
 
-/*
- * Изменим режим заслонки 
- */
-static int set_mode(Throttle* th, int val) {
+Throttle* throttle_new() {
+  Throttle* th = malloc(sizeof(Throttle));
+  th->mode = 0;
+  th->exist = 1; // Проверка наличия заслонки
 
-  // accept only 0,1
-  // принимаем только 0,1
-  if ((val == 1) || (val == 0)) {
-    th->position = val;
-    return 1;
-  } else {
-    // wrong value
-    // неправильное значение
-    return 0;
-  }
-}
+  th->set_mode = set_mode;
+  th->set_position = set_position;
 
-int set_position(Throttle* th, int val) {
-
-  if (val >= 0 && val <= 255) {
-    th->position = val;
-    return 1;
-  } else {
-    // wrong value
-    // неправильное значение
-    return 0;
-  }
-
+  return th;
 }
 

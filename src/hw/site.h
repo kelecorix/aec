@@ -4,12 +4,14 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "site.h"
-#include "ac.h"
 #include "throttle.h"
 #include "vent.h"
+#include "site.h"
+#include "ac.h"
 #include "ow.h"
+#include "i2c.h"
 #include "../config/config.h"
+#include "../log/logger.h"
 
 typedef struct Site {
 
@@ -27,10 +29,18 @@ typedef struct Site {
 
   float temp_in;      // температура сайта
   float temp_in_prev; // предыдущая температура сайта
+  float temp_in_prev_prev; //пред. предыдущая температура сайта
   float temp_out;     // температура окружающей среды
   float temp_mix;     // температура камеры смешения
   float temp_evapor1; // температуры испарителя 1го кондиционера
   float temp_evapor2; // температуры испарителя 2го кондиционера
+  int tacho1;         // данные таходатчика 1
+  int tacho2;         // данные таходатчика 2
+  int th_r; // положение заслонки считанное
+
+  int th_r_exists;       // существует адрес считывания положения заслонки
+  int tacho1_exists;   // таходатчик1 существует
+  int tacho2_exists;   // таходатчик2 существует
 
   int penalty; // штраф
   int th_check; // throttle check - флаг проверки заслонки
@@ -38,17 +48,26 @@ typedef struct Site {
   time_t time_uvo; // время включения охлаждения с помощью вентиляторов
   ConfigTable* cfg; // configuration for this particular  site
 
-  OWNET_HANDLE conn; //
-  char* mount_point; // path to mounted owfs, i.e "/mnt/1wire/"
+  OWNET_HANDLE conn;
+  char* mount_point;
+
+  Logger* logger;
 
   int (*set_mode)(struct Site*, int value);
   int (*set_ten)(struct Site*, int value);
-  double (*ac_time_work)(struct Site*);
+  double (*get_ac_time_work)(struct Site*);
 
 } Site;
 
+extern Site* site;
+
 // Режимы работы 
 int site_mode_uvo(Site* site);
+int sub_uvo_pen(Site* site);
+void sub_uvo_vent(Site* site);
+void sub_uvo_pow(Site* site);
+void sub_uvo_th(Site* site, int fail);
+int sub_uvo_fail(Site* site);
 int site_mode_ac(Site* site);
 int site_mode_heat(Site* site);
 int site_mode_fail_uvo(Site* site);

@@ -7,12 +7,11 @@
 #include "../utils/hashmap.h"
 #include "../utils/utils.h"
 
-
 ConfigTable* config_table_new() {
   ConfigTable* cfg = malloc(sizeof(ConfigTable));
-  cfg->mTable = hashmapCreate(30, str_hash_fn, hashmapIntEquals);
-  cfg->mStatic = hashmapCreate(30, str_hash_fn, hashmapIntEquals);
-  cfg->mOptional = hashmapCreate(30, str_hash_fn, hashmapIntEquals);
+  cfg->mTable = hashmapCreate(32, str_hash_fn, hashmapIntEquals);
+  cfg->mStatic = hashmapCreate(32, str_hash_fn, hashmapIntEquals);
+  cfg->mOptional = hashmapCreate(32, str_hash_fn, hashmapIntEquals);
   return cfg;
 }
 
@@ -39,21 +38,26 @@ bool isStatic(ConfigTable* cfg, char key[]) {
 
 /*Make a key static*/
 void makeStatic(ConfigTable* cfg, char key[]) {
-  hashmapPut(cfg->mStatic, key, 1);
+  hashmapPut(cfg->mStatic, key, "1");
 }
 
 /*Make a key optional*/
 void makeOptional(ConfigTable* cfg, char key[]) {
-  hashmapPut(cfg->mStatic, key, 1);
+  hashmapPut(cfg->mStatic, key, "1");
 }
 
 /*Get string parameter from table */
-const char getStr(ConfigTable* cfg, const char *key) {
+char* getStr(ConfigTable* cfg, const char *key) {
   char *value;
   value = hashmapGet(cfg->mTable, (void *) key);
-  if (value)
+
+  //remove /n from value
+  strip_n(value);
+
+  if (value) {
+    //printf("Current value %s\n", value);
     return value;
-  else
+  } else
     return "";
 }
 
@@ -108,11 +112,11 @@ ConfigTable* readConfig(char *filename) {
 
       if (tokens[0] == '$static')
       {
-        hashmapPut(cfg->mStatic, tokens[1], '1');
-        hashmapPut(cfg->mOptional, tokens[1], '0');
+        hashmapPut(cfg->mStatic, tokens[1], "1");
+        hashmapPut(cfg->mOptional, tokens[1], "0");
       } else {
-        hashmapPut(cfg->mOptional, tokens[1], '1');
-        hashmapPut(cfg->mStatic, tokens[1], '0');
+        hashmapPut(cfg->mOptional, tokens[1], "1");
+        hashmapPut(cfg->mStatic, tokens[1], "0");
       }
     }
 
