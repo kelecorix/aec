@@ -8,9 +8,6 @@
 static int steps[11] = { 0xFF, 0xED, 0xDF, 0xDE, 0xDC, 0xBF, 0xBE, 0x7F, 0x7E,
     0x9F, 0x8F };
 
-/*
- * Изменим режим заслонки 
- */
 static int set_mode(Throttle* th, int val) {
 
   i2cOpen();
@@ -60,7 +57,7 @@ void throttle_free() {
 Throttle* throttle_new() {
   Throttle* th = malloc(sizeof(Throttle));
   th->mode = 0;
-  th->exist = 1; // TODO: Проверка наличия заслонки
+  th->exist = 1; // Проверка наличия заслонки
 
   th->set_mode = set_mode;
   th->set_position = set_position;
