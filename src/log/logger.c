@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -17,11 +18,9 @@ Logger* create_logger() {
   //log->eventLOG_n = create_netlog("", 80); //TODO: считать параметры из конфига
 
   return log;
-
 }
 
 void logger_free(Logger* logger) {
-
   close_filelog(logger->dataLOG);
   close_filelog(logger->eventLOG);
   free(logger->dataLOG);
@@ -29,5 +28,8 @@ void logger_free(Logger* logger) {
 }
 
 void run_logger(){
-
+  while(1){
+    write_data_log();
+    usleep(10);
+  }
 }
