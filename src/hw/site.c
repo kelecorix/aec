@@ -205,7 +205,6 @@ void sub_uvo_vent(Site* site) {
           }
         }
       }
-
       site->temp_in_prev = site->temp_in;
       printf("sub_uvo_th\n");
       sub_uvo_th(site);
@@ -282,7 +281,6 @@ int sub_uvo_pen(Site* site) {
       return EXIT_SUCCESS; //вернем 0, чтоб перейти обратно в УВО
     }
   }
-
   else {
     printf("Температура выше поддержания + 2\n");
     if (site->power == 0) {
@@ -373,7 +371,6 @@ void sub_uvo_th(Site* site) {
           site_mode_fail_uvo(site);
         }
       }
-
     } else {
       printf("Нет пока ненастало\n");
       int curr_pos = site->th->position;
@@ -382,20 +379,11 @@ void sub_uvo_th(Site* site) {
           site->temp_mix, temp_dew, site->th->position);
       if (site->temp_mix >= temp_dew) {
         printf("Приоткроем заслонку %d\n", curr_pos);
-        curr_pos++;
-        if (curr_pos > 10) {
-          curr_pos = 10;
-        }
-        site->th->set_position(site->th, curr_pos);
+        site->th->set_position(site->th, curr_pos++);
       } else {
         printf("Призакроем заслонку %d\n", curr_pos);
-        curr_pos--;
-        if (curr_pos < 0) {
-          curr_pos = 0;
-        }
-        site->th->set_position(site->th, curr_pos);
+        site->th->set_position(site->th, curr_pos--);
       }
-
     }
   }
 
