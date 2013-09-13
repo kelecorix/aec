@@ -917,7 +917,7 @@ int site_mode_fail_ac(Site* site) {
     int ret;
     ret = read_sensors(site);
     if (ret != 0) {
-//Ошибка чтения датчиков
+      //Ошибка чтения датчиков
       for (v = 0; v < 2; v++) {
         site->vents[v]->set_mode(site->vents[v], 1);
         site->vents[v]->set_turns(site->vents[v], 10); // 100%
@@ -931,6 +931,7 @@ int site_mode_fail_ac(Site* site) {
     if (difftime(time(NULL), site->time_pre) <= 30) { //секунды
       continue;
     } else {
+      printf("Принятие решения авария кондиционеров работает УВО\n");
       if ((difftime(time(NULL), site->th->time_start) >= 30)
           && (site->th_check == 0)) {
 
