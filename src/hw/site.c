@@ -234,7 +234,7 @@ void sub_uvo_vent(Site* site) {
         site->vents[v]->time_start = time(NULL);
       }
 
-      sub_uvo_th(site,0);
+      sub_uvo_th(site, 0);
     }
   } else {
     printf("Температура не позваляет работать на вентиляторах\n");
@@ -932,7 +932,7 @@ int site_mode_fail_ac(Site* site) {
       continue;
     } else {
       if ((difftime(time(NULL), site->th->time_start) >= 30)
-          && (site->th_check == 0))
+          && (site->th_check == 0)) {
 
         if (site->th->position != th_pos_read) {
           for (v = 0; v < 2; v++) {
@@ -946,76 +946,76 @@ int site_mode_fail_ac(Site* site) {
           site->th_check = 1;
           continue;
         }
-    }
+      }
 
-    site->time_pre = time(NULL);
+      site->time_pre = time(NULL);
 
 // выключим все кондиционеры
-    for (a = 0; a < 2; a++) {
-      site->acs[a]->set_mode(site->acs[a], 0);
-    }
+      for (a = 0; a < 2; a++) {
+        site->acs[a]->set_mode(site->acs[a], 0);
+      }
 
 // включим вентиляцию
-    for (v = 0; v < 2; v++) {
-      if (site->vents[v]->mode == 0) {
-        if (site->temp_out <= site->temp_in) {
-          site->vents[v]->set_turns(site->vents[v], 10); // 100%
-          site->vents[v]->time_start = time(NULL);
+      for (v = 0; v < 2; v++) {
+        if (site->vents[v]->mode == 0) {
+          if (site->temp_out <= site->temp_in) {
+            site->vents[v]->set_turns(site->vents[v], 10); // 100%
+            site->vents[v]->time_start = time(NULL);
+          }
         }
       }
-    }
 
 //работаем с вытяжным
-    if ((difftime(time(NULL), site->vents[0]->time_start) > 30)) {
-      if (site->vents[0]->turns == vents_r[0]) {
-        site->vents[0]->error = NOERROR;
-      } else {
-        // Заглушка, можем уйти в бесконечный цикл
-        // site_mode_ac(site);
+      if ((difftime(time(NULL), site->vents[0]->time_start) > 30)) {
+        if (site->vents[0]->turns == vents_r[0]) {
+          site->vents[0]->error = NOERROR;
+        } else {
+          // Заглушка, можем уйти в бесконечный цикл
+          // site_mode_ac(site);
+        }
       }
-    }
 
 // проверяем кондиционеры
 //
-    for (a = 0; a < 2; a++) {
-      if (site->acs[a]->error == NOPOWER) {
-        if (site->power == 1)
-          site_mode_ac(site); // переходим в нормальный режим;
+      for (a = 0; a < 2; a++) {
+        if (site->acs[a]->error == NOPOWER) {
+          if (site->power == 1)
+            site_mode_ac(site); // переходим в нормальный режим;
+        }
       }
-    }
 
-    float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
-    NULL);
+      float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
+      NULL);
 
-    if (site->temp_in > temp_support - 2) {
+      if (site->temp_in > temp_support - 2) {
 //Переходим на уво
-      site_mode_uvo(site);
-    }
+        site_mode_uvo(site);
+      }
 
 // выключим вениляцию
-    for (v = 0; v < 2; v++) {
-      if (site->vents[v]->mode == 1) {
-        site->vents[v]->set_mode(site->vents[v], 0);
-        site->vents[v]->set_turns(site->vents[v], 0);
-        site->vents[v]->time_stop = time(NULL);
+      for (v = 0; v < 2; v++) {
+        if (site->vents[v]->mode == 1) {
+          site->vents[v]->set_mode(site->vents[v], 0);
+          site->vents[v]->set_turns(site->vents[v], 0);
+          site->vents[v]->time_stop = time(NULL);
+        }
       }
-    }
 
 //выключим кондиционеры
-    for (a = 0; a < 2; a++) {
-      site->acs[a]->set_mode(site->acs[a], 0);
-      site->acs[a]->time_stop = time(NULL);
+      for (a = 0; a < 2; a++) {
+        site->acs[a]->set_mode(site->acs[a], 0);
+        site->acs[a]->time_stop = time(NULL);
+      }
+
+      float temp_heat = strtof(getStr(site->cfg, (void *) "temp_heat"), NULL);
+
+      if (site->temp_in < temp_heat) {
+        site_mode_heat(site);
+      } else {
+        sub_uvo_th(site, 1); // Работа с залонкой
+        continue;
+      }
     }
-
-    float temp_heat = strtof(getStr(site->cfg, (void *) "temp_heat"), NULL);
-
-    if (site->temp_in < temp_heat) {
-      site_mode_heat(site);
-    } else {
-      sub_uvo_th(site, 1); // Работа с залонкой
-      continue;
-    }
-
   }
   return 1;
 }
