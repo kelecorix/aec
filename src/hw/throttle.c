@@ -61,6 +61,8 @@ char* i2c_get_th_data(int addr) {
     printf("Error reading from i2c\n");
   }
 
+  printf("заслонка считано %s, %s \n",buf[0], buf[1]);
+
   i2cClose();
 
   buf_ptr = &buf;
