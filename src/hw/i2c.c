@@ -142,15 +142,15 @@ void i2cTestHardware() {
 //  }
 
 // Тестируем реле или лампочки на RPi
-  int val = 0xFF;
-  char buf[1];
-  int i, bit = 2;
-  for (i = 0; i < 128; i++) {
-    val ^= (1 << bit);
-    printf("Value: %x\n", val);
-    set_i2c_register(g_i2cFile, addrRel, val, val);
-    sleep(2);
-  }
+//  int val = 0xFF;
+//  char buf[1];
+//  int i, bit = 2;
+//  for (i = 0; i < 128; i++) {
+//    val ^= (1 << bit);
+//    printf("Value: %x\n", val);
+//    set_i2c_register(g_i2cFile, addrRel, val, val);
+//    sleep(2);
+//  }
 
 //  sleep(10);
 //
