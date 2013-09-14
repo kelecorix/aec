@@ -125,10 +125,8 @@ void i2cTestHardware() {
 
   for(i=0; i<10;i++){
 
-    i2cSetAddress(addrFan1);
-    set_i2c_register(g_i2cFile, addrFan1, steps[i], steps[i]);
-    i2cSetAddress(addrFan2);
-    set_i2c_register(g_i2cFile, addrFan2, steps[i], steps[i]);
+    site->vents[0]->set_turns(site->vents[0], i);
+    site->vents[1]->set_turns(site->vents[1], i);
 
     sleep(25);
 
