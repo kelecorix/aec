@@ -109,11 +109,11 @@ void i2cTestHardware() {
       0x8F };
 
   i2cSetAddress(addrFan1);
-  set_i2c_register(g_i2cFile, addrFan1, 0, steps[2]);
-  set_i2c_register(g_i2cFile, addrFan2, 0, steps[2]);
+  set_i2c_register(g_i2cFile, addrFan1, 0, steps[4]);
+  set_i2c_register(g_i2cFile, addrFan2, 0, steps[4]);
   set_i2c_register(g_i2cFile, addrTh, 0, 0xFF);
 
-  sleep(40);
+  sleep(10);
 
   printf("Считаем адреса \n");
   char *a_tacho_in = getStr(site->cfg, (void *) "a_tacho_flow_in");
@@ -121,11 +121,11 @@ void i2cTestHardware() {
   char *a_th_adc = getStr(site->cfg, (void *) "a_throttle_adc");
 
   printf("Cитаем данные\n");
-  site->tacho1 = i2c_get_tacho_data(strtol(a_tacho_in, NULL, 16));
-  site->tacho2 = i2c_get_tacho_data(strtol(a_tacho_out, NULL, 16));
-  site->th_r = i2c_get_th_data(strtol(a_th_adc, NULL, 16));
+  int tacho1 = i2c_get_tacho_data(strtol(a_tacho_in, NULL, 16));
+  int tacho2 = i2c_get_tacho_data(strtol(a_tacho_out, NULL, 16));
+  int th_r = i2c_get_th_data(strtol(a_th_adc, NULL, 16));
 
-  printf("Тахо1: %f, Тахо2: %f, Заслонка: %d \n", site->tacho1, site->tacho2, site->th_r);
+  printf("Тахо1: %d, Тахо2: %d, Заслонка: %d \n", tacho1, tacho2, th_r);
 
 // Тестируем реле или лампочки на RPi
 //  int val = 0b00000000;
