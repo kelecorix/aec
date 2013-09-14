@@ -19,11 +19,11 @@ int set_position(Throttle* th, int val) {
     set_i2c_register(g_i2cFile, addr, steps[val], steps[val]);
     th->position = val;
     i2cClose();
-    if(val!=0){
-        th->mode = 1;
-      }else{
-        th->mode = 0;
-      }
+    if (val != 0) {
+      th->mode = 1;
+    } else {
+      th->mode = 0;
+    }
     return 1;
   } else {
     // wrong value
@@ -32,13 +32,24 @@ int set_position(Throttle* th, int val) {
   }
 }
 
-int i2c_get_th_data(int addr){
+int i2c_get_th_data(int addr) {
 
+  int value, bit;
+  unsigned char rvalue;
 
-  return 0;
+  i2cOpen();
+
+  if (get_i2c_register(g_i2cFile, addr, 0x02, &rvalue)) {
+    printf("Unable to get register!\n");
+  } else {
+    printf("Addr %x: %d (%x)\n", addr, (int) rvalue, (int) rvalue);
+  }
+
+  i2cClose();
+
+  return (int) rvalue;
 
 }
-
 
 void throttle_free() {
   //TODO: очистим ресурсы памяти

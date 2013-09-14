@@ -123,22 +123,33 @@ void i2cTestHardware() {
   printf("Cитаем данные\n");
   int tacho1, tacho2, th_r;
 
+  site->th->set_position(site->th, 0);
+
+  sleep(100);
+
   for(i=10; i<=11;i++){
 
-    site->vents[0]->set_turns(site->vents[0], i);
-    site->vents[1]->set_turns(site->vents[1], i);
+      site->th->set_position(site->th, i);
+//    site->vents[0]->set_turns(site->vents[0], i);
+//    site->vents[1]->set_turns(site->vents[1], i);
+//
+    sleep(45);
+//
+//    tacho1 = i2c_get_tacho_data(site->vents[0], strtol(a_tacho_in, NULL, 16));
+//    tacho2 = i2c_get_tacho_data(site->vents[1], strtol(a_tacho_out, NULL, 16));
 
-    sleep(15);
+ //   printf("Шаг %d: tахо1 %d, tахо2 %d, \n", i, tacho1, tacho2);
 
-    tacho1 = i2c_get_tacho_data(site->vents[0], strtol(a_tacho_in, NULL, 16));
-    tacho2 = i2c_get_tacho_data(site->vents[1], strtol(a_tacho_out, NULL, 16));
+    th_r = i2c_get_th_data(strtol(a_th_adc, NULL, 16));
 
-    printf("Шаг %d: tахо1 %d, tахо2 %d, \n", i, tacho1, tacho2);
+    printf("Шаг %d: заслонка %d, \n", i, th_r);
+
+
 
   }
 
-  site->vents[0]->set_turns(site->vents[0], 0);
-  site->vents[1]->set_turns(site->vents[1], 0);
+  //site->vents[0]->set_turns(site->vents[0], 0);
+  //site->vents[1]->set_turns(site->vents[1], 0);
 
 // Тестируем реле или лампочки на RPi
 //  int val = 0b00000000;
