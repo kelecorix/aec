@@ -457,13 +457,6 @@ int site_mode_ac(Site* site) {
       "Количество кондиционеров num_ac_tmp = %d is_diff_0 = %d is_diff_1 = %d\n",
       num_ac_tmp, site->acs[0]->is_diff, site->acs[1]->is_diff);
 
-  if (site->th->position == 10) {
-
-    site->th->set_position(site->th, 0);
-    site->th->time_start = time(NULL);
-
-  }
-
   for (a = 0; a < 2; a++) {
     site->acs[a]->set_mode(site->acs[a], 1);
     site->acs[a]->time_start = time(NULL);
@@ -514,6 +507,12 @@ int site_mode_ac(Site* site) {
             //}
 
           }
+
+          if (site->th->position == 10) {
+            site->th->set_position(site->th, 0);
+            site->th->time_start = time(NULL);
+          }
+
           site->acs[a_cond]->time_start = time(NULL);
           site->acs[a_cond]->is_diff = 1;
 
@@ -946,7 +945,7 @@ int site_mode_fail_ac(Site* site) {
       // включим вентиляцию
 
       float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
-          NULL);
+      NULL);
 
       if ((site->temp_out <= site->temp_in)
           && site->temp_in >= temp_support - 2) {
@@ -1409,9 +1408,11 @@ int read_sensors(Site* site) {
   //printf("temp_evapor1 = %2.2f\n", site->temp_evapor1);
   //printf("temp_evapor2 = %2.2f\n", site->temp_evapor2);
 
-  site->tacho1 = i2c_get_tacho_data(site->vents[0], strtol(a_tacho_in, NULL, 16));
-  site->tacho2 = i2c_get_tacho_data(site->vents[1], strtol(a_tacho_out, NULL, 16));
-  site->th_r   = i2c_get_th_data(strtol(a_th_adc, NULL, 16));
+  site->tacho1 = i2c_get_tacho_data(site->vents[0],
+      strtol(a_tacho_in, NULL, 16));
+  site->tacho2 = i2c_get_tacho_data(site->vents[1],
+      strtol(a_tacho_out, NULL, 16));
+  site->th_r = i2c_get_th_data(strtol(a_th_adc, NULL, 16));
 
   return 0;
 }
@@ -1447,7 +1448,7 @@ Site* site_new(char* filename) {
   site->set_mode = set_mode;
   site->set_ten = set_ten;
 //site->get_ac_time_work = get_time_work;
- printf("Попытаемся создать журнал\n");
+  printf("Попытаемся создать журнал\n");
   site->logger = create_logger();
 
   return site;
