@@ -138,7 +138,7 @@ int get_i2c_register_adc(int file, unsigned char addr, unsigned char reg,
 void i2cTestHardware() {
 
   // Fan 0 приточный
-  int i, addrFan1 = 0b00100000, addrFan2 = 0b00100001, addrTh = 0b00100010,
+  int i, step, addrFan1 = 0b00100000, addrFan2 = 0b00100001, addrTh = 0b00100010,
       addrRel = 0x3b;
 
   char *buf;
@@ -179,9 +179,9 @@ void i2cTestHardware() {
 
  //   printf("Шаг %d: tахо1 %d, tахо2 %d, \n", i, tacho1, tacho2);
 
-    buf =  i2c_get_th_data(strtol(a_th_adc, NULL, 16));
+    step =  i2c_get_th_data(strtol(a_th_adc, NULL, 16));
     //th_r =
-    printf("Шаг %d: заслонка %d, %d \n", i, buf[0], buf[1]);
+    printf("Шаг %d: заслонка в %d\n", i, step);
   }
 
   //site->vents[0]->set_turns(site->vents[0], 0);

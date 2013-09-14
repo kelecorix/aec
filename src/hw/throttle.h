@@ -21,7 +21,8 @@ typedef struct Throttle {
 
 } Throttle;
 
-char* i2c_get_th_data(int addr);
+int i2c_get_th_data(int addr);
+int pos_to_step(int pos);
 
 
 #endif /*THROTTLE_H_*/
