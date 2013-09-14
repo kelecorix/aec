@@ -183,7 +183,7 @@ float i2c_get_tacho_data(int addr) {
 
   i2cClose();
 
-  float turns_min = (1000 / (float) rvalue) * 60;
+  float turns_min = ((1000 / (float) rvalue) * 60)/5;
 
   return (int) turns_min;
 }
