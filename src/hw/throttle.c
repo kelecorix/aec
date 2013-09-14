@@ -35,19 +35,25 @@ int set_position(Throttle* th, int val) {
 int i2c_get_th_data(int addr) {
 
   int value, bit;
-  unsigned char rvalue;
+  unsigned char rvalue, rvalue2;
 
   i2cOpen();
 
-  if (get_i2c_register(g_i2cFile, addr, 0x02, &rvalue)) {
+  if (get_i2c_register(g_i2cFile, addr, 0x48, &rvalue)) {
     printf("Unable to get register!\n");
   } else {
-    printf("Addr %x: %d (%x)\n", addr, (int) rvalue, (int) rvalue);
+    printf("First byte %x: %d (%x)\n", addr, (int) rvalue, (int) rvalue);
+  }
+
+  if (get_i2c_register(g_i2cFile, addr, 0x48, &rvalue2)) {
+    printf("Unable to get register!\n");
+  } else {
+    printf("Second byte %x: %d (%x)\n", addr, (int) rvalue2, (int) rvalue2);
   }
 
   i2cClose();
 
-  return (int) rvalue;
+  return rvalue;
 
 }
 
