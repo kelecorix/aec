@@ -50,7 +50,7 @@ int i2c_get_th_data(int addr) {
   int k = read(g_i2cFile, buf, 2);
 
   i2cClose();
-
+  printf("заслонка считано %d %d\n", buf[0], buf[1]);
   int step = pos_to_step((buf[0]*100)+buf[1]);
 
   return step;
@@ -62,7 +62,7 @@ int pos_to_step(int pos) {
 
   for (i = 0; i < 11; i++) {
     for (j = 0; j < 2; j = j + 2) {
-      if ((pos > tts[i][j]) && (pos < tts[i][j + 1])) {
+      if ((pos >= tts[i][j]) && (pos <= tts[i][j + 1])) {
         step = i;
         break;
       }
