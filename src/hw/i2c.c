@@ -123,9 +123,11 @@ void i2cTestHardware() {
   printf("Cитаем данные\n");
   int tacho1, tacho2, th_r;
 
-  for(i=0; i<8;i++){
+  for(i=0; i<10;i++){
 
+    i2cSetAddress(addrFan1);
     set_i2c_register(g_i2cFile, addrFan1, steps[i], steps[i]);
+    i2cSetAddress(addrFan2);
     set_i2c_register(g_i2cFile, addrFan2, steps[i], steps[i]);
 
     sleep(25);
