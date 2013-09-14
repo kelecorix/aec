@@ -183,7 +183,7 @@ float i2c_get_tacho_data(int addr) {
 
   i2cClose();
 
-  return atof(rvalue);
+  return (float) rvalue;
 }
 
 float i2c_get_th_data(int addr) {
