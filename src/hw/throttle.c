@@ -61,7 +61,7 @@ char* i2c_get_th_data(int addr) {
 
   printf("Попробуем считать адрес\n");
 
-  if (read(g_i2cFile, buf, 2) == -1) {
+  if (read(g_i2cFile, buf, 1) == -1) {
     printf("Error reading from i2c\n");
   }
 
