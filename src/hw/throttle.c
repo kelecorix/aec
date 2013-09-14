@@ -61,11 +61,9 @@ char* i2c_get_th_data(int addr) {
 
   printf("Попробуем считать адрес\n");
 
-  if (read(g_i2cFile, buf, 1) == -1) {
-    printf("Error reading from i2c\n");
-  }
+  int k = read(g_i2cFile, buf, 2);
 
-  printf("заслонка считано %s, %s \n",buf[0], buf[1]);
+  printf("заслонка считано %d, %d \n",buf[0], buf[1]);
 
   i2cClose();
 
