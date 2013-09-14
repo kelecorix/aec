@@ -153,14 +153,30 @@ void i2cTestHardware() {
 
 }
 
-float i2c_get_tacho_data(char *addr){
+float i2c_get_tacho_data(int addr){
+
+  int value, bit;
+  char buf[1];
+
+  i2cOpen();
+
+  if (ioctl(g_i2cFile, I2C_SLAVE, addr) < 0) {
+    printf("Failed to acquire bus access and/or talk to slave.\n");
+  }
+
+  if (read(g_i2cFile, buf, 1) != 1) {
+    printf("Error reading from i2c\n");
+  }
+
+  value = (int) buf[0];
 
 
+  i2cClose();
 
   return 0;
 }
 
-float i2c_get_th_data(char *addr){
+float i2c_get_th_data(int addr){
 
 
   return 0;

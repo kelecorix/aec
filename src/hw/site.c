@@ -1409,12 +1409,11 @@ int read_sensors(Site* site) {
   //printf("temp_evapor1 = %2.2f\n", site->temp_evapor1);
   //printf("temp_evapor2 = %2.2f\n", site->temp_evapor2);
 
-  site->tacho1 = i2c_get_tacho_data(a_tacho_in);
-  site->tacho2 = i2c_get_tacho_data(a_tacho_out);
-  site->th_r   = i2c_get_th_data(a_th_adc);
+  site->tacho1 = i2c_get_tacho_data(strtol(a_tacho_in, NULL, 16));
+  site->tacho2 = i2c_get_tacho_data(strtol(a_tacho_out, NULL, 16));
+  site->th_r   = i2c_get_th_data(strtol(a_th_adc, NULL, 16));
 
   return 0;
-
 }
 
 //TODO: Переписать в виде синглетона
