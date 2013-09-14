@@ -159,7 +159,7 @@ void i2cTestHardware() {
   char *a_tacho_out = getStr(site->cfg, (void *) "a_tacho_flow_out");
   char *a_th_adc = getStr(site->cfg, (void *) "a_throttle_adc");
 
-  printf("Cитаем данные\n");
+  printf("Cчитаем данные\n");
   int tacho1, tacho2, th_r;
 
   site->th->set_position(site->th, 0);

@@ -38,6 +38,7 @@ char* i2c_get_th_data(int addr) {
   unsigned char rvalue, rvalue2;
   char buf[3];
   char *buf_ptr;
+
   i2cOpen();
 
 //  if (get_i2c_register(g_i2cFile, addr, 0x48, &rvalue)) {
@@ -56,7 +57,7 @@ char* i2c_get_th_data(int addr) {
     printf("Failed to acquire bus access and/or talk to slave.\n");
   }
 
-  if (read(g_i2cFile, buf, 2) != 1) {
+  if (read(g_i2cFile, buf, 2) == -1) {
     printf("Error reading from i2c\n");
   }
 
