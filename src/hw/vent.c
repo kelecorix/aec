@@ -65,9 +65,9 @@ float i2c_get_tacho_data(int addr) {
   float turns = ((1000 / (float) rvalue) * 60)/5;
 
   // Преобразуем обороты в номер шага
-  int turns_step = turns_to_step((int) turns);
+  //int turns_step = turns_to_step((int) turns);
 
-  return turns_step;
+  return turns;
 }
 
 int turns_to_step(int turns) {

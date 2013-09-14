@@ -123,12 +123,12 @@ void i2cTestHardware() {
   printf("Cитаем данные\n");
   int tacho1, tacho2, th_r;
 
-  for(i=0; i<10;i++){
+  for(i=0; i<=10;i++){
 
     site->vents[0]->set_turns(site->vents[0], i);
     site->vents[1]->set_turns(site->vents[1], i);
 
-    sleep(25);
+    sleep(15);
 
     tacho1 = i2c_get_tacho_data(strtol(a_tacho_in, NULL, 16));
     tacho2 = i2c_get_tacho_data(strtol(a_tacho_out, NULL, 16));
@@ -137,8 +137,8 @@ void i2cTestHardware() {
 
   }
 
-   set_i2c_register(g_i2cFile, addrFan1, 0, steps[0]);
-   set_i2c_register(g_i2cFile, addrFan2, 0, steps[0]);
+  site->vents[0]->set_turns(site->vents[0], 0);
+  site->vents[1]->set_turns(site->vents[1], 0);
 
 // Тестируем реле или лампочки на RPi
 //  int val = 0b00000000;
