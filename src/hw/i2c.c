@@ -181,7 +181,7 @@ void i2cTestHardware() {
 
     buf =  i2c_get_th_data(strtol(a_th_adc, NULL, 16));
     //th_r =
-    printf("Шаг %d: заслонка %s, %s \n", i, buf[0], buf[1]);
+    printf("Шаг %d: заслонка %d, %d \n", i, buf[0], buf[1]);
   }
 
   //site->vents[0]->set_turns(site->vents[0], 0);
