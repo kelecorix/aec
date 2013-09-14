@@ -32,6 +32,14 @@ int set_position(Throttle* th, int val) {
   }
 }
 
+int i2c_get_th_data(int addr){
+
+
+  return 0;
+
+}
+
+
 void throttle_free() {
   //TODO: очистим ресурсы памяти
 }

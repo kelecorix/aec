@@ -16,8 +16,6 @@ void i2cOpen();
 void i2cClose();
 void i2cSetAddress(int address);
 void i2cTestHardware();
-float i2c_get_tacho_data(int addr);
-float i2c_get_th_data(int addr);
 
 extern int g_i2cFile;
 

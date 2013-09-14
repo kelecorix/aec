@@ -130,8 +130,8 @@ void i2cTestHardware() {
 
     sleep(15);
 
-    tacho1 = i2c_get_tacho_data(strtol(a_tacho_in, NULL, 16));
-    tacho2 = i2c_get_tacho_data(strtol(a_tacho_out, NULL, 16));
+    tacho1 = i2c_get_tacho_data(site->vents[0], strtol(a_tacho_in, NULL, 16));
+    tacho2 = i2c_get_tacho_data(site->vents[1], strtol(a_tacho_out, NULL, 16));
 
     printf("Шаг %d: tахо1 %d, tахо2 %d, \n", i, tacho1, tacho2);
 
@@ -181,9 +181,4 @@ void i2cTestHardware() {
 
 }
 
-
-float i2c_get_th_data(int addr) {
-
-  return 0;
-}
 
