@@ -8,6 +8,9 @@
 static int steps[11] = { 0xFF, 0xED, 0xDF, 0xDE, 0xDC, 0xBF, 0xBE, 0x7F, 0x7E,
     0x9F, 0x8F };
 
+static int int tts[11][2] = { { 0, 0 }, { 0, 0 }, { 2, 4 }, { 3, 6 }, { 4, 8 },
+    { 4, 8 }, { 4, 8 }, { 4, 8 }, { 4, 8 }, { 4, 8 }, { 4, 8 } };
+
 void vent_free() {
   //TODO: очистим ресурсы памяти
 
@@ -29,9 +32,9 @@ int set_turns(Vent* vent, int val) {
     i2cSetAddress(addr);
     set_i2c_register(g_i2cFile, addr, 0, steps[val]);
     vent->turns = val;
-    if(val!=0){
+    if (val != 0) {
       vent->mode = 1;
-    }else{
+    } else {
       vent->mode = 0;
     }
     i2cClose();
@@ -41,6 +44,46 @@ int set_turns(Vent* vent, int val) {
     // неправильное значение
     return 0;
   }
+}
+
+float i2c_get_tacho_data(int addr) {
+
+  int value, bit;
+
+  unsigned char rvalue;
+  i2cOpen();
+
+  if (get_i2c_register(g_i2cFile, addr, 0x02, &rvalue)) {
+    printf("Unable to get register!\n");
+  } else {
+    printf("Addr %x: %d (%x)\n", addr, (int) rvalue, (int) rvalue);
+  }
+
+  i2cClose();
+
+  // Преобразуем количество импульсов в обороты
+  float turns = ((1000 / (float) rvalue) * 60)/5;
+
+  // Преобразуем обороты в номер шага
+  int turns_step = turns_to_step((int) turns);
+
+  return turns_step;
+}
+
+int turns_to_step(int turns) {
+
+  int step, i, j;
+
+  for(i=0; i< 11; i++){
+    for(j=0; j< 2; j=j+2){
+      if((turns > tts[i][j]) && (turns<tts[i][j+1])){
+        step = i;
+        break;
+      }
+    }
+  }
+
+  return step;
 }
 
 Vent* vent_new() {

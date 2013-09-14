@@ -100,18 +100,18 @@ int get_i2c_register(int file, unsigned char addr, unsigned char reg,
 void i2cTestHardware() {
 
   // Fan 0 приточный
-  int addrFan1 = 0b00100000, addrFan2 = 0b00100001, addrTh = 0b00100010,
+  int i, addrFan1 = 0b00100000, addrFan2 = 0b00100001, addrTh = 0b00100010,
       addrRel = 0x3b;
 
   i2cOpen();
 
-  int steps[10] = { 0xFF, 0xED, 0xDF, 0xDE, 0xDC, 0xBF, 0xBE, 0x7F, 0x7E, 0x9F,
+  int steps[11] = { 0xFF, 0xED, 0xDF, 0xDE, 0xDC, 0xBF, 0xBE, 0x7F, 0x7E, 0x9F,
       0x8F };
 
-  i2cSetAddress(addrFan1);
-  set_i2c_register(g_i2cFile, addrFan1, 0, steps[4]);
-  set_i2c_register(g_i2cFile, addrFan2, 0, steps[4]);
-  set_i2c_register(g_i2cFile, addrTh, 0, 0xFF);
+//  i2cSetAddress(addrFan1);
+//  set_i2c_register(g_i2cFile, addrFan1, 0, steps[0]);
+//  set_i2c_register(g_i2cFile, addrFan2, 0, steps[0]);
+  //set_i2c_register(g_i2cFile, addrTh, 0, 0xFF);
 
   sleep(10);
 
@@ -121,11 +121,24 @@ void i2cTestHardware() {
   char *a_th_adc = getStr(site->cfg, (void *) "a_throttle_adc");
 
   printf("Cитаем данные\n");
-  int tacho1 = i2c_get_tacho_data(strtol(a_tacho_in, NULL, 16));
-  int tacho2 = i2c_get_tacho_data(strtol(a_tacho_out, NULL, 16));
-  int th_r = i2c_get_th_data(strtol(a_th_adc, NULL, 16));
+  int tacho1, tacho2, th_r;
 
-  printf("Тахо1: %d, Тахо2: %d, Заслонка: %d \n", tacho1, tacho2, th_r);
+  for(i=0; i<8;i++){
+
+    set_i2c_register(g_i2cFile, addrFan1, 0, steps[i]);
+    set_i2c_register(g_i2cFile, addrFan2, 0, steps[i]);
+
+    sleep(25);
+
+    tacho1 = i2c_get_tacho_data(strtol(a_tacho_in, NULL, 16));
+    tacho2 = i2c_get_tacho_data(strtol(a_tacho_out, NULL, 16));
+
+    printf("Шаг %d: tахо1 %d, tахо2 %d, \n", i, tacho1, tacho2);
+
+  }
+
+   set_i2c_register(g_i2cFile, addrFan1, 0, steps[0]);
+   set_i2c_register(g_i2cFile, addrFan2, 0, steps[0]);
 
 // Тестируем реле или лампочки на RPi
 //  int val = 0b00000000;
@@ -160,33 +173,14 @@ void i2cTestHardware() {
 //  set_i2c_register(g_i2cFile, addrFan2, 0, steps[6]);
 //  set_i2c_register(g_i2cFile, addrTh, 0, 0xED);
 //  sleep(10);
-  set_i2c_register(g_i2cFile, addrFan1, 0, steps[0]);
-  set_i2c_register(g_i2cFile, addrFan2, 0, steps[0]);
-  set_i2c_register(g_i2cFile, addrTh, 0, 0x8F);
+//  set_i2c_register(g_i2cFile, addrFan1, 0, steps[0]);
+//  set_i2c_register(g_i2cFile, addrFan2, 0, steps[0]);
+//  set_i2c_register(g_i2cFile, addrTh, 0, 0x8F);
 
   i2cClose();
 
 }
 
-float i2c_get_tacho_data(int addr) {
-
-  int value, bit;
-
-  unsigned char rvalue;
-  i2cOpen();
-
-  if (get_i2c_register(g_i2cFile, addr, 0x02, &rvalue)) {
-    printf("Unable to get register!\n");
-  } else {
-    printf("Addr %x: %d (%x)\n", addr, (int) rvalue, (int) rvalue);
-  }
-
-  i2cClose();
-
-  float turns_min = ((1000 / (float) rvalue) * 60)/5;
-
-  return (int) turns_min;
-}
 
 float i2c_get_th_data(int addr) {
 
