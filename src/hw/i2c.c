@@ -152,3 +152,17 @@ void i2cTestHardware() {
   i2cClose();
 
 }
+
+float i2c_get_tacho_data(char *addr){
+
+
+
+  return 0;
+}
+
+float i2c_get_th_data(char *addr){
+
+
+  return 0;
+}
+

@@ -102,32 +102,5 @@ int list_sensors(Site* site, char *tokens[]) {
   return 0;
 }
 
-int read_sensors(Site* site) {
 
-  OWNET_HANDLE conn = site->conn;
-  char *mnt = site->mount_point;
-
-  char *s_temp_out = getStr(site->cfg, (void *) "s_temp_outdoor");
-  char *s_temp_in = getStr(site->cfg, (void *) "s_temp_indoor");
-  char *s_temp_mix = getStr(site->cfg, (void *) "s_temp_mix");
-  char *s_temp_evapor1 = getStr(site->cfg, (void *) "s_temp_evapor1");
-  char *s_temp_evapor2 = getStr(site->cfg, (void *) "s_temp_evapor2");
-
-  site->temp_out = get_data(conn, mnt, s_temp_out, 100);
-  site->temp_in = get_data(conn, mnt, s_temp_in, 100);
-  site->temp_mix = get_data(conn, mnt, s_temp_mix, 100);
-  site->temp_evapor1 = get_data(conn, mnt, s_temp_evapor1, 100);
-  site->temp_evapor2 = get_data(conn, mnt, s_temp_evapor2, 100);
-
-  site->acs[0]->temp = site->temp_evapor1;
-  site->acs[1]->temp = site->temp_evapor2;
-  //printf("temp_out = %2.2f\n", site->temp_out);
-  //printf("temp_in = %2.2f\n", site->temp_in);
-  //printf("temp_mix = %2.2f\n", site->temp_mix);
-  //printf("temp_evapor1 = %2.2f\n", site->temp_evapor1);
-  //printf("temp_evapor2 = %2.2f\n", site->temp_evapor2);
-
-  return 0;
-
-}
 

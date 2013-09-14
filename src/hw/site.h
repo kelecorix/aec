@@ -76,5 +76,6 @@ int site_mode_fail_mix(Site* site);
 int read_sensors();
 ConfigTable* read_config(char* filename);
 void run(Site* site);
+int search_sensors(OWNET_HANDLE conn);
 
 #endif /*SITE_C_*/
