@@ -1441,13 +1441,13 @@ Site* site_new(char* filename) {
 // Для тестирования на эмуляторе
 //site->mount_point = "/mnt/1wire/";
   site->mount_point = "/bus.0/";
-
+  printf("Попытаемся считать конфиг\n");
   site->cfg = read_config(filename);
 
   site->set_mode = set_mode;
   site->set_ten = set_ten;
 //site->get_ac_time_work = get_time_work;
-// printf("Попытаемся создать журнал\n");
+ printf("Попытаемся создать журнал\n");
   site->logger = create_logger();
 
   return site;
