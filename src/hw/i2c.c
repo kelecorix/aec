@@ -97,12 +97,51 @@ int get_i2c_register(int file, unsigned char addr, unsigned char reg,
   return 0;
 }
 
+int get_i2c_register_adc(int file, unsigned char addr, unsigned char reg,
+    unsigned char *val) {
+
+  unsigned char inbuf, outbuf;
+  struct i2c_rdwr_ioctl_data packets;
+  struct i2c_msg messages[2];
+
+  /*
+   * In order to read a register, we first do a "dummy write" by writing
+   * 0 bytes to the register we want to read from.  This is similar to
+   * the packet in set_i2c_register, except it's 1 byte rather than 2.
+   */
+  outbuf = reg;
+  messages[0].addr = addr;
+  messages[0].flags = 0;
+  messages[0].len = sizeof(outbuf);
+  messages[0].buf = &outbuf;
+
+  /* The data will get returned in this structure */
+  messages[1].addr = addr;
+  messages[1].flags = I2C_M_RD/* | I2C_M_NOSTART*/;
+  messages[1].len = sizeof(2*inbuf);
+  messages[1].buf = &inbuf;
+
+  /* Send the request to the kernel and get the result back */
+  packets.msgs = messages;
+  packets.nmsgs = 2;
+  if (ioctl(file, I2C_RDWR, &packets) < 0) {
+    perror("Unable to send data");
+    return 1;
+  }
+  *val = inbuf;
+
+  return 0;
+}
+
+
+
 void i2cTestHardware() {
 
   // Fan 0 приточный
   int i, addrFan1 = 0b00100000, addrFan2 = 0b00100001, addrTh = 0b00100010,
       addrRel = 0x3b;
 
+  char *buf;
   i2cOpen();
 
   int steps[11] = { 0xFF, 0xED, 0xDF, 0xDE, 0xDC, 0xBF, 0xBE, 0x7F, 0x7E, 0x9F,
@@ -140,12 +179,9 @@ void i2cTestHardware() {
 
  //   printf("Шаг %d: tахо1 %d, tахо2 %d, \n", i, tacho1, tacho2);
 
-    th_r = i2c_get_th_data(strtol(a_th_adc, NULL, 16));
-
-    printf("Шаг %d: заслонка %d, \n", i, th_r);
-
-
-
+    buf =  i2c_get_th_data(strtol(a_th_adc, NULL, 16));
+    //th_r =
+    printf("Шаг %d: заслонка %s, %s \n", i, buf[0], buf[1]);
   }
 
   //site->vents[0]->set_turns(site->vents[0], 0);

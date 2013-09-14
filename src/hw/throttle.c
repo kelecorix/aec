@@ -32,28 +32,39 @@ int set_position(Throttle* th, int val) {
   }
 }
 
-int i2c_get_th_data(int addr) {
+char* i2c_get_th_data(int addr) {
 
   int value, bit;
   unsigned char rvalue, rvalue2;
-
+  char buf[3];
+  char *buf_ptr;
   i2cOpen();
 
-  if (get_i2c_register(g_i2cFile, addr, 0x48, &rvalue)) {
-    printf("Unable to get register!\n");
-  } else {
-    printf("First byte %x: %d (%x)\n", addr, (int) rvalue, (int) rvalue);
+//  if (get_i2c_register(g_i2cFile, addr, 0x48, &rvalue)) {
+//    printf("Unable to get register!\n");
+//  } else {
+//    printf("First byte %x: %d (%x)\n", addr, (int) rvalue, (int) rvalue);
+//  }
+//
+//  if (get_i2c_register(g_i2cFile, addr, 0x48, &rvalue2)) {
+//    printf("Unable to get register!\n");
+//  } else {
+//    printf("Second byte %x: %d (%x)\n", addr, (int) rvalue2, (int) rvalue2);
+//  }
+
+  if (ioctl(g_i2cFile, I2C_SLAVE, addr) < 0) {
+    printf("Failed to acquire bus access and/or talk to slave.\n");
   }
 
-  if (get_i2c_register(g_i2cFile, addr, 0x48, &rvalue2)) {
-    printf("Unable to get register!\n");
-  } else {
-    printf("Second byte %x: %d (%x)\n", addr, (int) rvalue2, (int) rvalue2);
+  if (read(g_i2cFile, buf, 2) != 1) {
+    printf("Error reading from i2c\n");
   }
 
   i2cClose();
 
-  return rvalue;
+  buf_ptr = &buf;
+
+  return buf_ptr;
 
 }
 
