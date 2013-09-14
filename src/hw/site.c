@@ -1419,7 +1419,7 @@ int read_sensors(Site* site) {
 //TODO: Переписать в виде синглетона
 //TODO: Добавить мьютексы для многопоточного доступа к переменным
 Site* site_new(char* filename) {
-
+  printf("Попытаемся создать сайт\n");
   Site* site = malloc(sizeof(Site));
 //initialize hardware
   int i;
