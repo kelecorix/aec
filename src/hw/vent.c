@@ -6,10 +6,14 @@
 #include "site.h"
 
 static int steps[11] = { 0xFF, 0xED, 0xDF, 0xDE, 0xDC, 0xBF, 0xBE, 0x7F, 0x7E,
-    0x9F, 0x8F };
+    0x9F, 0x8F};
 
-static int tts[11][2] = { { 0, 0 }, { 0, 0 }, { 2, 4 }, { 3, 6 }, { 4, 8 },
+static int tts1[11][2] = { {120, 130}, { 119, 120 }, { 410, 420 }, { 620, 640 }, { 780, 810 },
+    { 780, 810 }, { 910, 930 }, { 990, 1100 }, { 1190, 1210 }, { 1320, 1340 }, { 0, 0 } };
+
+static int tts2[11][2] = { { 120, 130}, { 0, 0 }, { 2, 4 }, { 3, 6 }, { 4, 8 },
     { 4, 8 }, { 4, 8 }, { 4, 8 }, { 4, 8 }, { 4, 8 }, { 4, 8 } };
+
 
 void vent_free() {
   //TODO: очистим ресурсы памяти
@@ -76,7 +80,7 @@ int turns_to_step(int turns) {
 
   for(i=0; i< 11; i++){
     for(j=0; j< 2; j=j+2){
-      if((turns > tts[i][j]) && (turns<tts[i][j+1])){
+      if((turns > tts1[i][j]) && (turns<tts1[i][j+1])){
         step = i;
         break;
       }

@@ -123,7 +123,7 @@ void i2cTestHardware() {
   printf("Cитаем данные\n");
   int tacho1, tacho2, th_r;
 
-  for(i=0; i<=10;i++){
+  for(i=10; i<=11;i++){
 
     site->vents[0]->set_turns(site->vents[0], i);
     site->vents[1]->set_turns(site->vents[1], i);
