@@ -53,9 +53,13 @@ char* i2c_get_th_data(int addr) {
 //    printf("Second byte %x: %d (%x)\n", addr, (int) rvalue2, (int) rvalue2);
 //  }
 
+  printf("Установим адрес\n");
+
   if (ioctl(g_i2cFile, I2C_SLAVE, addr) < 0) {
     printf("Failed to acquire bus access and/or talk to slave.\n");
   }
+
+  printf("Попробуем считать адрес\n");
 
   if (read(g_i2cFile, buf, 2) == -1) {
     printf("Error reading from i2c\n");
