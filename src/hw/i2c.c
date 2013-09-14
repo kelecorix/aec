@@ -127,7 +127,7 @@ void i2cTestHardware() {
 
   sleep(100);
 
-  for(i=10; i<=11;i++){
+  for(i=1; i<=11;i++){
 
       site->th->set_position(site->th, i);
 //    site->vents[0]->set_turns(site->vents[0], i);
