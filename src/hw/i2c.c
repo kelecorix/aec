@@ -115,12 +115,12 @@ void i2cTestHardware() {
 
   sleep(40);
 
-  printf("Считаем адреса \n")
+  printf("Считаем адреса \n");
   char *a_tacho_in = getStr(site->cfg, (void *) "a_tacho_flow_in");
   char *a_tacho_out = getStr(site->cfg, (void *) "a_tacho_flow_out");
   char *a_th_adc = getStr(site->cfg, (void *) "a_throttle_adc");
 
-  printf("Cитаем данные\n")
+  printf("Cитаем данные\n");
   site->tacho1 = i2c_get_tacho_data(strtol(a_tacho_in, NULL, 16));
   site->tacho2 = i2c_get_tacho_data(strtol(a_tacho_out, NULL, 16));
   site->th_r = i2c_get_th_data(strtol(a_th_adc, NULL, 16));
