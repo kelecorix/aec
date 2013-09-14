@@ -63,6 +63,7 @@ int pos_to_step(int pos) {
   for (i = 0; i < 11; i++) {
     for (j = 0; j < 2; j = j + 2) {
       if ((pos >= tts[i][j]) && (pos <= tts[i][j + 1])) {
+        printf("Значение между %d - %d \n", tts[i][j],tts[i][j+1]);
         step = i;
         break;
       }
