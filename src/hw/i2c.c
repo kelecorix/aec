@@ -125,8 +125,8 @@ void i2cTestHardware() {
 
   for(i=0; i<8;i++){
 
-    set_i2c_register(g_i2cFile, addrFan1, 0, steps[i]);
-    set_i2c_register(g_i2cFile, addrFan2, 0, steps[i]);
+    set_i2c_register(g_i2cFile, addrFan1, steps[i], steps[i]);
+    set_i2c_register(g_i2cFile, addrFan2, steps[i], steps[i]);
 
     sleep(25);
 
