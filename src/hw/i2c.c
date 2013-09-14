@@ -113,7 +113,7 @@ void i2cTestHardware() {
 //  set_i2c_register(g_i2cFile, addrFan2, 0, steps[0]);
   //set_i2c_register(g_i2cFile, addrTh, 0, 0xFF);
 
-  sleep(10);
+  //sleep(10);
 
   printf("Считаем адреса \n");
   char *a_tacho_in = getStr(site->cfg, (void *) "a_tacho_flow_in");
