@@ -113,6 +113,8 @@ void i2cTestHardware() {
   set_i2c_register(g_i2cFile, addrFan2, 0, steps[2]);
   set_i2c_register(g_i2cFile, addrTh, 0, 0xFF);
 
+  sleep(40);
+
   char *a_tacho_in = getStr(site->cfg, (void *) "a_tacho_flow_in");
   char *a_tacho_out = getStr(site->cfg, (void *) "a_tacho_flow_out");
   char *a_th_adc = getStr(site->cfg, (void *) "a_throttle_adc");
