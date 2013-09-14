@@ -8,7 +8,7 @@
 static int steps[11] = { 0xFF, 0xED, 0xDF, 0xDE, 0xDC, 0xBF, 0xBE, 0x7F, 0x7E,
     0x9F, 0x8F };
 
-static int int tts[11][2] = { { 0, 0 }, { 0, 0 }, { 2, 4 }, { 3, 6 }, { 4, 8 },
+static int tts[11][2] = { { 0, 0 }, { 0, 0 }, { 2, 4 }, { 3, 6 }, { 4, 8 },
     { 4, 8 }, { 4, 8 }, { 4, 8 }, { 4, 8 }, { 4, 8 }, { 4, 8 } };
 
 void vent_free() {

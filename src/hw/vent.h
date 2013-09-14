@@ -27,4 +27,7 @@ typedef struct Vent {
 
 } Vent;
 
+int turns_to_step(int turns);
+float i2c_get_tacho_data(int addr);
+
 #endif /*VENT_H_*/
