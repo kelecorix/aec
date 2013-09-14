@@ -172,7 +172,7 @@ void i2cTestHardware() {
 //    site->vents[0]->set_turns(site->vents[0], i);
 //    site->vents[1]->set_turns(site->vents[1], i);
 //
-    sleep(15);
+    sleep(20);
 //
 //    tacho1 = i2c_get_tacho_data(site->vents[0], strtol(a_tacho_in, NULL, 16));
 //    tacho2 = i2c_get_tacho_data(site->vents[1], strtol(a_tacho_out, NULL, 16));
