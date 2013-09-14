@@ -8,6 +8,7 @@
 #include <string.h>
 #include <errno.h>
 #include "i2c.h"
+#include "site.h"
 
 int g_i2cFile;
 
@@ -104,13 +105,23 @@ void i2cTestHardware() {
 
   i2cOpen();
 
-//  int steps[10] = { 0xFF, 0xED, 0xDF, 0xDE, 0xDC, 0xBF, 0xBE, 0x7F, 0x7E, 0x9F,
-//      0x8F };
-//
-//  i2cSetAddress(addrFan1);
-//  set_i2c_register(g_i2cFile, addrFan1, 0, steps[2]);
-//  set_i2c_register(g_i2cFile, addrFan2, 0, steps[2]);
-//  set_i2c_register(g_i2cFile, addrTh, 0, 0xFF);
+  int steps[10] = { 0xFF, 0xED, 0xDF, 0xDE, 0xDC, 0xBF, 0xBE, 0x7F, 0x7E, 0x9F,
+      0x8F };
+
+  i2cSetAddress(addrFan1);
+  set_i2c_register(g_i2cFile, addrFan1, 0, steps[2]);
+  set_i2c_register(g_i2cFile, addrFan2, 0, steps[2]);
+  set_i2c_register(g_i2cFile, addrTh, 0, 0xFF);
+
+  char *a_tacho_in = getStr(site->cfg, (void *) "a_tacho_flow_in");
+  char *a_tacho_out = getStr(site->cfg, (void *) "a_tacho_flow_out");
+  char *a_th_adc = getStr(site->cfg, (void *) "a_throttle_adc");
+
+  site->tacho1 = i2c_get_tacho_data(strtol(a_tacho_in, NULL, 16));
+  site->tacho2 = i2c_get_tacho_data(strtol(a_tacho_out, NULL, 16));
+  site->th_r = i2c_get_th_data(strtol(a_th_adc, NULL, 16));
+
+  printf("Тахо1: %f, Тахо2: %f, Заслонка: %d \n", site->tacho1, site->tacho2, site->th_r);
 
 // Тестируем реле или лампочки на RPi
 //  int val = 0b00000000;
@@ -153,31 +164,25 @@ void i2cTestHardware() {
 
 }
 
-float i2c_get_tacho_data(int addr){
+float i2c_get_tacho_data(int addr) {
 
   int value, bit;
-  char buf[1];
 
+  unsigned char rvalue;
   i2cOpen();
 
-  if (ioctl(g_i2cFile, I2C_SLAVE, addr) < 0) {
-    printf("Failed to acquire bus access and/or talk to slave.\n");
+  if (get_i2c_register(g_i2cFile, addr, 0x02, &rvalue)) {
+    printf("Unable to get register!\n");
+  } else {
+    printf("Addr %x: %d (%x)\n", addr, (int) rvalue, (int) rvalue);
   }
-
-  if (read(g_i2cFile, buf, 1) != 1) {
-    printf("Error reading from i2c\n");
-  }
-
-  value = (int) buf[0];
-
 
   i2cClose();
 
-  return 0;
+  return atof(rvalue);
 }
 
-float i2c_get_th_data(int addr){
-
+float i2c_get_th_data(int addr) {
 
   return 0;
 }
