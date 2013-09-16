@@ -52,6 +52,28 @@ int set_step(Vent* vent, int val) {
   }
 }
 
+void i2c_get_tacho(int addr0, int addr1){
+  
+  unsigned char rvalue0, rvalue1;
+
+  i2cOpen();
+
+  get_i2c_register(g_i2cFile, addr0, 0x02, &rvalue0);
+  get_i2c_register(g_i2cFile, addr1, 0x02, &rvalue1);
+  
+  i2cClose();
+
+  // Преобразуем количество импульсов в обороты
+  site->tacho1_t = (int) (((1000 / (float) rvalue0) * 60) / 5);
+  site->tacho2_t = (int) (((1000 / (float) rvalue1) * 60) / 5);
+
+  // Преобразуем количество оборотов в шаг
+  site->tacho1 = turns_to_step(site->tacho1_t, site->vents[0]->type);
+  site->tacho2 = turns_to_step(site->tacho2_t, site->vents[1]->type);
+
+}
+
+
 int i2c_get_tacho_data(Vent* v, int addr) {
 
   int value, bit;
