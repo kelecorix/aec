@@ -60,9 +60,9 @@ void write_data_log(Site* site) {
   char *a_tacho_in = getStr(site->cfg, (void *) "a_tacho_flow_in");
   char *a_tacho_out = getStr(site->cfg, (void *) "a_tacho_flow_out");
 
-  site->tacho1_t = i2c_get_tacho_step(site->vents[0],
+  site->tacho1_t = i2c_get_tacho_data(site->vents[0],
       strtol(a_tacho_in, NULL, 16));
-  site->tacho2_t = i2c_get_tacho_step(site->vents[1],
+  site->tacho2_t = i2c_get_tacho_data(site->vents[1],
       strtol(a_tacho_out, NULL, 16));
 
   strftime(date, 25, "%Y:%m:%d %H:%M:%S", tm_info);
