@@ -181,7 +181,7 @@ void i2cTestHardware() {
 
     step =  i2c_get_th_data(strtol(a_th_adc, NULL, 16));
     //th_r =
-    printf("Шаг %d: заслонка в %d\n", i, step);
+    printf("Шаг %d: заслонка в %d [ADC %d]\n", i, step, site->th->position_adc);
   }
 
   //site->vents[0]->set_turns(site->vents[0], 0);

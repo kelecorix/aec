@@ -354,7 +354,7 @@ void sub_uvo_th(Site* site, int fail) {
       printf("Да настало, а есть ли откуда читать?\n");
       site->th->time_start = time(NULL);
       if (site->th_r_exists) {
-        printf("site->th->position = %d site->th_r = %d\n",site->th->position, site->th_r);
+        printf("site->th->position = %d site->th_r = %d site->th->position_adc = %d\n",site->th->position, site->th_r,site->th->position_adc);
         if (site->th->position == site->th_r) {
 
           int curr_pos = site->th->position;
@@ -382,14 +382,20 @@ void sub_uvo_th(Site* site, int fail) {
         site->temp_mix, temp_dew, site->th->position);
     if (site->temp_mix >= temp_dew) {
       //printf("Приоткроем заслонку %d\n", curr_pos);
-      curr_pos++;
-      site->th->set_position(site->th, curr_pos);
-      printf("Приоткроем заслонку %d\n", curr_pos);
+      if(curr_pos != 10 ) {
+        curr_pos++;
+        site->th->set_position(site->th, curr_pos);
+        printf("Приоткроем заслонку %d\n", curr_pos);
+        site->th->time_start = time(NULL);
+      }
     } else {
       //printf("Призакроем заслонку %d\n", curr_pos);
-      curr_pos--;
-      site->th->set_position(site->th, curr_pos);
-      printf("Приоткроем заслонку %d\n", curr_pos);
+      if (curr_pos != 0) {
+        curr_pos--;
+        site->th->set_position(site->th, curr_pos);
+        printf("Призакроем заслонку %d\n", curr_pos);
+        site->th->time_start = time(NULL);
+      }
     }
 
   }
