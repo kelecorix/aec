@@ -352,6 +352,7 @@ void sub_uvo_th(Site* site, int fail) {
         (time(NULL) - site->th->time_start));
     if ((time(NULL) - site->th->time_start) >= 30) {
       printf("Да настало, а есть ли откуда читать?\n");
+      site->th->time_start = time(NULL);
       if (site->th_r_exists) {
         if (site->th->position == site->th_r) {
 
@@ -391,7 +392,7 @@ void sub_uvo_th(Site* site, int fail) {
 
   }
 
-  site->th->time_start = time(NULL);
+  //site->th->time_start = time(NULL);
   site->temp_in_prev = site->temp_in;
 
   //возврат в основной цикл

@@ -121,6 +121,10 @@ int i2c_get_tacho_step(Vent* v, int addr) {
 
 int turns_to_step(int turns, int type) {
 
+  if (turns<=100){
+    return 0;
+  }
+
   int step = -5, i, j;
 
   if (type == 0) {
