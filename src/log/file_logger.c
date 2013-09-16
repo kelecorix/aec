@@ -98,12 +98,12 @@ void write_data_log(Site* site) {
   fprintf(fp, ";");
 
   memset(str, 0, sizeof(str));
-  sprintf(str, "%2.2f", site->tacho1_t);
+  sprintf(str, "%d", site->tacho1_t);
   fprintf(fp, str);
   fprintf(fp, ";");
 
   memset(str, 0, sizeof(str));
-  sprintf(str, "%2.2f", site->tacho2_t);
+  sprintf(str, "%d", site->tacho2_t);
   fprintf(fp, str);
   fprintf(fp, ";");
 
