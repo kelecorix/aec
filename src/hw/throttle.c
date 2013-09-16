@@ -51,7 +51,7 @@ int i2c_get_th_data(int addr) {
 
   i2cClose();
   //printf("заслонка считано %d %d\n", buf[0], buf[1]);
-  site->th->position_adc = buf[0]*100)+buf[1];
+  site->th->position_adc = buf[0]*100+buf[1];
   int step = pos_to_step((buf[0]*100)+buf[1]);
 
   return step;
