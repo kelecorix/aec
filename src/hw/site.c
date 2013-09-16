@@ -29,13 +29,13 @@ void run(Site* site) {
 
   // По умолчанию
   site->th->set_position(site->th, 0);
-  site->th_r_exists = 0;
-  site->tacho1_exists = 0;
-  site->tacho2_exists = 0;
+  site->th_r_exists = 1;
+  site->tacho1_exists = 1;
+  site->tacho2_exists = 1;
 
-  //site_mode_uvo(site);
+  site_mode_uvo(site);
   //site_mode_fail_uvo(site);
-  site_mode_fail_ac(site);
+  //site_mode_fail_ac(site);
 }
 
 /* Режим охлаждения УВО */
@@ -152,7 +152,7 @@ void sub_uvo_vent(Site* site) {
           site->vents[0]->time_start);
       if ((time(NULL) - site->vents[0]->time_start) > 30) {
         if (site->tacho1_exists && site->tacho2_exists) {
-          printf("Проверим тахо\n");
+          printf("Проверим тахо site->vents[0]->turns = %d site->tacho1 = %d site->vents[1]->turns = %d site->tacho2 = %d\n",site->vents[0]->turns,site->tacho1,site->vents[1]->turns,site->tacho2);
           if ((site->vents[0]->turns != site->tacho1)
               || (site->vents[1]->turns != site->tacho2)) {
             printf("Какойто вентилятор не вращается\n");

@@ -50,7 +50,7 @@ int i2c_get_th_data(int addr) {
   int k = read(g_i2cFile, buf, 2);
 
   i2cClose();
-  printf("заслонка считано %d %d\n", buf[0], buf[1]);
+  //printf("заслонка считано %d %d\n", buf[0], buf[1]);
   int step = pos_to_step((buf[0]*100)+buf[1]);
 
   return step;

@@ -61,7 +61,7 @@ int i2c_get_tacho_data(Vent* v, int addr) {
   if (get_i2c_register(g_i2cFile, addr, 0x02, &rvalue)) {
     printf("Unable to get register!\n");
   } else {
-    printf("Addr %x: %d (%x)\n", addr, (int) rvalue, (int) rvalue);
+    //printf("Addr %x: %d (%x)\n", addr, (int) rvalue, (int) rvalue);
   }
 
   i2cClose();
