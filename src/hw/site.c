@@ -354,6 +354,7 @@ void sub_uvo_th(Site* site, int fail) {
       printf("Да настало, а есть ли откуда читать?\n");
       site->th->time_start = time(NULL);
       if (site->th_r_exists) {
+        printf("site->th->position = %d site->th_r = %d\n",site->th->position, site->th_r);
         if (site->th->position == site->th_r) {
 
           int curr_pos = site->th->position;
@@ -363,6 +364,7 @@ void sub_uvo_th(Site* site, int fail) {
             site->th->set_position(site->th, curr_pos--);
           }
         } else {
+          printf("Авария заслонки\n");
           if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1) {
             for (v = 0; v < 2; v++) {
               site->vents[v]->set_step(site->vents[v], 0);
