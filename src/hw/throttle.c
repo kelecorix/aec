@@ -51,6 +51,7 @@ int i2c_get_th_data(int addr) {
 
   i2cClose();
   //printf("заслонка считано %d %d\n", buf[0], buf[1]);
+  site->th->position_adc = buf[0]*100)+buf[1];
   int step = pos_to_step((buf[0]*100)+buf[1]);
 
   return step;
@@ -58,12 +59,12 @@ int i2c_get_th_data(int addr) {
 
 int pos_to_step(int pos) {
 
-  int step, i, j;
+  int step=-5, i, j;
 
   for (i = 0; i < 11; i++) {
     for (j = 0; j < 2; j = j + 2) {
       if ((pos >= tts[i][j]) && (pos <= tts[i][j + 1])) {
-        printf("Значение между %d - %d \n", tts[i][j],tts[i][j+1]);
+        //printf("Значение между %d - %d \n", tts[i][j],tts[i][j+1]);
         step = i;
         break;
       }
