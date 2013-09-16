@@ -104,7 +104,7 @@ int turns_to_step(int turns, int type) {
   if (type == 1) {
     for (i = 0; i < 11; i++) {
       for (j = 0; j < 2; j = j + 2) {
-        if ((turns > tts1[i][j]) && (turns < tts1[i][j + 1])) {
+        if ((turns >= tts1[i][j]) && (turns <= tts1[i][j + 1])) {
           step = i;
           break;
         }
@@ -113,7 +113,7 @@ int turns_to_step(int turns, int type) {
   } else {
     for (i = 0; i < 11; i++) {
       for (j = 0; j < 2; j = j + 2) {
-        if ((turns > tts2[i][j]) && (turns < tts2[i][j + 1])) {
+        if ((turns >= tts2[i][j]) && (turns <= tts2[i][j + 1])) {
           step = i;
           break;
         }
