@@ -134,24 +134,26 @@ int turns_to_step(int turns, int type) {
   int step = -5, i, j;
 
   if (type == 0) {
-    for (i = 0; i < 11; i++) {
-      for (j = 0; j < 2; j = j + 2) {
-        if ((turns >= tts1[i][j]) && (turns <= tts1[i][j + 1])) {
-          step = i;
-          break;
+    //for (i = 0; i < 11; i++) {
+    //  for (j = 0; j < 2; j = j + 2) {
+        //if ((turns >= tts1[i][j]) && (turns <= tts1[i][j + 1])) {
+        if ((turns >= tts1[site->vents[0]->step][0]) && (turns <= tts1[site->vents[0]->step][1])) {
+          step = site->vents[0]->step;
+          //break;
         }
-      }
-    }
+    //  }
+    //}
   }
   if (type == 1) {
-    for (i = 0; i < 11; i++) {
-      for (j = 0; j < 2; j = j + 2) {
-        if ((turns >= tts2[i][j]) && (turns <= tts2[i][j + 1])) {
-          step = i;
-          break;
+    //for (i = 0; i < 11; i++) {
+    //  for (j = 0; j < 2; j = j + 2) {
+        //if ((turns >= tts2[i][j]) && (turns <= tts2[i][j + 1])) {
+        if ((turns >= tts2[site->vents[1]->step][0]) && (turns <= tts2[site->vents[0]->step][1])) {
+          step = site->vents[1]->step;
+          //break;
         }
-      }
-    }
+    //  }
+    //}
   }
 
   return step;
