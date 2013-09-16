@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -18,9 +17,9 @@ int write_log(FileLogWriter* flw, char* message) {
 
   flw->fp = fopen(flw->filename, "a");
   if (!flw->fp) {
-     fprintf(stderr, "could not open log file %s", flw->filename);
-     return NULL;
-   }
+    fprintf(stderr, "could not open log file %s", flw->filename);
+    return NULL;
+  }
 
   time_t timer;
   struct tm* tm_info;
@@ -40,20 +39,19 @@ int write_log(FileLogWriter* flw, char* message) {
   return 0;
 }
 
-void write_data_log(Site* site){
-  printf("Write data to logger\n");
+void write_data_log(Site* site) {
 
   FILE* fp = site->logger->dataLOG->fp;
   char *filename = site->logger->dataLOG->filename;
   fp = fopen(filename, "a");
-    if (!fp) {
-       fprintf(stderr, "could not open log file %s", filename);
-     }
+  if (!fp) {
+    fprintf(stderr, "could not open log file %s", filename);
+  }
 
   time_t timer;
   struct tm* tm_info;
-  char date[50], str[80]="";
-  int event_t=1;           // event type, тип события
+  char date[50], str[80] = "";
+  int event_t = 1;           // event type, тип события
 
   timer = time(NULL);
   tm_info = localtime(&timer);
@@ -66,7 +64,7 @@ void write_data_log(Site* site){
   fprintf(fp, "|");
 
   memset(str, 0, sizeof(str));
-  sprintf(str, "%2.2f",site->temp_in);
+  sprintf(str, "%2.2f", site->temp_in);
   fprintf(fp, str);
   fprintf(fp, ";");
 
@@ -88,8 +86,19 @@ void write_data_log(Site* site){
   memset(str, 0, sizeof(str));
   sprintf(str, "%2.2f", site->temp_evapor2);
   fprintf(fp, str);
-  fprintf(fp, "\n");
+  fprintf(fp, ";");
 
+  memset(str, 0, sizeof(str));
+  sprintf(str, "%2.2f", site->tacho1_t);
+  fprintf(fp, str);
+  fprintf(fp, ";");
+
+  memset(str, 0, sizeof(str));
+  sprintf(str, "%2.2f", site->tacho2_t);
+  fprintf(fp, str);
+  fprintf(fp, ";");
+
+  fprintf(fp, "\n");
   fclose(fp);
 }
 
