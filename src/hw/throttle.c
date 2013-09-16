@@ -60,18 +60,26 @@ int i2c_get_th_data(int addr) {
 int pos_to_step(int pos) {
 
   int step=-5, i, j;
-
-  for (i = 0; i < 11; i++) {
-    for (j = 0; j < 2; j = j + 2) {
-      if ((pos >= tts[i][j]) && (pos <= tts[i][j + 1])) {
-        //printf("Значение между %d - %d \n", tts[i][j],tts[i][j+1]);
-        step = i;
-        break;
-      }
-    }
+  //site->th->position;
+  
+  if (tts[site->th->position][0] <= pos && tts[site->th->position][1] >= pos) {
+  
+    return site->th->position;
+    
   }
+  return -1;
+  //for (i = 0; i < 11; i++) {
+  //  for (j = 0; j < 2; j = j + 2) {
+  //    if ((pos >= tts[i][j]) && (pos <= tts[i][j + 1])) {
+  //      //printf("Значение между %d - %d \n", tts[i][j],tts[i][j+1]);
+  //      step = i;
+  //      break;
+  //    }
+  //  }
+  //}
+  
 
-  return step;
+  //return step;
 }
 
 void throttle_free() {
