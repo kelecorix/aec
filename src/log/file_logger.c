@@ -4,6 +4,7 @@
 #include <time.h>
 #include "logger.h"
 #include "../hw/site.h"
+#include "../nw/vent.h"
 
 FileLogWriter* create_filelog(char* filename) {
 
@@ -55,6 +56,14 @@ void write_data_log(Site* site) {
 
   timer = time(NULL);
   tm_info = localtime(&timer);
+
+  char *a_tacho_in = getStr(site->cfg, (void *) "a_tacho_flow_in");
+  char *a_tacho_out = getStr(site->cfg, (void *) "a_tacho_flow_out");
+
+  site->tacho1_t = i2c_get_tacho_step(site->vents[0],
+      strtol(a_tacho_in, NULL, 16));
+  site->tacho2_t = i2c_get_tacho_step(site->vents[1],
+      strtol(a_tacho_out, NULL, 16));
 
   strftime(date, 25, "%Y:%m:%d %H:%M:%S", tm_info);
   fprintf(fp, date);
