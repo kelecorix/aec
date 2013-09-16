@@ -22,7 +22,7 @@ void vent_free() {
 }
 
 // Установим количество оборотов, 8 шагов управлен  ия скоростью
-int set_turns(Vent* vent, int val) {
+int set_step(Vent* vent, int val) {
 
   if (val >= 0 && val <= 11) {
     i2cOpen();
@@ -36,7 +36,7 @@ int set_turns(Vent* vent, int val) {
         steps[val]);
     i2cSetAddress(addr);
     set_i2c_register(g_i2cFile, addr, 0, steps[val]);
-    vent->turns = val;
+    vent->step = val;
     if (val != 0) {
       vent->mode = 1;
     } else {
@@ -69,10 +69,31 @@ int i2c_get_tacho_data(Vent* v, int addr) {
   // Преобразуем количество импульсов в обороты
   float turns = ((1000 / (float) rvalue) * 60) / 5;
 
+  return turns;
+}
+
+int i2c_get_tacho_step(Vent* v, int addr) {
+
+  int value, bit;
+  unsigned char rvalue;
+
+  i2cOpen();
+
+  if (get_i2c_register(g_i2cFile, addr, 0x02, &rvalue)) {
+    printf("Unable to get register!\n");
+  } else {
+    //printf("Addr %x: %d (%x)\n", addr, (int) rvalue, (int) rvalue);
+  }
+
+  i2cClose();
+
+  // Преобразуем количество импульсов в обороты
+  float turns = ((1000 / (float) rvalue) * 60) / 5;
+
   // Преобразуем обороты в номер шага
   int turns_step = turns_to_step((int) turns, v->type);
 
-  return turns;
+  return turns_step;
 }
 
 int turns_to_step(int turns, int type) {
@@ -108,6 +129,6 @@ Vent* vent_new() {
   vent->mode = 0;
   vent->error = NOERROR;
 
-  vent->set_turns = set_turns;
+  vent->set_step = set_step;
   return vent;
 }
