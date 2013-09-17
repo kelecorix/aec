@@ -4,6 +4,7 @@
 #include "throttle.h"
 #include "i2c.h"
 #include "site.h"
+#include "../utils/utils.h"
 
 static int steps[11] = { 0xFF, 0xED, 0xDF, 0xDE, 0xDC, 0xBF, 0xBE, 0x7F, 0x7E,
     0x9F, 0x8F };
@@ -40,7 +41,6 @@ int i2c_get_th_data(int addr) {
 
   char buf[3];
 
-
   i2cOpen();
 
   if (ioctl(g_i2cFile, I2C_SLAVE, addr) < 0) {
@@ -51,8 +51,26 @@ int i2c_get_th_data(int addr) {
 
   i2cClose();
   //printf("заслонка считано %d %d\n", buf[0], buf[1]);
+
+  int num = 0;
+
+  num = buf[1];
+  //printf("%x\n", num);
+  int rev = 0x0;
+  int digit = 0x0;
+  while (num != 0x0) {
+    digit = num % 0x10;
+    rev = rev * 0x10 + digit;
+    num = num / 0x10;
+  }
+
+  //printf("%x\n", rev);
+  buf[1] = rev;
+  revS(buf);
+
   int value = *((int *) buf);
-  site->th->position_adc = (int) (value/190);
+
+  site->th->position_adc = (int) (value / 190);
 
   int step = pos_to_step(value);
 
@@ -61,13 +79,13 @@ int i2c_get_th_data(int addr) {
 
 int pos_to_step(int pos) {
 
-  int step=-5, i, j;
+  int step = -5, i, j;
   //site->th->position;
-  
+
   if (tts[site->th->position][0] <= pos && tts[site->th->position][1] >= pos) {
-  
+
     return site->th->position;
-    
+
   }
   return -1;
   //for (i = 0; i < 11; i++) {
@@ -79,7 +97,6 @@ int pos_to_step(int pos) {
   //    }
   //  }
   //}
-  
 
   //return step;
 }

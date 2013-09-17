@@ -127,3 +127,28 @@ char* trim(char *s) {
   return rtrim(ltrim(s));
 }
 
+void revS(char str[])
+{
+  char c;
+  char *p, *q;
+
+  p = str;
+  if (!p)
+    return;
+
+  q = p + 1;
+  if (*q == '\0')
+    return;
+
+  c = *p;
+  revS(q);
+
+  while (*q != '\0') {
+    *p = *q;
+    p++;
+    q++;
+  }
+  *p = c;
+
+  return;
+}
