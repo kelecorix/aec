@@ -158,7 +158,7 @@ char *ssprintf(char* msg, ...){
   va_list args;
   char* ret;
 
-  char buf1 [50];
+  char buf1 [255];
   char *buf2;
   int n;
   n = sprintf(buf1, msg, args);

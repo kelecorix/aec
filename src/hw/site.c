@@ -200,7 +200,8 @@ void sub_uvo_vent(Site* site) {
 
       int curr_step = site->vents[0]->step;
       write_log(site->logger->eventLOG,
-          ssprintf("curr_step = %d site->temp_in_prev = %f site->temp_in = %f\n",
+          ssprintf(
+              "curr_step = %d site->temp_in_prev = %f site->temp_in = %f\n",
               curr_step, site->temp_in_prev, site->temp_in));
 
       if (site->temp_in_prev != site->temp_in_prev_prev != site->temp_in) {
@@ -302,7 +303,8 @@ int sub_uvo_pen(Site* site) {
     }
 
     if (site->temp_in < temp_heat) {
-      write_log(site->logger->eventLOG, ssprintf("Переходим в режим догрева\n"));
+      write_log(site->logger->eventLOG,
+          ssprintf("Переходим в режим догрева\n"));
       site_mode_heat(site);
     } else {
       return EXIT_SUCCESS; //вернем 0, чтоб перейти обратно в УВО
@@ -383,7 +385,8 @@ void sub_uvo_th(Site* site, int fail) {
     }
   } else {
     write_log(site->logger->eventLOG,
-        ssprintf("Не настало ли время проверить работает ли заслонка? diff %d\n",
+        ssprintf(
+            "Не настало ли время проверить работает ли заслонка? diff %d\n",
             (time(NULL) - site->th->time_start)));
     if ((time(NULL) - site->th->time_start) >= 120) {
       write_log(site->logger->eventLOG,
@@ -476,7 +479,8 @@ int sub_uvo_fail(Site* site) {
       // передадим исполнение в основную ветку
       return EXIT_FAILURE;
     } else {
-      write_log(site->logger->eventLOG, ssprintf("Температура не в пределах\n"));
+      write_log(site->logger->eventLOG,
+          ssprintf("Температура не в пределах\n"));
       write_log(site->logger->eventLOG, ssprintf("Перейдем sub_uvo_pen\n"));
       return sub_uvo_pen(site);
     }
@@ -550,7 +554,8 @@ int site_mode_ac(Site* site) {
                   (site->temp_in - site->acs[a_cond]->temp)));
           if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1) {
             // да
-            write_log(site->logger->eventLOG, ssprintf("выключим вентиляцию\n"));
+            write_log(site->logger->eventLOG,
+                ssprintf("выключим вентиляцию\n"));
             //выключим вентиляцию
             for (v = 0; v < 2; v++) {
               if (site->vents[v]->mode == 1)
@@ -761,8 +766,8 @@ int site_mode_heat(Site* site) {
       if (site->temp_in >= temp_support - 4) { //TODO: необходимо ввести параметр до какой температуры греть
                                                //да
         write_log(site->logger->eventLOG,
-            ssprintf("Сайт нагрели %f\n выключим ТЭН temp_mix %f", site->temp_in,
-                site->temp_mix));
+            ssprintf("Сайт нагрели %f\n выключим ТЭН temp_mix %f",
+                site->temp_in, site->temp_mix));
         set_ten(site, 0);
 
         if (site->temp_mix > 60) {
@@ -957,7 +962,8 @@ int site_mode_fail_uvo(Site* site) {
           write_log(site->logger->eventLOG, ssprintf("Да сайт позволяет\n"));
           site_mode_uvo(site);
         } else {
-          write_log(site->logger->eventLOG, ssprintf("Нет сайт не позволяет\n"));
+          write_log(site->logger->eventLOG,
+              ssprintf("Нет сайт не позволяет\n"));
           //продолжаем в текущем режиме
           continue;
         }
@@ -1342,7 +1348,8 @@ int site_mode_fail_temp_ac(Site* site) {
           //    (site->temp_in - site->acs[a_cond]->temp));
           if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1) {
             // да
-            write_log(site->logger->eventLOG, ssprintf("выключим вентиляцию\n"));
+            write_log(site->logger->eventLOG,
+                ssprintf("выключим вентиляцию\n"));
             //выключим вентиляцию
             for (v = 0; v < 2; v++) {
               if (site->vents[v]->mode == 1)
