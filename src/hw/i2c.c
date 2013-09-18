@@ -139,8 +139,8 @@ int get_i2c_register_adc(int file, unsigned char addr, unsigned char reg,
 
 void i2cTestHardware() {
 
-  //test_vents();
-  test_throttle();
+  test_vents();
+  //test_throttle();
 
 //  i2cSetAddress(addrFan1);
 //  set_i2c_register(g_i2cFile, addrFan1, 0, steps[0]);
