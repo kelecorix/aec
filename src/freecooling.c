@@ -34,43 +34,43 @@ int main(int argc, char *argv[]) {
   else
     printf("OWFS connection not fins. Fire up OWFS server!\n");
 
-  sleep(4);
+  //sleep(4);
 
   //Workers Воркеры - выполняют параллельно свои операции
 
-  if (pthread_create(&threadA, NULL, run, (void*) site)) {
-    fprintf(stderr, "Error creating algo thread\n");
-    printf("Error creating algo thread\n");
-    return 1;
-  }
+  //if (pthread_create(&threadA, NULL, run, (void*) site)) {
+  //  fprintf(stderr, "Error creating algo thread\n");
+  //  printf("Error creating algo thread\n");
+  //  return 1;
+  //}
 
-  sleep(4);
+  //sleep(4);
 
-  if (pthread_create(&threadU, NULL, run_ui, (void*) site)) {
-    fprintf(stderr, "Error creating UI thread\n");
-    printf("Error creating UI thread\n");
-    return 1;
-  }
+  //if (pthread_create(&threadU, NULL, run_ui, (void*) site)) {
+  //  fprintf(stderr, "Error creating UI thread\n");
+  //  printf("Error creating UI thread\n");
+  //  return 1;
+  //}
 
-  sleep(4);
+  //sleep(4);
 
-  printf("Создадим поток журналирования\n");
-  if(pthread_create(&threadL, NULL, run_logger, (void*) site)) {
-    fprintf(stderr, "Error creating Logger thread\n");
-    printf("Error creating Logger thread\n");
-    return 1;
-  }
+  //printf("Создадим поток журналирования\n");
+  //if(pthread_create(&threadL, NULL, run_logger, (void*) site)) {
+  //  fprintf(stderr, "Error creating Logger thread\n");
+  //  printf("Error creating Logger thread\n");
+  //  return 1;
+  //}
 
-  sleep(4);
+  //sleep(4);
 
 // ждем пока потоками завершаться
 // по идде сюда не должно дойти
-  pthread_join(threadA, retA);
-  pthread_join(threadU, retU);
-  pthread_join(threadL, retL);
+  //pthread_join(threadA, retA);
+  //pthread_join(threadU, retU);
+  //pthread_join(threadL, retL);
 
   // Для тестов оборудования
-  //i2cTestHardware();
+  i2cTestHardware();
 
   return EXIT_SUCCESS;
 
