@@ -353,7 +353,7 @@ void sub_uvo_th(Site* site, int fail) {
   } else {
     printf("Не настало ли время проверить работает ли заслонка? diff %d\n",
         (time(NULL) - site->th->time_start));
-    if ((time(NULL) - site->th->time_start) >= 150) {
+    if ((time(NULL) - site->th->time_start) >= 120) {
       printf("Да настало, а есть ли откуда читать?\n");
       site->th->time_start = time(NULL);
       if (site->th_r_exists) {
@@ -402,7 +402,6 @@ void sub_uvo_th(Site* site, int fail) {
         site->th->time_start = time(NULL);
       }
     }
-
   }
 
   //site->th->time_start = time(NULL);
