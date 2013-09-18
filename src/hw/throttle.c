@@ -93,7 +93,7 @@ int i2c_get_th_data(int addr) {
   //printf("3 kl = %d kl1 = %d buf[1] = %d\n", kl, kl1, buf[1]);
   //printf("Проверка сдвига %d %x\n", kl, kl);
 
-  site->th->position_adc = kl / 190;
+  site->th->position_adc = kl / 190.f;
 
   //printf("ЗНАЧ: %f 0x[%0x]\n", site->th->position_adc);
   int step = pos_to_step(kl);
@@ -137,5 +137,9 @@ Throttle* throttle_new() {
   th->set_position = set_position;
 
   return th;
+}
+
+void test_throttle(){
+
 }
 
