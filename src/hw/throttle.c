@@ -12,9 +12,9 @@
 static int steps[11] = { 0xFF, 0xF8, 0xF7, 0xF6, 0xF3, 0xEE, 0xEC, 0xE6, 0xDC,
     0xD3, 0x00 };
 
-static int tts[11][2] = { { 245, 265 }, { 327, 347 }, { 413, 453 },
-    { 512, 532 }, { 610, 630 }, { 681, 701 }, { 780, 800 }, { 817, 837 }, { 916,
-        936 }, { 1049, 1069 }, { 1133, 1153 } };
+static float tts[11][2] = { { 1.90, 2.22 }, { 1.90, 2.22 }, { 2.40, 2.80 },
+    { 3.70, 4.00 }, { 5.00, 5.30 }, { 5.7, 6.1 }, { 6.8, 7.2}, { 7.8, 8.1 }, { 9.1,
+        9.4 }, { 9.9, 10.2 }, { 9.9, 10.2 } };
 
 int set_position(Throttle* th, int val) {
 
@@ -101,7 +101,7 @@ int i2c_get_th_data(int addr) {
   return step;
 }
 
-int pos_to_step(int pos) {
+int pos_to_step(float pos) {
 
   int step = -5, i, j;
   //site->th->position;
@@ -112,6 +112,7 @@ int pos_to_step(int pos) {
 
   }
   return -1;
+
   //for (i = 0; i < 11; i++) {
   //  for (j = 0; j < 2; j = j + 2) {
   //    if ((pos >= tts[i][j]) && (pos <= tts[i][j + 1])) {
@@ -139,7 +140,47 @@ Throttle* throttle_new() {
   return th;
 }
 
-void test_throttle(){
+void test_throttle() {
+
+  int i, step;
+  char *buf;
+
+  i2cOpen();
+
+  char *a_th_adc = getStr(site->cfg, (void *) "a_throttle_adc");
+
+  printf("Cчитаем данные\n");
+  int tacho1, tacho2, th_r;
+
+  site->th->set_position(site->th, 0);
+
+  sleep(10);
+
+  printf("Прямой ход\n");
+  for (i = 1; i <= 11; i++) {
+
+    site->th->set_position(site->th, i);
+
+    sleep(30);
+
+    step = i2c_get_th_data(strtol(a_th_adc, NULL, 16));
+    printf("Шаг %d: заслонка в %d [ADC %f]\n", i, step, site->th->position_adc);
+
+  }
+
+  printf("Обратный ход\n");
+  for (i = 11; i >= 0; i--) {
+
+    site->th->set_position(site->th, i);
+
+    sleep(30);
+
+    step = i2c_get_th_data(strtol(a_th_adc, NULL, 16));
+    printf("Шаг %d: заслонка в %d [ADC %f]\n", i, step, site->th->position_adc);
+
+  }
+
+  i2cClose();
 
 }
 

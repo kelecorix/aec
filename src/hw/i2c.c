@@ -9,6 +9,8 @@
 #include <errno.h>
 #include "i2c.h"
 #include "site.h"
+#include "throttle.h"
+#include "vent.h"
 
 int g_i2cFile;
 
@@ -137,15 +139,8 @@ int get_i2c_register_adc(int file, unsigned char addr, unsigned char reg,
 
 void i2cTestHardware() {
 
-  // Fan 0 приточный
-  int i, step, addrFan1 = 0b00100000, addrFan2 = 0b00100001, addrTh = 0b00100010,
-      addrRel = 0x3b;
-
-  char *buf;
-  i2cOpen();
-
-  int steps[11] = { 0xFF, 0xED, 0xDF, 0xDE, 0xDC, 0xBF, 0xBE, 0x7F, 0x7E, 0x9F,
-      0x8F };
+  //test_vents();
+  test_throttle();
 
 //  i2cSetAddress(addrFan1);
 //  set_i2c_register(g_i2cFile, addrFan1, 0, steps[0]);
@@ -154,57 +149,57 @@ void i2cTestHardware() {
 
   //sleep(10);
 
-  printf("Считаем адреса \n");
-  char *a_tacho_in = getStr(site->cfg, (void *) "a_tacho_flow_in");
-  char *a_tacho_out = getStr(site->cfg, (void *) "a_tacho_flow_out");
-  char *a_th_adc = getStr(site->cfg, (void *) "a_throttle_adc");
-
-  printf("Cчитаем данные\n");
-  int tacho1, tacho2, th_r;
-
-  site->th->set_position(site->th, 0);
-
-  sleep(10);
-
-  printf("Прямой ход\n");
-  for(i=1; i<=11;i++){
-
-      site->th->set_position(site->th, i);
-//    site->vents[0]->set_turns(site->vents[0], i);
-//    site->vents[1]->set_turns(site->vents[1], i);
+//  printf("Считаем адреса \n");
+//  char *a_tacho_in = getStr(site->cfg, (void *) "a_tacho_flow_in");
+//  char *a_tacho_out = getStr(site->cfg, (void *) "a_tacho_flow_out");
+//  char *a_th_adc = getStr(site->cfg, (void *) "a_throttle_adc");
 //
-    sleep(30);
+//  printf("Cчитаем данные\n");
+//  int tacho1, tacho2, th_r;
 //
-//    tacho1 = i2c_get_tacho_data(site->vents[0], strtol(a_tacho_in, NULL, 16));
-//    tacho2 = i2c_get_tacho_data(site->vents[1], strtol(a_tacho_out, NULL, 16));
-
- //   printf("Шаг %d: tахо1 %d, tахо2 %d, \n", i, tacho1, tacho2);
-
-    step =  i2c_get_th_data(strtol(a_th_adc, NULL, 16));
-    //th_r =
-    printf("Шаг %d: заслонка в %d [ADC %f]\n", i, step, site->th->position_adc);
-
-  }
-
-  printf("Обратный ход\n");
-  for(i=11; i>=0;i--){
-
-      site->th->set_position(site->th, i);
-//    site->vents[0]->set_turns(site->vents[0], i);
-//    site->vents[1]->set_turns(site->vents[1], i);
+//  site->th->set_position(site->th, 0);
 //
-    sleep(30);
+//  sleep(10);
 //
-//    tacho1 = i2c_get_tacho_data(site->vents[0], strtol(a_tacho_in, NULL, 16));
-//    tacho2 = i2c_get_tacho_data(site->vents[1], strtol(a_tacho_out, NULL, 16));
-
- //   printf("Шаг %d: tахо1 %d, tахо2 %d, \n", i, tacho1, tacho2);
-
-    step =  i2c_get_th_data(strtol(a_th_adc, NULL, 16));
-    //th_r =
-    printf("Шаг %d: заслонка в %d [ADC %f]\n", i, step, site->th->position_adc);
-
-  }
+//  printf("Прямой ход\n");
+//  for(i=1; i<=11;i++){
+//
+//      site->th->set_position(site->th, i);
+////    site->vents[0]->set_turns(site->vents[0], i);
+////    site->vents[1]->set_turns(site->vents[1], i);
+////
+//    sleep(30);
+////
+////    tacho1 = i2c_get_tacho_data(site->vents[0], strtol(a_tacho_in, NULL, 16));
+////    tacho2 = i2c_get_tacho_data(site->vents[1], strtol(a_tacho_out, NULL, 16));
+//
+// //   printf("Шаг %d: tахо1 %d, tахо2 %d, \n", i, tacho1, tacho2);
+//
+//    step =  i2c_get_th_data(strtol(a_th_adc, NULL, 16));
+//    //th_r =
+//    printf("Шаг %d: заслонка в %d [ADC %f]\n", i, step, site->th->position_adc);
+//
+//  }
+//
+//  printf("Обратный ход\n");
+//  for(i=11; i>=0;i--){
+//
+//      site->th->set_position(site->th, i);
+////    site->vents[0]->set_turns(site->vents[0], i);
+////    site->vents[1]->set_turns(site->vents[1], i);
+////
+//    sleep(30);
+////
+////    tacho1 = i2c_get_tacho_data(site->vents[0], strtol(a_tacho_in, NULL, 16));
+////    tacho2 = i2c_get_tacho_data(site->vents[1], strtol(a_tacho_out, NULL, 16));
+//
+// //   printf("Шаг %d: tахо1 %d, tахо2 %d, \n", i, tacho1, tacho2);
+//
+//    step =  i2c_get_th_data(strtol(a_th_adc, NULL, 16));
+//    //th_r =
+//    printf("Шаг %d: заслонка в %d [ADC %f]\n", i, step, site->th->position_adc);
+//
+//  }
 
 
 
@@ -247,8 +242,6 @@ void i2cTestHardware() {
 //  set_i2c_register(g_i2cFile, addrFan1, 0, steps[0]);
 //  set_i2c_register(g_i2cFile, addrFan2, 0, steps[0]);
 //  set_i2c_register(g_i2cFile, addrTh, 0, 0x8F);
-
-  i2cClose();
 
 }
 

@@ -55,25 +55,25 @@ int set_step(Vent* vent, int val) {
   }
 }
 
-void i2c_get_tacho(int addr0, int addr1){
-  
+void i2c_get_tacho(int addr0, int addr1) {
+
   unsigned char rvalue0, rvalue1;
 
   i2cOpen();
 
   get_i2c_register(g_i2cFile, addr0, 0x02, &rvalue0);
   get_i2c_register(g_i2cFile, addr1, 0x02, &rvalue1);
-  
+
   i2cClose();
 
   // Преобразуем количество импульсов в обороты
   site->tacho1_t = (int) (((1000 / (float) rvalue0) * 60) / 5);
   site->tacho2_t = (int) (((1000 / (float) rvalue1) * 60) / 5);
 
-  if(site->tacho1_t<100)
-    site->tacho1_t =0;
+  if (site->tacho1_t < 100)
+    site->tacho1_t = 0;
 
-  if(site->tacho2_t<100)
+  if (site->tacho2_t < 100)
     site->tacho2_t = 0;
 
   // Преобразуем количество оборотов в шаг
@@ -81,7 +81,6 @@ void i2c_get_tacho(int addr0, int addr1){
   site->tacho2 = turns_to_step(site->tacho2_t, site->vents[1]->type);
 
 }
-
 
 int i2c_get_tacho_data(Vent* v, int addr) {
 
@@ -130,7 +129,7 @@ int i2c_get_tacho_step(Vent* v, int addr) {
 
 int turns_to_step(int turns, int type) {
 
-  if (turns<=100){
+  if (turns <= 100) {
     return 0;
   }
 
@@ -139,27 +138,53 @@ int turns_to_step(int turns, int type) {
   if (type == 0) {
     //for (i = 0; i < 11; i++) {
     //  for (j = 0; j < 2; j = j + 2) {
-        //if ((turns >= tts1[i][j]) && (turns <= tts1[i][j + 1])) {
-        if ((turns >= tts1[site->vents[0]->step][0]) && (turns <= tts1[site->vents[0]->step][1])) {
-          step = site->vents[0]->step;
-          //break;
-        }
+    //if ((turns >= tts1[i][j]) && (turns <= tts1[i][j + 1])) {
+    if ((turns >= tts1[site->vents[0]->step][0])
+        && (turns <= tts1[site->vents[0]->step][1])) {
+      step = site->vents[0]->step;
+      //break;
+    }
     //  }
     //}
   }
   if (type == 1) {
     //for (i = 0; i < 11; i++) {
     //  for (j = 0; j < 2; j = j + 2) {
-        //if ((turns >= tts2[i][j]) && (turns <= tts2[i][j + 1])) {
-        if ((turns >= tts2[site->vents[1]->step][0]) && (turns <= tts2[site->vents[0]->step][1])) {
-          step = site->vents[1]->step;
-          //break;
-        }
+    //if ((turns >= tts2[i][j]) && (turns <= tts2[i][j + 1])) {
+    if ((turns >= tts2[site->vents[1]->step][0])
+        && (turns <= tts2[site->vents[0]->step][1])) {
+      step = site->vents[1]->step;
+      //break;
+    }
     //  }
     //}
   }
 
   return step;
+}
+
+void test_vents() {
+
+  int i, step, tacho1, tacho2, th_r;
+  char *buf;
+
+  char *a_tacho_in = getStr(site->cfg, (void *) "a_tacho_flow_in");
+  char *a_tacho_out = getStr(site->cfg, (void *) "a_tacho_flow_out");
+
+  for (i = 1; i <= 11; i++) {
+
+    site->vents[0]->set_step(site->vents[0], i);
+    site->vents[1]->set_step(site->vents[1], i);
+
+    sleep(30);
+
+    tacho1 = i2c_get_tacho_data(site->vents[0], strtol(a_tacho_in, NULL, 16));
+    tacho2 = i2c_get_tacho_data(site->vents[1], strtol(a_tacho_out, NULL, 16));
+
+    printf("Шаг %d: tахо1 %d, tахо2 %d, \n", i, tacho1, tacho2);
+
+  }
+
 }
 
 Vent* vent_new() {

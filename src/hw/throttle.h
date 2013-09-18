@@ -23,7 +23,7 @@ typedef struct Throttle {
 } Throttle;
 
 int i2c_get_th_data(int addr);
-int pos_to_step(int pos);
+int pos_to_step(float pos);
 
 
 #endif /*THROTTLE_H_*/
