@@ -106,6 +106,7 @@ int pos_to_step(float pos) {
   int step = -5, i, j;
   //site->th->position;
 
+  printf("pos = %f,  position = %d \n", pos, site->th->position);
   if (tts[site->th->position][0] <= pos && tts[site->th->position][1] >= pos) {
 
     return site->th->position;
@@ -157,7 +158,7 @@ void test_throttle() {
   sleep(10);
 
   printf("Прямой ход\n");
-  for (i = 1; i <= 11; i++) {
+  for (i = 0; i < 11; i++) {
 
     site->th->set_position(site->th, i);
 
