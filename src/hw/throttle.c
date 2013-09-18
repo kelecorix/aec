@@ -54,7 +54,7 @@ int i2c_get_th_data(int addr) {
 
   i2cClose();
 
-  printf("заслонка считано 0x%X 0x%X \n", buf[0], buf[1]);
+ //printf("заслонка считано 0x%X 0x%X \n", buf[0], buf[1]);
 //
 //  int num = 0;
 //
