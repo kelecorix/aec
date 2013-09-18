@@ -17,15 +17,15 @@ FileLogWriter* create_filelog(char* filename) {
 void write_log(FileLogWriter* flw, char* message) {
 
   FILE* fp = flw->fp;
-  fp = fopen(flw->filename, "a");
+  char *filename = flw->filename;
+  fp = fopen(filename, "a");
   if (!fp) {
-    fprintf(stderr, "could not open log file %s", flw->filename);
+    fprintf(stderr, "could not open log file %s", filename);
   }
 
   time_t timer;
   struct tm* tm_info;
   char date[50];
-  int event_t; // event type, тип события
 
   timer = time(NULL);
   tm_info = localtime(&timer);
