@@ -81,6 +81,7 @@ int i2c_get_th_data(int addr) {
 //  printf("После приведения: 0x%X, %d \n", value, value);
 
   printf("Test = %d [%x]\n", 0x0775, 0x0775);
+  printf("Буферы: 0x%X, %d | 0x%X, %d\n", buf[0], buf[1]);
 
   int kl, kl1;
   kl = (int *) buf[0];
@@ -89,13 +90,12 @@ int i2c_get_th_data(int addr) {
   printf("2 kl = %d\n", kl);
   kl1 = (int *) buf[1];
   kl = kl + kl1;
-
-  printf("3 kl = %d kl1 = %d buf_tmp[1] = %d\n", kl, kl1, buf[1]);
+  printf("3 kl = %d kl1 = %d buf[1] = %d\n", kl, kl1, buf[1]);
   printf("Проверка сдвига %d %x\n", kl, kl);
 
   site->th->position_adc = kl / 190;
 
-  printf("ЗНАЧ: %d 0x[%0x]\n", site->th->position_adc);
+  printf("ЗНАЧ: %f 0x[%0x]\n", site->th->position_adc);
   int step = pos_to_step(kl);
 
   return step;
