@@ -10,7 +10,7 @@
 typedef struct Throttle {
 
   int mode; // 0 - сайт, 1 улица
-  int position_adc;
+  float position_adc;
   int position; // 0 -255
   int exist; // 1 - заслонка есть, 0 - заслонка отсутствует
   long time_work;

@@ -7,8 +7,8 @@
 #include "../utils/utils.h"
 
 /*static int steps[11] = { 0xFF, 0xED, 0xDF, 0xDE, 0xDC, 0xBF, 0xBE, 0x7F, 0x7E,
-    0x9F, 0x8F };*/
-    
+ 0x9F, 0x8F };*/
+
 static int steps[11] = { 0xFF, 0xF8, 0xF7, 0xF6, 0xF3, 0xEE, 0xEC, 0xE6, 0xDC,
     0xD3, 0x00 };
 
@@ -54,34 +54,49 @@ int i2c_get_th_data(int addr) {
 
   i2cClose();
 
-  printf("заслонка считано 0x%X 0x%X \n", buf[0], buf[1]);
+//  printf("заслонка считано 0x%X 0x%X \n", buf[0], buf[1]);
+//
+//  int num = 0;
+//
+//  num = buf[1];
+//  printf("buf[1] был 0x%X \n", num);
+//  int rev = 0x0;
+//  int digit = 0x0;
+//  while (num != 0x0) {
+//    digit = num % 0x10;
+//    rev = rev * 0x10 + digit;
+//    num = num / 0x10;
+//  }
+//
+//  printf("buf[1] стал 0x%X \n", rev);
+//  buf[1] = rev;
+//  buf[2] = 0x0;
+//  buf[3] = 0x0;
+//  revS(buf);
+//  printf("до приведения 0x%X 0x%X \n", buf[0], buf[1]);
+//
+//  int value = *((int *) buf);
+//  //printf("Буферы: %x, %x", buf[0], buf[1]);
+//
+//  printf("После приведения: 0x%X, %d \n", value, value);
 
-  int num = 0;
+  printf("Test = %d [%x]\n", 0x0775, 0x0775);
 
-  num = buf[1];
-  printf("buf[1] был 0x%X \n", num);
-  int rev = 0x0;
-  int digit = 0x0;
-  while (num != 0x0) {
-    digit = num % 0x10;
-    rev = rev * 0x10 + digit;
-    num = num / 0x10;
-  }
+  int kl, kl1;
+  kl = (int *) buf[0];
+  printf("1 kl = %d\n", kl);
+  kl = kl * 256;
+  printf("2 kl = %d\n", kl);
+  kl1 = (int *) buf[1];
+  kl = kl + kl1;
 
-  printf("buf[1] стал 0x%X \n", rev);
-  buf[1] = rev;
-  buf[2] = 0x0;
-  buf[3] = 0x0;
-  revS(buf);
-  printf("до приведения 0x%X 0x%X \n", buf[0], buf[1]);
+  printf("3 kl = %d kl1 = %d buf_tmp[1] = %d\n", kl, kl1, buf[1]);
+  printf("Проверка сдвига %d %x\n", kl, kl);
 
-  int value = *((int *) buf);
-  //printf("Буферы: %x, %x", buf[0], buf[1]);
+  site->th->position_adc = kl / 190;
 
-  printf("После приведения: 0x%X, %d \n", value, value);
-  site->th->position_adc = (int) ((value / 190) * 100);
   printf("ЗНАЧ: %d 0x[%0x]\n", site->th->position_adc);
-  int step = pos_to_step(value);
+  int step = pos_to_step(kl);
 
   return step;
 }
