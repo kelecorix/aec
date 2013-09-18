@@ -171,7 +171,7 @@ void test_vents() {
   char *a_tacho_in = getStr(site->cfg, (void *) "a_tacho_flow_in");
   char *a_tacho_out = getStr(site->cfg, (void *) "a_tacho_flow_out");
 
-  for (i = 1; i <= 11; i++) {
+  for (i = 0; i <11; i++) {
 
     site->vents[0]->set_step(site->vents[0], i);
     site->vents[1]->set_step(site->vents[1], i);
