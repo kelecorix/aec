@@ -96,7 +96,7 @@ int i2c_get_th_data(int addr) {
   site->th->position_adc = kl / 190.f;
 
   //printf("ЗНАЧ: %f 0x[%0x]\n", site->th->position_adc);
-  int step = pos_to_step(kl);
+  int step = pos_to_step(site->th->position_adc);
 
   return step;
 }
