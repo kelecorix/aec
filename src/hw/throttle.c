@@ -85,17 +85,17 @@ int i2c_get_th_data(int addr) {
 
   int kl, kl1;
   kl = (int *) buf[0];
-  printf("1 kl = %d\n", kl);
+  //printf("1 kl = %d\n", kl);
   kl = kl * 256;
-  printf("2 kl = %d\n", kl);
+  //printf("2 kl = %d\n", kl);
   kl1 = (int *) buf[1];
   kl = kl + kl1;
-  printf("3 kl = %d kl1 = %d buf[1] = %d\n", kl, kl1, buf[1]);
-  printf("Проверка сдвига %d %x\n", kl, kl);
+  //printf("3 kl = %d kl1 = %d buf[1] = %d\n", kl, kl1, buf[1]);
+  //printf("Проверка сдвига %d %x\n", kl, kl);
 
   site->th->position_adc = kl / 190;
 
-  printf("ЗНАЧ: %f 0x[%0x]\n", site->th->position_adc);
+  //printf("ЗНАЧ: %f 0x[%0x]\n", site->th->position_adc);
   int step = pos_to_step(kl);
 
   return step;

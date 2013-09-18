@@ -166,6 +166,7 @@ void i2cTestHardware() {
 
   sleep(10);
 
+  printf("Прямой ход\n");
   for(i=1; i<=11;i++){
 
       site->th->set_position(site->th, i);
@@ -182,7 +183,30 @@ void i2cTestHardware() {
     step =  i2c_get_th_data(strtol(a_th_adc, NULL, 16));
     //th_r =
     printf("Шаг %d: заслонка в %d [ADC %f]\n", i, step, site->th->position_adc);
+
   }
+
+  printf("Обратный ход\n");
+  for(i=11; i>=0;i--){
+
+      site->th->set_position(site->th, i);
+//    site->vents[0]->set_turns(site->vents[0], i);
+//    site->vents[1]->set_turns(site->vents[1], i);
+//
+    sleep(30);
+//
+//    tacho1 = i2c_get_tacho_data(site->vents[0], strtol(a_tacho_in, NULL, 16));
+//    tacho2 = i2c_get_tacho_data(site->vents[1], strtol(a_tacho_out, NULL, 16));
+
+ //   printf("Шаг %d: tахо1 %d, tахо2 %d, \n", i, tacho1, tacho2);
+
+    step =  i2c_get_th_data(strtol(a_th_adc, NULL, 16));
+    //th_r =
+    printf("Шаг %d: заслонка в %d [ADC %f]\n", i, step, site->th->position_adc);
+
+  }
+
+
 
   //site->vents[0]->set_turns(site->vents[0], 0);
   //site->vents[1]->set_turns(site->vents[1], 0);
