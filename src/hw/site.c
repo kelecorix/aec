@@ -1195,9 +1195,7 @@ int site_mode_fail_temp_ac(Site* site) {
   }
 
   int num_ac = atoi(getStr(site->cfg, (void *) "num_ac"));
-
   int num_ac_tmp = num_ac;
-
   int temp_support = strtof(getStr(site->cfg, (void *) "temp_support"), NULL);
 
   //printf(
