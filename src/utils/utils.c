@@ -152,3 +152,16 @@ void revS(char str[])
 
   return;
 }
+
+char* ssprintf(char* msg, ...){
+
+  va_list args;
+  char* ret;
+
+  char buffer [50];
+  int n;
+  n = sprintf(buffer, msg, args);
+
+  return buffer;
+
+}
