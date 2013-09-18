@@ -1425,10 +1425,7 @@ int read_sensors(Site* site) {
 
   i2c_get_tacho(strtol(a_tacho_in, NULL, 16),  strtol(a_tacho_out, NULL, 16));
 
-
   site->th_r = i2c_get_th_data(strtol(a_th_adc, NULL, 16));
-
-
 
   return 0;
 }

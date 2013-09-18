@@ -80,8 +80,8 @@ int i2c_get_th_data(int addr) {
 //
 //  printf("После приведения: 0x%X, %d \n", value, value);
 
-  printf("Test = %d [%x]\n", 0x0775, 0x0775);
-  printf("Буферы: 0x%X, %d | 0x%X, %d\n", buf[0], buf[1]);
+  //printf("Test = %d [%x]\n", 0x0775, 0x0775);
+  //printf("Буферы: 0x%X, %d | 0x%X, %d\n", buf[0], buf[1]);
 
   int kl, kl1;
   kl = (int *) buf[0];
@@ -106,7 +106,7 @@ int pos_to_step(float pos) {
   int step = -5, i, j;
   //site->th->position;
 
-  printf("pos = %f,  position = %d \n", pos, site->th->position);
+  //printf("pos = %f,  position = %d \n", pos, site->th->position);
   if (tts[site->th->position][0] <= pos && tts[site->th->position][1] >= pos) {
 
     return site->th->position;
