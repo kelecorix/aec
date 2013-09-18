@@ -152,7 +152,10 @@ void sub_uvo_vent(Site* site) {
           site->vents[0]->time_start);
       if ((time(NULL) - site->vents[0]->time_start) > 30) {
         if (site->tacho1_exists && site->tacho2_exists) {
-          printf("Проверим тахо site->vents[0]->step = %d site->tacho1 = %d, обороты %d | site->vents[1]->step = %d site->tacho2 = %d обороты %d \n",site->vents[0]->step,site->tacho1, site->tacho1_t, site->vents[1]->step, site->tacho2, site->tacho2_t);
+          printf(
+              "Проверим тахо site->vents[0]->step = %d site->tacho1 = %d, обороты %d | site->vents[1]->step = %d site->tacho2 = %d обороты %d \n",
+              site->vents[0]->step, site->tacho1, site->tacho1_t,
+              site->vents[1]->step, site->tacho2, site->tacho2_t);
           //if ((site->vents[0]->step != site->tacho1)
           //    || (site->vents[1]->step != site->tacho2)) {
           if ((site->tacho1 < 6) || (site->tacho2 < 6)) {
@@ -354,7 +357,9 @@ void sub_uvo_th(Site* site, int fail) {
       printf("Да настало, а есть ли откуда читать?\n");
       site->th->time_start = time(NULL);
       if (site->th_r_exists) {
-        printf("site->th->position = %d site->th_r = %d site->th->position_adc = %d\n",site->th->position, site->th_r,site->th->position_adc);
+        printf(
+            "site->th->position = %d site->th_r = %d site->th->position_adc = %d\n",
+            site->th->position, site->th_r, site->th->position_adc);
         if (site->th->position == site->th_r) {
 
           int curr_pos = site->th->position;
@@ -382,7 +387,7 @@ void sub_uvo_th(Site* site, int fail) {
         site->temp_mix, temp_dew, site->th->position);
     if (site->temp_mix >= temp_dew) {
       //printf("Приоткроем заслонку %d\n", curr_pos);
-      if(curr_pos != 10 ) {
+      if (curr_pos != 10) {
         curr_pos++;
         site->th->set_position(site->th, curr_pos);
         printf("Приоткроем заслонку %d\n", curr_pos);
@@ -1061,33 +1066,40 @@ int site_mode_fail_temp(Site* site) {
 
 int site_mode_fail_temp_uvo(Site* site) {
 
-  printf("Режим охлаждения УВО!\n");
+  int a, v, ret, res;
+  float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"), NULL);
+  float temp_dew = strtof(getStr(site->cfg, (void *) "temp_dew"), NULL);
+
+  //printf("Режим охлаждения УВО!\n");
   //write_log(site->logger->eventLOG, "Режим охлаждения УВО");
-  site->mode = 1;
+  site->penalty = 0;
+
+  site->vents[0]->set_step(site->vents[0], 1);
+  site->vents[1]->set_step(site->vents[1], 1);
+
+  //По умолчанию: кондиц. выкл.
+  for (a = 0; a < 2; a++) {
+    site->acs[a]->set_mode(site->acs[a], 0);
+  }
+
+  site->temp_in_prev = 0;
+
   site->time_pre = time(NULL);
   site->time_uvo = time(NULL);
 
-  int a, ret, res;
-  float temp_dew = strtof(getStr(site->cfg, (void *) "temp_dew"), NULL);
-
-  //По умолчанию: кондиц. вкл.
-  for (a = 0; a < 2; a++) {
-    site->acs[a]->set_mode(site->acs[a], 1);
-  }
-
-  //остановим вентиляторы
-  site->vents[0]->set_step(site->vents[0], 0);
-  site->vents[1]->set_step(site->vents[1], 0);
+  site->vents[0]->time_start = 0;
+  site->vents[1]->time_start = 0;
 
   // читаем датчики
   ret = read_sensors(site);
   if (ret != 0) {
     //Ошибка чтения датчиков
-    site_mode_fail_uvo(site);
+    site_mode_fail_temp_ac(site);
   }
 
-  printf("Переведем заслонку site->temp_out = %f temp_dew = %f\n",
-      site->temp_out, temp_dew);
+  //printf("Переведем заслонку site->temp_out = %f temp_dew = %f\n",
+  //    site->temp_out, temp_dew);
+
   if ((site->temp_out) > temp_dew) {
     if (site->th->exist) //Это есть ли заслонка? или есть ли откуда читать
     {
@@ -1103,53 +1115,65 @@ int site_mode_fail_temp_uvo(Site* site) {
     }
   }
 
-  printf("Перед while UVO");
+  //printf("Перед while UVO");
   while (1) {
+
+    int vents_r[2];
+
     ret = read_sensors(site);
     if (ret != 0) {
-      site_mode_fail_uvo(site);
+      site_mode_fail_temp_ac(site);
     }
 
-    site->power = 1;
-
-    if (difftime(time(NULL), site->time_pre) <= 5) {
+    if (difftime(time(NULL), site->time_pre) <= 30) {
       continue;
     }
 
-    printf("****************Принятие решения Режим УВО*****************\n");
+    //printf("****************Принятие решения Режим УВО*****************\n");
     site->time_pre = time(NULL);
-    printf("site->vents[0]->mode = %d site->vents[1]->mode = %d\n",
-        site->vents[0]->mode, site->vents[1]->mode);
+    //printf("site->vents[0]->mode = %d site->vents[1]->mode = %d\n",
+    //    site->vents[0]->mode, site->vents[1]->mode);
+
+    if (site->temp_in < (temp_support - 2)) {
+      site_mode_fail_uvo(site);
+    }
+
+    if ((site->temp_in - site->temp_out) <= 5) {
+      sub_uvo_pow(site);
+    }
+
+    if (site->acs[0]->mode == 1 || site->acs[1]->mode == 1) {
+      printf("Выключим кондиционеры\n");
+      for (a = 0; a < 2; a++) {
+        site->acs[a]->set_mode(site->acs[a], 0);
+      }
+    }
+
     if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1) {
-      printf("Вентиляторы включены принятие решения\n");
-      printf("Время разница: %d\n", (time(NULL) - site->time_uvo));
-      float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
-      NULL);
-      if (((site->vents[0]->step == 10 || site->vents[1]->step == 10)
-          && ((time(NULL) - site->time_uvo) >= 60))
-          || (site->temp_in <= temp_support)) {
-        printf("Вентиляторы вращаются на максимум и проработали 300 сек\n");
-        res = sub_uvo_fail(site); // 1 - EXIT_FAILURE - не попали в ошибку
-        if (res)
-          sub_uvo_vent(site);
-        else
-          continue;
-      } else {
-        printf("вентиляторы не на максимуме или не прошло 300 сек\n");
-        sub_uvo_vent(site);
+      if (time(NULL) - site->vents[0]->time_start > 30) {
+        if (site->vents[0]->step == vents_r[0]) {
+          for (v = 0; v < 2; v++) {
+            site->vents[v]->error = NOERROR;
+          }
+        } else {
+          for (v = 0; v < 2; v++) {
+            site->vents[v]->error = ERROR;
+          }
+          site_mode_fail_temp_ac(site);
+        }
       }
     } else {
-      printf("Вентиляторы не включены\n");
 
-      res = sub_uvo_fail(site); // 1 - EXITE_FAILURE - не попали в ошибку
-      if (res)
-        sub_uvo_vent(site);
-      else
-        continue;
+      site->time_uvo = time(NULL);
+      site->temp_in_prev = site->temp_in;
+
+      for (v = 0; v < 2; v++) {
+        site->vents[v]->set_step(site->vents[v], 10);
+        site->vents[v]->time_start = time(NULL);
+      }
     }
+    sub_uvo_th(site, 1);
   }
-
-  return 1;
 
   return 1;
 }
@@ -1181,20 +1205,17 @@ int site_mode_fail_temp_ac(Site* site) {
   //    num_ac_tmp, site->acs[0]->is_diff, site->acs[1]->is_diff);
 
   if (site->th->position == 10) {
-
     site->th->set_position(site->th, 0);
     site->th->time_start = time(NULL);
-
   }
 
   for (a = 0; a < 2; a++) {
     site->acs[a]->set_mode(site->acs[a], 1);
     site->acs[a]->time_start = time(NULL);
     //printf("Включили кондиционер КОНД_%d время включения %d\n", a,
-        site->acs[a]->time_start);
   }
 
-  //printf("До while Режим охлаждения кондиционером\n");
+//printf("До while Режим охлаждения кондиционером\n");
   while (1) {
 
     int ret;
@@ -1213,10 +1234,8 @@ int site_mode_fail_temp_ac(Site* site) {
           "*************Принятие решения Режим охлаждения кондиционером***************\n");
       site->time_pre = time(NULL);
 
-      if(site->temp_in < temp_support -2){
-
+      if (site->temp_in < temp_support - 2) {
         site_mode_uvo(site);
-
       }
 
       for (a_cond = 0; a_cond < num_ac; a_cond++) { //TODO количество кондиционеров брать из конфига
@@ -1287,7 +1306,7 @@ int site_mode_fail_temp_ac(Site* site) {
           continue;
         }
       } else {
-        //printf("НЕТ живых кондиционеров переходим в аварийный режим\n");
+        // printf("НЕТ живых кондиционеров переходим в аварийный режим\n");
         // авария кондиционирования
         // переходим на УВО
         site_mode_fail_ac(site);
@@ -1388,18 +1407,18 @@ int read_sensors(Site* site) {
 
   site->acs[0]->temp = site->temp_evapor1;
   site->acs[1]->temp = site->temp_evapor2;
-  //printf("temp_out = %2.2f\n", site->temp_out);
-  //printf("temp_in = %2.2f\n", site->temp_in);
-  //printf("temp_mix = %2.2f\n", site->temp_mix);
-  //printf("temp_evapor1 = %2.2f\n", site->temp_evapor1);
-  //printf("temp_evapor2 = %2.2f\n", site->temp_evapor2);
+//printf("temp_out = %2.2f\n", site->temp_out);
+//printf("temp_in = %2.2f\n", site->temp_in);
+//printf("temp_mix = %2.2f\n", site->temp_mix);
+//printf("temp_evapor1 = %2.2f\n", site->temp_evapor1);
+//printf("temp_evapor2 = %2.2f\n", site->temp_evapor2);
 
-  //site->tacho1 = i2c_get_tacho_step(site->vents[0],
-  //    strtol(a_tacho_in, NULL, 16));
-  //site->tacho2 = i2c_get_tacho_step(site->vents[1],
-  //    strtol(a_tacho_out, NULL, 16));
+//site->tacho1 = i2c_get_tacho_step(site->vents[0],
+//    strtol(a_tacho_in, NULL, 16));
+//site->tacho2 = i2c_get_tacho_step(site->vents[1],
+//    strtol(a_tacho_out, NULL, 16));
 
-  i2c_get_tacho(strtol(a_tacho_in, NULL, 16),  strtol(a_tacho_out, NULL, 16));
+  i2c_get_tacho(strtol(a_tacho_in, NULL, 16), strtol(a_tacho_out, NULL, 16));
 
   site->th_r = i2c_get_th_data(strtol(a_th_adc, NULL, 16));
 
