@@ -1159,8 +1159,6 @@ int site_mode_fail_temp_ac(Site* site) {
   printf("Авария по температуре: режим охлаждения кондиционером!\n");
 
   //write_log(site->logger->eventLOG, "Режим охлаждения кондиционером");
-
-  site->mode = 2;
   site->time_pre = time(NULL);
 
   int a, v, a_cond;
@@ -1176,9 +1174,11 @@ int site_mode_fail_temp_ac(Site* site) {
 
   int num_ac_tmp = num_ac;
 
-  printf(
-      "Количество кондиционеров num_ac_tmp = %d is_diff_0 = %d is_diff_1 = %d\n",
-      num_ac_tmp, site->acs[0]->is_diff, site->acs[1]->is_diff);
+  int temp_support = strtof(getStr(site->cfg, (void *) "temp_support"), NULL);
+
+  //printf(
+  //    "Количество кондиционеров num_ac_tmp = %d is_diff_0 = %d is_diff_1 = %d\n",
+  //    num_ac_tmp, site->acs[0]->is_diff, site->acs[1]->is_diff);
 
   if (site->th->position == 10) {
 
@@ -1190,21 +1190,22 @@ int site_mode_fail_temp_ac(Site* site) {
   for (a = 0; a < 2; a++) {
     site->acs[a]->set_mode(site->acs[a], 1);
     site->acs[a]->time_start = time(NULL);
-    printf("Включили кондиционер КОНД_%d время включения %d\n", a,
+    //printf("Включили кондиционер КОНД_%d время включения %d\n", a,
         site->acs[a]->time_start);
   }
 
-  printf("До while Режим охлаждения кондиционером\n");
-  while (1) { // sensors was read - ok
+  //printf("До while Режим охлаждения кондиционером\n");
+  while (1) {
 
     int ret;
     ret = read_sensors(site);
     if (ret != 0) {
       //Ошибка чтения датчиков
-      site_mode_fail_ac(site);
+      //site_mode_fail_ac(site);
+      continue;
     }
 
-    if (difftime(time(NULL), site->time_pre) <= 5) { //секунды
+    if (difftime(time(NULL), site->time_pre) <= 30) { //секунды
       usleep(100000);
       continue;
     } else {
@@ -1212,13 +1213,19 @@ int site_mode_fail_temp_ac(Site* site) {
           "*************Принятие решения Режим охлаждения кондиционером***************\n");
       site->time_pre = time(NULL);
 
+      if(site->temp_in < temp_support -2){
+
+        site_mode_uvo(site);
+
+      }
+
       for (a_cond = 0; a_cond < num_ac; a_cond++) { //TODO количество кондиционеров брать из конфига
-        if (((site->temp_in - site->acs[a_cond]->temp) >= 10)
+        if (((site->temp_in - site->acs[a_cond]->temp) >= 5)
             && (site->acs[a_cond]->mode == 1)) {
           //да КОНД_0 Набрал дельту
-          printf("Набрал дельту КОНД_%d %f дельта %f\n", a_cond,
-              site->acs[a_cond]->temp,
-              (site->temp_in - site->acs[a_cond]->temp));
+          //printf("Набрал дельту КОНД_%d %f дельта %f\n", a_cond,
+          //    site->acs[a_cond]->temp,
+          //    (site->temp_in - site->acs[a_cond]->temp));
           if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1) {
             // да
             printf("выключим вентиляцию\n");
@@ -1227,15 +1234,6 @@ int site_mode_fail_temp_ac(Site* site) {
               if (site->vents[v]->mode == 1)
                 site->vents[v]->set_step(site->vents[v], 0);
             }
-
-            //site->acs[a_cond]->mode == 1;
-            //TODO: Проверить по описанию
-            //for (a = 0; a < 2; a++) {
-            //  if (site->acs[a]->mode == 1)
-            //    site->acs[a]->set_mode(site->acs[a], 0);
-            //  site->acs[a]->time_start = time(NULL);
-            //}
-
           }
           site->acs[a_cond]->time_start = time(NULL);
           site->acs[a_cond]->is_diff = 1;
@@ -1283,35 +1281,13 @@ int site_mode_fail_temp_ac(Site* site) {
       printf("еще есть живые кондиционеры? num_ac_tmp = %d\n", num_ac_tmp);
       // еще есть живые кондиционеры?
       if (num_ac_tmp > 0) {
-        printf("Да еще есть кондиционеры num_ac_tmp = %d\n", num_ac_tmp);
-        //да
-        float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
-        NULL);
-
-        float temp_fail = strtof(getStr(site->cfg, (void *) "temp_fail"), NULL);
-
-        if ((temp_support - site->temp_out) > (site->penalty + 2)) {
-          printf(
-              "Температура позволяет перейти на УВО переходим в УВО temp_support %f site->temp_out %f site->penalty %d \n",
-              temp_support, site->temp_out, site->penalty);
-          // переходим в УВО
-          site_mode_uvo(site);
-
+        if ((site->temp_in - site->temp_out) > 6) {
+          site_mode_fail_temp_uvo(site);
         } else {
-          if (site->temp_in >= temp_fail) {
-            printf(
-                "Температура выше аварийной переходим в аварийный режим site->temp_in %f temp_fail %f\n",
-                site->temp_in, temp_fail);
-            //переходим в аварийный режим
-            site_mode_fail_ac(site);
-          } else {
-            printf("работа нормальная\n");
-            // работа нормальная
-            continue;
-          }
+          continue;
         }
       } else {
-        printf("НЕТ живых кондиционеров переходим в аварийный режим\n");
+        //printf("НЕТ живых кондиционеров переходим в аварийный режим\n");
         // авария кондиционирования
         // переходим на УВО
         site_mode_fail_ac(site);
