@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+#include <stdarg.h>
 #include "logger.h"
 #include "../hw/site.h"
 #include "../hw/vent.h"
