@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
   if (site->cfg)
     log4("Config was read ok!\n");
 
-  site->conn = create_server_conn("127.0.0.1:4304");
+  site->conn = create_server_conn("127.0.0.1:3001");
 
   if (site->conn == 0)
     log4("OWFS connection established!\n");

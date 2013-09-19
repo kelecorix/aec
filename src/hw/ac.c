@@ -79,7 +79,7 @@ static int set_mode(AC* ac, int val) {
   }
 
   if (read(g_i2cFile, buf, 1) != 1) {
-    printf("Error reading from i2c\n");
+    log1("set_mode: Error reading from i2c\n");
   }
 
   value = (int) buf[0];
