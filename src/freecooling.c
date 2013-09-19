@@ -24,13 +24,15 @@ int main(int argc, char *argv[]) {
   char *filename = "freecooling.conf";
 
   site = site_new(filename);
+  site->debug = argv[1];
+  site->gpf = argv[2];
 
   if (site->cfg)
     printf("Config was read ok!\n");
 
   site->conn = create_server_conn("127.0.0.1:4304");
   if (site->conn == 0)
-    printf("OWFS connection established!\n");
+    log4( ,,"OWFS connection established!\n");
   else
     printf("OWFS connection not fins. Fire up OWFS server!\n");
 

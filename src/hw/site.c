@@ -23,7 +23,7 @@ void run(Site* site) {
   // Установим значение регистра реле в 0
   i2cOpen();
   int addr = strtol(getStr(site->cfg, "a_relay"), NULL, 16);
-  printf("Управляем регистром, адрес %x\n", addr);
+  log4("Управляем регистром, адрес %x\n", addr);
   set_i2c_register(g_i2cFile, addr, 0xFF, 0xFF);
   i2cClose();
 
@@ -40,7 +40,7 @@ void run(Site* site) {
 
 /* Режим охлаждения УВО */
 int site_mode_uvo(Site* site) {
-  printf("Режим охлаждения УВО!\n");
+  log1("Режим охлаждения УВО!\n");
   //write_log(site->logger->eventLOG, "Режим охлаждения УВО");
   site->mode = 1;
   site->time_pre = time(NULL);
@@ -65,18 +65,18 @@ int site_mode_uvo(Site* site) {
     site_mode_fail_uvo(site);
   }
 
-  printf("Переведем заслонку site->temp_out = %f temp_dew = %f\n",
+  log3("Переведем заслонку site->temp_out = %f temp_dew = %f\n",
       site->temp_out, temp_dew);
   if ((site->temp_out) > temp_dew) {
     if (site->th->exist) //Это есть ли заслонка? или есть ли откуда читать
     {
-      printf("переведем заслонку в положение улица\n");
+      log3("переведем заслонку в положение улица\n");
       site->th->set_position(site->th, 10); //переведем заслонку в положение улица
       site->th->time_start = time(NULL);
     }
   } else {
     if (site->th->exist) {
-      printf("переведем заслонку в положение сайт\n");
+      log3("переведем заслонку в положение сайт\n");
       site->th->set_position(site->th, 0); //переведем заслонку в положение сайт
       site->th->time_start = time(NULL);
     }
@@ -95,30 +95,30 @@ int site_mode_uvo(Site* site) {
       continue;
     }
 
-    printf("****************Принятие решения Режим УВО*****************\n");
+    log2("****************Принятие решения Режим УВО*****************\n");
     site->time_pre = time(NULL);
-    printf("site->vents[0]->mode = %d site->vents[1]->mode = %d\n",
+    log3("site->vents[0]->mode = %d site->vents[1]->mode = %d\n",
         site->vents[0]->mode, site->vents[1]->mode);
     if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1) {
-      printf("Вентиляторы включены принятие решения\n");
-      printf("Время разница: %d\n", (time(NULL) - site->time_uvo));
+      log3("Вентиляторы включены принятие решения\n");
+      log3("Время разница: %d\n", (time(NULL) - site->time_uvo));
       float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
       NULL);
       if (((site->vents[0]->step == 10 || site->vents[1]->step == 10)
           && ((time(NULL) - site->time_uvo) >= 60))
           || (site->temp_in <= temp_support)) {
-        printf("Вентиляторы вращаются на максимум и проработали 300 сек\n");
+        log3("Вентиляторы вращаются на максимум и проработали 300 сек\n");
         res = sub_uvo_fail(site); // 1 - EXIT_FAILURE - не попали в ошибку
         if (res)
           sub_uvo_vent(site);
         else
           continue;
       } else {
-        printf("вентиляторы не на максимуме или не прошло 300 сек\n");
+        log3("вентиляторы не на максимуме или не прошло 300 сек\n");
         sub_uvo_vent(site);
       }
     } else {
-      printf("Вентиляторы не включены\n");
+      log3("Вентиляторы не включены\n");
 
       res = sub_uvo_fail(site); // 1 - EXITE_FAILURE - не попали в ошибку
       if (res)
@@ -137,37 +137,37 @@ void sub_uvo_vent(Site* site) {
   float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"), NULL);
   float temp_heat = strtof(getStr(site->cfg, (void *) "temp_heat"), NULL);
 
-  printf("Среда позваляет работать на вентиляторах?\n");
+  log3("Среда позваляет работать на вентиляторах?\n");
   if ((temp_support - site->temp_out) >= 2) {
-    printf("Да позваляет\n");
+    log3("Да позваляет\n");
     if ((site->acs[0]->mode == 1) || (site->acs[1]->mode == 1)) {
-      printf("Кондиционеры были включены выключим\n");
+      log3("Кондиционеры были включены выключим\n");
       for (a = 0; a < 2; a++) {
         site->acs[a]->set_mode(site->acs[a], 0);
       }
     }
 
     if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1) {
-      printf("Вентиляторы включены site->vents[0]->time_start = %d \n",
+      log3("Вентиляторы включены site->vents[0]->time_start = %d \n",
           site->vents[0]->time_start);
       if ((time(NULL) - site->vents[0]->time_start) > 30) {
         if (site->tacho1_exists && site->tacho2_exists) {
-          printf(
+          log3(
               "Проверим тахо site->vents[0]->step = %d site->tacho1 = %d, обороты %d | site->vents[1]->step = %d site->tacho2 = %d обороты %d \n",
               site->vents[0]->step, site->tacho1, site->tacho1_t,
               site->vents[1]->step, site->tacho2, site->tacho2_t);
           //if ((site->vents[0]->step != site->tacho1)
           //    || (site->vents[1]->step != site->tacho2)) {
           if ((site->tacho1 < 6) || (site->tacho2 < 6)) {
-            printf("Какой-то вентилятор не вращается\n");
+            log3("Какой-то вентилятор не вращается\n");
             for (v = 0; v < 2; v++) {
               site->vents[v]->error = ERROR;
             }
-            printf(
+            log3(
                 "Авария уво переход на аварийное охлаждение кондиционером\n");
             site_mode_fail_uvo(site);
           } else {
-            printf("Вентиляторы вращаются\n");
+            log3("Вентиляторы вращаются\n");
             for (v = 0; v < 2; v++) {
               site->vents[v]->error = NOERROR;
             }

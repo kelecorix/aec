@@ -54,11 +54,13 @@ typedef struct Site {
   char* mount_point;
 
   Logger* logger;
+  int debug; // Debug Level: 1,2,3,4
+  int gpf;   // Global print flag 
 
   int (*set_mode)(struct Site*, int value);
   int (*set_ten)(struct Site*, int value);
   double (*get_ac_time_work)(struct Site*);
-
+  
 } Site;
 
 extern Site* site;
