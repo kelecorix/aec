@@ -33,6 +33,6 @@ void run_logger(Site* site){
   while(1){
     printf("Цикл работы логгера\n");
     write_data_log(site);
-    sleep(10);
+    sleep(120);
   }
 }
