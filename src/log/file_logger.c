@@ -151,7 +151,9 @@ void log3(char* msg, ...){
   FileLogWriter* flog = site->logger->eventLOG;
   if (site->debug >= 3) {
     site->logger->eventLOG->fp = fopen(flog->filename, "a");
+    va_start (args, msg);
     write_log(flog->fp, msg, args);
+    va_end (args);
   }
 
   // pf - printf flag
