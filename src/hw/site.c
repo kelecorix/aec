@@ -574,7 +574,7 @@ int site_mode_ac(Site* site) {
       // еще есть живые кондиционеры?
       if (num_ac_tmp > 0) {
 
-        log3(("Да еще есть кондиционеры num_ac_tmp = %d\n", num_ac_tmp));
+        log3("Да еще есть кондиционеры num_ac_tmp = %d\n", num_ac_tmp);
         //да
         float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
         NULL);
@@ -584,8 +584,8 @@ int site_mode_ac(Site* site) {
 
         if ((temp_support - site->temp_out) > (site->penalty + 2)) {
 
-          log3(
-              ("Температура позволяет перейти на УВО переходим в УВО temp_support %f site->temp_out %f site->penalty %d \n", temp_support, site->temp_out, site->penalty));
+          log3("Температура позволяет перейти на УВО переходим в УВО temp_support %f site->temp_out %f site->penalty %d \n",
+              temp_support, site->temp_out, site->penalty);
           // переходим в УВО
           site_mode_uvo(site);
 
@@ -598,14 +598,14 @@ int site_mode_ac(Site* site) {
             //переходим в аварийный режим
             site_mode_fail_ac(site);
           } else {
-            log3(("работа нормальная\n"));
+            log3("работа нормальная\n");
             // работа нормальная
             continue;
           }
         }
       } else {
 
-        log3(("НЕТ живых кондиционеров переходим в аварийный режим\n"));
+        log3("НЕТ живых кондиционеров переходим в аварийный режим\n");
         // авария кондиционирования
         // переходим на УВО
         site_mode_fail_ac(site);
