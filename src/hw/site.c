@@ -168,7 +168,9 @@ void sub_uvo_vent(Site* site) {
         if (site->tacho1_exists && site->tacho2_exists) {
           write_log(site->logger->eventLOG,
               ssprintf(
-                  "Проверим тахо site->vents[0]->step = %d site->tacho1 = %d, обороты %d | site->vents[1]->step = %d site->tacho2 = %d обороты %d \n",
+                  "Проверим тахо site->vents[0]->step = %d "
+                  "site->tacho1 = %d, обороты %d | site->vents[1]->step "
+                  "= %d site->tacho2 = %d обороты %d \n",
                   site->vents[0]->step, site->tacho1, site->tacho1_t,
                   site->vents[1]->step, site->tacho2, site->tacho2_t));
           //if ((site->vents[0]->step != site->tacho1)
