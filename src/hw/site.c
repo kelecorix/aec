@@ -354,7 +354,8 @@ void sub_uvo_th(Site* site, int fail) {
       site->th->set_position(site->th, 10);
     }
   } else {
-
+    printf("Не настало ли время проверить работает ли заслонка? diff %d\n",
+    time(NULL) - site->th->time_start);
     log3("Не настало ли время проверить работает ли заслонка? diff %d\n",
         time(NULL) - site->th->time_start);
     if ((time(NULL) - site->th->time_start) >= 120) {
