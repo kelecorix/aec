@@ -14,30 +14,30 @@ FileLogWriter* create_filelog(char* filename) {
   return log;
 }
 
-int write_log(FileLogWriter* flw, char* message) {
+void write_log(FileLogWriter* flw, char* message) {
 
-  flw->fp = fopen(flw->filename, "a");
-  if (!flw->fp) {
-    fprintf(stderr, "could not open log file %s", flw->filename);
-    return NULL;
+  FILE* fp = flw->fp;
+  char *filename = flw->filename;
+  fp = fopen(filename, "a");
+  if (!fp) {
+    fprintf(stderr, "could not open log file %s", filename);
   }
 
   time_t timer;
   struct tm* tm_info;
   char date[50];
-  int event_t; // event type, тип события
 
   timer = time(NULL);
   tm_info = localtime(&timer);
 
   strftime(date, 25, "%Y:%m:%d %H:%M:%S", tm_info);
-  fprintf(flw->fp, date);
-  fprintf(flw->fp, "|");
-  fprintf(flw->fp, message);
-  fprintf(flw->fp, "\n");
+  fprintf(fp, date);
+  fprintf(fp, "|");
+  fprintf(fp, message);
+  fprintf(fp, "\n");
 
-  fclose(flw->fp);
-  return 0;
+  fclose(fp);
+  usleep(1000);
 }
 
 void write_data_log(Site* site) {
