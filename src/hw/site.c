@@ -1221,7 +1221,7 @@ int site_mode_fail_temp_uvo(Site* site) {
 
 int site_mode_fail_temp_ac(Site* site) {
 
-  log3("Авария по температуре: режим охлаждения кондиционером!\n");
+  printf("Авария по температуре: режим охлаждения кондиционером!\n");
 
   //    "Режим охлаждения кондиционером");
   site->time_pre = time(NULL);
@@ -1271,7 +1271,7 @@ int site_mode_fail_temp_ac(Site* site) {
       continue;
     } else {
 
-      log3("*************Принятие решения Режим охлаждения кондиционером***************\n");
+      printf("*************Принятие решения Режим охлаждения кондиционером***************\n");
       site->time_pre = time(NULL);
 
       if (site->temp_in < temp_support - 2) {
@@ -1287,7 +1287,7 @@ int site_mode_fail_temp_ac(Site* site) {
           if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1) {
             // да
 
-            log3("выключим вентиляцию\n");
+            printf("выключим вентиляцию\n");
             //выключим вентиляцию
             for (v = 0; v < 2; v++) {
               if (site->vents[v]->mode == 1)
@@ -1300,17 +1300,17 @@ int site_mode_fail_temp_ac(Site* site) {
         } else {
           //нет КОНД_x не набрал пока дельту
 
-          log3(" КОНД_%d не набрал пока дельту temp_in %f site->acs[a_cond]->temp %f \n", a_cond,
+          printf(" КОНД_%d не набрал пока дельту temp_in %f site->acs[a_cond]->temp %f \n", a_cond,
               site->temp_in, site->acs[a_cond]->temp);
           site->acs[a_cond]->is_diff = 0;
         }
 
         //600
         // отработан промежуток?
-        log3("Цикл КОНД_%d\n", a_cond);
+        printf("Цикл КОНД_%d\n", a_cond);
         //printf("600 отработан промежуток? diff %d time_start_%d %d\n",(difftime(time(NULL), site->acs[a_cond]->time_start)), a_cond, site->acs[a_cond]->time_start);
 
-        log3("600 отработан промежуток? time_start_%d %d time %d diff %d %f\n", a_cond,
+        printf("600 отработан промежуток? time_start_%d %d time %d diff %d %f\n", a_cond,
             site->acs[a_cond]->time_start, time(
             NULL), time(NULL) - site->acs[a_cond]->time_start,
             difftime(time(NULL), site->acs[a_cond]->time_start));
@@ -1318,20 +1318,20 @@ int site_mode_fail_temp_ac(Site* site) {
         && (site->acs[a_cond]->mode == 1)) {
           //дельта набрана?
 
-          log3(
+          printf(
               ("ДА 600 прошло дельта набрана? time %d - time_start %d = %f is_diff = %d\n", time(
               NULL), site->acs[a_cond]->time_start, (difftime(time(NULL),
                   site->acs[a_cond]->time_start)), site->acs[a_cond]->is_diff));
           if (site->acs[a_cond]->is_diff == 0) {
 
-            log3("Авария кондиционера num_ac_tmp = %d\n", num_ac_tmp);
+            printf("Авария кондиционера num_ac_tmp = %d\n", num_ac_tmp);
             // Авария кондиционера
             num_ac_tmp--;
 
-            log3("num_ac_tmp = %d", num_ac_tmp);
+            printf("num_ac_tmp = %d", num_ac_tmp);
             // Выключим нерабочий кондиционер
 
-            log3("Выключим нерабочий кондиционер КОНД_%d\n", a_cond);
+            printf("Выключим нерабочий кондиционер КОНД_%d\n", a_cond);
             if (site->acs[a_cond]->mode == 1) {
               site->acs[a_cond]->set_mode(site->acs[a_cond], 0);
               site->acs[a_cond]->mode = 0;
@@ -1340,7 +1340,7 @@ int site_mode_fail_temp_ac(Site* site) {
         } //600
       } //for
 
-      log3("еще есть живые кондиционеры? num_ac_tmp = %d\n", num_ac_tmp);
+      printf("еще есть живые кондиционеры? num_ac_tmp = %d\n", num_ac_tmp);
       // еще есть живые кондиционеры?
       if (num_ac_tmp > 0) {
         if ((site->temp_in - site->temp_out) > 6) {
