@@ -1310,10 +1310,10 @@ int site_mode_fail_temp_ac(Site* site) {
         printf("Цикл КОНД_%d\n", a_cond);
         //printf("600 отработан промежуток? diff %d time_start_%d %d\n",(difftime(time(NULL), site->acs[a_cond]->time_start)), a_cond, site->acs[a_cond]->time_start);
 
-        printf("600 отработан промежуток? time_start_%d %d time %d diff %d %f\n", a_cond,
-            site->acs[a_cond]->time_start, time(
-            NULL), time(NULL) - site->acs[a_cond]->time_start,
-            difftime(time(NULL), site->acs[a_cond]->time_start));
+//        printf("600 отработан промежуток? time_start_%d %d time %d diff %d %f\n", a_cond,
+//            site->acs[a_cond]->time_start, time(
+//            NULL), time(NULL) - site->acs[a_cond]->time_start,
+//            difftime(time(NULL), site->acs[a_cond]->time_start));
         if ((difftime(time(NULL), site->acs[a_cond]->time_start) > 60) //600 для тестов 60
         && (site->acs[a_cond]->mode == 1)) {
           //дельта набрана?
