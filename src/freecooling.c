@@ -27,10 +27,13 @@ int main(int argc, char *argv[]) {
   site->debug = atoi(argv[1]);
   site->gpf = atoi(argv[2]);
 
+  printf("%d %d", site->debug, site->gpf);
+
   if (site->cfg)
     log4("Config was read ok!\n");
 
   site->conn = create_server_conn("127.0.0.1:4304");
+
   if (site->conn == 0)
     log4("OWFS connection established!\n");
   else
