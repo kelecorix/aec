@@ -148,7 +148,6 @@ void log1(char* msg, ...) {
     va_start(args, msg);
     vfprintf(site->logger->eventLOG->fp, msg, args);
     va_end(args);
-    fprintf(site->logger->eventLOG->fp, "\n");
     fclose(site->logger->eventLOG->fp);
   }
   // pf - printf flag
@@ -178,7 +177,6 @@ void log2(char* msg, ...) {
     va_start(args, msg);
     vfprintf(site->logger->eventLOG->fp, msg, args);
     va_end(args);
-    fprintf(site->logger->eventLOG->fp, "\n");
     fclose(site->logger->eventLOG->fp);
   }
   // pf - printf flag
@@ -208,7 +206,6 @@ void log3(char* msg, ...) {
     va_start(args, msg);
     vfprintf(site->logger->eventLOG->fp, msg, args);
     va_end(args);
-    fprintf(site->logger->eventLOG->fp, "\n");
     fclose(site->logger->eventLOG->fp);
   }
 
@@ -239,7 +236,6 @@ void log4(char* msg, ...) {
     va_start(args, msg);
     vfprintf(site->logger->eventLOG->fp, msg, args);
     va_end(args);
-    fprintf(site->logger->eventLOG->fp, "\n");
     fclose(site->logger->eventLOG->fp);
 
   }
