@@ -95,8 +95,7 @@ int site_mode_uvo(Site* site) {
     //log2("****************Принятие решения Режим УВО*****************\n");
     site->time_pre = time(NULL);
     //log3("site->vents[0]->mode = %d site->vents[1]->mode = %d\n",
-    site->vents[0]->mode, site->vents[1]->mode
-    );
+    //site->vents[0]->mode, site->vents[1]->mode);
     if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1) {
       //log3("Вентиляторы включены принятие решения\n");
       //log3("Время разница: %d\n", time(NULL) - site->time_uvo);
