@@ -439,8 +439,7 @@ int sub_uvo_fail(Site* site) {
     if ((site->temp_in >= (temp_support - 2))
         && (site->temp_in <= (temp_support) + 2)) {
 
-      log3(
-          "Температура в пределах site->temp_in >= temp_support - 2 И site->temp_in <= temp_support + 2\n");
+      log3("Температура в пределах site->temp_in >= temp_support - 2 И site->temp_in <= temp_support + 2\n");
       log3("Перейдем sub_uvo_vent\n");
       //sub_uvo_vent(site);
       // передадим исполнение в основную ветку
@@ -452,16 +451,14 @@ int sub_uvo_fail(Site* site) {
       return sub_uvo_pen(site);
     }
   }
+  return 1;
 }
 
 /* Режим охлаждения кондиционером */
 int site_mode_ac(Site* site) {
   //проверил основные моменты
-  printf("Режим охлаждения кондиционером!\n");
 
   log3("Режим охлаждения кондиционером!\n");
-
-  //    "Режим охлаждения кондиционером");
 
   site->mode = 2;
   site->time_pre = time(NULL);
