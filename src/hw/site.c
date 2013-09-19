@@ -541,9 +541,9 @@ int site_mode_ac(Site* site) {
         //600
         // отработан промежуток?
         log3("Цикл КОНД_%d\n", a_cond);
-        log3("600 отработан промежуток? time_start_%d %d time %d diff %d \n", a_cond,
-            site->acs[a_cond]->time_start, time(NULL),
-            (time(NULL) - site->acs[a_cond]->time_start));
+//        log3("600 отработан промежуток? time_start_%d %d time %d diff %d \n", a_cond,
+//            site->acs[a_cond]->time_start, time(NULL),
+//            (time(NULL) - site->acs[a_cond]->time_start));
 
         if ((difftime(time(NULL), site->acs[a_cond]->time_start) > 600) //600 для тестов 60
         && (site->acs[a_cond]->mode == 1)) {
