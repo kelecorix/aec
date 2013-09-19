@@ -1296,9 +1296,10 @@ int site_mode_fail_temp_ac(Site* site) {
 //            NULL), time(NULL) - site->acs[a_cond]->time_start,
 //            difftime(time(NULL), site->acs[a_cond]->time_start));
         //600 для тестов 60
+        printf("before if");
         if ((difftime(time(NULL), site->acs[a_cond]->time_start) > 60) && (site->acs[a_cond]->mode == 1)) {
           //дельта набрана?
-
+        printf("after if");
           printf("ДА 600 прошло дельта набрана? time %d - time_start %d = %f is_diff = %d\n",
               time(NULL), site->acs[a_cond]->time_start, (difftime(time(NULL), site->acs[a_cond]->time_start)), site->acs[a_cond]->is_diff);
 
