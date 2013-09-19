@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
   site->gpf = argv[2];
 
   if (site->cfg)
-    printf("Config was read ok!\n");
+    log4("Config was read ok!\n");
 
   site->conn = create_server_conn("127.0.0.1:4304");
   if (site->conn == 0)
