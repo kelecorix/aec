@@ -24,8 +24,8 @@ int main(int argc, char *argv[]) {
   char *filename = "freecooling.conf";
 
   site = site_new(filename);
-  site->debug = argv[1];
-  site->gpf = argv[2];
+  site->debug = atoi(argv[1]);
+  site->gpf = atoi(argv[2]);
 
   if (site->cfg)
     log4("Config was read ok!\n");
