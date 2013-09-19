@@ -423,6 +423,8 @@ int sub_uvo_fail(Site* site) {
   log3("sub_uvo_fail\n");
   float temp_fail = strtof(getStr(site->cfg, (void *) "temp_fail"),
   NULL);
+  float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
+    NULL);
 
   if ((site->temp_in) >= temp_fail) {
     // прерываем цикл
@@ -430,9 +432,6 @@ int sub_uvo_fail(Site* site) {
     site_mode_fail_temp(site);
   } else {
     // температура нормальная
-    float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
-    NULL);
-
     log3("sub_uvo_fail site->temp_in = %f temp_support = %f\n", site->temp_in,
         temp_support);
 
