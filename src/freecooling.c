@@ -32,9 +32,9 @@ int main(int argc, char *argv[]) {
 
   site->conn = create_server_conn("127.0.0.1:4304");
   if (site->conn == 0)
-    log4( ,,"OWFS connection established!\n");
+    log4("OWFS connection established!\n");
   else
-    printf("OWFS connection not fins. Fire up OWFS server!\n");
+    log4("OWFS connection not fins. Fire up OWFS server!\n");
 
   sleep(4);
 
@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
 
   if (pthread_create(&threadA, NULL, run, (void*) site)) {
     fprintf(stderr, "Error creating algo thread\n");
-    printf("Error creating algo thread\n");
+    log4("Error creating algo thread\n");
     return 1;
   }
 
@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
 
   if (pthread_create(&threadU, NULL, run_ui, (void*) site)) {
     fprintf(stderr, "Error creating UI thread\n");
-    printf("Error creating UI thread\n");
+    log4("Error creating UI thread\n");
     return 1;
   }
 
@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
   printf("Создадим поток журналирования\n");
   if(pthread_create(&threadL, NULL, run_logger, (void*) site)) {
     fprintf(stderr, "Error creating Logger thread\n");
-    printf("Error creating Logger thread\n");
+    log4("Error creating Logger thread\n");
     return 1;
   }
 
