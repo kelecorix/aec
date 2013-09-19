@@ -64,8 +64,8 @@ int site_mode_uvo(Site* site) {
     site_mode_fail_uvo(site);
   }
 
-  printf("Переведем заслонку site->temp_out = %f temp_dew = %f\n", site->temp_out,
-        temp_dew);
+  printf("Переведем заслонку site->temp_out = %f temp_dew = %f\n",
+      site->temp_out, temp_dew);
   log3("Переведем заслонку site->temp_out = %f temp_dew = %f\n", site->temp_out,
       temp_dew);
   if ((site->temp_out) > temp_dew) {
@@ -356,7 +356,7 @@ void sub_uvo_th(Site* site, int fail) {
     }
   } else {
     printf("Не настало ли время проверить работает ли заслонка? diff %d\n",
-    time(NULL) - site->th->time_start);
+        time(NULL) - site->th->time_start);
     log3("Не настало ли время проверить работает ли заслонка? diff %d\n",
         time(NULL) - site->th->time_start);
     if ((time(NULL) - site->th->time_start) >= 120) {
@@ -425,7 +425,7 @@ int sub_uvo_fail(Site* site) {
   float temp_fail = strtof(getStr(site->cfg, (void *) "temp_fail"),
   NULL);
   float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
-    NULL);
+  NULL);
 
   if ((site->temp_in) >= temp_fail) {
     // прерываем цикл
@@ -439,7 +439,8 @@ int sub_uvo_fail(Site* site) {
     if ((site->temp_in >= (temp_support - 2))
         && (site->temp_in <= (temp_support) + 2)) {
 
-      log3("Температура в пределах site->temp_in >= temp_support - 2 И site->temp_in <= temp_support + 2\n");
+      log3(
+          "Температура в пределах site->temp_in >= temp_support - 2 И site->temp_in <= temp_support + 2\n");
       log3("Перейдем sub_uvo_vent\n");
       //sub_uvo_vent(site);
       // передадим исполнение в основную ветку
@@ -1188,11 +1189,30 @@ int site_mode_fail_temp_uvo(Site* site) {
     //    site->vents[0]->mode, site->vents[1]->mode);
 
     if (site->temp_in < (temp_support - 2)) {
-      site_mode_fail_uvo(site);
+      site_mode_uvo(site);
     }
 
     if ((site->temp_in - site->temp_out) <= 5) {
-      sub_uvo_pow(site);
+      site->time_uvo = 0;
+      site->th->time_start = 0;
+      for (v = 0; v < 2; v++) {
+        site->vents[v]->time_start = 0;
+      }
+
+      if (site->temp_out <= site->temp_in) {
+        for (v = 0; v < 2; v++) {
+          site->vents[v]->set_step(site->vents[v], 10);
+        }
+      }
+
+      if (site->power == 1) {
+        site_mode_fail_temp_ac(site);
+      } else {
+        for (v = 0; v < 2; v++) {
+          site->vents[v]->error = NOPOWER;
+        }
+        site_mode_fail_temp_uvo(site);
+      }
     }
 
     if (site->acs[0]->mode == 1 || site->acs[1]->mode == 1) {
