@@ -236,7 +236,6 @@ void* hashmapGet(Hashmap* map, void* key) {
     entry = entry->next;
   }
 
-  //return NULL;
 }
 
 bool hashmapContainsKey(Hashmap* map, void* key) {

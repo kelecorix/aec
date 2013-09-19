@@ -40,7 +40,7 @@ void run(Site* site) {
 /* Режим охлаждения УВО */
 int site_mode_uvo(Site* site) {
   log1("Режим охлаждения УВО!\n");
-  //    "Режим охлаждения УВО");
+
   site->mode = 1;
   site->time_pre = time(NULL);
   site->time_uvo = time(NULL);
@@ -64,8 +64,7 @@ int site_mode_uvo(Site* site) {
     site_mode_fail_uvo(site);
   }
 
-  log3("Переведем заслонку site->temp_out = %f temp_dew = %f\n",
-      "Переведем заслонку site->temp_out = %f temp_dew = %f\n", site->temp_out,
+  log3("Переведем заслонку site->temp_out = %f temp_dew = %f\n", site->temp_out,
       temp_dew);
   if ((site->temp_out) > temp_dew) {
     if (site->th->exist) //Это есть ли заслонка? или есть ли откуда читать
