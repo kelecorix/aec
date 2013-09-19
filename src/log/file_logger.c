@@ -17,7 +17,6 @@ FileLogWriter* create_filelog(char* filename) {
 void write_log(FILE* fp, char* msg, ...) {
 
   va_list args;
-    fprintf(stderr, "could not open log file %s", filename);
 
   time_t timer;
   struct tm* tm_info;

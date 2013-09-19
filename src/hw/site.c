@@ -17,8 +17,7 @@ void site_free() {
 
 void run(Site* site) {
 
-  //    "Начало работы");
-  //write_log(site->logger->eventLOG, "Начало работы");
+  log2("Начало работы");
 
   // Установим значение регистра реле в 0
   i2cOpen();
@@ -26,8 +25,6 @@ void run(Site* site) {
   log4("Управляем регистром, адрес %x\n", addr);
   set_i2c_register(g_i2cFile, addr, 0xFF, 0xFF);
   i2cClose();
-
-  site->logger->eventLOG->fp = fopen(site->logger->eventLOG->filename, "a");
 
   // По умолчанию
   site->th->set_position(site->th, 0);
@@ -43,9 +40,6 @@ void run(Site* site) {
 /* Режим охлаждения УВО */
 int site_mode_uvo(Site* site) {
   log1("Режим охлаждения УВО!\n");
-  fprintf(site->logger->eventLOG->fp, site->logger->eventLOG->fp,
-      "Режим охлаждения УВО!\n");
-
   //    "Режим охлаждения УВО");
   site->mode = 1;
   site->time_pre = time(NULL);
@@ -77,57 +71,41 @@ int site_mode_uvo(Site* site) {
     if (site->th->exist) //Это есть ли заслонка? или есть ли откуда читать
     {
       log3("переведем заслонку в положение улица\n");
-      fprintf(site->logger->eventLOG->fp, "переведем заслонку в положение улица\n");
       site->th->set_position(site->th, 10); //переведем заслонку в положение улица
       site->th->time_start = time(NULL);
     }
   } else {
     if (site->th->exist) {
       log3("переведем заслонку в положение сайт\n");
-      fprintf(site->logger->eventLOG->fp, "переведем заслонку в положение сайт\n");
       site->th->set_position(site->th, 0); //переведем заслонку в положение сайт
       site->th->time_start = time(NULL);
     }
   }
 
-  fprintf(site->logger->eventLOG->fp, "Перед while UVO");
+  log3("Перед while UVO\n");
   while (1) {
-    fclose(site->logger->eventLOG->fp);
-    site->logger->eventLOG->fp = fopen(site->logger->eventLOG->filename, "a");
-
     ret = read_sensors(site);
-    if (ret != 0) {
+    if (ret != 0)
       site_mode_fail_uvo(site);
-    }
 
     site->power = 1;
 
-    if (difftime(time(NULL), site->time_pre) <= 5) {
+    if (difftime(time(NULL), site->time_pre) <= 5)
       continue;
-    }
 
     log2("****************Принятие решения Режим УВО*****************\n");
-        "****************Принятие решения Режим УВО*****************\n");
     site->time_pre = time(NULL);
     log3("site->vents[0]->mode = %d site->vents[1]->mode = %d\n",
-    fprintf(site->logger->eventLOG->fp,
-        "site->vents[0]->mode = %d site->vents[1]->mode = %d\n",
         site->vents[0]->mode, site->vents[1]->mode);
     if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1) {
       log3("Вентиляторы включены принятие решения\n");
-      log3("Время разница: %d\n", (time(NULL) - site->time_uvo));
-          "Вентиляторы включены принятие решения\n");
-
-      fprintf(site->logger->eventLOG->fp, "Время разница: %d\n",
-          (time(NULL) - site->time_uvo));
+      log3("Время разница: %d\n", time(NULL) - site->time_uvo);
       float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
       NULL);
       if (((site->vents[0]->step == 10 || site->vents[1]->step == 10)
           && ((time(NULL) - site->time_uvo) >= 60))
           || (site->temp_in <= temp_support)) {
         log3("Вентиляторы вращаются на максимум и проработали 300 сек\n");
-        fprintf(site->logger->eventLOG->fp,
-            "Вентиляторы вращаются на максимум и проработали 300 сек\n");
         res = sub_uvo_fail(site); // 1 - EXIT_FAILURE - не попали в ошибку
         if (res)
           sub_uvo_vent(site);
@@ -135,8 +113,6 @@ int site_mode_uvo(Site* site) {
           continue;
       } else {
         log3("вентиляторы не на максимуме или не прошло 300 сек\n");
-        fprintf(site->logger->eventLOG->fp,
-            "вентиляторы не на максимуме или не прошло 300 сек\n");
         sub_uvo_vent(site);
       }
     } else {
@@ -156,16 +132,15 @@ int site_mode_uvo(Site* site) {
 void sub_uvo_vent(Site* site) {
 
   int a, v;
-  float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"), NULL);
+  float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
+  NULL);
   float temp_heat = strtof(getStr(site->cfg, (void *) "temp_heat"), NULL);
 
   log3("Среда позваляет работать на вентиляторах?\n");
-      "Среда позваляет работать на вентиляторах?\n");
   if ((temp_support - site->temp_out) >= 2) {
     log3("Да позваляет\n");
     if ((site->acs[0]->mode == 1) || (site->acs[1]->mode == 1)) {
       log3("Кондиционеры были включены выключим\n");
-      fprintf(site->logger->eventLOG->fp, "Кондиционеры были включены выключим\n");
       for (a = 0; a < 2; a++) {
         site->acs[a]->set_mode(site->acs[a], 0);
       }
@@ -173,34 +148,26 @@ void sub_uvo_vent(Site* site) {
 
     if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1) {
       log3("Вентиляторы включены site->vents[0]->time_start = %d \n",
-      fprintf(site->logger->eventLOG->fp,
           "Вентиляторы включены site->vents[0]->time_start = %d \n",
           site->vents[0]->time_start);
       if ((time(NULL) - site->vents[0]->time_start) > 30) {
         if (site->tacho1_exists && site->tacho2_exists) {
-          log3(
-          fprintf(site->logger->eventLOG->fp,
-              "Проверим тахо site->vents[0]->step = %d "
-                  "site->tacho1 = %d, обороты %d | site->vents[1]->step "
-                  "= %d site->tacho2 = %d обороты %d \n", site->vents[0]->step,
+          log3("Проверим тахо site->vents[0]->step = %d "
+              "site->tacho1 = %d, обороты %d | site->vents[1]->step "
+              "= %d site->tacho2 = %d обороты %d \n", site->vents[0]->step,
               site->tacho1, site->tacho1_t, site->vents[1]->step, site->tacho2,
               site->tacho2_t);
           //if ((site->vents[0]->step != site->tacho1)
           //    || (site->vents[1]->step != site->tacho2)) {
           if ((site->tacho1 < 6) || (site->tacho2 < 6)) {
             log3("Какой-то вентилятор не вращается\n");
-            fprintf(site->logger->eventLOG->fp,
-                "Какой-то вентилятор не вращается\n");
             for (v = 0; v < 2; v++) {
               site->vents[v]->error = ERROR;
             }
-            log3(
-            fprintf(site->logger->eventLOG->fp,
-                "Авария уво переход на аварийное охлаждение кондиционером\n");
+            log3("Авария уво переход на аварийное охлаждение кондиционером\n");
             site_mode_fail_uvo(site);
           } else {
             log3("Вентиляторы вращаются\n");
-            fprintf(site->logger->eventLOG->fp, "Вентиляторы вращаются\n");
             for (v = 0; v < 2; v++) {
               site->vents[v]->error = NOERROR;
             }
@@ -215,15 +182,12 @@ void sub_uvo_vent(Site* site) {
 
       int curr_step = site->vents[0]->step;
       log3("curr_step = %d site->temp_in_prev = %f site->temp_in = %f\n",
-      fprintf(site->logger->eventLOG->fp,
           "curr_step = %d site->temp_in_prev = %f site->temp_in = %f\n",
           curr_step, site->temp_in_prev, site->temp_in);
 
       if (site->temp_in_prev != site->temp_in_prev_prev != site->temp_in) {
         if (site->temp_in_prev <= site->temp_in) {
           log3("Добавим обороты curr_step = %d\n", curr_step);
-          fprintf(site->logger->eventLOG->fp, "Добавим обороты curr_step = %d\n",
-              curr_step);
           if (curr_step != 10) {
             curr_step++;
             if (curr_step > 10) {
@@ -236,8 +200,6 @@ void sub_uvo_vent(Site* site) {
           }
         } else {
           log3("Уменьшим обороты curr_step = %d\n", curr_step);
-          fprintf(site->logger->eventLOG->fp, "Уменьшим обороты curr_step = %d\n",
-              curr_step);
           if (curr_step != 0) {
             curr_step--;
             if (curr_step < 0) {
@@ -255,8 +217,6 @@ void sub_uvo_vent(Site* site) {
       sub_uvo_th(site, 0);
     } else {
       log3("sub_uvo_vent Вентиляторы не включены включим\n");
-      fprintf(site->logger->eventLOG->fp,
-          "sub_uvo_vent Вентиляторы не включены включим\n");
       site->time_uvo = time(NULL);
       //site->temp_in_prev = site->temp_in; //видимо не сдесь так как тут мы только когда включаем
 
@@ -281,8 +241,6 @@ void sub_uvo_vent(Site* site) {
     }
   } else {
     log3("Температура не позваляет работать на вентиляторах\n");
-    fprintf(site->logger->eventLOG->fp,
-        ("Температура не позваляет работать на вентиляторах\n"));
     sub_uvo_pow(site);
   }
 }
@@ -291,7 +249,8 @@ int sub_uvo_pen(Site* site) {
 
   log1("Мы в sub_uvo_pen\n");
   int a, v;
-  float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"), NULL);
+  float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
+  NULL);
   float temp_heat = strtof(getStr(site->cfg, (void *) "temp_heat"), NULL);
 
   site->time_uvo = 0;
@@ -302,7 +261,6 @@ int sub_uvo_pen(Site* site) {
 
   if (site->temp_in < (temp_support - 2)) {
     log3("Температура ниже поддержания - 2\n");
-    fprintf(site->logger->eventLOG->fp, ("Температура ниже поддержания - 2\n"));
     if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1) {
       log4("Выключим вентиляторы\n");
       for (v = 0; v < 2; v++) {
@@ -323,14 +281,12 @@ int sub_uvo_pen(Site* site) {
 
     if (site->temp_in < temp_heat) {
       log3("Переходим в режим догрева\n");
-      fprintf(site->logger->eventLOG->fp, ("Переходим в режим догрева\n"));
       site_mode_heat(site);
     } else {
       return EXIT_SUCCESS; //вернем 0, чтоб перейти обратно в УВО
     }
   } else {
     log3("Температура выше поддержания + 2\n");
-    fprintf(site->logger->eventLOG->fp, ("Температура выше поддержания + 2\n"));
     if (site->power == 0) {
       //питания нет
       for (a = 0; a < 2; a++) {
@@ -340,16 +296,12 @@ int sub_uvo_pen(Site* site) {
       // переходим в режим охлаждения УВО
       // авария на кондиционере
       log3("переходим в режим охлаждения УВО  авария на кондиционере\n");
-      fprintf(site->logger->eventLOG->fp,
-          ("переходим в режим охлаждения УВО  авария на кондиционере\n"));
       site_mode_fail_ac(site);
     } else {
       //питание есть
       site->penalty++;
       // переходим в режим охлаждения кондиционером
       log3("переходим в режим охлаждения кондиционером\n");
-      fprintf(site->logger->eventLOG->fp,
-          ("переходим в режим охлаждения кондиционером\n"));
       site_mode_ac(site);
     }
   }
@@ -388,33 +340,29 @@ void sub_uvo_pow(Site* site) {
 //
 void sub_uvo_th(Site* site, int fail) {
 
-  fprintf(site->logger->eventLOG->fp, "*********sub_uvo_th**************\n");
+  log2("*********sub_uvo_th**************\n");
   int v;
   float temp_dew = strtof(getStr(site->cfg, (void *) "temp_dew"), NULL);
 
-  fprintf(site->logger->eventLOG->fp,
-      "sub_uvo_th temp_dew = %f site->temp_out = %f \n", temp_dew,
+  log3("sub_uvo_th temp_dew = %f site->temp_out = %f \n", temp_dew,
       site->temp_out);
   if (site->temp_out > temp_dew) {
-    fprintf(site->logger->eventLOG->fp, "Где заслонка\n");
+    log3("Где заслонка\n");
     // Заслонка выставлена на улицу
     if (site->th->position != 10) {
-
-      fprintf(site->logger->eventLOG->fp, "Переводим заслонку на улицу\n");
+      log3("Переводим заслонку на улицу\n");
       site->th->set_position(site->th, 10);
     }
   } else {
 
-    fprintf(site->logger->eventLOG->fp,
-        "Не настало ли время проверить работает ли заслонка? diff %d\n",
-        (time(NULL) - site->th->time_start));
+    log3("Не настало ли время проверить работает ли заслонка? diff %d\n",
+        time(NULL) - site->th->time_start);
     if ((time(NULL) - site->th->time_start) >= 120) {
 
-      fprintf(site->logger->eventLOG->fp, "Да настало, а есть ли откуда читать?\n");
+      log3("Да настало, а есть ли откуда читать?\n");
       site->th->time_start = time(NULL);
       if (site->th_r_exists) {
-
-        fprintf(site->logger->eventLOG->fp,
+        log3(
             "site->th->position = %d site->th_r = %d site->th->position_adc = %d\n",
             site->th->position, site->th_r, site->th->position_adc);
         if (site->th->position == site->th_r) {
@@ -426,7 +374,7 @@ void sub_uvo_th(Site* site, int fail) {
             site->th->set_position(site->th, curr_pos--);
           }
         } else {
-          fprintf(site->logger->eventLOG->fp, "Авария заслонки\n");
+          log3("Авария заслонки\n");
           if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1) {
             for (v = 0; v < 2; v++) {
               site->vents[v]->set_step(site->vents[v], 0);
@@ -440,7 +388,7 @@ void sub_uvo_th(Site* site, int fail) {
     }
     int curr_pos = site->th->position;
 
-    fprintf(site->logger->eventLOG->fp,
+    log3(
         "Температура в миксере %f температура росы %f site->th->position = %d\n",
         site->temp_mix, temp_dew, site->th->position);
     if (site->temp_mix >= temp_dew) {
@@ -448,8 +396,7 @@ void sub_uvo_th(Site* site, int fail) {
       if (curr_pos != 10) {
         curr_pos++;
         site->th->set_position(site->th, curr_pos);
-
-        fprintf(site->logger->eventLOG->fp, "Приоткроем заслонку %d\n", curr_pos);
+        log3("Приоткроем заслонку %d\n", curr_pos);
         site->th->time_start = time(NULL);
       }
     } else {
@@ -457,8 +404,7 @@ void sub_uvo_th(Site* site, int fail) {
       if (curr_pos != 0) {
         curr_pos--;
         site->th->set_position(site->th, curr_pos);
-
-        fprintf(site->logger->eventLOG->fp, "Призакроем заслонку %d\n", curr_pos);
+        log3("Призакроем заслонку %d\n", curr_pos);
         site->th->time_start = time(NULL);
       }
     }
@@ -473,8 +419,9 @@ void sub_uvo_th(Site* site, int fail) {
 
 int sub_uvo_fail(Site* site) {
 
-  fprintf(site->logger->eventLOG->fp, "sub_uvo_fail\n");
-  float temp_fail = strtof(getStr(site->cfg, (void *) "temp_fail"), NULL);
+  log3("sub_uvo_fail\n");
+  float temp_fail = strtof(getStr(site->cfg, (void *) "temp_fail"),
+  NULL);
 
   if ((site->temp_in) >= temp_fail) {
     // прерываем цикл
@@ -485,23 +432,22 @@ int sub_uvo_fail(Site* site) {
     float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
     NULL);
 
-    fprintf(site->logger->eventLOG->fp,
-        "sub_uvo_fail site->temp_in = %f temp_support = %f\n", site->temp_in,
+    log3("sub_uvo_fail site->temp_in = %f temp_support = %f\n", site->temp_in,
         temp_support);
 
     if ((site->temp_in >= (temp_support - 2))
         && (site->temp_in <= (temp_support) + 2)) {
 
-      fprintf(site->logger->eventLOG->fp,
+      log3(
           "Температура в пределах site->temp_in >= temp_support - 2 И site->temp_in <= temp_support + 2\n");
-      fprintf(site->logger->eventLOG->fp, "Перейдем sub_uvo_vent\n");
+      log3("Перейдем sub_uvo_vent\n");
       //sub_uvo_vent(site);
       // передадим исполнение в основную ветку
       return EXIT_FAILURE;
     } else {
 
-      fprintf(site->logger->eventLOG->fp, "Температура не в пределах\n");
-      fprintf(site->logger->eventLOG->fp, "Перейдем sub_uvo_pen\n");
+      log3("Температура не в пределах\n");
+      log3("Перейдем sub_uvo_pen\n");
       return sub_uvo_pen(site);
     }
   }
@@ -512,7 +458,7 @@ int site_mode_ac(Site* site) {
   //проверил основные моменты
   printf("Режим охлаждения кондиционером!\n");
 
-  fprintf(site->logger->eventLOG->fp, "Режим охлаждения кондиционером!\n");
+  log3("Режим охлаждения кондиционером!\n");
 
   //    "Режим охлаждения кондиционером");
 
@@ -532,7 +478,7 @@ int site_mode_ac(Site* site) {
 
   int num_ac_tmp = num_ac;
 
-  fprintf(site->logger->eventLOG->fp,
+  log3(
       "Количество кондиционеров num_ac_tmp = %d is_diff_0 = %d is_diff_1 = %d\n",
       num_ac_tmp, site->acs[0]->is_diff, site->acs[1]->is_diff);
 
@@ -540,12 +486,11 @@ int site_mode_ac(Site* site) {
     site->acs[a]->set_mode(site->acs[a], 1);
     site->acs[a]->time_start = time(NULL);
 
-    fprintf(site->logger->eventLOG->fp,
-        "Включили кондиционер КОНД_%d время включения %d\n", a,
+    log3("Включили кондиционер КОНД_%d время включения %d\n", a,
         site->acs[a]->time_start);
   }
 
-  fprintf(site->logger->eventLOG->fp, "До while Режим охлаждения кондиционером\n");
+  log3("До while Режим охлаждения кондиционером\n");
   while (1) { // sensors was read - ok
 
     int ret;
@@ -560,7 +505,7 @@ int site_mode_ac(Site* site) {
       continue;
     } else {
 
-      fprintf(site->logger->eventLOG->fp,
+      log3(
           "*************Принятие решения Режим охлаждения кондиционером***************\n");
       site->time_pre = time(NULL);
 
@@ -569,14 +514,13 @@ int site_mode_ac(Site* site) {
             && (site->acs[a_cond]->mode == 1)) {
           //да КОНД_0 Набрал дельту
 
-          fprintf(site->logger->eventLOG->fp,
-              "Набрал дельту КОНД_%d %f дельта %f\n", a_cond,
+          log3("Набрал дельту КОНД_%d %f дельта %f\n", a_cond,
               site->acs[a_cond]->temp,
               (site->temp_in - site->acs[a_cond]->temp));
           if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1) {
             // да
 
-            fprintf(site->logger->eventLOG->fp, "выключим вентиляцию\n");
+            log3("выключим вентиляцию\n");
             //выключим вентиляцию
             for (v = 0; v < 2; v++) {
               if (site->vents[v]->mode == 1)
@@ -604,7 +548,7 @@ int site_mode_ac(Site* site) {
         } else {
           //нет КОНД_x не набрал пока дельту
 
-          fprintf(site->logger->eventLOG->fp,
+          log3(
               " КОНД_%d не набрал пока дельту temp_in %f site->acs[a_cond]->temp %f \n",
               a_cond, site->temp_in, site->acs[a_cond]->temp);
           site->acs[a_cond]->is_diff = 0;
@@ -612,11 +556,10 @@ int site_mode_ac(Site* site) {
 
         //600
         // отработан промежуток?
-        fprintf(site->logger->eventLOG->fp, "Цикл КОНД_%d\n", a_cond);
+        log3("Цикл КОНД_%d\n", a_cond);
         //printf("600 отработан промежуток? diff %d time_start_%d %d\n",(difftime(time(NULL), site->acs[a_cond]->time_start)), a_cond, site->acs[a_cond]->time_start);
 
-        fprintf(site->logger->eventLOG->fp,
-            "600 отработан промежуток? time_start_%d %d time %d diff %d %f\n",
+        log3("600 отработан промежуток? time_start_%d %d time %d diff %d %f\n",
             a_cond, site->acs[a_cond]->time_start, time(
             NULL), time(NULL) - site->acs[a_cond]->time_start,
             difftime(time(NULL), site->acs[a_cond]->time_start));
@@ -624,7 +567,7 @@ int site_mode_ac(Site* site) {
         && (site->acs[a_cond]->mode == 1)) {
           //дельта набрана?
 
-          fprintf(site->logger->eventLOG->fp,
+          log3(
               "ДА 600 прошло дельта набрана? time %d - time_start %d = %f is_diff = %d\n",
               time(
               NULL), site->acs[a_cond]->time_start,
@@ -632,16 +575,14 @@ int site_mode_ac(Site* site) {
               site->acs[a_cond]->is_diff);
           if (site->acs[a_cond]->is_diff == 0) {
 
-            fprintf(site->logger->eventLOG->fp,
-                ("Авария кондиционера num_ac_tmp = %d\n", num_ac_tmp));
+            log3(("Авария кондиционера num_ac_tmp = %d\n", num_ac_tmp));
             // Авария кондиционера
             num_ac_tmp--;
 
-            fprintf(site->logger->eventLOG->fp, ("num_ac_tmp = %d", num_ac_tmp));
+            log3(("num_ac_tmp = %d", num_ac_tmp));
             // Выключим нерабочий кондиционер
 
-            fprintf(site->logger->eventLOG->fp,
-                ("Выключим нерабочий кондиционер КОНД_%d\n", a_cond));
+            log3(("Выключим нерабочий кондиционер КОНД_%d\n", a_cond));
             if (site->acs[a_cond]->mode == 1) {
               site->acs[a_cond]->set_mode(site->acs[a_cond], 0);
               site->acs[a_cond]->mode = 0;
@@ -650,13 +591,11 @@ int site_mode_ac(Site* site) {
         } //600
       } //for
 
-      fprintf(site->logger->eventLOG->fp,
-          ("еще есть живые кондиционеры? num_ac_tmp = %d\n", num_ac_tmp));
+      log3(("еще есть живые кондиционеры? num_ac_tmp = %d\n", num_ac_tmp));
       // еще есть живые кондиционеры?
       if (num_ac_tmp > 0) {
 
-        fprintf(site->logger->eventLOG->fp,
-            ("Да еще есть кондиционеры num_ac_tmp = %d\n", num_ac_tmp));
+        log3(("Да еще есть кондиционеры num_ac_tmp = %d\n", num_ac_tmp));
         //да
         float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
         NULL);
@@ -666,7 +605,7 @@ int site_mode_ac(Site* site) {
 
         if ((temp_support - site->temp_out) > (site->penalty + 2)) {
 
-          fprintf(site->logger->eventLOG->fp,
+          log3(
               ("Температура позволяет перейти на УВО переходим в УВО temp_support %f site->temp_out %f site->penalty %d \n", temp_support, site->temp_out, site->penalty));
           // переходим в УВО
           site_mode_uvo(site);
@@ -674,21 +613,20 @@ int site_mode_ac(Site* site) {
         } else {
           if (site->temp_in >= temp_fail) {
 
-            fprintf(site->logger->eventLOG->fp,
+            log3(
                 "Температура выше аварийной переходим в аварийный режим site->temp_in %f temp_fail %f\n",
                 site->temp_in, temp_fail);
             //переходим в аварийный режим
             site_mode_fail_ac(site);
           } else {
-            fprintf(site->logger->eventLOG->fp, ("работа нормальная\n"));
+            log3(("работа нормальная\n"));
             // работа нормальная
             continue;
           }
         }
       } else {
 
-        fprintf(site->logger->eventLOG->fp,
-            ("НЕТ живых кондиционеров переходим в аварийный режим\n"));
+        log3(("НЕТ живых кондиционеров переходим в аварийный режим\n"));
         // авария кондиционирования
         // переходим на УВО
         site_mode_fail_ac(site);
@@ -702,7 +640,7 @@ int site_mode_ac(Site* site) {
 /* Режим догрева сайта */
 int site_mode_heat(Site* site) {
 
-  fprintf(site->logger->eventLOG->fp, ("Режим догрева сайта!\n"));
+  log3(("Режим догрева сайта!\n"));
   //    "Режим догрева сайта"); //падает при повторном вызове
   site->mode = 3;
 
@@ -716,8 +654,7 @@ int site_mode_heat(Site* site) {
     site->vents[v]->error = ERROR_HEAT;
   }
 
-  fprintf(site->logger->eventLOG->fp,
-      ("Проверим положение заслонки %d\n", site->th->position));
+  log3(("Проверим положение заслонки %d\n", site->th->position));
   if (site->th->position > 1) {
     // улица
     site->th->set_position(site->th, 0);
@@ -738,20 +675,20 @@ int site_mode_heat(Site* site) {
       if (((time(NULL) - site->th->time_start) >= 30) && site->th_r_exists) {
         if (difftime(time(NULL), site->th->time_start) >= 30) {
 
-          fprintf(site->logger->eventLOG->fp,
+          log3(
               ("Настало время проверить перевилась ли заслонка site->th_check = %d\n", site->th_check));
           //да Необходимо проверить перевилась ли заслонка
           // не было проверки закслонки
 
-          fprintf(site->logger->eventLOG->fp,
+          log3(
               ("site->th->position = %d th_pos_read = %d", site->th->position, th_pos_read));
           if (site->th->position == th_pos_read) {
 
-            fprintf(site->logger->eventLOG->fp, ("да заслонка исправна\n"));
+            log3(("да заслонка исправна\n"));
             break;
           } else {
 
-            fprintf(site->logger->eventLOG->fp, ("заслонка не исправна\n"));
+            log3(("заслонка не исправна\n"));
             site_mode_fail_uvo(site);
           }
         }
@@ -761,8 +698,7 @@ int site_mode_heat(Site* site) {
     }
   }
 
-  fprintf(site->logger->eventLOG->fp,
-      "Перед ЦИКЛ ДОГРЕВ time %d site->time_pre %d diff %f\n", time(NULL),
+  log3("Перед ЦИКЛ ДОГРЕВ time %d site->time_pre %d diff %f\n", time(NULL),
       site->time_pre, difftime(time(NULL), site->time_pre));
   while (1) {
     // читаем датчики
@@ -780,8 +716,7 @@ int site_mode_heat(Site* site) {
       continue;
     } else {
 
-      fprintf(site->logger->eventLOG->fp,
-          ("*****************Принятие решения ДОГРЕВ*******************\n"));
+      log3(("*****************Принятие решения ДОГРЕВ*******************\n"));
       site->time_pre = time(NULL);
 
       float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
@@ -790,19 +725,17 @@ int site_mode_heat(Site* site) {
       if (site->temp_in >= temp_support - 4) { //TODO: необходимо ввести параметр до какой температуры греть
                                                //да
 
-        fprintf(site->logger->eventLOG->fp,
-            "Сайт нагрели %f\n выключим ТЭН temp_mix %f", site->temp_in,
+        log3("Сайт нагрели %f\n выключим ТЭН temp_mix %f", site->temp_in,
             site->temp_mix);
         set_ten(site, 0);
 
         if (site->temp_mix > 60) {
 
-          fprintf(site->logger->eventLOG->fp,
-              ("ТЭН не остыл еще продолжим вентиляцию\n"));
+          log3(("ТЭН не остыл еще продолжим вентиляцию\n"));
           continue; // продолжаем цикл догрева
         } else {
 
-          fprintf(site->logger->eventLOG->fp, ("ТЭН остыл выключим вентиляцию\n"));
+          log3(("ТЭН остыл выключим вентиляцию\n"));
           site->vents[0]->set_step(site->vents[0], 0); // обороты приточного
 
           //выключим вентиляцию
@@ -811,13 +744,12 @@ int site_mode_heat(Site* site) {
           //    site->vents[v]->set_mode(site->vents[v], 0);
           //}
 
-          fprintf(site->logger->eventLOG->fp,
-              ("Перейдем в режим охлаждения УВО\n"));
+          log3(("Перейдем в режим охлаждения УВО\n"));
           site_mode_uvo(site); // режим охлаждения уво
         }
       } else {
         //нет
-        fprintf(site->logger->eventLOG->fp, ("Нужно греть сайт\n"));
+        log3(("Нужно греть сайт\n"));
         // TODO: Проверить по описанию
         if (site->vents[0]->mode == 0) {
           site->vents[0]->set_mode(site->vents[0], 1);
@@ -827,32 +759,30 @@ int site_mode_heat(Site* site) {
 
         if (difftime(time(NULL), site->vents[0]) > 30) {
 
-          fprintf(site->logger->eventLOG->fp,
-              ("Проверим вращается ли вентилятор\n"));
+          log3(("Проверим вращается ли вентилятор\n"));
           //да
 
           if ((site->vents[0]->step == site->tacho1)
               || (site->tacho1_exists != 1)) {
-            fprintf(site->logger->eventLOG->fp, ("Да вращается\n"));
+            log3(("Да вращается\n"));
             //да
             site->vents[0]->time_start = time(NULL);
             if ((site->ten == 1) && site->vents[0]->error == ERROR_HEAT) {
 
-              fprintf(site->logger->eventLOG->fp,
-                  ("Пока неизвестно вращается ли вентилятор\n"));
+              log3(("Пока неизвестно вращается ли вентилятор\n"));
               //да
               continue;
 
             } else {
               //нет
 
-              fprintf(site->logger->eventLOG->fp, ("Да вращается включим ТЭН\n"));
+              log3(("Да вращается включим ТЭН\n"));
               set_ten(site, 1);
               continue;
             }
           } else {
 
-            fprintf(site->logger->eventLOG->fp,
+            log3(
                 ("АВАРИЯ вентилятора Авария вентиляции - охлаждение кондиционером\n"));
             //нет
             set_ten(site, 0);
@@ -863,8 +793,7 @@ int site_mode_heat(Site* site) {
           }
         } else {
 
-          fprintf(site->logger->eventLOG->fp,
-              ("Время проверки работает ли вентилятор еще не настало\n"));
+          log3(("Время проверки работает ли вентилятор еще не настало\n"));
           //нет
           //if (((site->ten == 1) && site->vents[0]->error == ERROR_HEAT)
           //    || ((site->ten == 1) && site->vents[1]->error == ERROR_HEAT)) {
@@ -892,7 +821,7 @@ int site_mode_heat(Site* site) {
  * Авария заслонки - Авария охлаждения кондиционером */
 int site_mode_fail_uvo(Site* site) {
 
-  fprintf(site->logger->eventLOG->fp, ("site_mode_fail_uvo: Режим авария УВО!\n"));
+  log3(("site_mode_fail_uvo: Режим авария УВО!\n"));
   //    "Режим авария УВО");
   site->mode = 4;
   site->time_pre = time(NULL);
@@ -912,7 +841,7 @@ int site_mode_fail_uvo(Site* site) {
     site->acs[a]->set_mode(site->acs[a], 1);
     site->acs[a]->time_start = time(NULL);
 
-    fprintf(site->logger->eventLOG->fp,
+    log3(
         ("site_mode_fail_uvo: Включили кондиционер КОНД_%d время включения %d\n", a, site->acs[a]->time_start));
   }
 
@@ -932,7 +861,7 @@ int site_mode_fail_uvo(Site* site) {
       continue;
     } else {
 
-      fprintf(site->logger->eventLOG->fp,
+      log3(
           ("site_mode_fail_uvo: ****************Авария УВО работаем на кондиционере принятие решения*******************\n"));
       site->time_pre = time(NULL);
 
@@ -941,8 +870,9 @@ int site_mode_fail_uvo(Site* site) {
             && (site->acs[a_cond]->mode == 1)) {
           //да
 
-          fprintf(site->logger->eventLOG->fp,
-              "site_mode_fail_uvo: КОНД_%d набрал дельту site->temp_in = %f site->acs[a_cond]->temp = %f\n", a_cond, site->temp_in, site->acs[a_cond]->temp);
+          log3(
+              "site_mode_fail_uvo: КОНД_%d набрал дельту site->temp_in = %f site->acs[a_cond]->temp = %f\n",
+              a_cond, site->temp_in, site->acs[a_cond]->temp);
           if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1) {
             //да
             // выключим вентиляцию
@@ -974,22 +904,22 @@ int site_mode_fail_uvo(Site* site) {
       float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
       NULL);
 
-      fprintf(site->logger->eventLOG->fp,
-          ("Проверим температуру в сайте может попробуем перейти на УВО\n"));
+      log3(("Проверим температуру в сайте может попробуем перейти на УВО\n"));
 
-      fprintf(site->logger->eventLOG->fp,
+      log3(
           ("temp_support = %f site->temp_out = %f site->penalty = %d\n", temp_support, site->temp_out, site->penalty));
       if ((temp_support - site->temp_out) >= (site->penalty + 2)) {
 
-        fprintf(site->logger->eventLOG->fp,
-            "Да температура на улице позволяет, а в сайте температура ниже поддержания - 2 site->temp_in = %f temp_support = %f\n", site->temp_in, temp_support);
+        log3(
+            "Да температура на улице позволяет, а в сайте температура ниже поддержания - 2 site->temp_in = %f temp_support = %f\n",
+            site->temp_in, temp_support);
         if (site->temp_in < temp_support - 2) {
           // переходим в УВО
-          fprintf(site->logger->eventLOG->fp, ("Да сайт позволяет\n"));
+          log3(("Да сайт позволяет\n"));
           site_mode_uvo(site);
         } else {
 
-          fprintf(site->logger->eventLOG->fp, ("Нет сайт не позволяет\n"));
+          log3(("Нет сайт не позволяет\n"));
           //продолжаем в текущем режиме
           continue;
         }
@@ -1005,7 +935,7 @@ int site_mode_fail_uvo(Site* site) {
 
 /* Авария кондиционеров - Охлаждение УВО */
 int site_mode_fail_ac(Site* site) {
-  fprintf(site->logger->eventLOG->fp, ("Режим авария кондиционеров!\n"));
+  log3(("Режим авария кондиционеров!\n"));
   //    "Режим авария кондиционеров");
   site->mode = 5;
 
@@ -1045,7 +975,7 @@ int site_mode_fail_ac(Site* site) {
       continue;
     } else {
 
-      fprintf(site->logger->eventLOG->fp,
+      log3(
           ("********************Принятие решения авария кондиционеров работает УВО****************\n"));
       if ((difftime(time(NULL), site->th->time_start) >= 30)
           && (site->th_check == 0)) {
@@ -1071,8 +1001,7 @@ int site_mode_fail_ac(Site* site) {
         site->acs[a]->set_mode(site->acs[a], 0);
       }
 
-      fprintf(site->logger->eventLOG->fp,
-          ("site_mode_fail_ac: включим вентиляцию\n"));
+      log3(("site_mode_fail_ac: включим вентиляцию\n"));
       // включим вентиляцию
 
       float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
@@ -1083,7 +1012,7 @@ int site_mode_fail_ac(Site* site) {
         for (v = 0; v < 2; v++) {
           if (site->vents[v]->mode == 0) {
 
-            fprintf(site->logger->eventLOG->fp,
+            log3(
                 ("Температура на улице ниже температуры в сайте включим вентиляторы\n"));
             site->vents[v]->set_step(site->vents[v], 10); // 100%
             site->vents[v]->time_start = time(NULL);
@@ -1093,7 +1022,7 @@ int site_mode_fail_ac(Site* site) {
         for (v = 0; v < 2; v++) {
           if (site->vents[v]->mode == 1) {
 
-            fprintf(site->logger->eventLOG->fp,
+            log3(
                 ("Температура на улице выше температуры в сайте выключим вентиляторы\n"));
             site->vents[v]->set_step(site->vents[v], 0); // 0%
             site->vents[v]->time_start = time(NULL);
@@ -1111,7 +1040,7 @@ int site_mode_fail_ac(Site* site) {
         }
       }
 
-      fprintf(site->logger->eventLOG->fp,
+      log3(
           ("Проверим кондишки если авария по питанию и питание появилось можно перейти\n"));
       // проверяем кондиционеры
       //
@@ -1119,17 +1048,16 @@ int site_mode_fail_ac(Site* site) {
         if (site->acs[a]->error == NOPOWER) {
           if (site->power == 1) {
 
-            fprintf(site->logger->eventLOG->fp, ("Да питание есть перейдем\n"));
+            log3(("Да питание есть перейдем\n"));
             site_mode_ac(site); // переходим в нормальный режим;
           }
         }
       }
 
-      fprintf(site->logger->eventLOG->fp,
-          ("Проверим температура не ниже поддержания - 2\n"));
+      log3(("Проверим температура не ниже поддержания - 2\n"));
       if (site->temp_in < temp_support - 2) {
 
-        fprintf(site->logger->eventLOG->fp,
+        log3(
             ("Да ниже выключим вениляцию site->vents[v]->mode = %d\n", site->vents[v]->mode));
         // выключим вениляцию
         for (v = 0; v < 2; v++) {
@@ -1149,11 +1077,11 @@ int site_mode_fail_ac(Site* site) {
         float temp_heat = strtof(getStr(site->cfg, (void *) "temp_heat"),
         NULL);
 
-        fprintf(site->logger->eventLOG->fp,
-            "Сайт не замерз? site->temp_in = %f temp_heat = %f\n", site->temp_in, temp_heat);
+        log3("Сайт не замерз? site->temp_in = %f temp_heat = %f\n",
+            site->temp_in, temp_heat);
         if (site->temp_in < temp_heat) {
 
-          fprintf(site->logger->eventLOG->fp, ("Да замерз пойдем греть\n"));
+          log3(("Да замерз пойдем греть\n"));
           site_mode_heat(site);
         }
 
@@ -1161,8 +1089,7 @@ int site_mode_fail_ac(Site* site) {
 
       }
 
-      fprintf(site->logger->eventLOG->fp,
-          ("Переход на функцию логики управления заслонкой\n"));
+      log3(("Переход на функцию логики управления заслонкой\n"));
       sub_uvo_th(site, 1); // Работа с залонкой
     }
   }
@@ -1172,7 +1099,7 @@ int site_mode_fail_ac(Site* site) {
 /* Превышена температура аварии - Аварийный режим охлаждения*/
 int site_mode_fail_temp(Site* site) {
 
-  fprintf(site->logger->eventLOG->fp, ("Общий аварийный режим!\n"));
+  log3(("Общий аварийный режим!\n"));
   //     "Общий аварийный режим");
   site->mode = 6;
 
@@ -1230,16 +1157,14 @@ int site_mode_fail_temp_uvo(Site* site) {
     if (site->th->exist) //Это есть ли заслонка? или есть ли откуда читать
     {
 
-      fprintf(site->logger->eventLOG->fp,
-          ("переведем заслонку в положение улица\n"));
+      log3(("переведем заслонку в положение улица\n"));
       site->th->set_position(site->th, 10); //переведем заслонку в положение улица
       site->th->time_start = time(NULL);
     }
   } else {
     if (site->th->exist) {
 
-      fprintf(site->logger->eventLOG->fp,
-          ("переведем заслонку в положение сайт\n"));
+      log3(("переведем заслонку в положение сайт\n"));
       site->th->set_position(site->th, 0); //переведем заслонку в положение сайт
       site->th->time_start = time(NULL);
     }
@@ -1273,7 +1198,7 @@ int site_mode_fail_temp_uvo(Site* site) {
     }
 
     if (site->acs[0]->mode == 1 || site->acs[1]->mode == 1) {
-      fprintf(site->logger->eventLOG->fp, ("Выключим кондиционеры\n"));
+      log3(("Выключим кондиционеры\n"));
       for (a = 0; a < 2; a++) {
         site->acs[a]->set_mode(site->acs[a], 0);
       }
@@ -1310,8 +1235,7 @@ int site_mode_fail_temp_uvo(Site* site) {
 
 int site_mode_fail_temp_ac(Site* site) {
 
-  fprintf(site->logger->eventLOG->fp,
-      ("Авария по температуре: режим охлаждения кондиционером!\n"));
+  log3(("Авария по температуре: режим охлаждения кондиционером!\n"));
 
   //    "Режим охлаждения кондиционером");
   site->time_pre = time(NULL);
@@ -1361,7 +1285,7 @@ int site_mode_fail_temp_ac(Site* site) {
       continue;
     } else {
 
-      fprintf(site->logger->eventLOG->fp,
+      log3(
           ("*************Принятие решения Режим охлаждения кондиционером***************\n"));
       site->time_pre = time(NULL);
 
@@ -1379,7 +1303,7 @@ int site_mode_fail_temp_ac(Site* site) {
           if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1) {
             // да
 
-            fprintf(site->logger->eventLOG->fp, ("выключим вентиляцию\n"));
+            log3(("выключим вентиляцию\n"));
             //выключим вентиляцию
             for (v = 0; v < 2; v++) {
               if (site->vents[v]->mode == 1)
@@ -1392,40 +1316,39 @@ int site_mode_fail_temp_ac(Site* site) {
         } else {
           //нет КОНД_x не набрал пока дельту
 
-          fprintf(site->logger->eventLOG->fp,
-              " КОНД_%d не набрал пока дельту temp_in %f site->acs[a_cond]->temp %f \n", a_cond, site->temp_in, site->acs[a_cond]->temp);
+          log3(
+              " КОНД_%d не набрал пока дельту temp_in %f site->acs[a_cond]->temp %f \n",
+              a_cond, site->temp_in, site->acs[a_cond]->temp);
           site->acs[a_cond]->is_diff = 0;
         }
 
         //600
         // отработан промежуток?
-        fprintf(site->logger->eventLOG->fp, ("Цикл КОНД_%d\n", a_cond));
+        log3(("Цикл КОНД_%d\n", a_cond));
         //printf("600 отработан промежуток? diff %d time_start_%d %d\n",(difftime(time(NULL), site->acs[a_cond]->time_start)), a_cond, site->acs[a_cond]->time_start);
 
-        fprintf(site->logger->eventLOG->fp,
-            "600 отработан промежуток? time_start_%d %d time %d diff %d %f\n", a_cond, site->acs[a_cond]->time_start, time(
-            NULL), time(NULL) - site->acs[a_cond]->time_start, difftime(
-                time(NULL), site->acs[a_cond]->time_start));
+        log3("600 отработан промежуток? time_start_%d %d time %d diff %d %f\n",
+            a_cond, site->acs[a_cond]->time_start, time(
+            NULL), time(NULL) - site->acs[a_cond]->time_start,
+            difftime(time(NULL), site->acs[a_cond]->time_start));
         if ((difftime(time(NULL), site->acs[a_cond]->time_start) > 60) //600 для тестов 60
         && (site->acs[a_cond]->mode == 1)) {
           //дельта набрана?
 
-          fprintf(site->logger->eventLOG->fp,
+          log3(
               ("ДА 600 прошло дельта набрана? time %d - time_start %d = %f is_diff = %d\n", time(
               NULL), site->acs[a_cond]->time_start, (difftime(time(NULL),
                   site->acs[a_cond]->time_start)), site->acs[a_cond]->is_diff));
           if (site->acs[a_cond]->is_diff == 0) {
 
-            fprintf(site->logger->eventLOG->fp,
-                ("Авария кондиционера num_ac_tmp = %d\n", num_ac_tmp));
+            log3(("Авария кондиционера num_ac_tmp = %d\n", num_ac_tmp));
             // Авария кондиционера
             num_ac_tmp--;
 
-            fprintf(site->logger->eventLOG->fp, ("num_ac_tmp = %d", num_ac_tmp));
+            log3(("num_ac_tmp = %d", num_ac_tmp));
             // Выключим нерабочий кондиционер
 
-            fprintf(site->logger->eventLOG->fp,
-                ("Выключим нерабочий кондиционер КОНД_%d\n", a_cond));
+            log3("Выключим нерабочий кондиционер КОНД_%d\n", a_cond);
             if (site->acs[a_cond]->mode == 1) {
               site->acs[a_cond]->set_mode(site->acs[a_cond], 0);
               site->acs[a_cond]->mode = 0;
@@ -1434,8 +1357,7 @@ int site_mode_fail_temp_ac(Site* site) {
         } //600
       } //for
 
-      fprintf(site->logger->eventLOG->fp,
-          ("еще есть живые кондиционеры? num_ac_tmp = %d\n", num_ac_tmp));
+      log3("еще есть живые кондиционеры? num_ac_tmp = %d\n", num_ac_tmp);
       // еще есть живые кондиционеры?
       if (num_ac_tmp > 0) {
         if ((site->temp_in - site->temp_out) > 6) {
@@ -1489,17 +1411,16 @@ int set_ten(Site* site, int val) {
 
   int addr, value, bit = 0;
   addr = strtol(getStr(site->cfg, "a_relay"), NULL, 16);
-  fprintf(site->logger->eventLOG->fp, ("Изменим тен\n"));
+  log3("Изменим тен\n");
   char buf[1];
 
   if (ioctl(g_i2cFile, I2C_SLAVE, addr) < 0) {
 
-    fprintf(site->logger->eventLOG->fp,
-        "Failed to acquire bus access and/or talk to slave.\n");
+    log3("Failed to acquire bus access and/or talk to slave.\n");
   }
 
   if (read(g_i2cFile, buf, 1) != 1) {
-    fprintf(site->logger->eventLOG->fp, "Error reading from i2c\n");
+    log3("Error reading from i2c\n");
   }
 
   value = (int) buf[0];
@@ -1510,8 +1431,6 @@ int set_ten(Site* site, int val) {
     else
       value |= (1 << bit); // установим бит
 
-    //printf("Управляем регистром, адрес %x, значение %d, %x , бит %d \n", addr,
-    //    val, value, bit);
     set_i2c_register(g_i2cFile, addr, value, value);
     site->ten = val;
     i2cClose();
@@ -1547,16 +1466,6 @@ int read_sensors(Site* site) {
 
   site->acs[0]->temp = site->temp_evapor1;
   site->acs[1]->temp = site->temp_evapor2;
-//printf("temp_out = %2.2f\n", site->temp_out);
-//printf("temp_in = %2.2f\n", site->temp_in);
-//printf("temp_mix = %2.2f\n", site->temp_mix);
-//printf("temp_evapor1 = %2.2f\n", site->temp_evapor1);
-//printf("temp_evapor2 = %2.2f\n", site->temp_evapor2);
-
-//site->tacho1 = i2c_get_tacho_step(site->vents[0],
-//    strtol(a_tacho_in, NULL, 16));
-//site->tacho2 = i2c_get_tacho_step(site->vents[1],
-//    strtol(a_tacho_out, NULL, 16));
 
   i2c_get_tacho(strtol(a_tacho_in, NULL, 16), strtol(a_tacho_out, NULL, 16));
 
@@ -1568,16 +1477,14 @@ int read_sensors(Site* site) {
 //TODO: Переписать в виде синглетона
 //TODO: Добавить мьютексы для многопоточного доступа к переменным
 Site* site_new(char* filename) {
-  //printf("Попытаемся создать сайт\n");
+
   Site* site = malloc(sizeof(Site));
-//initialize hardware
   int i;
   for (i = 0; i < 2; i++) {
     site->acs[i] = ac_new(i);
     site->vents[i] = vent_new();
   }
 
-// Укажем конкретный тип для вентилятора
   site->vents[0]->type = 0; // приточный
   site->vents[1]->type = 1;
 
@@ -1587,16 +1494,12 @@ Site* site_new(char* filename) {
   site->temp_in_prev = 0;
   site->conn = NULL;
 
-// Для тестирования на эмуляторе
-//site->mount_point = "/mnt/1wire/";
   site->mount_point = "/bus.0/";
-  //printf("Попытаемся считать конфиг\n");
   site->cfg = read_config(filename);
 
   site->set_mode = set_mode;
   site->set_ten = set_ten;
-//site->get_ac_time_work = get_time_work;
-  //printf("Попытаемся создать журнал\n");
+
   site->logger = create_logger();
 
   return site;
