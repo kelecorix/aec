@@ -28,9 +28,10 @@ void write_log(FILE* fp, char* msg, ...) {
   strftime(date, 25, "%Y:%m:%d %H:%M:%S", tm_info);
   fprintf(fp, date);
   fprintf(fp, "|");
+  va_start (args, msg);
   vfprintf(fp, msg, args);
+  va_end (args);
   fprintf(fp, "\n");
-
   fclose(fp);
 }
 
@@ -107,8 +108,9 @@ void log0(FileLogWriter* flog, int pf, char* msg, ...){
   }
   // pf - printf flag
   if (site->gpf)
+    va_start (args, msg);
     printf(msg, args);
-
+    va_end (args);
 }
 
 
@@ -122,8 +124,9 @@ void log1(char* msg, ...){
   }  
   // pf - printf flag
   if (site->gpf)
+    va_start (args, msg);
     vprintf(msg, args);
-
+    va_end (args);
 }
 
 // Light Debug
@@ -136,7 +139,9 @@ void log2(char* msg, ...){
   }
   // pf - printf flag
   if (site->gpf)
+    va_start (args, msg);
     vprintf(msg, args);
+    va_end (args);
 }
 
 // Debug
@@ -150,7 +155,9 @@ void log3(char* msg, ...){
 
   // pf - printf flag
   if (site->gpf)
+    va_start (args, msg);
     vprintf(msg, args);
+    va_end (args);
 }
 
 // Deep Debug
@@ -164,5 +171,7 @@ void log4(char* msg, ...){
 
   // pf - printf flag
   if (site->gpf)
+    va_start (args, msg);
     vprintf(msg, args);
+    va_end (args);
 }
