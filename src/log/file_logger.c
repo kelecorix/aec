@@ -37,6 +37,7 @@ void write_log(FileLogWriter* flw, char* message) {
   fprintf(fp, "\n");
 
   fclose(fp);
+  usleep(1000);
 }
 
 void write_data_log(Site* site) {

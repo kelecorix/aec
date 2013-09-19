@@ -25,13 +25,9 @@ int main(int argc, char *argv[]) {
 
   site = site_new(filename);
 
-  if (site->cfg){
-    //float temp_dew = strtof(getStr(site->cfg, (void *) "temp_dew"), NULL);
+  if (site->cfg)
     write_log( site->logger->eventLOG, ssprintf("Config was read ok!\n"));
-    //write_log(site->logger->eventLOG,
-    //      ssprintf("Переведем заслонку site->temp_out = %f temp_dew = %f\n",
-    //          site->temp_out, temp_dew));
-  }
+
   site->conn = create_server_conn("127.0.0.1:4304");
   if (site->conn == 0)
     printf("OWFS connection established!\n");
@@ -58,12 +54,12 @@ int main(int argc, char *argv[]) {
 
   sleep(4);
 
-//  printf("Создадим поток журналирования\n");
-//  if(pthread_create(&threadL, NULL, run_logger, (void*) site)) {
-//    fprintf(stderr, "Error creating Logger thread\n");
-//    printf("Error creating Logger thread\n");
-//    return 1;
-//  }
+  printf("Создадим поток журналирования\n");
+  if(pthread_create(&threadL, NULL, run_logger, (void*) site)) {
+    fprintf(stderr, "Error creating Logger thread\n");
+    printf("Error creating Logger thread\n");
+    return 1;
+  }
 
   sleep(4);
 
@@ -71,7 +67,7 @@ int main(int argc, char *argv[]) {
 // по идде сюда не должно дойти
   pthread_join(threadA, retA);
   pthread_join(threadU, retU);
-  //pthread_join(threadL, retL);
+  pthread_join(threadL, retL);
 
   // Для тестов оборудования
   //i2cTestHardware();
