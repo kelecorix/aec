@@ -122,7 +122,7 @@ void log1(char* msg, ...){
   }  
   // pf - printf flag
   if (site->gpf)
-    printf(msg, args);
+    vprintf(msg, args);
 
 }
 
@@ -136,7 +136,7 @@ void log2(char* msg, ...){
   }
   // pf - printf flag
   if (site->gpf)
-    printf(msg, args);
+    vprintf(msg, args);
 }
 
 // Debug
@@ -150,7 +150,7 @@ void log3(char* msg, ...){
 
   // pf - printf flag
   if (site->gpf)
-    printf(msg, args);
+    vprintf(msg, args);
 }
 
 // Deep Debug
@@ -164,5 +164,5 @@ void log4(char* msg, ...){
 
   // pf - printf flag
   if (site->gpf)
-    printf(msg, args);
+    vprintf(msg, args);
 }
