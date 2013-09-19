@@ -570,7 +570,7 @@ int site_mode_ac(Site* site) {
         } //600
       } //for
 
-      log3(("еще есть живые кондиционеры? num_ac_tmp = %d\n", num_ac_tmp));
+      log3("еще есть живые кондиционеры? num_ac_tmp = %d\n", num_ac_tmp);
       // еще есть живые кондиционеры?
       if (num_ac_tmp > 0) {
 
@@ -619,7 +619,7 @@ int site_mode_ac(Site* site) {
 /* Режим догрева сайта */
 int site_mode_heat(Site* site) {
 
-  log3(("Режим догрева сайта!\n"));
+  log3("Режим догрева сайта!\n");
   //    "Режим догрева сайта"); //падает при повторном вызове
   site->mode = 3;
 
@@ -633,7 +633,7 @@ int site_mode_heat(Site* site) {
     site->vents[v]->error = ERROR_HEAT;
   }
 
-  log3(("Проверим положение заслонки %d\n", site->th->position));
+  log3("Проверим положение заслонки %d\n", site->th->position);
   if (site->th->position > 1) {
     // улица
     site->th->set_position(site->th, 0);
@@ -659,14 +659,14 @@ int site_mode_heat(Site* site) {
           //да Необходимо проверить перевилась ли заслонка
           // не было проверки закслонки
 
-          log3(("site->th->position = %d th_pos_read = %d", site->th->position, th_pos_read));
+          log3("site->th->position = %d th_pos_read = %d", site->th->position, th_pos_read);
           if (site->th->position == th_pos_read) {
 
-            log3(("да заслонка исправна\n"));
+            log3("да заслонка исправна\n");
             break;
           } else {
 
-            log3(("заслонка не исправна\n"));
+            log3("заслонка не исправна\n");
             site_mode_fail_uvo(site);
           }
         }
@@ -694,7 +694,7 @@ int site_mode_heat(Site* site) {
       continue;
     } else {
 
-      log3(("*****************Принятие решения ДОГРЕВ*******************\n"));
+      log3("*****************Принятие решения ДОГРЕВ*******************\n");
       site->time_pre = time(NULL);
 
       float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
@@ -708,11 +708,11 @@ int site_mode_heat(Site* site) {
 
         if (site->temp_mix > 60) {
 
-          log3(("ТЭН не остыл еще продолжим вентиляцию\n"));
+          log3("ТЭН не остыл еще продолжим вентиляцию\n");
           continue; // продолжаем цикл догрева
         } else {
 
-          log3(("ТЭН остыл выключим вентиляцию\n"));
+          log3("ТЭН остыл выключим вентиляцию\n");
           site->vents[0]->set_step(site->vents[0], 0); // обороты приточного
 
           //выключим вентиляцию
@@ -721,12 +721,12 @@ int site_mode_heat(Site* site) {
           //    site->vents[v]->set_mode(site->vents[v], 0);
           //}
 
-          log3(("Перейдем в режим охлаждения УВО\n"));
+          log3("Перейдем в режим охлаждения УВО\n");
           site_mode_uvo(site); // режим охлаждения уво
         }
       } else {
         //нет
-        log3(("Нужно греть сайт\n"));
+        log3("Нужно греть сайт\n");
         // TODO: Проверить по описанию
         if (site->vents[0]->mode == 0) {
           site->vents[0]->set_mode(site->vents[0], 1);
@@ -736,29 +736,29 @@ int site_mode_heat(Site* site) {
 
         if (difftime(time(NULL), site->vents[0]) > 30) {
 
-          log3(("Проверим вращается ли вентилятор\n"));
+          log3("Проверим вращается ли вентилятор\n");
           //да
 
           if ((site->vents[0]->step == site->tacho1) || (site->tacho1_exists != 1)) {
-            log3(("Да вращается\n"));
+            log3("Да вращается\n");
             //да
             site->vents[0]->time_start = time(NULL);
             if ((site->ten == 1) && site->vents[0]->error == ERROR_HEAT) {
 
-              log3(("Пока неизвестно вращается ли вентилятор\n"));
+              log3("Пока неизвестно вращается ли вентилятор\n");
               //да
               continue;
 
             } else {
               //нет
 
-              log3(("Да вращается включим ТЭН\n"));
+              log3("Да вращается включим ТЭН\n");
               set_ten(site, 1);
               continue;
             }
           } else {
 
-            log3(("АВАРИЯ вентилятора Авария вентиляции - охлаждение кондиционером\n"));
+            log3("АВАРИЯ вентилятора Авария вентиляции - охлаждение кондиционером\n");
             //нет
             set_ten(site, 0);
             site->vents[0]->set_step(site->vents[0], 0);
@@ -768,7 +768,7 @@ int site_mode_heat(Site* site) {
           }
         } else {
 
-          log3(("Время проверки работает ли вентилятор еще не настало\n"));
+          log3("Время проверки работает ли вентилятор еще не настало\n");
           //нет
           //if (((site->ten == 1) && site->vents[0]->error == ERROR_HEAT)
           //    || ((site->ten == 1) && site->vents[1]->error == ERROR_HEAT)) {
@@ -796,7 +796,7 @@ int site_mode_heat(Site* site) {
  * Авария заслонки - Авария охлаждения кондиционером */
 int site_mode_fail_uvo(Site* site) {
 
-  log3(("site_mode_fail_uvo: Режим авария УВО!\n"));
+  log3("site_mode_fail_uvo: Режим авария УВО!\n");
   //    "Режим авария УВО");
   site->mode = 4;
   site->time_pre = time(NULL);
@@ -878,7 +878,7 @@ int site_mode_fail_uvo(Site* site) {
       float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
       NULL);
 
-      log3(("Проверим температуру в сайте может попробуем перейти на УВО\n"));
+      log3("Проверим температуру в сайте может попробуем перейти на УВО\n");
 
       log3(
           ("temp_support = %f site->temp_out = %f site->penalty = %d\n", temp_support, site->temp_out, site->penalty));
@@ -889,11 +889,11 @@ int site_mode_fail_uvo(Site* site) {
             site->temp_in, temp_support);
         if (site->temp_in < temp_support - 2) {
           // переходим в УВО
-          log3(("Да сайт позволяет\n"));
+          log3("Да сайт позволяет\n");
           site_mode_uvo(site);
         } else {
 
-          log3(("Нет сайт не позволяет\n"));
+          log3("Нет сайт не позволяет\n");
           //продолжаем в текущем режиме
           continue;
         }
@@ -909,7 +909,7 @@ int site_mode_fail_uvo(Site* site) {
 
 /* Авария кондиционеров - Охлаждение УВО */
 int site_mode_fail_ac(Site* site) {
-  log3(("Режим авария кондиционеров!\n"));
+  log3("Режим авария кондиционеров!\n");
   //    "Режим авария кондиционеров");
   site->mode = 5;
 
@@ -974,7 +974,7 @@ int site_mode_fail_ac(Site* site) {
         site->acs[a]->set_mode(site->acs[a], 0);
       }
 
-      log3(("site_mode_fail_ac: включим вентиляцию\n"));
+      log3("site_mode_fail_ac: включим вентиляцию\n");
       // включим вентиляцию
 
       float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
@@ -984,7 +984,7 @@ int site_mode_fail_ac(Site* site) {
         for (v = 0; v < 2; v++) {
           if (site->vents[v]->mode == 0) {
 
-            log3(("Температура на улице ниже температуры в сайте включим вентиляторы\n"));
+            log3("Температура на улице ниже температуры в сайте включим вентиляторы\n");
             site->vents[v]->set_step(site->vents[v], 10); // 100%
             site->vents[v]->time_start = time(NULL);
           }
@@ -993,7 +993,7 @@ int site_mode_fail_ac(Site* site) {
         for (v = 0; v < 2; v++) {
           if (site->vents[v]->mode == 1) {
 
-            log3(("Температура на улице выше температуры в сайте выключим вентиляторы\n"));
+            log3("Температура на улице выше температуры в сайте выключим вентиляторы\n");
             site->vents[v]->set_step(site->vents[v], 0); // 0%
             site->vents[v]->time_start = time(NULL);
           }
@@ -1010,23 +1010,23 @@ int site_mode_fail_ac(Site* site) {
         }
       }
 
-      log3(("Проверим кондишки если авария по питанию и питание появилось можно перейти\n"));
+      log3("Проверим кондишки если авария по питанию и питание появилось можно перейти\n");
       // проверяем кондиционеры
       //
       for (a = 0; a < 2; a++) {
         if (site->acs[a]->error == NOPOWER) {
           if (site->power == 1) {
 
-            log3(("Да питание есть перейдем\n"));
+            log3("Да питание есть перейдем\n");
             site_mode_ac(site); // переходим в нормальный режим;
           }
         }
       }
 
-      log3(("Проверим температура не ниже поддержания - 2\n"));
+      log3("Проверим температура не ниже поддержания - 2\n");
       if (site->temp_in < temp_support - 2) {
 
-        log3(("Да ниже выключим вениляцию site->vents[v]->mode = %d\n", site->vents[v]->mode));
+        log3("Да ниже выключим вениляцию site->vents[v]->mode = %d\n", site->vents[v]->mode);
         // выключим вениляцию
         for (v = 0; v < 2; v++) {
           if (site->vents[v]->mode == 1) {
@@ -1048,7 +1048,7 @@ int site_mode_fail_ac(Site* site) {
         log3("Сайт не замерз? site->temp_in = %f temp_heat = %f\n", site->temp_in, temp_heat);
         if (site->temp_in < temp_heat) {
 
-          log3(("Да замерз пойдем греть\n"));
+          log3("Да замерз пойдем греть\n");
           site_mode_heat(site);
         }
 
@@ -1056,7 +1056,7 @@ int site_mode_fail_ac(Site* site) {
 
       }
 
-      log3(("Переход на функцию логики управления заслонкой\n"));
+      log3("Переход на функцию логики управления заслонкой\n");
       sub_uvo_th(site, 1); // Работа с залонкой
     }
   }
@@ -1066,7 +1066,7 @@ int site_mode_fail_ac(Site* site) {
 /* Превышена температура аварии - Аварийный режим охлаждения*/
 int site_mode_fail_temp(Site* site) {
 
-  log3(("Общий аварийный режим!\n"));
+  log3("Общий аварийный режим!\n");
   //     "Общий аварийный режим");
   site->mode = 6;
 
@@ -1124,14 +1124,14 @@ int site_mode_fail_temp_uvo(Site* site) {
     if (site->th->exist) //Это есть ли заслонка? или есть ли откуда читать
     {
 
-      log3(("переведем заслонку в положение улица\n"));
+      log3("переведем заслонку в положение улица\n");
       site->th->set_position(site->th, 10); //переведем заслонку в положение улица
       site->th->time_start = time(NULL);
     }
   } else {
     if (site->th->exist) {
 
-      log3(("переведем заслонку в положение сайт\n"));
+      log3("переведем заслонку в положение сайт\n");
       site->th->set_position(site->th, 0); //переведем заслонку в положение сайт
       site->th->time_start = time(NULL);
     }
@@ -1184,7 +1184,7 @@ int site_mode_fail_temp_uvo(Site* site) {
     }
 
     if (site->acs[0]->mode == 1 || site->acs[1]->mode == 1) {
-      log3(("Выключим кондиционеры\n"));
+      log3("Выключим кондиционеры\n");
       for (a = 0; a < 2; a++) {
         site->acs[a]->set_mode(site->acs[a], 0);
       }
@@ -1221,7 +1221,7 @@ int site_mode_fail_temp_uvo(Site* site) {
 
 int site_mode_fail_temp_ac(Site* site) {
 
-  log3(("Авария по температуре: режим охлаждения кондиционером!\n"));
+  log3("Авария по температуре: режим охлаждения кондиционером!\n");
 
   //    "Режим охлаждения кондиционером");
   site->time_pre = time(NULL);
@@ -1271,7 +1271,7 @@ int site_mode_fail_temp_ac(Site* site) {
       continue;
     } else {
 
-      log3(("*************Принятие решения Режим охлаждения кондиционером***************\n"));
+      log3("*************Принятие решения Режим охлаждения кондиционером***************\n");
       site->time_pre = time(NULL);
 
       if (site->temp_in < temp_support - 2) {
@@ -1287,7 +1287,7 @@ int site_mode_fail_temp_ac(Site* site) {
           if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1) {
             // да
 
-            log3(("выключим вентиляцию\n"));
+            log3("выключим вентиляцию\n");
             //выключим вентиляцию
             for (v = 0; v < 2; v++) {
               if (site->vents[v]->mode == 1)
@@ -1307,7 +1307,7 @@ int site_mode_fail_temp_ac(Site* site) {
 
         //600
         // отработан промежуток?
-        log3(("Цикл КОНД_%d\n", a_cond));
+        log3("Цикл КОНД_%d\n", a_cond);
         //printf("600 отработан промежуток? diff %d time_start_%d %d\n",(difftime(time(NULL), site->acs[a_cond]->time_start)), a_cond, site->acs[a_cond]->time_start);
 
         log3("600 отработан промежуток? time_start_%d %d time %d diff %d %f\n", a_cond,
@@ -1324,11 +1324,11 @@ int site_mode_fail_temp_ac(Site* site) {
                   site->acs[a_cond]->time_start)), site->acs[a_cond]->is_diff));
           if (site->acs[a_cond]->is_diff == 0) {
 
-            log3(("Авария кондиционера num_ac_tmp = %d\n", num_ac_tmp));
+            log3("Авария кондиционера num_ac_tmp = %d\n", num_ac_tmp);
             // Авария кондиционера
             num_ac_tmp--;
 
-            log3(("num_ac_tmp = %d", num_ac_tmp));
+            log3("num_ac_tmp = %d", num_ac_tmp);
             // Выключим нерабочий кондиционер
 
             log3("Выключим нерабочий кондиционер КОНД_%d\n", a_cond);
