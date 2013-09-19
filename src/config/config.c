@@ -9,9 +9,9 @@
 
 ConfigTable* config_table_new() {
   ConfigTable* cfg = malloc(sizeof(ConfigTable));
-  cfg->mTable = hashmapCreate(32, str_hash_fn, hashmapIntEquals);
-  cfg->mStatic = hashmapCreate(32, str_hash_fn, hashmapIntEquals);
-  cfg->mOptional = hashmapCreate(32, str_hash_fn, hashmapIntEquals);
+  cfg->mTable = hashmapCreate(36, str_hash_fn, hashmapIntEquals);
+  cfg->mStatic = hashmapCreate(36, str_hash_fn, hashmapIntEquals);
+  cfg->mOptional = hashmapCreate(36, str_hash_fn, hashmapIntEquals);
   return cfg;
 }
 
@@ -125,8 +125,8 @@ ConfigTable* readConfig(char *filename) {
 
   }
 
-  if (line)
-    free(line);
+  //if (line)
+  //  free(line);
 
   return cfg;
 }

@@ -127,3 +127,43 @@ char* trim(char *s) {
   return rtrim(ltrim(s));
 }
 
+void revS(char str[])
+{
+  char c;
+  char *p, *q;
+
+  p = str;
+  if (!p)
+    return;
+
+  q = p + 1;
+  if (*q == '\0')
+    return;
+
+  c = *p;
+  revS(q);
+
+  while (*q != '\0') {
+    *p = *q;
+    p++;
+    q++;
+  }
+  *p = c;
+
+  return;
+}
+
+char *ssprintf(char* msg, ...){
+
+  va_list args;
+  char* ret;
+
+  char buf1 [255];
+  char *buf2;
+  int n;
+  n = sprintf(buf1, msg, args);
+
+  buf2 = string_copy(buf1);
+  return buf2;
+
+}

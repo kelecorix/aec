@@ -10,6 +10,7 @@
 typedef struct Throttle {
 
   int mode; // 0 - сайт, 1 улица
+  float position_adc;
   int position; // 0 -255
   int exist; // 1 - заслонка есть, 0 - заслонка отсутствует
   long time_work;
@@ -20,5 +21,9 @@ typedef struct Throttle {
   int (*set_position)(struct Throttle*, int val);
 
 } Throttle;
+
+int i2c_get_th_data(int addr);
+int pos_to_step(float pos);
+
 
 #endif /*THROTTLE_H_*/

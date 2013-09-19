@@ -15,6 +15,7 @@ typedef struct Vent {
 
   int mode; // 0 - OFF/ВЫКЛ, 1 - ON/ВКЛ
   int turns; // обороты, значения мз таблицы 
+  int step;  // шаг в соотв. с оборотами
   int type; // 0 - приточный/in, 1 - вытяжной
   long time_work;
   time_t time_start;
@@ -23,8 +24,13 @@ typedef struct Vent {
   vent_error error;
 
   int (*set_mode)(struct Vent*, int val);
-  int (*set_turns)(struct Vent*, int val);
+  int (*set_step)(struct Vent*, int val);
 
 } Vent;
+
+void i2c_get_tacho(int addr0, int addr1);
+int i2c_get_tacho_step(struct Vent* v, int addr);
+int i2c_get_tacho_data(struct Vent* v, int addr);
+int turns_to_step(int turns, int type);
 
 #endif /*VENT_H_*/

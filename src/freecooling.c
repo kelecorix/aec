@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
   site = site_new(filename);
 
   if (site->cfg)
-    printf("Config was read ok!\n");
+    write_log( site->logger->eventLOG, ssprintf("Config was read ok!\n"));
 
   site->conn = create_server_conn("127.0.0.1:4304");
   if (site->conn == 0)
@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
 // по идде сюда не должно дойти
   pthread_join(threadA, retA);
   pthread_join(threadU, retU);
-  //pthread_join(threadL, retL);
+  pthread_join(threadL, retL);
 
   // Для тестов оборудования
   //i2cTestHardware();

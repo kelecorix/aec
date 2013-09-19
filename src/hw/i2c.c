@@ -8,6 +8,9 @@
 #include <string.h>
 #include <errno.h>
 #include "i2c.h"
+#include "site.h"
+#include "throttle.h"
+#include "vent.h"
 
 int g_i2cFile;
 
@@ -96,21 +99,112 @@ int get_i2c_register(int file, unsigned char addr, unsigned char reg,
   return 0;
 }
 
+int get_i2c_register_adc(int file, unsigned char addr, unsigned char reg,
+    unsigned char *val) {
+
+  unsigned char inbuf, outbuf;
+  struct i2c_rdwr_ioctl_data packets;
+  struct i2c_msg messages[2];
+
+  /*
+   * In order to read a register, we first do a "dummy write" by writing
+   * 0 bytes to the register we want to read from.  This is similar to
+   * the packet in set_i2c_register, except it's 1 byte rather than 2.
+   */
+  outbuf = reg;
+  messages[0].addr = addr;
+  messages[0].flags = 0;
+  messages[0].len = sizeof(outbuf);
+  messages[0].buf = &outbuf;
+
+  /* The data will get returned in this structure */
+  messages[1].addr = addr;
+  messages[1].flags = I2C_M_RD/* | I2C_M_NOSTART*/;
+  messages[1].len = sizeof(2*inbuf);
+  messages[1].buf = &inbuf;
+
+  /* Send the request to the kernel and get the result back */
+  packets.msgs = messages;
+  packets.nmsgs = 2;
+  if (ioctl(file, I2C_RDWR, &packets) < 0) {
+    perror("Unable to send data");
+    return 1;
+  }
+  *val = inbuf;
+
+  return 0;
+}
+
+
+
 void i2cTestHardware() {
 
-  // Fan 0 приточный
-  int addrFan1 = 0b00100000, addrFan2 = 0b00100001, addrTh = 0b00100010,
-      addrRel = 0x3b;
+  test_vents();
+  //test_throttle();
 
-  i2cOpen();
-
-//  int steps[10] = { 0xFF, 0xED, 0xDF, 0xDE, 0xDC, 0xBF, 0xBE, 0x7F, 0x7E, 0x9F,
-//      0x8F };
-//
 //  i2cSetAddress(addrFan1);
-//  set_i2c_register(g_i2cFile, addrFan1, 0, steps[2]);
-//  set_i2c_register(g_i2cFile, addrFan2, 0, steps[2]);
-//  set_i2c_register(g_i2cFile, addrTh, 0, 0xFF);
+//  set_i2c_register(g_i2cFile, addrFan1, 0, steps[0]);
+//  set_i2c_register(g_i2cFile, addrFan2, 0, steps[0]);
+  //set_i2c_register(g_i2cFile, addrTh, 0, 0xFF);
+
+  //sleep(10);
+
+//  printf("Считаем адреса \n");
+//  char *a_tacho_in = getStr(site->cfg, (void *) "a_tacho_flow_in");
+//  char *a_tacho_out = getStr(site->cfg, (void *) "a_tacho_flow_out");
+//  char *a_th_adc = getStr(site->cfg, (void *) "a_throttle_adc");
+//
+//  printf("Cчитаем данные\n");
+//  int tacho1, tacho2, th_r;
+//
+//  site->th->set_position(site->th, 0);
+//
+//  sleep(10);
+//
+//  printf("Прямой ход\n");
+//  for(i=1; i<=11;i++){
+//
+//      site->th->set_position(site->th, i);
+////    site->vents[0]->set_turns(site->vents[0], i);
+////    site->vents[1]->set_turns(site->vents[1], i);
+////
+//    sleep(30);
+////
+////    tacho1 = i2c_get_tacho_data(site->vents[0], strtol(a_tacho_in, NULL, 16));
+////    tacho2 = i2c_get_tacho_data(site->vents[1], strtol(a_tacho_out, NULL, 16));
+//
+// //   printf("Шаг %d: tахо1 %d, tахо2 %d, \n", i, tacho1, tacho2);
+//
+//    step =  i2c_get_th_data(strtol(a_th_adc, NULL, 16));
+//    //th_r =
+//    printf("Шаг %d: заслонка в %d [ADC %f]\n", i, step, site->th->position_adc);
+//
+//  }
+//
+//  printf("Обратный ход\n");
+//  for(i=11; i>=0;i--){
+//
+//      site->th->set_position(site->th, i);
+////    site->vents[0]->set_turns(site->vents[0], i);
+////    site->vents[1]->set_turns(site->vents[1], i);
+////
+//    sleep(30);
+////
+////    tacho1 = i2c_get_tacho_data(site->vents[0], strtol(a_tacho_in, NULL, 16));
+////    tacho2 = i2c_get_tacho_data(site->vents[1], strtol(a_tacho_out, NULL, 16));
+//
+// //   printf("Шаг %d: tахо1 %d, tахо2 %d, \n", i, tacho1, tacho2);
+//
+//    step =  i2c_get_th_data(strtol(a_th_adc, NULL, 16));
+//    //th_r =
+//    printf("Шаг %d: заслонка в %d [ADC %f]\n", i, step, site->th->position_adc);
+//
+//  }
+
+
+
+  //site->vents[0]->set_turns(site->vents[0], 0);
+  //site->vents[1]->set_turns(site->vents[1], 0);
 
 // Тестируем реле или лампочки на RPi
 //  int val = 0b00000000;
@@ -127,15 +221,15 @@ void i2cTestHardware() {
 //  }
 
 // Тестируем реле или лампочки на RPi
-  int val = 0xFF;
-  char buf[1];
-  int i, bit = 2;
-  for (i = 0; i < 128; i++) {
-    val ^= (1 << bit);
-    printf("Value: %x\n", val);
-    set_i2c_register(g_i2cFile, addrRel, val, val);
-    sleep(2);
-  }
+//  int val = 0xFF;
+//  char buf[1];
+//  int i, bit = 2;
+//  for (i = 0; i < 128; i++) {
+//    val ^= (1 << bit);
+//    printf("Value: %x\n", val);
+//    set_i2c_register(g_i2cFile, addrRel, val, val);
+//    sleep(2);
+//  }
 
 //  sleep(10);
 //
@@ -148,7 +242,7 @@ void i2cTestHardware() {
 //  set_i2c_register(g_i2cFile, addrFan1, 0, steps[0]);
 //  set_i2c_register(g_i2cFile, addrFan2, 0, steps[0]);
 //  set_i2c_register(g_i2cFile, addrTh, 0, 0x8F);
-//
-  i2cClose();
 
 }
+
+
