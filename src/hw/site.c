@@ -176,17 +176,17 @@ void sub_uvo_vent(Site* site) {
       }
 
       if ((time(NULL) - site->time_uvo) >= 1800) {
-        printf("Сняли пенальти с уво\n");
+        log3("Сняли пенальти с уво\n");
         site->penalty = 0;
       }
 
       int curr_step = site->vents[0]->step;
-      printf("curr_step = %d site->temp_in_prev = %f site->temp_in = %f\n",
+      log3("curr_step = %d site->temp_in_prev = %f site->temp_in = %f\n",
           curr_step, site->temp_in_prev, site->temp_in);
 
       if (site->temp_in_prev != site->temp_in_prev_prev != site->temp_in) {
         if (site->temp_in_prev <= site->temp_in) {
-          printf("Добавим обороты curr_step = %d\n", curr_step);
+          log3("Добавим обороты curr_step = %d\n", curr_step);
           if (curr_step != 10) {
             curr_step++;
             if (curr_step > 10) {
@@ -198,7 +198,7 @@ void sub_uvo_vent(Site* site) {
             }
           }
         } else {
-          printf("Уменьшим обороты curr_step = %d\n", curr_step);
+          log3("Уменьшим обороты curr_step = %d\n", curr_step);
           if (curr_step != 0) {
             curr_step--;
             if (curr_step < 0) {
@@ -212,10 +212,10 @@ void sub_uvo_vent(Site* site) {
         }
       }
       site->temp_in_prev = site->temp_in;
-      printf("sub_uvo_th\n");
+      log3("sub_uvo_th\n");
       sub_uvo_th(site, 0);
     } else {
-      printf("sub_uvo_vent Вентиляторы не включены включим\n");
+      log3("sub_uvo_vent Вентиляторы не включены включим\n");
       site->time_uvo = time(NULL);
       //site->temp_in_prev = site->temp_in; //видимо не сдесь так как тут мы только когда включаем
 
@@ -239,14 +239,14 @@ void sub_uvo_vent(Site* site) {
       sub_uvo_th(site, 0);
     }
   } else {
-    printf("Температура не позваляет работать на вентиляторах\n");
+    log3("Температура не позваляет работать на вентиляторах\n");
     sub_uvo_pow(site);
   }
 }
 
 int sub_uvo_pen(Site* site) {
 
-  printf("Мы в sub_uvo_pen\n");
+  log1("Мы в sub_uvo_pen\n");
   int a, v;
   float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"), NULL);
   float temp_heat = strtof(getStr(site->cfg, (void *) "temp_heat"), NULL);
@@ -258,9 +258,9 @@ int sub_uvo_pen(Site* site) {
   }
 
   if (site->temp_in < (temp_support - 2)) {
-    printf("Температура ниже поддержания - 2\n");
+    log3("Температура ниже поддержания - 2\n");
     if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1) {
-      printf("Выключим вентиляторы\n");
+      log4("Выключим вентиляторы\n");
       for (v = 0; v < 2; v++) {
         site->vents[v]->set_step(site->vents[v], 0);
       }
@@ -271,20 +271,20 @@ int sub_uvo_pen(Site* site) {
     }
 
     if (site->acs[0]->mode == 1 || site->acs[1]->mode == 1) {
-      printf("Выключим кондиционеры\n");
+      log3("Выключим кондиционеры\n");
       for (a = 0; a < 2; a++) {
         site->acs[a]->set_mode(site->acs[a], 0);
       }
     }
 
     if (site->temp_in < temp_heat) {
-      printf("Переходим в режим догрева\n");
+      log3("Переходим в режим догрева\n");
       site_mode_heat(site);
     } else {
       return EXIT_SUCCESS; //вернем 0, чтоб перейти обратно в УВО
     }
   } else {
-    printf("Температура выше поддержания + 2\n");
+    log3("Температура выше поддержания + 2\n");
     if (site->power == 0) {
       //питания нет
       for (a = 0; a < 2; a++) {
@@ -293,23 +293,23 @@ int sub_uvo_pen(Site* site) {
 
       // переходим в режим охлаждения УВО
       // авария на кондиционере
-      printf("переходим в режим охлаждения УВО  авария на кондиционере\n");
+      log3("переходим в режим охлаждения УВО  авария на кондиционере\n");
       site_mode_fail_ac(site);
     } else {
       //питание есть
       site->penalty++;
       // переходим в режим охлаждения кондиционером
-      printf("переходим в режим охлаждения кондиционером\n");
+      log3("переходим в режим охлаждения кондиционером\n");
       site_mode_ac(site);
     }
   }
-  printf("Выход из sub_uvo_pen\n");
+  log3("Выход из sub_uvo_pen\n");
   return EXIT_SUCCESS;
 }
 
 void sub_uvo_pow(Site* site) {
 
-  printf("******sub_uvo_pow*******\n");
+  log2("******sub_uvo_pow*******\n");
   int a, v;
 
   site->time_uvo = 0;
