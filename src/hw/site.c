@@ -499,7 +499,7 @@ int site_mode_ac(Site* site) {
         if (((site->temp_in - site->acs[a_cond]->temp) >= 10) && (site->acs[a_cond]->mode == 1)) {
           //да КОНД_0 Набрал дельту
 
-          log3("Набрал дельту КОНД_%d %f дельта %f\n", a_cond, site->acs[a_cond]->temp,
+          log3("Набрал дельту КОНД_%d %f дельта %d\n", a_cond, site->acs[a_cond]->temp,
               (site->temp_in - site->acs[a_cond]->temp));
           if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1) {
             // да

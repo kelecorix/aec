@@ -29,9 +29,9 @@ void write_log(FILE* fp, char* msg, ...) {
   strftime(date, 25, "%Y:%m:%d %H:%M:%S", tm_info);
   fprintf(fp, date);
   fprintf(fp, "|");
-  va_start (args, msg);
+  va_start(args, msg);
   vfprintf(fp, msg, args);
-  va_end (args);
+  va_end(args);
   fprintf(fp, "\n");
   fclose(fp);
 }
