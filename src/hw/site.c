@@ -64,6 +64,8 @@ int site_mode_uvo(Site* site) {
     site_mode_fail_uvo(site);
   }
 
+  printf("Переведем заслонку site->temp_out = %f temp_dew = %f\n", site->temp_out,
+        temp_dew);
   log3("Переведем заслонку site->temp_out = %f temp_dew = %f\n", site->temp_out,
       temp_dew);
   if ((site->temp_out) > temp_dew) {
