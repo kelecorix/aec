@@ -59,12 +59,12 @@ int main(int argc, char *argv[]) {
 
   sleep(4);
 
-//  printf("Создадим поток журналирования\n");
-//  if(pthread_create(&threadL, NULL, run_logger, (void*) site)) {
-//    fprintf(stderr, "Error creating Logger thread\n");
-//    log4("Error creating Logger thread\n");
-//    return 1;
-//  }
+  printf("Создадим поток журналирования\n");
+  if(pthread_create(&threadL, NULL, run_logger, (void*) site)) {
+    fprintf(stderr, "Error creating Logger thread\n");
+    log4("Error creating Logger thread\n");
+    return 1;
+  }
 
   sleep(4);
 
@@ -72,7 +72,7 @@ int main(int argc, char *argv[]) {
 // по идде сюда не должно дойти
   pthread_join(threadA, retA);
   pthread_join(threadU, retU);
-  //pthread_join(threadL, retL);
+  pthread_join(threadL, retL);
 
   // Для тестов оборудования
   //i2cTestHardware();

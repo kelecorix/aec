@@ -105,7 +105,21 @@ void log0(FileLogWriter* flog, int pf, char* msg, ...) {
   if (site->debug >= 1) {
 
     flog->fp = fopen(flog->filename, "a");
-    write_log(flog->fp, msg, args);
+    time_t timer;
+    struct tm* tm_info;
+    char date[50];
+
+    timer = time(NULL);
+    tm_info = localtime(&timer);
+
+    strftime(date, 25, "%Y:%m:%d %H:%M:%S", tm_info);
+    fprintf(site->logger->eventLOG->fp, date);
+    fprintf(site->logger->eventLOG->fp, "|");
+    va_start(args, msg);
+    vfprintf(site->logger->eventLOG->fp, msg, args);
+    va_end(args);
+    fprintf(site->logger->eventLOG->fp, "\n");
+    fclose(site->logger->eventLOG->fp);
   }
   // pf - printf flag
   if (site->gpf) {
@@ -121,7 +135,21 @@ void log1(char* msg, ...) {
   FileLogWriter* flog = site->logger->eventLOG;
   if (site->debug >= 1) {
     flog->fp = fopen(flog->filename, "a");
-    write_log(flog->fp, msg, args);
+    time_t timer;
+    struct tm* tm_info;
+    char date[50];
+
+    timer = time(NULL);
+    tm_info = localtime(&timer);
+
+    strftime(date, 25, "%Y:%m:%d %H:%M:%S", tm_info);
+    fprintf(site->logger->eventLOG->fp, date);
+    fprintf(site->logger->eventLOG->fp, "|");
+    va_start(args, msg);
+    vfprintf(site->logger->eventLOG->fp, msg, args);
+    va_end(args);
+    fprintf(site->logger->eventLOG->fp, "\n");
+    fclose(site->logger->eventLOG->fp);
   }
   // pf - printf flag
   if (site->gpf) {
@@ -137,7 +165,21 @@ void log2(char* msg, ...) {
   FileLogWriter* flog = site->logger->eventLOG;
   if (site->debug >= 2) {
     flog->fp = fopen(flog->filename, "a");
-    write_log(flog->fp, msg, args);
+    time_t timer;
+    struct tm* tm_info;
+    char date[50];
+
+    timer = time(NULL);
+    tm_info = localtime(&timer);
+
+    strftime(date, 25, "%Y:%m:%d %H:%M:%S", tm_info);
+    fprintf(site->logger->eventLOG->fp, date);
+    fprintf(site->logger->eventLOG->fp, "|");
+    va_start(args, msg);
+    vfprintf(site->logger->eventLOG->fp, msg, args);
+    va_end(args);
+    fprintf(site->logger->eventLOG->fp, "\n");
+    fclose(site->logger->eventLOG->fp);
   }
   // pf - printf flag
   if (site->gpf) {
@@ -168,7 +210,6 @@ void log3(char* msg, ...) {
     va_end(args);
     fprintf(site->logger->eventLOG->fp, "\n");
     fclose(site->logger->eventLOG->fp);
-
   }
 
   // pf - printf flag
@@ -185,7 +226,22 @@ void log4(char* msg, ...) {
   FileLogWriter* flog = site->logger->eventLOG;
   if (site->debug >= 4) {
     site->logger->eventLOG->fp = fopen(flog->filename, "a");
-    write_log(flog->fp, msg, args);
+    time_t timer;
+    struct tm* tm_info;
+    char date[50];
+
+    timer = time(NULL);
+    tm_info = localtime(&timer);
+
+    strftime(date, 25, "%Y:%m:%d %H:%M:%S", tm_info);
+    fprintf(site->logger->eventLOG->fp, date);
+    fprintf(site->logger->eventLOG->fp, "|");
+    va_start(args, msg);
+    vfprintf(site->logger->eventLOG->fp, msg, args);
+    va_end(args);
+    fprintf(site->logger->eventLOG->fp, "\n");
+    fclose(site->logger->eventLOG->fp);
+
   }
 
   // pf - printf flag
