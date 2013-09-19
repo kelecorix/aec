@@ -1050,7 +1050,7 @@ int site_mode_fail_temp(Site* site) {
   // write_log(site->logger->eventLOG, "Общий аварийный режим");
   site->mode = 6;
 
-  if (site->temp_in - site->temp_out) {
+  if (site->temp_in - site->temp_out >= 5) {
     // да
     // Охлаждаем УВО
     site_mode_fail_temp_uvo(site);
