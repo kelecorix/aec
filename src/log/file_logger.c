@@ -14,14 +14,10 @@ FileLogWriter* create_filelog(char* filename) {
   return log;
 }
 
-void write_log(FileLogWriter* flw, char* message) {
+void write_log(FILE* fp, char* msg, ...) {
 
-  FILE* fp = flw->fp;
-  char *filename = flw->filename;
-  fp = fopen(filename, "a");
-  if (!fp) {
+  va_list args;
     fprintf(stderr, "could not open log file %s", filename);
-  }
 
   time_t timer;
   struct tm* tm_info;
@@ -33,26 +29,26 @@ void write_log(FileLogWriter* flw, char* message) {
   strftime(date, 25, "%Y:%m:%d %H:%M:%S", tm_info);
   fprintf(fp, date);
   fprintf(fp, "|");
-  fprintf(fp, message);
+  fprintf(fp, msg, args);
   fprintf(fp, "\n");
 
   fclose(fp);
-  usleep(1000);
 }
 
 void write_data_log(Site* site) {
 
   FILE* fp = site->logger->dataLOG->fp;
   char *filename = site->logger->dataLOG->filename;
-  fp = fopen(filename, "a");
-  if (!fp) {
-    fprintf(stderr, "could not open log file %s", filename);
-  }
-
+ 
   time_t timer;
   struct tm* tm_info;
   char date[50], str[80] = "";
   int event_t = 1;           // event type, тип события
+
+  fp = fopen(filename, "a");
+  
+  if (!fp)
+    fprintf(stderr, "could not open log file %s", filename);
 
   timer = time(NULL);
   tm_info = localtime(&timer);
@@ -103,7 +99,71 @@ void write_data_log(Site* site) {
   fclose(fp);
 }
 
-int close_filelog(FileLogWriter* flog) {
-  fclose(flog->fp);
-  return 0;
+void log0(FileLogWriter* flog, int pf, char* msg, ...){
+  va_list args;
+  if (site->debug >= 1) {
+
+    flog->fp = fopen(flog->filename, "a");
+    write_log(flog->fp, msg, args);
+  }
+  // pf - printf flag
+  if (site->gpf)
+    printf(msg, args);
+
+}
+
+
+// Basic messages
+void log1(char* msg, ...){
+  va_list args;
+  FileLogWriter* flog = site->logger->eventLOG;
+  if (site->debug >= 1){
+    flog->fp = fopen(flog->filename, "a");
+    write_log(flog->fp, msg, args);
+  }  
+  // pf - printf flag
+  if (site->gpf)
+    printf(msg, args);
+
+}
+
+// Light Debug
+void log2(char* msg, ...){
+  va_list args;
+  FileLogWriter* flog = site->logger->eventLOG; 
+  if (site->debug >= 2) {
+   flog->fp = fopen(flog->filename, "a");
+   write_log(flog->fp, msg, args);
+  }
+  // pf - printf flag
+  if (site->gpf)
+    printf(msg, args);
+}
+
+// Debug
+void log3(char* msg, ...){
+  va_list args;
+  FileLogWriter* flog = site->logger->eventLOG;
+  if (site->debug >= 3) {
+    site->logger->eventLOG->fp = fopen(flog->filename, "a");
+    write_log(flog->fp, msg, args);
+  }
+
+  // pf - printf flag
+  if (site->gpf)
+    printf(msg, args);
+}
+
+// Deep Debug
+void log4(char* msg, ...){
+  va_list args;
+  FileLogWriter* flog =  site->logger->eventLOG;
+  if (site->debug >= 4){ 
+    site->logger->eventLOG->fp = fopen(flog->filename, "a");
+    write_log(flog->fp, msg, args);
+  }
+
+  // pf - printf flag
+  if (site->gpf)
+    printf(msg, args);
 }

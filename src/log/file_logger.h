@@ -13,8 +13,12 @@ typedef struct FileLogWriter {
 } FileLogWriter;
 
 FileLogWriter* create_filelog(char* filename);
-int close_filelog(FileLogWriter* flog);
-void write_log(FileLogWriter* flw, char* message);
+void write_log(FILE* fp, char* msg, ...);
 void write_data_log();
+void log0(FileLogWriter* flog, int pf, char* msg, ...);
+void log1(char* msg, ...);
+void log2(char* msg, ...);
+void log3(char* msg, ...);
+void log4(char* msg, ...);
 
 #endif /* FILE_LOGGER_H_ */

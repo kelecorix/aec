@@ -22,8 +22,8 @@ Logger* create_logger() {
 }
 
 void logger_free(Logger* logger) {
-  close_filelog(logger->dataLOG);
-  close_filelog(logger->eventLOG);
+  //close_filelog(logger->dataLOG);
+  //close_filelog(logger->eventLOG);
   free(logger->dataLOG);
   free(logger->eventLOG);
 }
