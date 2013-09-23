@@ -35,6 +35,7 @@ void run_logger(Site* site){
     write_data_log(site);
     sleep(30);
   }
+}
 
 void test_logger(){
 
