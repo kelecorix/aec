@@ -134,7 +134,6 @@ void write_data_log(Site* site) {
 
 void log0(FileLogWriter* flog, int pf, char* msg, ...) {
   va_list args;
-  if (site->debug >= 1) {
 
     flog->fp = fopen(flog->filename, "a");
     time_t timer;
@@ -152,7 +151,6 @@ void log0(FileLogWriter* flog, int pf, char* msg, ...) {
     va_end(args);
     fprintf(site->logger->eventLOG->fp, "\n");
     fclose(site->logger->eventLOG->fp);
-  }
   // pf - printf flag
   if (pf==1) {
     va_start(args, msg);
