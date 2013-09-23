@@ -40,7 +40,7 @@ void run_logger(Site* site){
 void test_logger(){
 
  // write_dl("This is test of arbitrary write in data log" , 2);
-  log0(site->logger->dataLOG, 0, "this is test for %s number %d", site->logger->dataLOG->filename, 12);
+  logD(site->logger->dataLOG, 0, "this is test for %s number %d", site->logger->dataLOG->filename, 12);
 
 }
 
