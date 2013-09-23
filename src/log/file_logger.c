@@ -135,24 +135,24 @@ void write_data_log(Site* site) {
 void log0(FileLogWriter* flog, int pf, char* msg, ...) {
   va_list args;
 
-    flog->fp = fopen(flog->filename, "a");
-    time_t timer;
-    struct tm* tm_info;
-    char date[50];
+  flog->fp = fopen(flog->filename, "a");
+  time_t timer;
+  struct tm* tm_info;
+  char date[50];
 
-    timer = time(NULL);
-    tm_info = localtime(&timer);
+  timer = time(NULL);
+  tm_info = localtime(&timer);
 
-    strftime(date, 25, "%Y:%m:%d %H:%M:%S", tm_info);
-    fprintf(site->logger->eventLOG->fp, date);
-    fprintf(site->logger->eventLOG->fp, "|");
-    va_start(args, msg);
-    vfprintf(site->logger->eventLOG->fp, msg, args);
-    va_end(args);
-    fprintf(site->logger->eventLOG->fp, "\n");
-    fclose(site->logger->eventLOG->fp);
+  strftime(date, 25, "%Y:%m:%d %H:%M:%S", tm_info);
+  fprintf(flog->fp, date);
+  fprintf(flog->fp, "|");
+  va_start(args, msg);
+  vfprintf(flog->fp, msg, args);
+  va_end(args);
+  fprintf(flog->fp, "\n");
+  fclose(flog->fp);
   // pf - printf flag
-  if (pf==1) {
+  if (pf == 1) {
     va_start(args, msg);
     printf(msg, args);
     va_end(args);
