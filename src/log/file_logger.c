@@ -36,7 +36,7 @@ void write_log(FILE* fp, char* msg, ...) {
   fclose(fp);
 }
 
-void write_dl(char* msg,  int event_t ) {
+void write_dl(char* msg, int event_t, ... ) {
 
   // event type, тип события
   FILE* fp = site->logger->dataLOG->fp;
@@ -54,9 +54,9 @@ void write_dl(char* msg,  int event_t ) {
   strftime(date, 25, "%Y:%m:%d %H:%M:%S", tm_info);
   fprintf(fp, date);
 
-  fprintf(fp, "|");
-  sprintf(str, "%d", event_t);
-  fprintf(fp, str);
+//  fprintf(fp, "|");
+//  sprintf(str, "%d", event_t);
+//  fprintf(fp, str);
 
   fprintf(fp, "|");
   fprintf(fp, msg);
@@ -65,7 +65,6 @@ void write_dl(char* msg,  int event_t ) {
   fclose(fp);
 
 }
-
 
 void write_data_log(Site* site) {
 
@@ -155,7 +154,7 @@ void log0(FileLogWriter* flog, int pf, char* msg, ...) {
     fclose(site->logger->eventLOG->fp);
   }
   // pf - printf flag
-  if (site->gpf) {
+  if (pf==1) {
     va_start(args, msg);
     printf(msg, args);
     va_end(args);
