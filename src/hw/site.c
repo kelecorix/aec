@@ -296,8 +296,16 @@ int sub_uvo_pen(Site* site) {
       log3("переходим в режим охлаждения УВО  авария на кондиционере\n");
       site_mode_fail_ac(site);
     } else {
+
+      if (site->temp_out<=site->temp_in){
+        for (v=0; v<2; v++){
+         site->vents[v]->set_step(site->vents[v], 11);
+        }
+      }
+
       //питание есть
       site->penalty++;
+
       // переходим в режим охлаждения кондиционером
       log3("переходим в режим охлаждения кондиционером\n");
       site_mode_ac(site);
@@ -320,11 +328,18 @@ void sub_uvo_pow(Site* site) {
 
   if (site->temp_out < site->temp_in) {
     for (v = 0; v < 2; v++) {
-      site->vents[v]->set_step(site->vents[v], 255);
+      site->vents[v]->set_step(site->vents[v], 11);
     }
   }
 
   if (site->power == 1) {
+
+    if (site->temp_out<=site->temp_in){
+      for (v=0; v<2; v++){
+       site->vents[v]->set_step(site->vents[v], 11);
+      }
+    }
+
     site_mode_ac(site);
   } else {
     for (a = 0; a < 2; a++) {
@@ -1000,6 +1015,12 @@ int site_mode_fail_ac(Site* site) {
       for (a = 0; a < 2; a++) {
         if (site->acs[a]->error == NOPOWER) {
           if (site->power == 1) {
+
+            if (site->temp_out<=site->temp_in){
+              for (v=0; v<2; v++){
+               site->vents[v]->set_step(site->vents[v], 11);
+              }
+            }
 
             log3("Да питание есть перейдем\n");
             site_mode_ac(site); // переходим в нормальный режим;
