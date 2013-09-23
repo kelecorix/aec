@@ -38,8 +38,6 @@ int main(int argc, char *argv[]) {
 
   printf("%d %d", site->debug, site->gpf);
 
-  test_logger();
-
   if (site->cfg)
     log4("Config was read ok!\n");
 

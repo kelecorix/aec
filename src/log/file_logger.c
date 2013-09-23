@@ -132,7 +132,7 @@ void write_data_log(Site* site) {
   fclose(fp);
 }
 
-void log0(FileLogWriter* flog, int pf, char* msg, ...) {
+void logD(FileLogWriter* flog, int pf, char* msg, ...) {
   va_list args;
 
   flog->fp = fopen(flog->filename, "a");
