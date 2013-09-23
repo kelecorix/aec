@@ -592,7 +592,8 @@ int site_mode_ac(Site* site) {
         float temp_fail = strtof(getStr(site->cfg, (void *) "temp_fail"),
         NULL);
 
-        if ((temp_support - site->temp_out) > (site->penalty + 2)) {
+        if (((temp_support - site->temp_out) > (site->penalty + 2))
+            && (site->temp_in < (temp_support -1))) {
 
           log3("Температура позволяет перейти на УВО переходим в УВО temp_support %f site->temp_out %f site->penalty %d \n", temp_support,
               site->temp_out, site->penalty);
@@ -940,9 +941,7 @@ int site_mode_fail_ac(Site* site) {
         site->vents[v]->set_step(site->vents[v], 11); // 100%
         site->vents[v]->time_start = time(NULL);
       }
-
       continue;
-
     }
 
     if (difftime(time(NULL), site->time_pre) <= 30) { //секунды
