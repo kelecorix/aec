@@ -13,6 +13,7 @@
 #include "ui/keyboard.h"
 #include "ui/ui.h"
 #include "hw/i2c.h"
+#include "log/logger.h"
 
 Site* site;
 
@@ -36,6 +37,8 @@ int main(int argc, char *argv[]) {
   site->gpf = atoi(argv[2]);
 
   printf("%d %d", site->debug, site->gpf);
+
+  test_logger();
 
   if (site->cfg)
     log4("Config was read ok!\n");

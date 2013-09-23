@@ -18,7 +18,7 @@ void site_free() {
 void run(Site* site) {
 
   log2("Начало работы\n");
-  
+
   // Установим значение регистра реле в 0
   i2cOpen();
   int addr = strtol(getStr(site->cfg, "a_relay"), NULL, 16);
@@ -297,9 +297,9 @@ int sub_uvo_pen(Site* site) {
       site_mode_fail_ac(site);
     } else {
 
-      if (site->temp_out<=site->temp_in){
-        for (v=0; v<2; v++){
-         site->vents[v]->set_step(site->vents[v], 11);
+      if (site->temp_out <= site->temp_in) {
+        for (v = 0; v < 2; v++) {
+          site->vents[v]->set_step(site->vents[v], 11);
         }
       }
 
@@ -334,9 +334,9 @@ void sub_uvo_pow(Site* site) {
 
   if (site->power == 1) {
 
-    if (site->temp_out<=site->temp_in){
-      for (v=0; v<2; v++){
-       site->vents[v]->set_step(site->vents[v], 11);
+    if (site->temp_out <= site->temp_in) {
+      for (v = 0; v < 2; v++) {
+        site->vents[v]->set_step(site->vents[v], 11);
       }
     }
 
@@ -552,8 +552,7 @@ int site_mode_ac(Site* site) {
         //600
         // отработан промежуток?
         log3("Цикл КОНД_%d\n", a_cond);
-        log3("600 отработан промежуток? time_start_%d %d time %d diff %d \n", a_cond,
-            site->acs[a_cond]->time_start, time(NULL),
+        log3("600 отработан промежуток? time_start_%d %d time %d diff %d \n", a_cond, site->acs[a_cond]->time_start, time(NULL),
             (time(NULL) - site->acs[a_cond]->time_start));
 
         if ((difftime(time(NULL), site->acs[a_cond]->time_start) > 600) && (site->acs[a_cond]->mode == 1)) {
@@ -592,8 +591,7 @@ int site_mode_ac(Site* site) {
         float temp_fail = strtof(getStr(site->cfg, (void *) "temp_fail"),
         NULL);
 
-        if (((temp_support - site->temp_out) > (site->penalty + 2))
-            && (site->temp_in < (temp_support -1))) {
+        if (((temp_support - site->temp_out) > (site->penalty + 2)) && (site->temp_in < (temp_support - 1))) {
 
           log3("Температура позволяет перейти на УВО переходим в УВО temp_support %f site->temp_out %f site->penalty %d \n", temp_support,
               site->temp_out, site->penalty);
@@ -879,7 +877,7 @@ int site_mode_fail_uvo(Site* site) {
       }
 
       //да
-      float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),NULL);
+      float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"), NULL);
 
       log3("Проверим температуру в сайте может попробуем перейти на УВО\n");
 
@@ -1003,7 +1001,7 @@ int site_mode_fail_ac(Site* site) {
         if (site->vents[0]->step == vents_r[0]) {
           site->vents[0]->error = NOERROR;
         } else {
-          // Заглушка, можем уйти в бесконечный цикл
+          // TODO: Заглушка, можем уйти в бесконечный цикл
           // site_mode_ac(site);
         }
       }
@@ -1015,9 +1013,9 @@ int site_mode_fail_ac(Site* site) {
         if (site->acs[a]->error == NOPOWER) {
           if (site->power == 1) {
 
-            if (site->temp_out<=site->temp_in){
-              for (v=0; v<2; v++){
-               site->vents[v]->set_step(site->vents[v], 11);
+            if (site->temp_out <= site->temp_in) {
+              for (v = 0; v < 2; v++) {
+                site->vents[v]->set_step(site->vents[v], 11);
               }
             }
 
@@ -1315,10 +1313,8 @@ int site_mode_fail_temp_ac(Site* site) {
         log3("Цикл КОНД_%d\n", a_cond);
         //log3("600 отработан промежуток? diff %d time_start_%d %d\n",(difftime(time(NULL), site->acs[a_cond]->time_start)), a_cond, site->acs[a_cond]->time_start);
 
-        log3("600 отработан промежуток? time_start_%d %d time %d diff %d %f\n", a_cond,
-            site->acs[a_cond]->time_start, time(
-            NULL), time(NULL) - site->acs[a_cond]->time_start,
-            difftime(time(NULL), site->acs[a_cond]->time_start));
+        log3("600 отработан промежуток? time_start_%d %d time %d diff %d %f\n", a_cond, site->acs[a_cond]->time_start, time(
+        NULL), time(NULL) - site->acs[a_cond]->time_start, difftime(time(NULL), site->acs[a_cond]->time_start));
         //600 для тестов 60
         log3("before if");
         if ((difftime(time(NULL), site->acs[a_cond]->time_start) > 60) && (site->acs[a_cond]->mode == 1)) {
