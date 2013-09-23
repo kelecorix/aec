@@ -15,6 +15,7 @@ typedef struct FileLogWriter {
 FileLogWriter* create_filelog(char* filename);
 void write_log(FILE* fp, char* msg, ...);
 void write_data_log();
+void write_dl(char* msg,  int event_t );
 void log0(FileLogWriter* flog, int pf, char* msg, ...);
 void log1(char* msg, ...);
 void log2(char* msg, ...);

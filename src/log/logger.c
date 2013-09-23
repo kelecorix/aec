@@ -35,4 +35,10 @@ void run_logger(Site* site){
     write_data_log(site);
     sleep(30);
   }
+
+void test_logger(){
+
+  write_dl("This is test of arbitrary write in data log" , 2);
+
 }
+

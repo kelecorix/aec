@@ -17,5 +17,6 @@ typedef struct Logger {
 } Logger;
 
 void run_logger();
+void test_logger();
 
 #endif /*LOG_H_*/
