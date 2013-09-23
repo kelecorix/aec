@@ -18,12 +18,20 @@ Site* site;
 
 int main(int argc, char *argv[]) {
 
+
+  if (argc < 2)
+  {
+      fprintf(stderr, "usage: %s debug_level printf_flaf \n", argv[0]);
+      exit(1);
+  }
+
   pthread_t threadA, threadU, threadL;
   int retA, retU, retL;
   void *ret;
   char *filename = "freecooling.conf";
 
   site = site_new(filename);
+
   site->debug = atoi(argv[1]);
   site->gpf = atoi(argv[2]);
 
