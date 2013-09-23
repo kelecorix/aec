@@ -56,9 +56,11 @@ void write_data_log(Site* site) {
 
   strftime(date, 25, "%Y:%m:%d %H:%M:%S", tm_info);
   fprintf(fp, date);
-  fprintf(fp, "|");
+  //пока не выводим тип сообщения
+  /*fprintf(fp, "|");
   sprintf(str, "%d", event_t);
-  fprintf(fp, str);
+  fprintf(fp, str);*/
+  //*****************************
   fprintf(fp, "|");
 
   memset(str, 0, sizeof(str));
@@ -94,7 +96,7 @@ void write_data_log(Site* site) {
   memset(str, 0, sizeof(str));
   sprintf(str, "%d", site->tacho2_t);
   fprintf(fp, str);
-  fprintf(fp, ";");
+  //fprintf(fp, ";");
 
   fprintf(fp, "\n");
   fclose(fp);
