@@ -36,6 +36,37 @@ void write_log(FILE* fp, char* msg, ...) {
   fclose(fp);
 }
 
+void write_dl(char* msg,  int event_t ) {
+
+  // event type, тип события
+  FILE* fp = site->logger->dataLOG->fp;
+  char *filename = site->logger->dataLOG->filename;
+
+  time_t timer;
+  struct tm* tm_info;
+  char date[50], str[80] = "";
+
+  fp = fopen(filename, "a");
+
+  if (!fp)
+    fprintf(stderr, "could not open log file %s", filename);
+
+  strftime(date, 25, "%Y:%m:%d %H:%M:%S", tm_info);
+  fprintf(fp, date);
+
+  fprintf(fp, "|");
+  sprintf(str, "%d", event_t);
+  fprintf(fp, str);
+
+  fprintf(fp, "|");
+  fprintf(fp, msg);
+
+  fprintf(fp, "\n");
+  fclose(fp);
+
+}
+
+
 void write_data_log(Site* site) {
 
   FILE* fp = site->logger->dataLOG->fp;
