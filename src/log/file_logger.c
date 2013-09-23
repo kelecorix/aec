@@ -36,7 +36,7 @@ void write_log(FILE* fp, char* msg, ...) {
   fclose(fp);
 }
 
-void write_dl(char* msg, int event_t, ... ) {
+void write_dl(char* msg, int event_t) {
 
   // event type, тип события
   FILE* fp = site->logger->dataLOG->fp;
