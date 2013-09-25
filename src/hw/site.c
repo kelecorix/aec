@@ -36,15 +36,15 @@ void run(Site* site) {
   site->vents[0]->set_step(site->vents[0], 0);
   site->vents[1]->set_step(site->vents[1], 0);
 
-  site_mode_uvo(site);
+  //site_mode_uvo(site);
   //site_mode_fail_uvo(site);
-  //site_mode_fail_ac(site);
+  site_mode_fail_ac(site);
 }
 
 /* Режим охлаждения УВО */
 int site_mode_uvo(Site* site) {
   log1("Режим охлаждения УВО!\n");
-
+  logD(site->logger->dataLOG, 0, "Режим охлаждения УВО!");
   site->mode = 1;
   site->time_pre = time(NULL);
   site->time_uvo = time(NULL);
@@ -464,7 +464,7 @@ int site_mode_ac(Site* site) {
   //проверил основные моменты
 
   log3("Режим охлаждения кондиционером!\n");
-
+  logD(site->logger->dataLOG, 0, "Режим охлаждения кондиционером!");
   site->mode = 2;
   site->time_pre = time(NULL);
 
@@ -627,6 +627,7 @@ int site_mode_ac(Site* site) {
 int site_mode_heat(Site* site) {
 
   log3("Режим догрева сайта!\n");
+  logD(site->logger->dataLOG, 0, "Режим догрева сайта!");
   //    "Режим догрева сайта"); //падает при повторном вызове
   site->mode = 3;
 
@@ -802,6 +803,7 @@ int site_mode_heat(Site* site) {
 int site_mode_fail_uvo(Site* site) {
 
   log3("site_mode_fail_uvo: Режим авария УВО!\n");
+  logD(site->logger->dataLOG, 0, "Режим авария УВО!");
   //    "Режим авария УВО");
   site->mode = 4;
   site->time_pre = time(NULL);
@@ -909,6 +911,7 @@ int site_mode_fail_uvo(Site* site) {
 /* Авария кондиционеров - Охлаждение УВО */
 int site_mode_fail_ac(Site* site) {
   log3("Режим авария кондиционеров!\n");
+  logD(site->logger->dataLOG, 0, "Режим авария кондиционеров!");
   //    "Режим авария кондиционеров");
   site->mode = 5;
 
@@ -1069,6 +1072,7 @@ int site_mode_fail_ac(Site* site) {
 int site_mode_fail_temp(Site* site) {
 
   log3("site_mode_fail_temp: Авария по температуре!\n");
+  logD(site->logger->dataLOG, 0, "Авария по температуре!");
   //     "Общий аварийный режим");
   site->mode = 6;
 
@@ -1090,6 +1094,7 @@ int site_mode_fail_temp(Site* site) {
 int site_mode_fail_temp_uvo(Site* site) {
 
   log3("site_mode_fail_temp_uvo: RUN\n");
+  logD(site->logger->dataLOG, 0, "Авария по температуре! УВО");
   int a, v, ret, res;
   float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
   NULL);
@@ -1227,7 +1232,7 @@ int site_mode_fail_temp_uvo(Site* site) {
 int site_mode_fail_temp_ac(Site* site) {
 
   log3("Авария по температуре: режим охлаждения кондиционером!\n");
-
+  logD(site->logger->dataLOG, 0, "Авария по температуре! Кондиционеры");
   //    "Режим охлаждения кондиционером");
   site->time_pre = time(NULL);
 
