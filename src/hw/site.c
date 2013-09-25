@@ -36,9 +36,9 @@ void run(Site* site) {
   site->vents[0]->set_step(site->vents[0], 0);
   site->vents[1]->set_step(site->vents[1], 0);
 
-  //site_mode_uvo(site);
+  site_mode_uvo(site);
   //site_mode_fail_uvo(site);
-  site_mode_fail_ac(site);
+  //site_mode_fail_ac(site);
 }
 
 /* Режим охлаждения УВО */
