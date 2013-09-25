@@ -93,8 +93,10 @@ int site_mode_uvo(Site* site) {
 
     site->power = 1;
 
-    if (difftime(time(NULL), site->time_pre) <= 5)
+    if (difftime(time(NULL), site->time_pre) <= 5){
+      sleep(1);
       continue;
+    }
 
     //log2("****************Принятие решения Режим УВО*****************\n");
     site->time_pre = time(NULL);
@@ -109,10 +111,12 @@ int site_mode_uvo(Site* site) {
           || (site->temp_in <= temp_support)) {
         log3("Вентиляторы вращаются на максимум и проработали 300 сек\n");
         res = sub_uvo_fail(site); // 1 - EXIT_FAILURE - не попали в ошибку
-        if (res)
-          sub_uvo_vent(site);
-        else
+        if (res){
+          sub_uvo_vent(site);}
+        else {
+          sleep(1);
           continue;
+        }
       } else {
         //log3("вентиляторы не на максимуме или не прошло 300 сек\n");
         sub_uvo_vent(site);
@@ -121,10 +125,11 @@ int site_mode_uvo(Site* site) {
       ///log3("Вентиляторы не включены\n");
 
       res = sub_uvo_fail(site); // 1 - EXITE_FAILURE - не попали в ошибку
-      if (res)
-        sub_uvo_vent(site);
-      else
-        continue;
+      if (res){
+        sub_uvo_vent(site);}
+      else{
+        sleep(1);
+        continue;}
     }
   }
 
@@ -219,7 +224,7 @@ void sub_uvo_vent(Site* site) {
       site->time_uvo = time(NULL);
       //site->temp_in_prev = site->temp_in; //видимо не сдесь так как тут мы только когда включаем
 
-      if ((site->temp_out > 20) || (site->vents[0]->error == ERROR || site->vents[1]->error == ERROR)) {
+      if ((site->temp_out > 15) || (site->vents[0]->error == ERROR || site->vents[1]->error == ERROR)) {
         for (v = 0; v < 2; v++) {
           site->vents[v]->set_step(site->vents[v], 11);
           site->vents[v]->time_start = time(NULL);
@@ -463,6 +468,8 @@ int sub_uvo_fail(Site* site) {
 int site_mode_ac(Site* site) {
   //проверил основные моменты
 
+  int delta_gained = 0;// флаг - дельта набрана 0/1
+
   log3("Режим охлаждения кондиционером!\n");
   logD(site->logger->dataLOG, 0, "Режим охлаждения кондиционером!");
   site->mode = 2;
@@ -496,13 +503,15 @@ int site_mode_ac(Site* site) {
 
     int ret;
     ret = read_sensors(site);
+
     if (ret != 0) {
       //Ошибка чтения датчиков
       site_mode_fail_ac(site);
     }
 
     if (difftime(time(NULL), site->time_pre) <= 5) { //секунды
-      usleep(100000);
+      //usleep(100000);
+      sleep(1);
       continue;
     } else {
 
@@ -512,28 +521,17 @@ int site_mode_ac(Site* site) {
       for (a_cond = 0; a_cond < num_ac; a_cond++) { //TODO количество кондиционеров брать из конфига
         if (((site->temp_in - site->acs[a_cond]->temp) >= 10) && (site->acs[a_cond]->mode == 1)) {
           //да КОНД_0 Набрал дельту
-
           log3("Набрал дельту КОНД_%d %f дельта %d\n", a_cond, site->acs[a_cond]->temp, (site->temp_in - site->acs[a_cond]->temp));
           if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1) {
-            // да
-
             log3("выключим вентиляцию\n");
             //выключим вентиляцию
             for (v = 0; v < 2; v++) {
               if (site->vents[v]->mode == 1)
                 site->vents[v]->set_step(site->vents[v], 0);
             }
-
-            //site->acs[a_cond]->mode == 1;
-            //TODO: Проверить по описанию
-            //for (a = 0; a < 2; a++) {
-            //  if (site->acs[a]->mode == 1)
-            //    site->acs[a]->set_mode(site->acs[a], 0);
-            //  site->acs[a]->time_start = time(NULL);
-            //}
-
           }
 
+          //перекроем заслонку
           if (site->th->position == 10) {
             site->th->set_position(site->th, 0);
             site->th->time_start = time(NULL);
@@ -541,12 +539,13 @@ int site_mode_ac(Site* site) {
 
           site->acs[a_cond]->time_start = time(NULL);
           site->acs[a_cond]->is_diff = 1;
+          delta_gained = 1;
 
         } else {
           //нет КОНД_x не набрал пока дельту
-
           log3(" КОНД_%d не набрал пока дельту temp_in %f site->acs[a_cond]->temp %f \n", a_cond, site->temp_in, site->acs[a_cond]->temp);
-          site->acs[a_cond]->is_diff = 0;
+          if(delta_gained == 0)
+            site->acs[a_cond]->is_diff = 0;
         }
 
         //600
@@ -607,6 +606,7 @@ int site_mode_ac(Site* site) {
           } else {
             log3("работа нормальная\n");
             // работа нормальная
+            sleep(1);
             continue;
           }
         }
@@ -694,9 +694,9 @@ int site_mode_heat(Site* site) {
     }
 
     if (difftime(time(NULL), site->time_pre) <= 30) //30
-        { //секунды
-      usleep(10000);
+    { //секунды
       //printf("ЦИКЛ time %d site->time_pre %d diff %f\n", time(NULL), site->time_pre, difftime(time(NULL), site->time_pre));
+      sleep(1);
       continue;
     } else {
 
@@ -715,6 +715,7 @@ int site_mode_heat(Site* site) {
         if (site->temp_mix > 60) {
 
           log3("ТЭН не остыл еще продолжим вентиляцию\n");
+          sleep(1);
           continue; // продолжаем цикл догрева
         } else {
 
@@ -753,6 +754,7 @@ int site_mode_heat(Site* site) {
 
               log3("Пока неизвестно вращается ли вентилятор\n");
               //да
+              sleep(1);
               continue;
 
             } else {
@@ -760,6 +762,7 @@ int site_mode_heat(Site* site) {
 
               log3("Да вращается включим ТЭН\n");
               set_ten(site, 1);
+              sleep(1);
               continue;
             }
           } else {
@@ -788,6 +791,7 @@ int site_mode_heat(Site* site) {
           //  continue;
 
           //}
+          sleep(1);
           continue;
         }
       }
@@ -838,7 +842,7 @@ int site_mode_fail_uvo(Site* site) {
     }
 
     if (difftime(time(NULL), site->time_pre) <= 5) { //секунды
-      usleep(10000);
+      sleep(1);
       continue;
     } else {
 
@@ -896,10 +900,12 @@ int site_mode_fail_uvo(Site* site) {
 
           log3("Нет сайт не позволяет\n");
           //продолжаем в текущем режиме
+          sleep(1);
           continue;
         }
       } else {
         //продолжаем в текущем режиме
+        sleep(1);
         continue;
       }
     }
@@ -945,7 +951,8 @@ int site_mode_fail_ac(Site* site) {
       continue;
     }
 
-    if (difftime(time(NULL), site->time_pre) <= 30) { //секунды
+    if (difftime(time(NULL), site->time_pre) <= 5) { //секунды
+      sleep(1);
       continue;
     } else {
 
@@ -1056,7 +1063,7 @@ int site_mode_fail_ac(Site* site) {
           log3("Да замерз пойдем греть\n");
           site_mode_heat(site);
         }
-
+        sleep(1);
         continue;
 
       }
@@ -1157,7 +1164,8 @@ int site_mode_fail_temp_uvo(Site* site) {
       site_mode_fail_temp_ac(site);
     }
 
-    if (difftime(time(NULL), site->time_pre) <= 30) {
+    if (difftime(time(NULL), site->time_pre) <= 5) {
+      sleep(1);
       continue;
     }
 
@@ -1236,6 +1244,8 @@ int site_mode_fail_temp_ac(Site* site) {
   //    "Режим охлаждения кондиционером");
   site->time_pre = time(NULL);
 
+  int delta_gained = 0;// флаг - дельта набрана 0/1
+
   int a, v, a_cond;
   for (v = 0; v < 2; v++) {
     site->vents[v]->time_start = 0;
@@ -1276,7 +1286,7 @@ int site_mode_fail_temp_ac(Site* site) {
     }
 
     if (difftime(time(NULL), site->time_pre) <= 30) { //секунды
-      usleep(100000);
+      sleep(1);
       continue;
     } else {
 
@@ -1293,6 +1303,7 @@ int site_mode_fail_temp_ac(Site* site) {
           //printf("Набрал дельту КОНД_%d %f дельта %f\n", a_cond,
           //    site->acs[a_cond]->temp,
           //    (site->temp_in - site->acs[a_cond]->temp));
+          delta_gained = 1;
           if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1) {
             // да
 
@@ -1305,12 +1316,13 @@ int site_mode_fail_temp_ac(Site* site) {
           }
           site->acs[a_cond]->time_start = time(NULL);
           site->acs[a_cond]->is_diff = 1;
+          delta_gained = 1;
 
         } else {
           //нет КОНД_x не набрал пока дельту
-
           log3(" КОНД_%d не набрал пока дельту temp_in %f site->acs[a_cond]->temp %f \n", a_cond, site->temp_in, site->acs[a_cond]->temp);
-          site->acs[a_cond]->is_diff = 0;
+          if(delta_gained == 0)
+            site->acs[a_cond]->is_diff = 0;
         }
 
         //600
@@ -1352,6 +1364,7 @@ int site_mode_fail_temp_ac(Site* site) {
         if ((site->temp_in - site->temp_out) > 6) {
           site_mode_fail_temp_uvo(site);
         } else {
+          sleep(1);
           continue;
         }
       } else {
