@@ -1395,7 +1395,7 @@ int set_ten(Site* site, int val) {
   }
 
   if (read(g_i2cFile, buf, 1) != 1) {
-    log3("Error reading from i2c\n");
+    log3("TEN Error reading from i2c\n");
   }
 
   value = (int) buf[0];

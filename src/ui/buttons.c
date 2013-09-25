@@ -41,7 +41,7 @@ int checkButton() {
 
   if (buttonsConnected == 1) {
     if (read(btn, buf, 1) != 1) {
-      printf("Error reading from i2c\n");
+      printf("BUTTONS Error reading from i2c\n");
       buttonsConnected = 0;
     } else {
       //printf("%0x\n",(uint)buf[0]);
