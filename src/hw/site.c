@@ -222,7 +222,7 @@ void sub_uvo_vent(Site* site) {
       site->time_uvo = time(NULL);
       //site->temp_in_prev = site->temp_in; //видимо не сдесь так как тут мы только когда включаем
 
-      if ((site->temp_out > 15) || (site->vents[0]->error == ERROR || site->vents[1]->error == ERROR)) {
+      if ((site->temp_out > 12) || (site->vents[0]->error == ERROR || site->vents[1]->error == ERROR)) {
         for (v = 0; v < 2; v++) {
           site->vents[v]->set_step(site->vents[v], 11);
           site->vents[v]->time_start = time(NULL);

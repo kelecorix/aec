@@ -10,7 +10,7 @@ int povtor = 2;
 int povtor_old = 2;
 
 char *BUTTONS = "/dev/i2c-1";
-int BTNaddress = 0x3D;
+int BTNaddress = 0x3D; // TODO: Читать из конфига!!
 int buttonsConnected = -1; // -1 = unknown, 0 = not connected, 1 = connected
 int preButton = 0;
 
