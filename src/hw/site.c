@@ -114,7 +114,6 @@ int site_mode_uvo(Site* site) {
         if (res){
           sub_uvo_vent(site);}
         else {
-          sleep(1);
           continue;
         }
       } else {
@@ -125,11 +124,10 @@ int site_mode_uvo(Site* site) {
       ///log3("Вентиляторы не включены\n");
 
       res = sub_uvo_fail(site); // 1 - EXITE_FAILURE - не попали в ошибку
-      if (res){
-        sub_uvo_vent(site);}
-      else{
-        sleep(1);
-        continue;}
+      if (res)
+        sub_uvo_vent(site);
+      else
+        continue;
     }
   }
 
@@ -510,7 +508,6 @@ int site_mode_ac(Site* site) {
     }
 
     if (difftime(time(NULL), site->time_pre) <= 5) { //секунды
-      //usleep(100000);
       sleep(1);
       continue;
     } else {
@@ -606,7 +603,6 @@ int site_mode_ac(Site* site) {
           } else {
             log3("работа нормальная\n");
             // работа нормальная
-            sleep(1);
             continue;
           }
         }
@@ -693,7 +689,7 @@ int site_mode_heat(Site* site) {
       site_mode_fail_uvo(site);
     }
 
-    if (difftime(time(NULL), site->time_pre) <= 30) //30
+    if (difftime(time(NULL), site->time_pre) <= 5) //30
     { //секунды
       //printf("ЦИКЛ time %d site->time_pre %d diff %f\n", time(NULL), site->time_pre, difftime(time(NULL), site->time_pre));
       sleep(1);
@@ -715,7 +711,6 @@ int site_mode_heat(Site* site) {
         if (site->temp_mix > 60) {
 
           log3("ТЭН не остыл еще продолжим вентиляцию\n");
-          sleep(1);
           continue; // продолжаем цикл догрева
         } else {
 
@@ -754,7 +749,6 @@ int site_mode_heat(Site* site) {
 
               log3("Пока неизвестно вращается ли вентилятор\n");
               //да
-              sleep(1);
               continue;
 
             } else {
@@ -762,7 +756,6 @@ int site_mode_heat(Site* site) {
 
               log3("Да вращается включим ТЭН\n");
               set_ten(site, 1);
-              sleep(1);
               continue;
             }
           } else {
@@ -791,7 +784,6 @@ int site_mode_heat(Site* site) {
           //  continue;
 
           //}
-          sleep(1);
           continue;
         }
       }
@@ -868,18 +860,6 @@ int site_mode_fail_uvo(Site* site) {
             }
           }
         }
-
-        //600
-        // отработан промежуток?
-        //if ((difftime(time(NULL), site->acs[a]->time_start) > 600)
-        //    && (site->acs[a]->mode == 1)) {
-        //  //дельта набрана?
-        //  if (site->acs[a]->is_diff == 0) {
-        //    // Авария кондиционера
-        //    num_ac_tmp--;
-        //    site->acs[a]->set_mode(site->acs[a], 0);
-        //  }
-        //}
       }
 
       //да
@@ -900,12 +880,10 @@ int site_mode_fail_uvo(Site* site) {
 
           log3("Нет сайт не позволяет\n");
           //продолжаем в текущем режиме
-          sleep(1);
           continue;
         }
       } else {
         //продолжаем в текущем режиме
-        sleep(1);
         continue;
       }
     }
@@ -1063,9 +1041,7 @@ int site_mode_fail_ac(Site* site) {
           log3("Да замерз пойдем греть\n");
           site_mode_heat(site);
         }
-        sleep(1);
         continue;
-
       }
 
       log3("Переход на функцию логики управления заслонкой\n");
@@ -1140,14 +1116,12 @@ int site_mode_fail_temp_uvo(Site* site) {
   if ((site->temp_out) > temp_dew) {
     if (site->th->exist) //Это есть ли заслонка? или есть ли откуда читать
     {
-
       log3("переведем заслонку в положение улица\n");
       site->th->set_position(site->th, 10); //переведем заслонку в положение улица
       site->th->time_start = time(NULL);
     }
   } else {
     if (site->th->exist) {
-
       log3("переведем заслонку в положение сайт\n");
       site->th->set_position(site->th, 0); //переведем заслонку в положение сайт
       site->th->time_start = time(NULL);
@@ -1285,7 +1259,7 @@ int site_mode_fail_temp_ac(Site* site) {
       continue;
     }
 
-    if (difftime(time(NULL), site->time_pre) <= 30) { //секунды
+    if (difftime(time(NULL), site->time_pre) <= 5) { //секунды
       sleep(1);
       continue;
     } else {
@@ -1364,7 +1338,6 @@ int site_mode_fail_temp_ac(Site* site) {
         if ((site->temp_in - site->temp_out) > 6) {
           site_mode_fail_temp_uvo(site);
         } else {
-          sleep(1);
           continue;
         }
       } else {
