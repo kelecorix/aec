@@ -93,13 +93,19 @@ static int set_mode(AC* ac, int val) {
     if (ac->num == 1) {
       bit = 1;
     }
-    if (val == 1)
+    if (val == 1) {
       value |= (1 << bit); // установим бит
-    else
+      ac->moto_time_start = time(NULL);
+      log3("ac.c: Включим КОНД_%d\n",ac->num);    
+    } else {
       value &= ~(1 << bit); // очистим бит
-
+      ac->moto_time_stop = time(NULL);
+      log3("Моточасы KOND_%d %d %d %d\n",ac->num, (ac->moto_time_stop - ac->moto_time_start), ac->moto_time_stop, ac->moto_time_start);
+      logD(site->logger->dataLOG, 0, "Моточасы KOND_%d %d",ac->num, (ac->moto_time_stop - ac->moto_time_start));
+    }
     //printf("Управляем регистром, адрес %x, значение %d, %x , бит %d , номер %d\n", addr, val, value, bit, ac->num);
     set_i2c_register(g_i2cFile, addr, value, value);
+    
     ac->mode = val;
     i2cClose();
     return 1;

@@ -19,6 +19,9 @@ typedef struct AC {
   double temp; // температура 
   time_t time_start;
   time_t time_stop;
+  time_t moto_time_start;
+  time_t moto_time_stop;
+  
   int num;
 
   ac_error error;

@@ -6,10 +6,10 @@ use lib '/root/libperl/lib/perl5/site_perl/5.8.8';
 use LWP;
 use HTTP::Request::Common;
 
-$ret = testInterneta();
-if ($ret == -1) {
-  exit;
-}
+#$ret = testInterneta();
+#if ($ret == -1) {
+#  exit;
+#}
 #$ret = testServeraStat();
 #if ($ret == -1) {
 #  exit;
@@ -20,9 +20,13 @@ if ($ret == -1) {
 $syte_name = 'ODE-ODE-TEST';
 #$file = "/var/log/send_server-klimat.log";
 #$file_work = "/var/log/send_server-klimat.log.old";
-$file = "/opt/owfs/freecooling/data.log";
-$file_work = "/opt/owfs/freecooling/data.log.old";
-$file_flag_run = "/var/run/new_client_pl.pid";
+#$file_version_new = "/opt/owfs/freecooling/version_new";
+$file_version_new = "/tmp/version_new";
+#$file_version_old = "/opt/owfs/freecooling/version";
+$file_version_old = "/opt/owfs/freecooling/version";
+$file_program_new = "/tmp/freecooling2";
+$file_program_old = "/opt/owfs/freecooling/freecooling2";
+$file_flag_run = "/var/run/update_freecooling_pl.pid";
 
 if (-e $file_flag_run) {
   print "Est flug $file_flag_run\n";
@@ -32,93 +36,86 @@ if (-e $file_flag_run) {
   print FFF "run\n";
 }
 
-if (!-e $file_work) {
-  print "Отправленного файла нету подготовим файл\n";
-  if (-e $file) {
-    rename($file, $file_work); 
-  }
+print "Скачаем файл version\n";
+#$ff = system "scp freecooling\@192.168.1.100:/home/freecooling/program/freecooling/version /home/artyr/version_new";
+$ff = system "wget -q 195.138.71.229:443/program/freecooling/version -O /tmp/version_new";
+#print $ff."\n";
+if ($ff != 0) {
+ print "Ошибка при копировании\n";
+   if (-e $file_flag_run) {
+     unlink($file_flag_run);
+   }  
+ 
+ exit;
+}
+
+print "Файл version скачали сравним версии программы\n";
+
+open(FILE_W,$file_version_new);
+@ver_new = <FILE_W>;
+chomp $ver_new[0];
+#print $ver_new[0]."\n";
+close(FILE_W);
+
+open(FILE_W,$file_version_old);
+@ver_old = <FILE_W>;
+chomp $ver_old[0];
+#print $ver_old[0]."\n";
+close(FILE_W);
+
+if($ver_old[0] eq $ver_new[0]) {
+ print "Версия таже\n";
+ 
 } else {
-  print "Есть не отправленый файл отправим\n";
-#  if (-e $file_flag_run) {
-#    unlink($file_flag_run);
-#  }  
+ print "Версия обновилась нужно скачать\n";
+ #$ff = system "scp freecooling\@192.168.1.100:/home/freecooling/program/freecooling/freecooling2 /home/artyr/";
+ $ff = system "wget -q 195.138.71.229:443/program/freecooling/freecooling2 -O /tmp/freecooling2";
+ if ($ff != 0) {
+   print "Ошибка при копировании файла freecooling\n";
+   if (-e $file_flag_run) {
+     unlink($file_flag_run);
+   }  
+   exit;
+ }
+  
+ #$ff = system "scp freecooling\@192.168.1.100:/home/freecooling/program/freecooling/freecooling2.md5 /home/artyr/";
+ $ff = system "wget -q 195.138.71.229:443/program/freecooling/freecooling2.md5 -O /tmp/freecooling2.md5";
+ if ($ff != 0) {
+   print "Ошибка при копировании файла freecooling.md5\n";
+   if (-e $file_flag_run) {
+     unlink($file_flag_run);
+   }  
+   exit;
+ }
+ print "Файлы скачали проверим контрольную сумму\n";
+ $ff = system "md5sum -c /tmp/freecooling2.md5 --status";
+ if ($ff != 0) {
+   print "Ошибка md5sum\n";
+   if (-e $file_flag_run) {
+     unlink($file_flag_run);
+   }  
+   exit;
+ }
+ print "Файлы скачаны проверку прошли нужно остановить программу и скопировать новую\n";
+ #cp /tmp/version_new /opt/owfs/freecooling/version
+ $ff = system "killall freecooling2.sh; killall freecooling2";
+ #if ($ff != 0) {
+ #  print "Ошибка killall\n";
+ #  if (-e $file_flag_run) {
+ #    unlink($file_flag_run);
+ #  }  
+ #  exit;
+ #}
+ sleep(2);
+ rename($file_version_new, $file_version_old); 
+ #rename($file_program_new, $file_program_old);
 }
 
 
-if (-e $file_work) {
-  #print "The file $file is valid and exists!";
-  open(FILE_W,$file_work);
-
-  while (<FILE_W>) {
-    #$line_tmp = fgets($fh, 4096);
-    $line_tmp = $_;
-    chop $line_tmp;
-    #print "$line_tmp\n";
-    #$line_tmp = str_replace('\r\n', '', $line_tmp);
-    #$line_tmp = str_replace('\n', '', $line_tmp);
-    if (length($line_tmp) > 5) {
-      push @lines, $line_tmp;
-    }
-  }
-  # Выполнить операции с файлом
-  
-  close(FILE_W); 
-
-  $i = 0;  
-  $str_send_tmp = '';
-  foreach $line (@lines) {
-    print $line."\n"; 
-    #@expl_tmp = split(/\|/,$line);
-    #$str_send_tmp = $str_send_tmp.$expl_tmp[0].' '.$expl_tmp[1].'!';
-    $str_send_tmp = $str_send_tmp.$line.'!';
-    print "$str_send_tmp\n";
-    $i++;
-    if ($i == 20) {
-    #  //отправим на сервер
-      chop $str_send_tmp;
-
-      $ret = -1;
-      print "STR SEND: \n".$str_send_tmp."\n";
-      while ($ret == -1) {
-        $ret = SendServer($str_send_tmp);
-        print "Ретурн отправка ".$ret."\n";
-        sleep(5);
-      }        
-
-      print $str_send_tmp;
-      $str_send_tmp = '';
-      $i = 0;
-      print "\n\n";
-    }  
-    
-  }
-
-  if (length($str_send_tmp) > 5) {
-    print "Остаток для отсылки\n";
-    chop $str_send_tmp;
-    print $str_send_tmp;
-    print "\n\n";
-    #//отправим на сервер остаток
-    $ret = -1;
-    while ($ret == -1) {
-      $ret = SendServer($str_send_tmp);
-      print "Ретурн отправка ".$ret."\n";
-      sleep(5);
-    }
-                  
-  }
-  
-  print "Все отправили удалим файл\n";      
-  unlink($file_work);
+if (-e $file_flag_run) {
   unlink($file_flag_run);
-    
-} else {
-  print "Файла для отправки нету\n";
-  if (-e $file_flag_run) {
-    unlink($file_flag_run);
-  }  
+}  
 
-}
 
 sub SendServer {
   my $send_str = shift;

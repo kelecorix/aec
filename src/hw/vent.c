@@ -76,6 +76,9 @@ void i2c_get_tacho(int addr0, int addr1) {
   if (site->tacho2_t < 100)
     site->tacho2_t = 0;
 
+  if (site->tacho1_t == 0) {
+    site->tacho2_t = 0;
+  }
   // Преобразуем количество оборотов в шаг
   site->tacho1 = turns_to_step(site->tacho1_t, site->vents[0]->type);
   site->tacho2 = turns_to_step(site->tacho2_t, site->vents[1]->type);
