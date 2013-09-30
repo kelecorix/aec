@@ -55,7 +55,7 @@ int site_mode_uvo(Site* site) {
   site->time_pre = time(NULL);
   site->time_uvo = time(NULL);
 
-  int a, ret, res;
+  int ret, res;
   float temp_dew = strtof(getStr(site->cfg, (void *) "temp_dew"), NULL);
 
   // читаем датчики
@@ -66,6 +66,7 @@ int site_mode_uvo(Site* site) {
   }
 
   log3("Переведем заслонку site->temp_out = %f temp_dew = %f\n", site->temp_out, temp_dew);
+  printf("Переведем заслонку site->temp_out = %f temp_dew = %f\n", site->temp_out, temp_dew);
   if ((site->temp_out) > temp_dew) {
     if (site->th->exist) //Это есть ли заслонка? или есть ли откуда читать
     {
