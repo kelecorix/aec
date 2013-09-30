@@ -9,7 +9,6 @@
 #include "hw/vent.h"
 #include "hw/ow.h"
 #include "ui/lcd.h"
-#include "ui/buttons.h"
 #include "ui/keyboard.h"
 #include "ui/ui.h"
 #include "hw/i2c.h"
