@@ -1465,8 +1465,12 @@ int read_sensors(Site* site) {
   site->temp_evapor1 = get_data(conn, mnt, s_temp_evapor1, 100);
   site->temp_evapor2 = get_data(conn, mnt, s_temp_evapor2, 100);
 
+  //TODO: переделать более грамотно, а что если
+  // у нас 5 кондиционеров
+  // Первый читаем в обязательном порядке
   site->acs[0]->temp = site->temp_evapor1;
-  site->acs[1]->temp = site->temp_evapor2;
+  if(site->num_ac == 2)
+    site->acs[1]->temp = site->temp_evapor2;
 
   i2c_get_tacho(strtol(a_tacho_in, NULL, 16), strtol(a_tacho_out, NULL, 16));
 
