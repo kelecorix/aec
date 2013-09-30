@@ -57,7 +57,7 @@ int site_mode_uvo(Site* site) {
 
   int ret, res;
   float temp_dew = strtof(getStr(site->cfg, (void *) "temp_dew"), NULL);
-
+  printf("до датчиков\n");
   // читаем датчики
   ret = read_sensors(site);
   if (ret != 0) {
