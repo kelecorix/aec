@@ -1512,8 +1512,8 @@ Site* site_new(char* filename) {
   site->acs = malloc(num_ac * sizeof(int*));
   site->num_ac = num_ac;
 
-  for(i=0; i<site->num_ac; i++)
-    site->acs[i] = ac_new(i);
+  for(i=0; i<site->num_ac; i++){
+    site->acs[i] = ac_new(i);}
 
   return site;
 }
