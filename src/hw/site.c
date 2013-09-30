@@ -1287,7 +1287,7 @@ int site_mode_fail_temp_ac(Site* site) {
         site_mode_uvo(site);
       }
 
-      for (a_cond = 0; a_cond < num_ac; a_cond++) { //TODO количество кондиционеров брать из конфига
+      for (a_cond = 0; a_cond < site->num_ac; a_cond++) { //TODO количество кондиционеров брать из конфига
         if (((site->temp_in - site->acs[a_cond]->temp) >= 5) && (site->acs[a_cond]->mode == 1)) {
           //да КОНД_0 Набрал дельту
           log3("Набрал дельту КОНД_%d %f дельта %f\n", a_cond, site->acs[a_cond]->temp, (site->temp_in - site->acs[a_cond]->temp));
