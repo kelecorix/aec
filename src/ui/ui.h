@@ -16,13 +16,6 @@
 #define mode_intro 5
 #define mode_MENU 6
 
-typedef struct Params {
-
-  LCD* lcd;
-  KB* keyboard;
-
-} Params;
-
 void display(Site* site, LCD* lcd, int display_mode);
 void run_ui(Site* site);
 
