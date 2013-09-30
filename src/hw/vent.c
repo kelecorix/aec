@@ -148,7 +148,7 @@ int turns_to_step(int turns, int type) {
   return step;
 }
 
-static void send_moto(Vent* vent, pre_mode) {
+static void send_moto(Vent* vent, int pre_mode) {
 
   if (vent->mode == pre_mode)
     return;

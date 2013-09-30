@@ -10,7 +10,7 @@
 
 int dmode; // Мы либо в режиме редактирования 1, либо в режиме вывода 0
 
-void run_ui() {
+void run_ui(Site* site) {
 
   // инициализируем экран
   int addr_lcd = strtol(getStr(site->cfg, (void *) "a_lcd"), (char **) NULL, 16);
@@ -23,7 +23,7 @@ void run_ui() {
   KB* kb = kb_new(addr_kb);
 
   // инициализируем меню
-  init_menu();
+  //init_menu();
 
   // установим обработчик нажатия
   //setHandler(MSG_MENU_SELECT, &selectMenu);

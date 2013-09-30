@@ -47,8 +47,8 @@ typedef struct LCD {
   int fd; // дескриптор для работы с шиной
   int connect; // -1 = unknown, 0 = not connected, 1 = connected
 
-  static void (*init)(struct LCD*);
-  static void (*reset)(struct LCD*);
+  void (*init)(struct LCD*);
+  void (*reset)(struct LCD*);
   void (*clear)(struct LCD*);
   void (*write_quartets)(struct LCD*, int bits);
   void (*write_char)(struct LCD*, char letter);

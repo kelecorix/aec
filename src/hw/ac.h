@@ -34,6 +34,6 @@ typedef struct AC {
 
 } AC;
 
-static void send_moto(struct AC*);
+static void send_moto_ac(AC* ac);
 
 #endif /*AC_H_*/

@@ -83,7 +83,7 @@ static int set_mode(AC* ac, int val) {
     else
       value &= ~(1 << bit); // очистим бит
 
-    send_moto(ac);
+    send_moto_ac(ac);
 
     //log4("Управляем регистром, адрес %x, значение %d, %x , бит %d , номер %d\n", addr, val, value, bit, ac->num);
     set_i2c_register(g_i2cFile, addr, value, value);
@@ -100,7 +100,7 @@ static int set_mode(AC* ac, int val) {
 /* Внутренняя функция передачи данных моточасов
  *
  */
-static void send_moto(AC* ac) {
+static void send_moto_ac(AC* ac) {
 
   if (ac->mode == 1) {
     ac->moto_start = time(NULL);

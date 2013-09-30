@@ -42,7 +42,7 @@ LCD* lcd_new(int addr) {
 
 /* Функция инициализации экрана
  */
-static void init(LCD* lcd) {
+void init(LCD* lcd) {
   write_quartets(lcd, CMD_SIL | SIL_N);
   write_quartets(lcd, CMD_EDC);
   write_quartets(lcd, CMD_CAH);
@@ -52,7 +52,7 @@ static void init(LCD* lcd) {
 
 /* Функция перезагрузки экрана
  */
-static void reset(LCD* lcd) {
+void reset(LCD* lcd) {
   send(lcd, 0xFF);
   usleep(5000);
   send(lcd, 0x03 + LCD_EN);
@@ -71,8 +71,8 @@ static void reset(LCD* lcd) {
 
 /* Функция очистки экрана
  */
-static void clear(LCD* lcd) {
-  write_quartet(lcd, CMD_CAH);
+void clear(LCD* lcd) {
+  write_quartets(lcd, CMD_CAH);
 }
 
 /* Функция записи полубайта на шину i2c

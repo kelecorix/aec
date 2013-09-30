@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdint.h>
 #include "msg.h"
 
 volatile iTimer lTimer[maxTimers]; // список таймеров
