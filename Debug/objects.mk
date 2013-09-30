@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS := -lownet -lpthread -lowcapi
+LIBS :=
 
