@@ -3,5 +3,6 @@ git pull
 cd Debug/
 make clean
 make
-cp freecooling2 ..
+cp freecooling ..
 cd ..
+
