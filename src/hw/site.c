@@ -1470,8 +1470,8 @@ int read_sensors(Site* site) {
   // у нас 5 кондиционеров
   // Первый читаем в обязательном порядке
   site->acs[0]->temp = site->temp_evapor1;
-  if(site->num_ac == 2)
-    site->acs[1]->temp = site->temp_evapor2;
+//  if(site->num_ac == 2)
+//    site->acs[1]->temp = site->temp_evapor2;
 
   i2c_get_tacho(strtol(a_tacho_in, NULL, 16), strtol(a_tacho_out, NULL, 16));
 
@@ -1512,8 +1512,9 @@ Site* site_new(char* filename) {
   site->acs = malloc(num_ac * sizeof(int*));
   site->num_ac = num_ac;
 
-  for(i=0; i<site->num_ac; i++){
-    site->acs[i] = ac_new(i);}
-
+  for(i=0; i < (site->num_ac); i++){
+    site->acs[i] = ac_new(i);
+  }
+  printf("Количество кондишек: %d", site->num_ac);
   return site;
 }
