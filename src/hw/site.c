@@ -38,8 +38,7 @@ void run(Site* site) {
 
   //По умолчанию: кондиц. вкл.
   int a;
-  int num_ac = atoi(getStr(site->cfg, (void *) "num_ac"));
-  for (a = 0; a < num_ac; a++) {
+  for (a = 0; a < site->num_ac; a++) {
     site->acs[a]->set_mode(site->acs[a], 1);
   }
 
@@ -146,7 +145,7 @@ void sub_uvo_vent(Site* site) {
     log3("Да позваляет\n");
     if ((site->acs[0]->mode == 1) || (site->acs[1]->mode == 1)) {
       log3("Кондиционеры были включены выключим\n");
-      for (a = 0; a < 2; a++) {
+      for (a = 0; a < site->num_ac; a++) {
         site->acs[a]->set_mode(site->acs[a], 0);
       }
     }
@@ -275,8 +274,7 @@ int sub_uvo_pen(Site* site) {
 
     if (site->acs[0]->mode == 1 || site->acs[1]->mode == 1) {
       log3("Выключим кондиционеры\n");
-      int num_ac = atoi(getStr(site->cfg, (void *) "num_ac"));
-      for (a = 0; a < num_ac; a++) {
+      for (a = 0; a < site->num_ac; a++) {
         site->acs[a]->set_mode(site->acs[a], 0);
       }
     }
@@ -291,7 +289,7 @@ int sub_uvo_pen(Site* site) {
     log3("Температура выше поддержания + 2\n");
     if (site->power == 0) {
       //питания нет
-      for (a = 0; a < 2; a++) {
+      for (a = 0; a < site->num_ac; a++) {
         site->acs[a]->error = NOPOWER;
       }
 
@@ -346,7 +344,7 @@ void sub_uvo_pow(Site* site) {
 
     site_mode_ac(site);
   } else {
-    for (a = 0; a < 2; a++) {
+    for (a = 0; a < site->num_ac; a++) {
       site->acs[a]->error = NOPOWER;
     }
     site_mode_fail_ac(site);
@@ -479,18 +477,16 @@ int site_mode_ac(Site* site) {
     site->vents[v]->time_start = 0;
   }
 
-  for (a = 0; a < 2; a++) {
+  for (a = 0; a < site->num_ac; a++) {
     site->acs[a]->is_diff = 0;
   }
 
-  int num_ac = atoi(getStr(site->cfg, (void *) "num_ac"));
-
-  int num_ac_tmp = num_ac;
+  int num_ac_tmp = site->num_ac;
 
   log3("Количество кондиционеров num_ac_tmp = %d is_diff_0 = %d is_diff_1 = %d\n", num_ac_tmp, site->acs[0]->is_diff,
       site->acs[1]->is_diff);
 
-  for (a = 0; a < num_ac; a++) {
+  for (a = 0; a < site->num_ac; a++) {
     site->acs[a]->set_mode(site->acs[a], 1);
     site->acs[a]->time_start = time(NULL);
 
@@ -516,7 +512,7 @@ int site_mode_ac(Site* site) {
       log3("*************Принятие решения Режим охлаждения кондиционером***************\n");
       site->time_pre = time(NULL);
 
-      for (a_cond = 0; a_cond < num_ac; a_cond++) { //TODO количество кондиционеров брать из конфига
+      for (a_cond = 0; a_cond < site->num_ac; a_cond++) { //TODO количество кондиционеров брать из конфига
         if (((site->temp_in - site->acs[a_cond]->temp) >= 10) && (site->acs[a_cond]->mode == 1)) {
           //да КОНД_0 Набрал дельту
           log3("Набрал дельту КОНД_%d %f дельта %d\n", a_cond, site->acs[a_cond]->temp, (site->temp_in - site->acs[a_cond]->temp));
@@ -810,20 +806,18 @@ int site_mode_fail_uvo(Site* site) {
     site->vents[v]->time_start = 0;
   }
 
-  for (a = 0; a < 2; a++) {
+  for (a = 0; a < site->num_ac; a++) {
     site->acs[a]->is_diff = 0;
   }
 
-  int num_ac = atoi(getStr(site->cfg, (void *) "num_ac"));
-
-  for (a = 0; a < num_ac; a++) {
+  for (a = 0; a < site->num_ac; a++) {
     site->acs[a]->set_mode(site->acs[a], 1);
     site->acs[a]->time_start = time(NULL);
 
     log3("site_mode_fail_uvo: Включили кондиционер КОНД_%d время включения %d\n", a, site->acs[a]->time_start);
   }
 
-  int num_ac_tmp = num_ac;
+  int num_ac_tmp = site->num_ac;
 
   while (1) { // sensors was read - ok
 
@@ -842,7 +836,7 @@ int site_mode_fail_uvo(Site* site) {
       log3("site_mode_fail_uvo: ****************Авария УВО работаем на кондиционере принятие решения*******************\n");
       site->time_pre = time(NULL);
 
-      for (a_cond = 0; a_cond < num_ac; a_cond++) {
+      for (a_cond = 0; a_cond < site->num_ac; a_cond++) {
         if (((site->temp_in - site->acs[a_cond]->temp) >= 10) && (site->acs[a_cond]->mode == 1)) {
           //да
 
@@ -861,7 +855,7 @@ int site_mode_fail_uvo(Site* site) {
             site->th->time_start = time(NULL);
 
             // TODO: Проверить по описанию
-            for (a = 0; a < num_ac; a++) {
+            for (a = 0; a < site->num_ac; a++) {
               //site->acs[a]->set_mode(site->acs[a], 1);
               site->acs[a]->time_start = time(NULL);
             }
@@ -961,7 +955,7 @@ int site_mode_fail_ac(Site* site) {
       site->time_pre = time(NULL);
 
       // выключим все кондиционеры
-      for (a = 0; a < 2; a++) {
+      for (a = 0; a < site->num_ac; a++) {
         site->acs[a]->set_mode(site->acs[a], 0);
       }
 
@@ -1004,7 +998,7 @@ int site_mode_fail_ac(Site* site) {
       log3("Проверим кондишки если авария по питанию и питание появилось можно перейти\n");
       // проверяем кондиционеры
       //
-      for (a = 0; a < 2; a++) {
+      for (a = 0; a < site->num_ac; a++) {
         if (site->acs[a]->error == NOPOWER) {
           if (site->power == 1) {
 
@@ -1100,7 +1094,7 @@ int site_mode_fail_temp_uvo(Site* site) {
   site->vents[1]->time_start = time(NULL);
   
   //По умолчанию: кондиц. выкл.
-  for (a = 0; a < 2; a++) {
+  for (a = 0; a < site->num_ac; a++) {
     site->acs[a]->set_mode(site->acs[a], 0);
   }
 
@@ -1191,7 +1185,7 @@ int site_mode_fail_temp_uvo(Site* site) {
 
     if (site->acs[0]->mode == 1 || site->acs[1]->mode == 1) {
       log3("site_mode_fail_temp_uvo: Выключим кондиционеры\n");
-      for (a = 0; a < 2; a++) {
+      for (a = 0; a < site->num_ac; a++) {
         site->acs[a]->set_mode(site->acs[a], 0);
       }
     }
@@ -1245,12 +1239,11 @@ int site_mode_fail_temp_ac(Site* site) {
     site->vents[v]->time_start = 0;
   }
 
-  for (a = 0; a < 2; a++) {
+  for (a = 0; a < site->num_ac; a++) {
     site->acs[a]->is_diff = 0;
   }
 
-  int num_ac = atoi(getStr(site->cfg, (void *) "num_ac"));
-  int num_ac_tmp = num_ac;
+  int num_ac_tmp = site->num_ac;
   int temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
   NULL);
 
@@ -1265,7 +1258,7 @@ int site_mode_fail_temp_ac(Site* site) {
     }
   }
 
-  for (a = 0; a < 2; a++) {
+  for (a = 0; a < site->num_ac; a++) {
     site->acs[a]->set_mode(site->acs[a], 1);
     site->acs[a]->time_start = time(NULL);
   }
@@ -1487,11 +1480,10 @@ Site* site_new(char* filename) {
   Site* site = malloc(sizeof(Site));
   int i;
   for (i = 0; i < 2; i++) {
-    site->acs[i] = ac_new(i);
     site->vents[i] = vent_new();
   }
 
-  site->vents[0]->type = 0; // приточный
+  site->vents[0]->type = 0;  // приточный
   site->vents[1]->type = 1;
 
   site->th = throttle_new();
@@ -1507,6 +1499,13 @@ Site* site_new(char* filename) {
   site->set_ten = set_ten;
 
   site->logger = create_logger();
+
+  int num_ac = strtoa(getStr(site->cfg, (void *) "num_ac"), NULL);
+  site->acs = malloc(num_ac * sizeof(int*));
+  site->num_ac = num_ac;
+
+  for(i=0; i<num_ac; i++)
+    site->acs[i] = ac_new(i);
 
   return site;
 }
