@@ -10,13 +10,13 @@ volatile uint16_t lMesPointer, hMesPointer; // указатели на нача�
 // установка обработчика события
 // вызывается: setHandler(MSG_KEY_PRESS, &checkKey);
 void setHandler(msg_num msg, handler hnd) {
-  ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+  //ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
     if (numHandlers < maxHandlers) {
       lHandler[numHandlers].hnd = hnd; // и регистрирем обработчик
       lHandler[numHandlers].msg = msg;
       numHandlers++;
     }
-  }
+  //}
 }
 
 // снятие обработчика события
@@ -25,12 +25,11 @@ void setHandler(msg_num msg, handler hnd) {
 void killHandler(msg_num msg, handler hnd) {
   if (numHandlers==0)
     return;
-  ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+  //ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
     int8_t i, j;
     j = 0;
     for (i = numHandlers-1; i >= 0; i--) {
       if ((lHandler[i].msg == msg) && (lHandler[i].hnd == hnd)) {
-
         // сдвигаем все записи к началу списка, чтобы дырок не было
         for (j = i; j < numHandlers-1 ; j++) {
           lHandler[j].msg = lHandler[j + 1].msg;
@@ -39,7 +38,7 @@ void killHandler(msg_num msg, handler hnd) {
         numHandlers--;
         break;
       }
-    }
+    //}
   }
 }
 
@@ -47,7 +46,7 @@ void killHandler(msg_num msg, handler hnd) {
 // пример вызова: sendMessage(MSG_KEY_PRESS, KEY_MENU)
 void sendMessage(msg_num msg, msg_par par) {
 
-  ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+  //ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
     hMesPointer = (hMesPointer + 1) & (maxMessages - 1); // сдвигаем указатель головы
 
     lMessage[hMesPointer].msg = msg; // заносим событие и параметр
@@ -55,7 +54,7 @@ void sendMessage(msg_num msg, msg_par par) {
     if (hMesPointer == lMesPointer) { // догнали начало очереди, убиваем необработанное сообытие
       lMesPointer = (lMesPointer + 1) & (maxMessages - 1);
     }
-  }
+  //}
 }
 ;
 
@@ -70,12 +69,12 @@ void dispatchMessage(void) {
     return;
   }
 
-  ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+  //ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
     lMesPointer = (lMesPointer + 1) & (maxMessages - 1); // сдвинем указатель
 
     msg = lMessage[lMesPointer].msg;
     par = lMessage[lMesPointer].par;
-  }
+  //}
 
   if (msg != 0 && numHandlers > 0) {
     for (i = numHandlers - 1; i >= 0; i--) { // просматриваем обработчики с конца
@@ -97,7 +96,7 @@ void setTimer(msg_num msg, msg_par par, uint16_t time) {
     sendMessage(msg, par);
   } else {
 
-    ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+    //ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
       firstFree = numTimers + 1;
 
       for (i = 0; i <= numTimers; i++) { // ищем установленный таймер
@@ -123,7 +122,7 @@ void setTimer(msg_num msg, msg_par par, uint16_t time) {
         if (firstFree > numTimers)
           numTimers = firstFree;
       }
-    }
+    //}
   }
 }
 
@@ -132,7 +131,7 @@ void setTimer(msg_num msg, msg_par par, uint16_t time) {
 // не зависимо от параметра события
 void killTimer(msg_num msg) {
   uint8_t i;
-  ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
+  //ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
     for (i = 0; i < maxTimers; i++) {
       if (lTimer[i].msg == msg) {
         lTimer[i].msg = 0;
@@ -140,7 +139,7 @@ void killTimer(msg_num msg) {
     }
     while ((lTimer[numTimers].msg == 0) && (numTimers > 0))
       numTimers--;
-  }
+  //}
 }
 
 // диспетчер таймеров
@@ -168,9 +167,9 @@ void initMessages() {
   hMesPointer = 0;
 
   // главный таймер
-  TCCR2 = _BV(WGM21) | _BV(CS22) | _BV(CS20);
-  OCR2 = F_CPU / 102400; // период 1/100 сек, делитель 1/1024
-  TIMSK |= _BV(OCIE2);
+//  TCCR2 = _BV(WGM21) | _BV(CS22) | _BV(CS20);
+//  OCR2 = F_CPU / 102400; // период 1/100 сек, делитель 1/1024
+//  TIMSK |= _BV(OCIE2);
 }
 
 ISR(TIMER2_COMP_vect)

@@ -26,7 +26,7 @@ void run_ui() {
   init_menu();
 
   // установим обработчик нажатия
-  setHandler(MSG_MENU_SELECT, &selectMenu);
+  //setHandler(MSG_MENU_SELECT, &selectMenu);
 
   sleep(1);
 
