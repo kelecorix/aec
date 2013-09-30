@@ -1465,6 +1465,7 @@ int read_sensors(Site* site) {
   site->temp_evapor1 = get_data(conn, mnt, s_temp_evapor1, 100);
   site->temp_evapor2 = get_data(conn, mnt, s_temp_evapor2, 100);
 
+  printf("пытаемся записать температуры\n");
   //TODO: переделать более грамотно, а что если
   // у нас 5 кондиционеров
   // Первый читаем в обязательном порядке
