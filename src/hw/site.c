@@ -62,6 +62,7 @@ int site_mode_uvo(Site* site) {
   ret = read_sensors(site);
   if (ret != 0) {
     //Ошибка чтения датчиков
+    printf("Ошибка чтения датчиков\n");
     site_mode_fail_uvo(site);
   }
 
