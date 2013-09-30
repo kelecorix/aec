@@ -59,17 +59,6 @@ int site_mode_uvo(Site* site) {
   int a, ret, res;
   float temp_dew = strtof(getStr(site->cfg, (void *) "temp_dew"), NULL);
 
-  //По умолчанию: кондиц. вкл.
-  //int num_ac = atoi(getStr(site->cfg, (void *) "num_ac"));
-  //for (a = 0; a < num_ac; a++) {
-  //  site->acs[a]->set_mode(site->acs[a], 1);
-  //}
-
-  //остановим вентиляторы
-  //вроде как ненужно останавливать
-  //site->vents[0]->set_step(site->vents[0], 0);
-  //site->vents[1]->set_step(site->vents[1], 0);
-
   // читаем датчики
   ret = read_sensors(site);
   if (ret != 0) {

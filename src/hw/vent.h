@@ -20,6 +20,8 @@ typedef struct Vent {
   long time_work;
   time_t time_start;
   time_t time_stop;
+  time_t moto_start;
+  time_t moto_stop;
 
   vent_error error;
 

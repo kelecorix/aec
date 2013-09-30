@@ -19,9 +19,9 @@ typedef struct AC {
   double temp; // температура 
   time_t time_start;
   time_t time_stop;
-  time_t moto_time_start;
-  time_t moto_time_stop;
-  
+  time_t moto_start;
+  time_t moto_stop;
+
   int num;
 
   ac_error error;
@@ -33,5 +33,7 @@ typedef struct AC {
   double (*ac_time_work)(struct AC*);
 
 } AC;
+
+static void send_moto(struct AC*);
 
 #endif /*AC_H_*/

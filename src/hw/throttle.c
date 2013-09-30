@@ -54,35 +54,6 @@ int i2c_get_th_data(int addr) {
 
   i2cClose();
 
- //printf("заслонка считано 0x%X 0x%X \n", buf[0], buf[1]);
-//
-//  int num = 0;
-//
-//  num = buf[1];
-//  printf("buf[1] был 0x%X \n", num);
-//  int rev = 0x0;
-//  int digit = 0x0;
-//  while (num != 0x0) {
-//    digit = num % 0x10;
-//    rev = rev * 0x10 + digit;
-//    num = num / 0x10;
-//  }
-//
-//  printf("buf[1] стал 0x%X \n", rev);
-//  buf[1] = rev;
-//  buf[2] = 0x0;
-//  buf[3] = 0x0;
-//  revS(buf);
-//  printf("до приведения 0x%X 0x%X \n", buf[0], buf[1]);
-//
-//  int value = *((int *) buf);
-//  //printf("Буферы: %x, %x", buf[0], buf[1]);
-//
-//  printf("После приведения: 0x%X, %d \n", value, value);
-
-  //printf("Test = %d [%x]\n", 0x0775, 0x0775);
-  //printf("Буферы: 0x%X, %d | 0x%X, %d\n", buf[0], buf[1]);
-
   int kl, kl1;
   kl = (int *) buf[0];
   //printf("1 kl = %d\n", kl);
@@ -182,6 +153,5 @@ void test_throttle() {
   }
 
   i2cClose();
-
 }
 
