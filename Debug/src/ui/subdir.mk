@@ -7,21 +7,18 @@ C_SRCS += \
 ../src/ui/keyboard.c \
 ../src/ui/lcd.c \
 ../src/ui/menu.c \
-../src/ui/msg.c \
 ../src/ui/ui.c 
 
 OBJS += \
 ./src/ui/keyboard.o \
 ./src/ui/lcd.o \
 ./src/ui/menu.o \
-./src/ui/msg.o \
 ./src/ui/ui.o 
 
 C_DEPS += \
 ./src/ui/keyboard.d \
 ./src/ui/lcd.d \
 ./src/ui/menu.d \
-./src/ui/msg.d \
 ./src/ui/ui.d 
 
 

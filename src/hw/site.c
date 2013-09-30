@@ -1500,7 +1500,7 @@ Site* site_new(char* filename) {
 
   site->logger = create_logger();
 
-  int num_ac = strtoa(getStr(site->cfg, (void *) "num_ac"), NULL);
+  int num_ac = strtol(getStr(site->cfg, (void *) "num_ac"), NULL, 2);
   site->acs = malloc(num_ac * sizeof(int*));
   site->num_ac = num_ac;
 

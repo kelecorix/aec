@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <unistd.h>
-#include <linux/input.h>
 #include <fcntl.h>
 #include <linux/i2c-dev.h>
 #include "ui.h"
