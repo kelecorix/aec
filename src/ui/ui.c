@@ -11,6 +11,8 @@ int dmode; // Мы либо в режиме редактирования 1, ли
 
 void run_ui(Site* site) {
 
+  return;
+
   // инициализируем экран
   int addr_lcd = strtol(getStr(site->cfg, (void *) "a_lcd"), (char **) NULL, 16);
   LCD* lcd = lcd_new(addr_lcd);
