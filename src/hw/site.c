@@ -65,7 +65,7 @@ int site_mode_uvo(Site* site) {
     printf("Ошибка чтения датчиков\n");
     site_mode_fail_uvo(site);
   }
-
+  printf())
   log3("Переведем заслонку site->temp_out = %f temp_dew = %f\n", site->temp_out, temp_dew);
   printf("Переведем заслонку site->temp_out = %f temp_dew = %f\n", site->temp_out, temp_dew);
   if ((site->temp_out) > temp_dew) {
@@ -1445,7 +1445,7 @@ int set_ten(Site* site, int val) {
 }
 
 int read_sensors(Site* site) {
-
+  printf("начинаем читать датчики\n");
   OWNET_HANDLE conn = site->conn;
   char *mnt = site->mount_point;
 
@@ -1471,7 +1471,7 @@ int read_sensors(Site* site) {
   i2c_get_tacho(strtol(a_tacho_in, NULL, 16), strtol(a_tacho_out, NULL, 16));
 
   site->th_r = i2c_get_th_data(strtol(a_th_adc, NULL, 16));
-
+  printf("считали датчики\n");
   return 0;
 }
 
