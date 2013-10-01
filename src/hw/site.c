@@ -1090,11 +1090,12 @@ int site_mode_fail_temp_uvo(Site* site) {
   //    "Режим охлаждения УВО");
   site->penalty = 0;
 
-  site->vents[0]->set_step(site->vents[0], 11);
-  site->vents[1]->set_step(site->vents[1], 11);
-  site->vents[0]->time_start = time(NULL);
-  site->vents[1]->time_start = time(NULL);
-  
+  for (v = 0; v < 2; v++) {
+    site->vents[v]->set_step(site->vents[v], 11);
+    site->vents[v]->time_start = time(NULL);
+  }
+
+
   //По умолчанию: кондиц. выкл.
   for (a = 0; a < site->num_ac; a++) {
     site->acs[a]->set_mode(site->acs[a], 0);
