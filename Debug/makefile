@@ -28,19 +28,19 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: freecooling
+all: freecooling2
 
 # Tool invocations
-freecooling: $(OBJS) $(USER_OBJS)
+freecooling2: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C Linker'
-	gcc -L/opt/owfs/lib -o "freecooling" $(OBJS) $(USER_OBJS) $(LIBS)
+	gcc -L/opt/owfs/lib -o "freecooling2" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(OBJS)$(C_DEPS)$(EXECUTABLES) freecooling
+	-$(RM) $(OBJS)$(C_DEPS)$(EXECUTABLES) freecooling2
 	-@echo ' '
 
 .PHONY: all clean dependents
