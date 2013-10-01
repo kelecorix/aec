@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
   site->debug = atoi(argv[1]);
   site->gpf = atoi(argv[2]);
 
-  printf("%d %d", site->debug, site->gpf);
+  printf("Парметры запуска: %d %d\n", site->debug, site->gpf);
 
   if (site->cfg)
     log4("Config was read ok!\n");

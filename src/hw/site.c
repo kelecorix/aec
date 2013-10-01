@@ -1485,7 +1485,6 @@ int read_sensors(Site* site) {
 //TODO: Добавить мьютексы для многопоточного доступа к переменным
 Site* site_new(char* filename) {
 
-  printf("создадим сайт\n");
   Site* site = malloc(sizeof(Site));
   int i;
   for (i = 0; i < 2; i++) {
@@ -1516,6 +1515,6 @@ Site* site_new(char* filename) {
   for(i=0; i < (site->num_ac); i++){
     site->acs[i] = ac_new(i);
   }
-  printf("Количество кондишек: %d", site->num_ac);
+  printf("Количество кондишек: %d\n", site->num_ac);
   return site;
 }
