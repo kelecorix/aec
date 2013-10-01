@@ -57,15 +57,15 @@ int site_mode_uvo(Site* site) {
 
   int ret, res;
   float temp_dew = strtof(getStr(site->cfg, (void *) "temp_dew"), NULL);
-  printf("до датчиков\n");
+
   // читаем датчики
   ret = read_sensors(site);
   if (ret != 0) {
     //Ошибка чтения датчиков
-    printf("Ошибка чтения датчиков\n");
+
     site_mode_fail_uvo(site);
   }
-  printf("После чтения датчиков\n");
+
   log3("Переведем заслонку site->temp_out = %f temp_dew = %f\n", site->temp_out, temp_dew);
   printf("Переведем заслонку site->temp_out = %f temp_dew = %f\n", site->temp_out, temp_dew);
   if ((site->temp_out) > temp_dew) {
@@ -1446,7 +1446,7 @@ int set_ten(Site* site, int val) {
 }
 
 int read_sensors(Site* site) {
-  printf("начинаем читать датчики\n");
+
   OWNET_HANDLE conn = site->conn;
   char *mnt = site->mount_point;
 
@@ -1466,7 +1466,7 @@ int read_sensors(Site* site) {
   site->temp_evapor1 = get_data(conn, mnt, s_temp_evapor1, 100);
   site->temp_evapor2 = get_data(conn, mnt, s_temp_evapor2, 100);
 
-  printf("пытаемся записать температуры\n");
+
   //TODO: переделать более грамотно, а что если
   // у нас 5 кондиционеров
   // Первый читаем в обязательном порядке
@@ -1477,7 +1477,7 @@ int read_sensors(Site* site) {
   i2c_get_tacho(strtol(a_tacho_in, NULL, 16), strtol(a_tacho_out, NULL, 16));
 
   site->th_r = i2c_get_th_data(strtol(a_th_adc, NULL, 16));
-  printf("считали датчики\n");
+
   return 0;
 }
 
