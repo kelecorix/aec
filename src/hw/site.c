@@ -155,15 +155,15 @@ void sub_uvo_vent(Site* site) {
     if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1) {
       log3("Вентиляторы включены site->vents[0]->time_start = %d \n", "Вентиляторы включены site->vents[0]->time_start = %d \n",
           site->vents[0]->time_start);
-      if ((time(NULL) - site->vents[0]->time_start) > 30) {
+      if ((time(NULL) - site->vents[0]->time_start) > 60) {
         if (site->tacho1_exists && site->tacho2_exists) {
           log3("Проверим тахо site->vents[0]->step = %d "
               "site->tacho1 = %d, обороты %d | site->vents[1]->step "
               "= %d site->tacho2 = %d обороты %d \n", site->vents[0]->step, site->tacho1, site->tacho1_t, site->vents[1]->step,
               site->tacho2, site->tacho2_t);
-          //if ((site->vents[0]->step != site->tacho1)
-          //    || (site->vents[1]->step != site->tacho2)) {
-          if ((site->tacho1 < 6) || (site->tacho2 < 6)) {
+          if ((site->vents[0]->step != site->tacho1)
+              || (site->vents[1]->step != site->tacho2)) {
+          //if ((site->tacho1 < 6) || (site->tacho2 < 6)) {
             log3("Какой-то вентилятор не вращается\n");
             for (v = 0; v < 2; v++) {
               site->vents[v]->error = ERROR;

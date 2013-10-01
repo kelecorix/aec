@@ -108,7 +108,9 @@ if($ver_old[0] eq $ver_new[0]) {
  #}
  sleep(2);
  rename($file_version_new, $file_version_old); 
- #rename($file_program_new, $file_program_old);
+ rename($file_program_new, $file_program_old);
+ $ff = system "chmod +x $file_program_old";
+ $ff = system "/opt/owfs/freecooling/freecooling2.sh &";
 }
 
 
