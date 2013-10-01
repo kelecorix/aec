@@ -155,7 +155,7 @@ static void send_moto(Vent* vent, int pre_mode) {
 
   if (vent->mode == 1) {
     vent->moto_start = time(NULL);
-    log3("ac.c: Включим ВЕНТ_%d\n", vent);
+    log3("vent.c: Включим ВЕНТ_%d\n", vent);
   } else {
     vent->moto_stop = time(NULL);
     log3("Моточасы VENT_%d %d %d %d\n", vent->type, (vent->moto_stop - vent->moto_start), vent->moto_stop, vent->moto_start);
