@@ -15,6 +15,7 @@
 #include "log/logger.h"
 
 Site* site;
+Cfg* gcfg;
 int gmode;
 
 /*
@@ -35,7 +36,6 @@ void process_args(char *argv[]) {
 //  int tlFlag = 0; // time log period
 //  int tmFlag = 0; // moto log period
 //  int hFlag;    // help
-
   for (i = 1; i < argv; i++) {
     if (strcmp(argv[i], "-d") == 0) {
       //dFlag = 1;
@@ -43,7 +43,7 @@ void process_args(char *argv[]) {
         i++;
         val = atoi(argv[i]);
         if ((val <= 4) && (val > 0)) {
-          site->debug = val;
+          gcfg->debug = val;
         } else {
           fprintf(stderr, "Должен быть аргумент, например: -d 2. Используйте -h для подсказки\n");
           EXIT_FAILURE;
@@ -60,7 +60,7 @@ void process_args(char *argv[]) {
         i++;
         val = atoi(argv[i]);
         if ((val <= 1) && (val >= 0)) {
-          site->gpf = val;
+          gcfg->gpf = val;
         } else {
           fprintf(stderr, "Должен быть аргумент, например: -d 2. Используйте -h для подсказки\n");
           EXIT_FAILURE;
@@ -80,7 +80,7 @@ void process_args(char *argv[]) {
       //saFlag = 1;
       if (i + 1 <= argv - 1) {
         i++;
-        site->saddr = argv[i];
+        gcfg->saddr = argv[i];
       } else {
         fprintf(stderr, "Неправильный аргумент, например: -sa 127.0.0.1:3001. Используйте -h для подсказки\n");
         EXIT_FAILURE;
@@ -90,7 +90,7 @@ void process_args(char *argv[]) {
       //cfFlag = 1;
       if (i + 1 <= argv - 1) {
         i++;
-        site->cdir = argv[i];
+        gcfg->cdir = argv[i];
       } else {
         fprintf(stderr, "Неправильный аргумент, например: -cf /etc/conf. Используйте -h для подсказки\n");
         EXIT_FAILURE;
@@ -101,7 +101,7 @@ void process_args(char *argv[]) {
       //lfFlag = 1;
       if (i + 1 <= argv - 1) {
         i++;
-        site->ldir = argv[i];
+        gcfg->ldir = argv[i];
       } else {
         fprintf(stderr, "Неправильный аргумент, например: -lf /etc/log. Используйте -h для подсказки\n");
         EXIT_FAILURE;
@@ -112,7 +112,7 @@ void process_args(char *argv[]) {
 
       if (i + 1 <= argv - 1) {
         i++;
-        site->mpoint = argv[i];
+        gcfg->mpoint = argv[i];
       } else {
         fprintf(stderr, "Неправильный аргумент, например: -mp  /mnt/1wire/. Используйте -h для подсказки\n");
         EXIT_FAILURE;
@@ -125,7 +125,7 @@ void process_args(char *argv[]) {
         i++;
         val = atoi(argv[i]);
         if (val > 0) {
-          site->ltime = val;
+          gcfg->ltime = val;
         } else {
           fprintf(stderr, "Должен быть аргумент, например: -tl 25. Используйте -h для подсказки\n");
           EXIT_FAILURE;
@@ -142,7 +142,7 @@ void process_args(char *argv[]) {
         i++;
         val = atoi(argv[i]);
         if (val > 0) {
-          site->mtime = val;
+          gcfg->mtime = val;
         } else {
           fprintf(stderr, "Должен быть аргумент, например: -tm 30. Используйте -h для подсказки\n");
           EXIT_FAILURE;
@@ -215,6 +215,7 @@ void process_args(char *argv[]) {
       printf("\n");
       printf("Ключ: -h\n");
       printf("\tПредназначен для вывода описания работы с программой\n");
+      EXIT_SUCCESS;
     }
   }
 
@@ -225,10 +226,15 @@ void process_args(char *argv[]) {
 int main(int argc, char *argv[]) {
 
   int opts = 0; //0 - no need to process cli options, 1 - process options
-  if (argc == 0)
+  if (argc == 1)
     opts = 0;
   else
     opts = 1;
+
+  gcfg = new_gcfg();
+
+  if (opts)
+     process_args(argv);
 
   pthread_t threadA, threadU, threadL;
   void* retA = NULL;
@@ -238,13 +244,10 @@ int main(int argc, char *argv[]) {
 
   site = site_new(filename);
 
-  if (opts)
-    process_args(argv);
-
   if (site->cfg)
     log_2("Config was read ok!\n");
 
-  site->conn = create_server_conn(site->saddr);
+  site->conn = create_server_conn(gcfg->saddr);
 
   if (site->conn == 0)
     log_4("OWFS connection established!\n");

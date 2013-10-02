@@ -18,6 +18,22 @@
  *
  *
  */
+typedef struct Cfg {
+  int debug; // Debug Level: 1,2,3,4
+  int gpf;   // Global print flag
+  char* saddr; // адрес owfs сервера
+  char* mpoint; // адрес для считывания owfs
+  char* ldir; // директория для записи логов
+  char* cdir; // директ
+  int ltime;  // периодичность записи глобального лога
+  int mtime;  // периодичность записи моточасов
+} Cfg;
+
+/*
+ *
+ *
+ *
+ */
 typedef struct Site {
 
   AC** acs; // массив кондционеров в соотв. с конфигурацией, обычно 1 или 2
@@ -62,16 +78,9 @@ typedef struct Site {
   int (*set_ten)(struct Site*, int value);
   double (*get_ac_time_work)(struct Site*);
 
-  int debug; // Debug Level: 1,2,3,4
-  int gpf;   // Global print flag
-  char* saddr; // адрес owfs сервера
-  char* mpoint; // адрес для считывания owfs
-  char* ldir; // директория для записи логов
-  char* cdir; // директ
-  int ltime;  // периодичность записи глобального лога
-  int mtime;  // периодичность записи моточасов
-
 } Site;
+
+
 
 /*
  *
@@ -79,6 +88,8 @@ typedef struct Site {
  *
  */
 extern Site* site;
+
+extern Cfg* gcfg;
 
 // Режимы работы 
 int site_mode_uvo(Site* site);
@@ -97,4 +108,5 @@ ConfigTable* read_config(char* filename);
 void run(Site* site);
 int search_sensors(OWNET_HANDLE conn);
 Site* site_new(char* filename);
+Cfg* new_gcfg();
 #endif /*SITE_C_*/

@@ -16,10 +16,10 @@
 Logger* create_logger() {
 
   Logger* log = malloc(sizeof(Logger));
-  log->dataLOG = create_filelog(concat(site->cdir, "/data.log"));
+  log->dataLOG = create_filelog(concat(gcfg->cdir, "/data.log"));
   //log->dataLOG_n = create_netlog("", 80);
 
-  log->eventLOG = create_filelog(concat(site->cdir, "/event.log"));
+  log->eventLOG = create_filelog(concat(gcfg->cdir, "/event.log"));
   //log->eventLOG_n = create_netlog("", 80);
 
   return log;

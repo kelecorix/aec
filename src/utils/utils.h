@@ -1,10 +1,6 @@
 #ifndef UTILS_C_
 #define UTILS_C_
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-
 int splitString(char *string, char *items[], char splitChar);
 
 char* concat(char* str1, char* str2);

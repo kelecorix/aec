@@ -193,7 +193,7 @@ void logD(FileLogWriter* flog, int pf, char* msg, ...) {
 void log_1(char* msg, ...) {
   va_list args;
   FileLogWriter* flog = site->logger->eventLOG;
-  if (site->debug >= 1) {
+  if (gcfg->debug >= 1) {
     flog->fp = fopen(flog->filename, "a");
     time_t timer;
     struct tm* tm_info;
@@ -211,7 +211,7 @@ void log_1(char* msg, ...) {
     fclose(site->logger->eventLOG->fp);
   }
   // pf - printf flag
-  if (site->gpf) {
+  if (gcfg->gpf) {
     va_start(args, msg);
     vprintf(msg, args);
     va_end(args);
@@ -227,7 +227,7 @@ void log_1(char* msg, ...) {
 void log_2(char* msg, ...) {
   va_list args;
   FileLogWriter* flog = site->logger->eventLOG;
-  if (site->debug >= 2) {
+  if (gcfg->debug >= 2) {
     flog->fp = fopen(flog->filename, "a");
     time_t timer;
     struct tm* tm_info;
@@ -245,7 +245,7 @@ void log_2(char* msg, ...) {
     fclose(site->logger->eventLOG->fp);
   }
   // pf - printf flag
-  if (site->gpf) {
+  if (gcfg->gpf) {
     va_start(args, msg);
     vprintf(msg, args);
     va_end(args);
@@ -261,7 +261,7 @@ void log_2(char* msg, ...) {
 void log_3(char* msg, ...) {
   va_list args;
   FileLogWriter* flog = site->logger->eventLOG;
-  if (site->debug >= 3) {
+  if (gcfg->debug >= 3) {
     site->logger->eventLOG->fp = fopen(flog->filename, "a");
     time_t timer;
     struct tm* tm_info;
@@ -280,7 +280,7 @@ void log_3(char* msg, ...) {
   }
 
   // pf - printf flag
-  if (site->gpf) {
+  if (gcfg->gpf) {
     va_start(args, msg);
     vprintf(msg, args);
     va_end(args);
@@ -296,7 +296,7 @@ void log_3(char* msg, ...) {
 void log_4(char* msg, ...) {
   va_list args;
   FileLogWriter* flog = site->logger->eventLOG;
-  if (site->debug >= 4) {
+  if (gcfg->debug >= 4) {
     site->logger->eventLOG->fp = fopen(flog->filename, "a");
     time_t timer;
     struct tm* tm_info;
@@ -316,7 +316,7 @@ void log_4(char* msg, ...) {
   }
 
   // pf - printf flag
-  if (site->gpf) {
+  if (gcfg->gpf) {
     va_start(args, msg);
     vprintf(msg, args);
     va_end(args);

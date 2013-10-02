@@ -27,7 +27,7 @@ void site_free() {
 int read_sensors(Site* site) {
 
   OWNET_HANDLE conn = site->conn;
-  char *mnt = site->mpoint;
+  char *mnt = gcfg->mpoint;
 
   char *s_temp_out = getStr(site->cfg, (void *) "s_temp_outdoor");
   char *s_temp_in = getStr(site->cfg, (void *) "s_temp_indoor");
@@ -1582,14 +1582,21 @@ Site* site_new(char* filename) {
     site->acs[i] = ac_new(i);
   }
   log_2("Количество кондишек: %d\n", site->num_ac);
-  site->debug = 0;
-  site->gpf   = 0;
-  site->saddr  = "127.0.0.1:3001"; // адрес owfs сервера
-  site->mpoint = "/bus.0/"; // адрес для считывания owfs
-  site->ldir   = "/var/log"; // директория для записи логов
-  site->cdir   = get_app_dir(); // директ
-  site->ltime  = 10;  // периодичность записи глобального лога
-  site->mtime  = 20;  // периодичность записи моточасов
-
   return site;
+}
+
+Cfg* new_gcfg(){
+
+  Cfg* gcfg = malloc(sizeof(Cfg));
+
+  gcfg->debug = 0;
+  gcfg->gpf   = 0;
+  gcfg->saddr  = "127.0.0.1:3001"; // адрес owfs сервера
+  gcfg->mpoint = "/bus.0/"; // адрес для считывания owfs
+  gcfg->ldir   = "/var/log"; // директория для записи логов
+  gcfg->cdir   = get_app_dir(); // директ
+  gcfg->ltime  = 10;  // периодичность записи глобального лога
+  gcfg->mtime  = 20;  // периодичность записи моточасов
+
+  return gcfg;
 }
