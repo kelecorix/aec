@@ -26,8 +26,7 @@ int main(int argc, char *argv[]) {
   }
 
   pthread_t threadA, threadU, threadL;
-  int retA, retU, retL;
-  void *ret;
+  int retA=0, retU=0, retL=0;
   char *filename = "freecooling.conf";
 
   site = site_new(filename);
@@ -40,17 +39,17 @@ int main(int argc, char *argv[]) {
   if (site->cfg)
     log_2("Config was read ok!\n");
 
-//  site->conn = create_server_conn("127.0.0.1:3001");
-//
-//  if (site->conn == 0)
-//    log_4("OWFS connection established!\n");
-//  else
-//    log_4("OWFS connection not fins. Fire up OWFS server!\n");
-//
-//  sleep(4);
-//
-//  //Workers Воркеры - выполняют параллельно свои операции
-//
+  site->conn = create_server_conn("127.0.0.1:3001");
+
+  if (site->conn == 0)
+    log_4("OWFS connection established!\n");
+  else
+    log_4("OWFS connection not fins. Fire up OWFS server!\n");
+
+  sleep(4);
+
+  //Workers Воркеры - выполняют параллельно свои операции
+
   if (pthread_create(&threadA, NULL, run, (void*) site)) {
     fprintf(stderr, "Error creating algo thread\n");
     log_4("Error creating algo thread\n");
@@ -65,22 +64,20 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-//  sleep(4);
-//
-//  printf("Создадим поток журналирования\n");
-//  if(pthread_create(&threadL, NULL, run_logger, (void*) site)) {
-//    fprintf(stderr, "Error creating Logger thread\n");
-//    log4("Error creating Logger thread\n");
-//    return 1;
-//  }
-//
-//  sleep(4);
+  sleep(4);
 
-// ждем пока потоками завершаться
-// по идде сюда не должно дойти
+  printf("Создадим поток журналирования\n");
+  if(pthread_create(&threadL, NULL, run_logger, (void*) site)) {
+    fprintf(stderr, "Error creating Logger thread\n");
+    log_4("Error creating Logger thread\n");
+    return 1;
+  }
+
+  sleep(4);
+
   pthread_join(threadA, retA);
   pthread_join(threadU, retU);
- // pthread_join(threadL, retL);
+  pthread_join(threadL, retL);
 
   // Для тестов оборудования
   //i2cTestHardware();

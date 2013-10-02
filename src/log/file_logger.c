@@ -42,7 +42,6 @@ void write_dl(char* msg, int event_t) {
   FILE* fp = site->logger->dataLOG->fp;
   char *filename = site->logger->dataLOG->filename;
 
-  //time_t timer;
   struct tm* tm_info;
   char date[50]="";
 
@@ -51,6 +50,7 @@ void write_dl(char* msg, int event_t) {
   if (!fp)
     fprintf(stderr, "could not open log file %s", filename);
 
+  tm_info = NULL;
   strftime(date, 25, "%Y:%m:%d %H:%M:%S", tm_info);
   fprintf(fp, date);
 

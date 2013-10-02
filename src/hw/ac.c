@@ -1,10 +1,11 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "ac.h"
 #include "i2c.h"
 #include "site.h"
 #include "../log/file_logger.h"
+#include "../config/config.h"
+#include "ac.h"
 
 void ac_free() {
 //TODO: очистим ресурсы памяти
@@ -66,7 +67,6 @@ static int set_mode(AC* ac, int val) {
 
   int addr, value, bit;
   addr = strtol(getStr(site->cfg, "a_relay"), NULL, 16);
-  unsigned char rvalue;
   char buf[1];
 
   if (ioctl(g_i2cFile, I2C_SLAVE, addr) < 0)

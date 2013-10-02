@@ -61,7 +61,6 @@ char* getStr(ConfigTable* cfg, const char *key) {
   char *value;
   value = hashmapGet(cfg->mTable, (void *) key);
 
-  //remove /n from value
   strip_n(value);
 
   if (value)
@@ -94,7 +93,6 @@ ConfigTable* readConfig(char *filename) {
   if (fp == NULL)
     exit(EXIT_FAILURE);
 
-  int ret;
   while ((read = getline(&line, &len, fp)) != -1) {
     int i = 0;
 
@@ -119,7 +117,7 @@ ConfigTable* readConfig(char *filename) {
 
       hashmapPut(cfg->mTable, tokens[1], tokens[2]);
 
-      if (tokens[0] == '$static')
+      if (strcmp(tokens[0], "$static")==0)
       {
         hashmapPut(cfg->mStatic, tokens[1], "1");
         hashmapPut(cfg->mOptional, tokens[1], "0");

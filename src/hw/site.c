@@ -1,7 +1,6 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "site.h"
 #include "ac.h"
 #include "throttle.h"
 #include "vent.h"
@@ -9,6 +8,7 @@
 #include "i2c.h"
 #include "../config/config.h"
 #include "../log/logger.h"
+#include "site.h"
 //Site* site;
 
 void site_free() {
@@ -138,9 +138,7 @@ int site_mode_uvo(Site* site) {
 void sub_uvo_vent(Site* site) {
 
   int a, v;
-  float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),
-  NULL);
-  float temp_heat = strtof(getStr(site->cfg, (void *) "temp_heat"), NULL);
+  float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"),NULL);
 
   log_3("Среда позваляет работать на вентиляторах?\n");
   if ((temp_support - site->temp_out) >= 2) {
@@ -188,7 +186,7 @@ void sub_uvo_vent(Site* site) {
       log_3("curr_step = %d site->temp_in_prev = %f site->temp_in = %f\n", "curr_step = %d site->temp_in_prev = %f site->temp_in = %f\n",
           curr_step, site->temp_in_prev, site->temp_in);
 
-      if (site->temp_in_prev != site->temp_in_prev_prev != site->temp_in) {
+      if ((site->temp_in_prev != site->temp_in_prev_prev) && (site->temp_in_prev != site->temp_in)) {
         if (site->temp_in_prev <= site->temp_in) {
           log_3("Добавим обороты curr_step = %d\n", curr_step);
           if (curr_step != 10) {
@@ -626,7 +624,7 @@ int site_mode_heat(Site* site) {
   //    "Режим догрева сайта"); //падает при повторном вызове
   site->mode = 3;
 
-  int a, v;
+  int v;
 
   site->time_pre = time(NULL);
   site->th_check = 0;
@@ -644,7 +642,7 @@ int site_mode_heat(Site* site) {
   }
   //сайт
 
-  int i, th_pos_read;
+  int i=0, th_pos_read=0;
   if (site->th_r_exists) {
     while (i < 300) {
       int ret;
@@ -657,7 +655,7 @@ int site_mode_heat(Site* site) {
       if (((time(NULL) - site->th->time_start) >= 30) && site->th_r_exists) {
         if (difftime(time(NULL), site->th->time_start) >= 30) {
 
-          log_3(("Настало время проверить перевилась ли заслонка site->th_check = %d\n", site->th_check));
+          log_3("Настало время проверить перевилась ли заслонка site->th_check = %d\n", site->th_check);
           //да Необходимо проверить перевилась ли заслонка
           // не было проверки закслонки
 
@@ -818,8 +816,6 @@ int site_mode_fail_uvo(Site* site) {
 
     log_3("site_mode_fail_uvo: Включили кондиционер КОНД_%d время включения %d\n", a, site->acs[a]->time_start);
   }
-
-  int num_ac_tmp = site->num_ac;
 
   while (1) { // sensors was read - ok
 
@@ -1054,35 +1050,12 @@ int site_mode_fail_ac(Site* site) {
   return 1;
 }
 
-/* Превышена температура аварии - Аварийный режим охлаждения*/
-int site_mode_fail_temp(Site* site) {
-
-  log_3("site_mode_fail_temp: Авария по температуре!\n");
-  logD(site->logger->dataLOG, 0, "Авария по температуре!");
-  //     "Общий аварийный режим");
-  site->mode = 6;
-
-  log_3("site_mode_fail_temp: site->temp_in - site->temp_out = %f >= 5 \n",(site->temp_in - site->temp_out));
-  if (site->temp_in - site->temp_out >= 5) {
-    // да
-    // Охлаждаем УВО
-    log_3("site_mode_fail_temp: перейдем site_mode_fail_temp_uvo\n");
-    site_mode_fail_temp_uvo(site);
-  } else {
-    // нет
-    // Охлаждаем кондиционерами
-    log_3("site_mode_fail_temp: перейдем site_mode_fail_temp_ac\n");
-    site_mode_fail_temp_ac(site);
-  }
-
-  return 1;
-}
 
 int site_mode_fail_temp_uvo(Site* site) {
 
   log_3("site_mode_fail_temp_uvo: RUN\n");
   logD(site->logger->dataLOG, 0, "Авария по температуре! УВО");
-  int a, v, ret, res;
+  int a, v, ret;
   float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"), NULL);
   float temp_dew = strtof(getStr(site->cfg, (void *) "temp_dew"), NULL);
 
@@ -1372,6 +1345,30 @@ int site_mode_fail_temp_ac(Site* site) {
         site_mode_fail_ac(site);
       }
     }
+  }
+
+  return 1;
+}
+
+/* Превышена температура аварии - Аварийный режим охлаждения*/
+int site_mode_fail_temp(Site* site) {
+
+  log_3("site_mode_fail_temp: Авария по температуре!\n");
+  logD(site->logger->dataLOG, 0, "Авария по температуре!");
+  //     "Общий аварийный режим");
+  site->mode = 6;
+
+  log_3("site_mode_fail_temp: site->temp_in - site->temp_out = %f >= 5 \n",(site->temp_in - site->temp_out));
+  if (site->temp_in - site->temp_out >= 5) {
+    // да
+    // Охлаждаем УВО
+    log_3("site_mode_fail_temp: перейдем site_mode_fail_temp_uvo\n");
+    site_mode_fail_temp_uvo(site);
+  } else {
+    // нет
+    // Охлаждаем кондиционерами
+    log_3("site_mode_fail_temp: перейдем site_mode_fail_temp_ac\n");
+    site_mode_fail_temp_ac(site);
   }
 
   return 1;

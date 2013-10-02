@@ -62,16 +62,16 @@ float get_data(OWNET_HANDLE conn, char* mnt, char* filename, int lim) {
 
       // Считываение прошло нормально
 
-      if (data == " ") { //компилятор ругается
+      if (strcmp(data, " ")==0) {
         // пытаемся считать еще несколько раз
         int i;
         for (i = 0; i < lim; i++) {
           OWNET_read(conn, full_path, &data);
-          if (data != " ")
+          if (strcmp(data," ")!=0)
             break;
         }
 
-        if (data == " ") {
+        if (strcmp(data, " ")==0) {
           // все еще пусто после повторных опросов
           return -100.f; // вернем ошибку
         }
@@ -96,8 +96,8 @@ float get_data(OWNET_HANDLE conn, char* mnt, char* filename, int lim) {
 int list_sensors(Site* site, char *tokens[]) {
 
   char *dirs = NULL;
-  int res = OWNET_dirlist(site->conn, site->mount_point, dirs);
-  int ret = splitString(dirs, tokens, ',');
+  OWNET_dirlist(site->conn, site->mount_point, dirs);
+  splitString(dirs, tokens, ',');
 
   return 0;
 }

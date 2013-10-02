@@ -1,8 +1,8 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "vent.h"
 #include "i2c.h"
+#include "vent.h"
 #include "site.h"
 
 static int steps[11] = { 0xFF, 0xF8, 0xF7, 0xF6, 0xF3, 0xEE, 0xEC, 0xE6, 0xDC, 0xD3, 0x00 };
@@ -98,13 +98,12 @@ void i2c_get_tacho(int addr0, int addr1) {
 
 int i2c_get_tacho_data(Vent* v, int addr) {
 
-  int value, bit;
   unsigned char rvalue;
 
   i2cOpen();
 
   if (get_i2c_register(g_i2cFile, addr, 0x02, &rvalue)) {
-    printf("Unable to get register!\n");
+    log_4("Unable to get register!\n");
   } else {
     //printf("Addr %x: %d (%x)\n", addr, (int) rvalue, (int) rvalue);
   }
@@ -119,7 +118,6 @@ int i2c_get_tacho_data(Vent* v, int addr) {
 
 int i2c_get_tacho_step(Vent* v, int addr) {
 
-  int value, bit;
   unsigned char rvalue;
 
   i2cOpen();
@@ -147,7 +145,7 @@ int turns_to_step(int turns, int type) {
     return 0;
   }
 
-  int step = -5, i, j;
+  int step=-5;
 
   if (type == 0) {
     if ((turns >= tts1[site->vents[0]->step][0]) && (turns <= tts1[site->vents[0]->step][1])) {
@@ -167,8 +165,7 @@ int turns_to_step(int turns, int type) {
 
 void test_vents() {
 
-  int i, step, tacho1, tacho2, step1, step2;
-  char *buf;
+  int i, tacho1, tacho2, step1, step2;
 
   char *a_tacho_in = getStr(site->cfg, (void *) "a_tacho_flow_in");
   char *a_tacho_out = getStr(site->cfg, (void *) "a_tacho_flow_out");

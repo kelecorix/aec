@@ -24,10 +24,11 @@ typedef struct ConfigTable {
   void (*makeStatic)(char* key[]);
   void (*makeOptional)(char* key);
 
-  const char (*getStr)(struct ConfigTable*, char* key[]);
   const char (*getNum)(char* key[]);
 
 } ConfigTable;
+
+char* getStr(ConfigTable* cfg, const char *key) ;
 
 //static int str_hash_fn(void *str);
 

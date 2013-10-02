@@ -43,7 +43,7 @@ int i2c_get_th_data(int addr) {
     printf("Failed to acquire bus access and/or talk to slave.\n");
   }
 
-  int k = read(g_i2cFile, buf, 2);
+  read(g_i2cFile, buf, 2);
 
   i2cClose();
 
@@ -62,8 +62,6 @@ int i2c_get_th_data(int addr) {
 }
 
 int pos_to_step(float pos) {
-
-  int step = -5, i, j;
 
   if (tts[site->th->position][0] <= pos && tts[site->th->position][1] >= pos)
     return site->th->position;
@@ -88,14 +86,12 @@ Throttle* throttle_new() {
 void test_throttle() {
 
   int i, step;
-  char *buf;
 
   i2cOpen();
 
   char *a_th_adc = getStr(site->cfg, (void *) "a_throttle_adc");
 
   printf("Cчитаем данные\n");
-  int tacho1, tacho2, th_r;
 
   site->th->set_position(site->th, 0);
 
