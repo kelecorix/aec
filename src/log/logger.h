@@ -16,6 +16,7 @@ typedef struct Logger {
   NetLogWriter* eventLOG_n; // удаленное журанлирование событий
 } Logger;
 
+Logger* create_logger();
 void run_logger();
 void test_logger();
 

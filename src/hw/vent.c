@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "i2c.h"
-#include "vent.h"
 #include "site.h"
+#include "vent.h"
 
 static int steps[11] = { 0xFF, 0xF8, 0xF7, 0xF6, 0xF3, 0xEE, 0xEC, 0xE6, 0xDC, 0xD3, 0x00 };
 

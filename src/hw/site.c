@@ -15,6 +15,42 @@ void site_free() {
   //TODO: очистим ресурсы памяти
 }
 
+int read_sensors(Site* site) {
+
+  OWNET_HANDLE conn = site->conn;
+  char *mnt = site->mount_point;
+
+  char *s_temp_out = getStr(site->cfg, (void *) "s_temp_outdoor");
+  char *s_temp_in = getStr(site->cfg, (void *) "s_temp_indoor");
+  char *s_temp_mix = getStr(site->cfg, (void *) "s_temp_mix");
+  char *s_temp_evapor1 = getStr(site->cfg, (void *) "s_temp_evapor1");
+  char *s_temp_evapor2 = getStr(site->cfg, (void *) "s_temp_evapor2");
+
+  char *a_tacho_in = getStr(site->cfg, (void *) "a_tacho_flow_in");
+  char *a_tacho_out = getStr(site->cfg, (void *) "a_tacho_flow_out");
+  char *a_th_adc = getStr(site->cfg, (void *) "a_throttle_adc");
+
+  site->temp_out = get_data(conn, mnt, s_temp_out, 100);
+  site->temp_in = get_data(conn, mnt, s_temp_in, 100);
+  site->temp_mix = get_data(conn, mnt, s_temp_mix, 100);
+  site->temp_evapor1 = get_data(conn, mnt, s_temp_evapor1, 100);
+  site->temp_evapor2 = get_data(conn, mnt, s_temp_evapor2, 100);
+
+
+  //TODO: переделать более грамотно, а что если
+  // у нас 5 кондиционеров
+  // Первый читаем в обязательном порядке
+  site->acs[0]->temp = site->temp_evapor1;
+  if(site->num_ac == 2)
+    site->acs[1]->temp = site->temp_evapor2;
+
+  i2c_get_tacho(strtol(a_tacho_in, NULL, 16), strtol(a_tacho_out, NULL, 16));
+
+  site->th_r = i2c_get_th_data(strtol(a_th_adc, NULL, 16));
+
+  return 0;
+}
+
 void run(Site* site) {
 
   log_2("Начало работы\n");
@@ -45,6 +81,45 @@ void run(Site* site) {
   //site_mode_uvo(site);
   //site_mode_fail_uvo(site);
   //site_mode_fail_ac(site);
+}
+
+
+int set_ten(Site* site, int val) {
+
+  i2cOpen();
+
+  int addr, value, bit = 0;
+  addr = strtol(getStr(site->cfg, "a_relay"), NULL, 16);
+  log_3("Изменим тен\n");
+  char buf[1];
+
+  if (ioctl(g_i2cFile, I2C_SLAVE, addr) < 0) {
+
+    log_3("Failed to acquire bus access and/or talk to slave.\n");
+  }
+
+  if (read(g_i2cFile, buf, 1) != 1) {
+    log_3("TEN Error reading from i2c\n");
+  }
+
+  value = (int) buf[0];
+
+  if ((val == 1) || (val == 0)) {
+    if (val == 1)
+      value &= ~(1 << bit); // очистим бит
+    else
+      value |= (1 << bit); // установим бит
+
+    set_i2c_register(g_i2cFile, addr, value, value);
+    site->ten = val;
+    i2cClose();
+    return 1;
+  } else {
+    // wrong value
+    // неправильное значение
+    return 0;
+  }
+  return 0;
 }
 
 /* Режим охлаждения УВО */
@@ -1402,79 +1477,7 @@ int set_mode(Site* site, int val) {
   return 0;
 }
 
-int set_ten(Site* site, int val) {
 
-  i2cOpen();
-
-  int addr, value, bit = 0;
-  addr = strtol(getStr(site->cfg, "a_relay"), NULL, 16);
-  log_3("Изменим тен\n");
-  char buf[1];
-
-  if (ioctl(g_i2cFile, I2C_SLAVE, addr) < 0) {
-
-    log_3("Failed to acquire bus access and/or talk to slave.\n");
-  }
-
-  if (read(g_i2cFile, buf, 1) != 1) {
-    log_3("TEN Error reading from i2c\n");
-  }
-
-  value = (int) buf[0];
-
-  if ((val == 1) || (val == 0)) {
-    if (val == 1)
-      value &= ~(1 << bit); // очистим бит
-    else
-      value |= (1 << bit); // установим бит
-
-    set_i2c_register(g_i2cFile, addr, value, value);
-    site->ten = val;
-    i2cClose();
-    return 1;
-  } else {
-    // wrong value
-    // неправильное значение
-    return 0;
-  }
-  return 0;
-}
-
-int read_sensors(Site* site) {
-
-  OWNET_HANDLE conn = site->conn;
-  char *mnt = site->mount_point;
-
-  char *s_temp_out = getStr(site->cfg, (void *) "s_temp_outdoor");
-  char *s_temp_in = getStr(site->cfg, (void *) "s_temp_indoor");
-  char *s_temp_mix = getStr(site->cfg, (void *) "s_temp_mix");
-  char *s_temp_evapor1 = getStr(site->cfg, (void *) "s_temp_evapor1");
-  char *s_temp_evapor2 = getStr(site->cfg, (void *) "s_temp_evapor2");
-
-  char *a_tacho_in = getStr(site->cfg, (void *) "a_tacho_flow_in");
-  char *a_tacho_out = getStr(site->cfg, (void *) "a_tacho_flow_out");
-  char *a_th_adc = getStr(site->cfg, (void *) "a_throttle_adc");
-
-  site->temp_out = get_data(conn, mnt, s_temp_out, 100);
-  site->temp_in = get_data(conn, mnt, s_temp_in, 100);
-  site->temp_mix = get_data(conn, mnt, s_temp_mix, 100);
-  site->temp_evapor1 = get_data(conn, mnt, s_temp_evapor1, 100);
-  site->temp_evapor2 = get_data(conn, mnt, s_temp_evapor2, 100);
-
-
-  //TODO: переделать более грамотно, а что если
-  // у нас 5 кондиционеров
-  // Первый читаем в обязательном порядке
-  site->acs[0]->temp = site->temp_evapor1;
-  if(site->num_ac == 2)
-    site->acs[1]->temp = site->temp_evapor2;
-
-  i2c_get_tacho(strtol(a_tacho_in, NULL, 16), strtol(a_tacho_out, NULL, 16));
-
-  site->th_r = i2c_get_th_data(strtol(a_th_adc, NULL, 16));
-
-  return 0;
-}
 
 //TODO: Переписать в виде синглетона
 //TODO: Добавить мьютексы для многопоточного доступа к переменным
@@ -1493,7 +1496,7 @@ Site* site_new(char* filename) {
 
   site->penalty = 0;
   site->temp_in_prev = 0;
-  site->conn = NULL;
+  site->conn = 0;
 
   site->mount_point = "/bus.0/";
   site->cfg = read_config(filename);

@@ -80,5 +80,5 @@ int read_sensors();
 ConfigTable* read_config(char* filename);
 void run(Site* site);
 int search_sensors(OWNET_HANDLE conn);
-
+Site* site_new(char* filename);
 #endif /*SITE_C_*/

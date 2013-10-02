@@ -16,6 +16,10 @@ void i2cOpen();
 void i2cClose();
 void i2cSetAddress(int address);
 void i2cTestHardware();
+int set_i2c_register(int file, unsigned char addr, unsigned char reg,
+    unsigned char value);
+int get_i2c_register(int file, unsigned char addr, unsigned char reg,
+    unsigned char *val);
 
 extern int g_i2cFile;
 

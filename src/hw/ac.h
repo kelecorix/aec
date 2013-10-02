@@ -33,4 +33,6 @@ typedef struct AC {
 
 } AC;
 
+AC* ac_new(int i);
+
 #endif /*AC_H_*/
