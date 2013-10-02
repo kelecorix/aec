@@ -44,13 +44,16 @@ int close_server_conn(OWNET_HANDLE conn) {
  */
 float get_data(OWNET_HANDLE conn, char* mnt, char* filename, int lim) {
 
-  // check if exists local file
-  char* dirpath = concat(get_current_dir_name(), gcfg->edir);
-  if (access(concat(dirpath, filename), F_OK) != -1) {
-    // File exists
+  // посмотрим или существуют файлы для эмуляции
+
+  char* cwd = get_current_dir_name();
+  char* dirpath = concat(cwd, "/");
+  dirpath = concat(dirpath, gcfg->edir);
+  char* fullpath = concat(dirpath, filename);
+  if (access(fullpath, F_OK) != -1) {
     // Файл существует
     char buf[100];
-    FILE *fp = fopen(filename, "r");
+    FILE *fp = fopen(fullpath, "r");
     fgets(buf, sizeof(buf), fp);
     fclose(fp);
     return atof(buf);
