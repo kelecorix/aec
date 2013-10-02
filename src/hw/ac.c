@@ -11,38 +11,6 @@ void ac_free() {
 //TODO: очистим ресурсы памяти
 }
 
-/* Функция старта кондиционера
- */
-int ac_start(AC* ac) {
-  // Получим текущее время, зафиксируем как время старта
-  ac->time_start = time(NULL);
-
-  // Изменим режим работы
-  ac->set_mode(ac, 1);
-
-  return 1;
-}
-
-/* Выполним стоп кондционера
- * 
- */
-int ac_stop(AC* ac) {
-  // Получим текущее время, зафиксируем как время остановки
-  ac->time_stop = time(NULL);
-
-  // Измени режим работы
-  ac->set_mode(ac, 0);
-  return 1;
-}
-
-/*
- * Рассчитаем время работы
- */
-double ac_time_work(AC* ac) {
-  double seconds = difftime(ac->time_start, ac->time_stop);
-  return seconds;
-}
-
 /* Внутренняя функция передачи данных моточасов
  *
  */
@@ -109,9 +77,6 @@ AC* ac_new(int i) {
   ac->mode = 0;
   ac->error = NO_ERROR;
 
-  ac->ac_start = ac_time_work;
-  ac->ac_stop = ac_stop;
-  ac->ac_time_work = ac_start;
   ac->set_mode = set_mode;
   ac->num = i;
 

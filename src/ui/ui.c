@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <time.h>
-#include "ui.h"
 #include "lcd.h"
 #include "keyboard.h"
 #include "menu.h"
 #include "../hw/site.h"
 #include "../config/config.h"
+#include "ui.h"
 
 int dmode; // Мы либо в режиме редактирования 1, либо в режиме вывода 0
 

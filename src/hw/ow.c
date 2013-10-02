@@ -95,10 +95,10 @@ float get_data(OWNET_HANDLE conn, char* mnt, char* filename, int lim) {
 
 int list_sensors(Site* site, char *tokens[]) {
 
-  char *dirs = NULL;
-  OWNET_dirlist(site->conn, site->mount_point, dirs);
-  splitString(dirs, tokens, ',');
-
+//  char *dirs = NULL;
+//  OWNET_dirlist(site->conn, site->mount_point, dirs);
+//  splitString(dirs, tokens, ',');
+//
   return 0;
 }
 
