@@ -24,7 +24,7 @@ static void send_moto(AC* ac) {
   } else {
     ac->moto_stop = time(NULL);
     log_3("Моточасы KOND_%d %d %d %d\n", ac->num, (ac->moto_stop - ac->moto_start), ac->moto_stop, ac->moto_start);
-    logD(site->logger->dataLOG, 0, "Моточасы KOND_%d %d", ac->num, (ac->moto_stop - ac->moto_start));
+    logD(gcfg->logger->dataLOG, 0, "Моточасы KOND_%d %d", ac->num, (ac->moto_stop - ac->moto_start));
   }
 }
 

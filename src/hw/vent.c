@@ -50,7 +50,7 @@ static void send_moto(Vent* vent, int pre_mode) {
   } else {
     vent->moto_stop = time(NULL);
     log_3("Моточасы VENT_%d %d %d %d\n", vent->type, (vent->moto_stop - vent->moto_start), vent->moto_stop, vent->moto_start);
-    logD(site->logger->dataLOG, 0, "Моточасы VENT_%d %d", vent->type, (vent->moto_stop - vent->moto_start));
+    logD(gcfg->logger->dataLOG, 0, "Моточасы VENT_%d %d", vent->type, (vent->moto_stop - vent->moto_start));
   }
 }
 

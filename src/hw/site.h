@@ -24,9 +24,11 @@ typedef struct Cfg {
   char* saddr; // адрес owfs сервера
   char* mpoint; // адрес для считывания owfs
   char* ldir; // директория для записи логов
-  char* cdir; // директ
+  char* cdir; // директория конфигурационного файла
   int ltime;  // периодичность записи глобального лога
   int mtime;  // периодичность записи моточасов
+  char* filename; // имя файла конфигурации
+  Logger* logger;
 } Cfg;
 
 /*
@@ -72,8 +74,6 @@ typedef struct Site {
 
   OWNET_HANDLE conn;
 
-  Logger* logger;
-
   int (*set_mode)(struct Site*, int value);
   int (*set_ten)(struct Site*, int value);
   double (*get_ac_time_work)(struct Site*);
@@ -107,6 +107,6 @@ int read_sensors();
 ConfigTable* read_config(char* filename);
 void run(Site* site);
 int search_sensors(OWNET_HANDLE conn);
-Site* site_new(char* filename);
+Site* site_new();
 Cfg* new_gcfg();
 #endif /*SITE_C_*/

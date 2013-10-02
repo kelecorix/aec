@@ -14,10 +14,10 @@
  */
 typedef struct FileLogWriter {
   FILE *fp;
-  char* filename;
+  char* filepath;
 } FileLogWriter;
 
-FileLogWriter* create_filelog(char* filename);
+FileLogWriter* create_filelog(char* filepath);
 void write_log(FILE* fp, char* msg, ...);
 void write_data_log();
 void write_dl(char* msg,  int event_t );

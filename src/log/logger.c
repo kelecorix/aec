@@ -3,10 +3,11 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
-#include "logger.h"
-#include "file_logger.h"
 #include "net_logger.h"
 #include "../hw/site.h"
+#include "file_logger.h"
+#include "logger.h"
+#include "../utils/utils.h"
 
 /*
  *
@@ -15,12 +16,16 @@
  */
 Logger* create_logger() {
 
-  Logger* log = malloc(sizeof(Logger));
-  log->dataLOG = create_filelog(concat(gcfg->cdir, "/data.log"));
-  //log->dataLOG_n = create_netlog("", 80);
+  char* filepath;
+  char* dname="data.log";
+  char* ename="event.log";
 
-  log->eventLOG = create_filelog(concat(gcfg->cdir, "/event.log"));
-  //log->eventLOG_n = create_netlog("", 80);
+  Logger* log = malloc(sizeof(Logger));
+  filepath = concat(gcfg->ldir, dname);
+  log->dataLOG = create_filelog(filepath);
+
+  filepath = concat(gcfg->ldir, ename);
+  log->eventLOG = create_filelog(filepath);
 
   return log;
 }
@@ -56,7 +61,7 @@ void run_logger(Site* site){
  */
 void test_logger(){
 
-  logD(site->logger->dataLOG, 0, "this is test for %s number %d", site->logger->dataLOG->filename, 12);
+  logD(gcfg->logger->dataLOG, 0, "this is test for %s number %d", gcfg->logger->dataLOG->filepath, 12);
 
 }
 

@@ -9,6 +9,7 @@
 #include "../config/config.h"
 #include "../log/logger.h"
 #include "site.h"
+#include "../utils/utils.h"
 
 /*
  *
@@ -148,7 +149,7 @@ int set_ten(Site* site, int val) {
 int site_mode_fail_temp_ac(Site* site) {
 
   log_3("Авария по температуре: режим охлаждения кондиционером!\n");
-  logD(site->logger->dataLOG, 0, "Авария по температуре! Кондиционеры");
+  logD(gcfg->logger->dataLOG, 0, "Авария по температуре! Кондиционеры");
   //    "Режим охлаждения кондиционером");
   site->time_pre = time(NULL);
 
@@ -302,7 +303,7 @@ int site_mode_fail_temp_ac(Site* site) {
 int site_mode_fail_temp_uvo(Site* site) {
 
   log_3("site_mode_fail_temp_uvo: RUN\n");
-  logD(site->logger->dataLOG, 0, "Авария по температуре! УВО");
+  logD(gcfg->logger->dataLOG, 0, "Авария по температуре! УВО");
   int a, v, ret;
   float temp_support = strtof(getStr(site->cfg, (void *) "temp_support"), NULL);
   float temp_dew = strtof(getStr(site->cfg, (void *) "temp_dew"), NULL);
@@ -455,7 +456,7 @@ int site_mode_fail_temp_uvo(Site* site) {
 int site_mode_fail_temp(Site* site) {
 
   log_3("site_mode_fail_temp: Авария по температуре!\n");
-  logD(site->logger->dataLOG, 0, "Авария по температуре!");
+  logD(gcfg->logger->dataLOG, 0, "Авария по температуре!");
   //     "Общий аварийный режим");
   site->mode = 6;
 
@@ -480,7 +481,7 @@ int site_mode_fail_temp(Site* site) {
  */
 int site_mode_uvo(Site* site) {
   log_1("Режим охлаждения УВО!\n");
-  logD(site->logger->dataLOG, 0, "Режим охлаждения УВО!");
+  logD(gcfg->logger->dataLOG, 0, "Режим охлаждения УВО!");
   site->mode = 1;
   site->time_pre = time(NULL);
   site->time_uvo = time(NULL);
@@ -924,7 +925,7 @@ int site_mode_ac(Site* site) {
   int delta_gained = 0;// флаг - дельта набрана 0/1
 
   log_3("Режим охлаждения кондиционером!\n");
-  logD(site->logger->dataLOG, 0, "Режим охлаждения кондиционером!");
+  logD(gcfg->logger->dataLOG, 0, "Режим охлаждения кондиционером!");
   site->mode = 2;
   site->time_pre = time(NULL);
 
@@ -1078,7 +1079,7 @@ int site_mode_ac(Site* site) {
 int site_mode_heat(Site* site) {
 
   log_3("Режим догрева сайта!\n");
-  logD(site->logger->dataLOG, 0, "Режим догрева сайта!");
+  logD(gcfg->logger->dataLOG, 0, "Режим догрева сайта!");
   //    "Режим догрева сайта"); //падает при повторном вызове
   site->mode = 3;
 
@@ -1254,7 +1255,7 @@ int site_mode_heat(Site* site) {
 int site_mode_fail_uvo(Site* site) {
 
   log_3("site_mode_fail_uvo: Режим авария УВО!\n");
-  logD(site->logger->dataLOG, 0, "Режим авария УВО!");
+  logD(gcfg->logger->dataLOG, 0, "Режим авария УВО!");
   //    "Режим авария УВО");
   site->mode = 4;
   site->time_pre = time(NULL);
@@ -1354,7 +1355,7 @@ int site_mode_fail_uvo(Site* site) {
  */
 int site_mode_fail_ac(Site* site) {
   log_3("Режим авария кондиционеров!\n");
-  logD(site->logger->dataLOG, 0, "Режим авария кондиционеров!");
+  logD(gcfg->logger->dataLOG, 0, "Режим авария кондиционеров!");
   //    "Режим авария кондиционеров");
   site->mode = 5;
 
@@ -1556,7 +1557,7 @@ int set_mode(Site* site, int val) {
  *
  *
  */
-Site* site_new(char* filename) {
+Site* site_new() {
 
   Site* site = malloc(sizeof(Site));
   int i;
@@ -1570,10 +1571,9 @@ Site* site_new(char* filename) {
   site->penalty = 0;
   site->temp_in_prev = 0;
   site->conn = 0;
-  site->cfg = read_config(filename);
+  site->cfg = read_config(concat(gcfg->cdir, gcfg->filename));
   site->set_mode = set_mode;
   site->set_ten = set_ten;
-  site->logger = create_logger();
   int num_ac = atoi(getStr(site->cfg, (void *) "num_ac"));
   site->acs = malloc(num_ac * sizeof(int*));
   site->num_ac = num_ac;
@@ -1588,15 +1588,14 @@ Site* site_new(char* filename) {
 Cfg* new_gcfg(){
 
   Cfg* gcfg = malloc(sizeof(Cfg));
-
   gcfg->debug = 0;
   gcfg->gpf   = 0;
   gcfg->saddr  = "127.0.0.1:3001"; // адрес owfs сервера
   gcfg->mpoint = "/bus.0/"; // адрес для считывания owfs
-  gcfg->ldir   = "/var/log"; // директория для записи логов
+  gcfg->ldir   = "/var/log/"; // директория для записи логов
   gcfg->cdir   = get_app_dir(); // директ
   gcfg->ltime  = 10;  // периодичность записи глобального лога
   gcfg->mtime  = 20;  // периодичность записи моточасов
-
+  gcfg->filename = "freecooling.conf";
   return gcfg;
 }
