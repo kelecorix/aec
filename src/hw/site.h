@@ -28,7 +28,9 @@ typedef struct Cfg {
   int ltime;  // периодичность записи глобального лога
   int mtime;  // периодичность записи моточасов
   char* filename; // имя файла конфигурации
+  char* edir;  //директория для файло эмуляции
   Logger* logger;
+  OWNET_HANDLE conn;
 } Cfg;
 
 /*
@@ -71,8 +73,6 @@ typedef struct Site {
   time_t time_pre; // время предыдущего решения в секундах
   time_t time_uvo; // время включения охлаждения с помощью вентиляторов
   ConfigTable* cfg; // configuration for this particular  site
-
-  OWNET_HANDLE conn;
 
   int (*set_mode)(struct Site*, int value);
   int (*set_ten)(struct Site*, int value);

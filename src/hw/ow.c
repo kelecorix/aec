@@ -45,7 +45,7 @@ int close_server_conn(OWNET_HANDLE conn) {
 float get_data(OWNET_HANDLE conn, char* mnt, char* filename, int lim) {
 
   // check if exists local file
-  if (access(filename, F_OK) != -1) {
+  if (access(concat(gcfg->edir, filename), F_OK) != -1) {
     // File exists
     // Файл существует
     char buf[100];

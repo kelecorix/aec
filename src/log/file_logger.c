@@ -227,10 +227,17 @@ void log_1(char* msg, ...) {
  */
 void log_2(char* msg, ...) {
   va_list args;
-  printf("%s \n", gcfg->logger->eventLOG->filepath);
   FileLogWriter* flog = gcfg->logger->eventLOG;
   if (gcfg->debug >= 2) {
-    flog->fp = fopen(flog->filepath, "a");
+    flog->fp = fopen(flog->filepath, "at");
+
+    if (!flog->fp)
+      flog->fp = fopen(gcfg->logger->eventLOG->filepath, "wt");
+
+    if (!flog->fp) {
+      printf("can not open event log for writing.\n");
+      return;   // bail out if we can't log
+    }
     time_t timer;
     struct tm* tm_info;
     char date[50];
@@ -245,6 +252,7 @@ void log_2(char* msg, ...) {
     vfprintf(flog->fp, msg, args);
     va_end(args);
     fclose(flog->fp);
+
   }
   // pf - printf flag
   if (gcfg->gpf) {

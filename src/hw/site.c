@@ -27,7 +27,7 @@ void site_free() {
  */
 int read_sensors(Site* site) {
 
-  OWNET_HANDLE conn = site->conn;
+  OWNET_HANDLE conn = gcfg->conn;
   char *mnt = gcfg->mpoint;
 
   char *s_temp_out = getStr(site->cfg, (void *) "s_temp_outdoor");
@@ -1570,7 +1570,7 @@ Site* site_new() {
   site->th = throttle_new();
   site->penalty = 0;
   site->temp_in_prev = 0;
-  site->conn = 0;
+  gcfg->conn = 0;
   site->cfg = read_config(concat(gcfg->cdir, gcfg->filename));
   site->set_mode = set_mode;
   site->set_ten = set_ten;
@@ -1597,5 +1597,6 @@ Cfg* new_gcfg(){
   gcfg->ltime  = 10;  // периодичность записи глобального лога
   gcfg->mtime  = 20;  // периодичность записи моточасов
   gcfg->filename = "freecooling.conf";
+  gcfg->edir = "emul/";
   return gcfg;
 }

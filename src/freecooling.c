@@ -36,7 +36,8 @@ void process_args(int argc, char *argv[]) {
   int mpFlag = 0; // moint point for owfs
   int tlFlag = 0; // time log period
   int tmFlag = 0; // moto log period
-  int hFlag;    // help
+  int hFlag  = 0;    // help
+
   for (i = 1; i < argc; i++) {
     if (strcmp(argv[i], "-d") == 0) {
       dFlag = 1;
@@ -220,6 +221,18 @@ void process_args(int argc, char *argv[]) {
     }
   }
 
+  // заготовки для специфичной обработки флагов
+  if (dFlag == 0)  dFlag = 0;
+  if (pFlag == 0)  pFlag = 0;
+  if (thFlag == 0) thFlag =0;
+  if (saFlag == 0) saFlag=0;
+  if (cfFlag == 0) cfFlag=0;
+  if (lfFlag == 0) lfFlag=0;
+  if (mpFlag == 0) mpFlag=0;
+  if (tlFlag == 0) tlFlag=0;
+  if (tmFlag == 0) tmFlag=0;
+  if (hFlag ==0)   hFlag=0;
+
   // Разбираемся с несовместимыми флагами
 
 }
@@ -245,9 +258,9 @@ int main(int argc, char *argv[]) {
   if (site->cfg)
     log_2("Config was read ok!\n");
 
-  site->conn = create_server_conn(gcfg->saddr);
+  gcfg->conn = create_server_conn(gcfg->saddr);
 
-  if (site->conn == 0)
+  if (gcfg->conn == 0)
     log_4("OWFS connection established!\n");
   else
     log_4("OWFS connection not fins. Fire up OWFS server!\n");
