@@ -59,4 +59,6 @@ typedef struct LCD {
 
 } LCD;
 
+LCD* lcd_new(int addr);
+
 #endif /* LCD_H_ */

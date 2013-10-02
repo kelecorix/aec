@@ -12,9 +12,6 @@ typedef struct ConfigTable {
   Hashmap* mStatic; /* Flags to indicate static config values*/
   Hashmap* mOptional; /* Flags to indicate optional config values*/
 
-  int (*readConfig)(char filename[]);
-  int (*writeConfig)(char filename[]);
-
   bool (*isDefined)(struct ConfigTable*, char key[]);
   bool (*isStatic)(char key[]);
   bool (*isRequired)(char key[]);
@@ -29,10 +26,8 @@ typedef struct ConfigTable {
 } ConfigTable;
 
 char* getStr(ConfigTable* cfg, const char *key) ;
-
-//static int str_hash_fn(void *str);
-
-//static bool str_eq(void *key_a, void *key_b);
+ConfigTable* readConfig(char filename[]);
+void writeConfig(char filename[]);
 
 /* Structure of configuration file 
 

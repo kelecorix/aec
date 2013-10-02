@@ -5,7 +5,7 @@
 #include "ui.h"
 #include "../hw/i2c.h"
 
-KB* kb_new( addr) {
+KB* kb_new(int addr) {
 
   KB* kb = malloc(sizeof(KB));
   kb->address = addr;
@@ -23,6 +23,5 @@ KB* kb_new( addr) {
   } else {
     kb->connect = 1;
   }
-
   return kb;
 }

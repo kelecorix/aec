@@ -10,4 +10,6 @@ typedef struct KB {
 
 } KB;
 
+KB* kb_new(int addr);
+
 #endif /* KEYBOARD_H_ */

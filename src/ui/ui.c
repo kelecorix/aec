@@ -11,8 +11,6 @@ int dmode; // Мы либо в режиме редактирования 1, ли
 
 void run_ui(Site* site) {
 
-  return;
-
   // инициализируем экран
   int addr_lcd = strtol(getStr(site->cfg, (void *) "a_lcd"), (char **) NULL, 16);
   LCD* lcd = lcd_new(addr_lcd);
@@ -20,8 +18,8 @@ void run_ui(Site* site) {
   lcd->reset(lcd);
 
   // инициализируем клавиатуру
-  int addr_kb = strtol(getStr(site->cfg, (void *) "a_keyb"), (char **) NULL, 16);
-  KB* kb = kb_new(addr_kb);
+  // int addr_kb = strtol(getStr(site->cfg, (void *) "a_keyb"), (char **) NULL, 16);
+  // KB* kb = kb_new(addr_kb);
 
   // инициализируем меню
   init_menu();
