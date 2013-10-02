@@ -222,6 +222,7 @@ void* hashmapPut(Hashmap* map, void* key, void* value) {
     // Move to next entry.
     p = &current->next;
   }
+  return 0;
 }
 
 void* hashmapGet(Hashmap* map, void* key) {
@@ -235,7 +236,7 @@ void* hashmapGet(Hashmap* map, void* key) {
     }
     entry = entry->next;
   }
-
+  return 0; // if nothing was found
 }
 
 bool hashmapContainsKey(Hashmap* map, void* key) {
@@ -284,6 +285,7 @@ void* hashmapMemoize(Hashmap* map, void* key,
     // Move to next entry.
     p = &current->next;
   }
+  return 0; // if nothing was returned
 }
 
 void* hashmapRemove(Hashmap* map, void* key) {
@@ -305,7 +307,7 @@ void* hashmapRemove(Hashmap* map, void* key) {
     p = &current->next;
   }
 
-  //return NULL;
+  return 0;//if nothing was returned
 }
 
 void hashmapForEach(Hashmap* map,

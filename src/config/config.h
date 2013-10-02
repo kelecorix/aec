@@ -29,9 +29,9 @@ typedef struct ConfigTable {
 
 } ConfigTable;
 
-static int str_hash_fn(void *str);
+//static int str_hash_fn(void *str);
 
-static bool str_eq(void *key_a, void *key_b);
+//static bool str_eq(void *key_a, void *key_b);
 
 /* Structure of configuration file 
 

@@ -12,13 +12,13 @@ KB* kb_new( addr) {
   kb->connect = -1;
 
   if ((kb->fd = open(I2C_FILE_NAME, O_RDWR)) < 0) {
-    log1("Failed to open the i2c bus\n");
+    log_1("Failed to open the i2c bus\n");
     kb->connect = 0;
   } else {
     kb->connect = 1;
   }
   if (ioctl(kb->fd, I2C_SLAVE, addr) < 0) {
-    log1("Failed to acquire bus access and/or talk to slave.\n");
+    log_1("Failed to acquire bus access and/or talk to slave.\n");
     kb->connect = 0;
   } else {
     kb->connect = 1;

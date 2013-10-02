@@ -38,22 +38,22 @@ int main(int argc, char *argv[]) {
   printf("Парметры запуска: %d %d\n", site->debug, site->gpf);
 
   if (site->cfg)
-    log4("Config was read ok!\n");
+    log_2("Config was read ok!\n");
 
-  site->conn = create_server_conn("127.0.0.1:3001");
-
-  if (site->conn == 0)
-    log4("OWFS connection established!\n");
-  else
-    log4("OWFS connection not fins. Fire up OWFS server!\n");
-
-  sleep(4);
-
-  //Workers Воркеры - выполняют параллельно свои операции
-
+//  site->conn = create_server_conn("127.0.0.1:3001");
+//
+//  if (site->conn == 0)
+//    log_4("OWFS connection established!\n");
+//  else
+//    log_4("OWFS connection not fins. Fire up OWFS server!\n");
+//
+//  sleep(4);
+//
+//  //Workers Воркеры - выполняют параллельно свои операции
+//
   if (pthread_create(&threadA, NULL, run, (void*) site)) {
     fprintf(stderr, "Error creating algo thread\n");
-    log4("Error creating algo thread\n");
+    log_4("Error creating algo thread\n");
     return 1;
   }
 
@@ -61,26 +61,26 @@ int main(int argc, char *argv[]) {
 
   if (pthread_create(&threadU, NULL, run_ui, (void*) site)) {
     fprintf(stderr, "Error creating UI thread\n");
-    log4("Error creating UI thread\n");
+    log_4("Error creating UI thread\n");
     return 1;
   }
 
-  sleep(4);
-
-  printf("Создадим поток журналирования\n");
-  if(pthread_create(&threadL, NULL, run_logger, (void*) site)) {
-    fprintf(stderr, "Error creating Logger thread\n");
-    log4("Error creating Logger thread\n");
-    return 1;
-  }
-
-  sleep(4);
+//  sleep(4);
+//
+//  printf("Создадим поток журналирования\n");
+//  if(pthread_create(&threadL, NULL, run_logger, (void*) site)) {
+//    fprintf(stderr, "Error creating Logger thread\n");
+//    log4("Error creating Logger thread\n");
+//    return 1;
+//  }
+//
+//  sleep(4);
 
 // ждем пока потоками завершаться
 // по идде сюда не должно дойти
   pthread_join(threadA, retA);
   pthread_join(threadU, retU);
-  pthread_join(threadL, retL);
+ // pthread_join(threadL, retL);
 
   // Для тестов оборудования
   //i2cTestHardware();

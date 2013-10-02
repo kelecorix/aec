@@ -29,11 +29,8 @@ typedef struct AC {
   int (*set_mode)(struct AC*, int m);
   int (*ac_start)(struct AC*);
   int (*ac_stop)(struct AC*);
-  long (*ac_moto_work)(struct AC*);
   double (*ac_time_work)(struct AC*);
 
 } AC;
-
-static void send_moto_ac(AC* ac);
 
 #endif /*AC_H_*/

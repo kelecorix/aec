@@ -66,7 +66,7 @@ char* concat(char* str1, char* str2) {
 
 int concat3(char *first, char *second, char *third) {
 
-  char *total;
+  //char *total;
 
   return 0;
 
@@ -151,19 +151,4 @@ void revS(char str[])
   *p = c;
 
   return;
-}
-
-char *ssprintf(char* msg, ...){
-
-  va_list args;
-  char* ret;
-
-  char buf1 [255];
-  char *buf2;
-  int n;
-  n = sprintf(buf1, msg, args);
-
-  buf2 = string_copy(buf1);
-  return buf2;
-
 }

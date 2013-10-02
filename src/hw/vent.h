@@ -34,6 +34,5 @@ void i2c_get_tacho(int addr0, int addr1);
 int i2c_get_tacho_step(struct Vent* v, int addr);
 int i2c_get_tacho_data(struct Vent* v, int addr);
 int turns_to_step(int turns, int type);
-static void send_moto(Vent* vent, int pre_mode);
 
 #endif /*VENT_H_*/

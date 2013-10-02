@@ -24,7 +24,7 @@ void run_ui(Site* site) {
   KB* kb = kb_new(addr_kb);
 
   // инициализируем меню
-  //init_menu();
+  init_menu();
 
   // установим обработчик нажатия
   //setHandler(MSG_MENU_SELECT, &selectMenu);

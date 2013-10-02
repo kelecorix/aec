@@ -19,6 +19,21 @@ void vent_free() {
 
 }
 
+static void send_moto(Vent* vent, int pre_mode) {
+
+  if (vent->mode == pre_mode)
+    return;
+
+  if (vent->mode == 1) {
+    vent->moto_start = time(NULL);
+    log_3("vent.c: Включим ВЕНТ_%d\n", vent);
+  } else {
+    vent->moto_stop = time(NULL);
+    log_3("Моточасы VENT_%d %d %d %d\n", vent->type, (vent->moto_stop - vent->moto_start), vent->moto_stop, vent->moto_start);
+    logD(site->logger->dataLOG, 0, "Моточасы VENT_%d %d", vent->type, (vent->moto_stop - vent->moto_start));
+  }
+}
+
 // Установим количество оборотов, 11 шагов управлен  ия скоростью
 int set_step(Vent* vent, int val) {
 
@@ -148,20 +163,7 @@ int turns_to_step(int turns, int type) {
   return step;
 }
 
-static void send_moto(Vent* vent, int pre_mode) {
 
-  if (vent->mode == pre_mode)
-    return;
-
-  if (vent->mode == 1) {
-    vent->moto_start = time(NULL);
-    log3("vent.c: Включим ВЕНТ_%d\n", vent);
-  } else {
-    vent->moto_stop = time(NULL);
-    log3("Моточасы VENT_%d %d %d %d\n", vent->type, (vent->moto_stop - vent->moto_start), vent->moto_stop, vent->moto_start);
-    logD(site->logger->dataLOG, 0, "Моточасы VENT_%d %d", vent->type, (vent->moto_stop - vent->moto_start));
-  }
-}
 
 void test_vents() {
 

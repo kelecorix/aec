@@ -42,9 +42,9 @@ void write_dl(char* msg, int event_t) {
   FILE* fp = site->logger->dataLOG->fp;
   char *filename = site->logger->dataLOG->filename;
 
-  time_t timer;
+  //time_t timer;
   struct tm* tm_info;
-  char date[50], str[80] = "";
+  char date[50]="";
 
   fp = fopen(filename, "a");
 
@@ -74,7 +74,7 @@ void write_data_log(Site* site) {
   time_t timer;
   struct tm* tm_info;
   char date[50], str[80] = "";
-  int event_t = 1;           // event type, тип события
+  //int event_t = 1;           // event type, тип события
 
   fp = fopen(filename, "a");
 
@@ -160,7 +160,7 @@ void logD(FileLogWriter* flog, int pf, char* msg, ...) {
 }
 
 // Basic messages
-void log1(char* msg, ...) {
+void log_1(char* msg, ...) {
   va_list args;
   FileLogWriter* flog = site->logger->eventLOG;
   if (site->debug >= 1) {
@@ -189,7 +189,7 @@ void log1(char* msg, ...) {
 }
 
 // Light Debug
-void log2(char* msg, ...) {
+void log_2(char* msg, ...) {
   va_list args;
   FileLogWriter* flog = site->logger->eventLOG;
   if (site->debug >= 2) {
@@ -218,7 +218,7 @@ void log2(char* msg, ...) {
 }
 
 // Debug
-void log3(char* msg, ...) {
+void log_3(char* msg, ...) {
   va_list args;
   FileLogWriter* flog = site->logger->eventLOG;
   if (site->debug >= 3) {
@@ -248,7 +248,7 @@ void log3(char* msg, ...) {
 }
 
 // Deep Debug
-void log4(char* msg, ...) {
+void log_4(char* msg, ...) {
   va_list args;
   FileLogWriter* flog = site->logger->eventLOG;
   if (site->debug >= 4) {

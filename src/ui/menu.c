@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include <stdint.h>
-#include <linux/input.h>
 #include <time.h>
+#include <math.h>
 
-#include "ui.h"
 #include "lcd.h"
 #include "keyboard.h"
 #include "menu.h"
@@ -11,13 +10,16 @@
 #include "../config/config.h"
 
 int mode;                   // режим редактирования или нет
+Menu* menu;
 
 void init_menu() {
-
+  create_menu();
 }
 
 
-create_menu(){
+void create_menu(){
+
+  menu = malloc(sizeof(Menu));
 
   create_node(1, 0, 0, 0, "Температуры", "");
   create_node(2, 0, 0, 0, "Оборудование", "");
@@ -91,39 +93,100 @@ create_menu(){
  *            text   - текст меню
  *            ct     - имя параметра в конфиге, если есть
  */
-void create_node(int id, int parent, int min, int max, char* text, char* ct){
+void create_node(int id, int parent, int min, int max, char* text, char* cn){
 
-  // Получим текущее значение
+  Node* node = malloc(sizeof(Node));
+
+  node->id     = id;
+  node->min    = min;
+  node->max    = max;
+  node->text   = text;
+  node->cn     = cn;
+  node->parent = get_parent_by_id(parent);
+  node->val    = strtol(getStr(site->cfg, (void *) cn), (char **) NULL, 10);
+
+  // В конце
+  if (id == 0) {
+    menu->root = node;
+    menu->curr = node;
+  }
+  menu->length++;
+  menu->nodes[menu->length] = node;
+  add_child(node);
+}
+
+int getDepth(Menu* tree, Node* p){
+  if(isRoot(p))
+    return 0;
+  else
+    return 1 + getDepth(tree, p->parent);
+}
+
+int getHeight(Menu* tree){
+  Node* node;
+  int i, h = 0;
+
+  for(i=0; i< menu->length; i++){
+    node = tree->nodes[i];
+    if(isLeaf(node))
+      h = MAX(h, getDepth(tree, node));
+  }
+
+  return h;
+}
+
+int isRoot(Node* node){
+  if (node->parent == NULL)
+    return 1;
+  else
+    return 0;
+}
+
+int isLeaf(Node* node){
+  if(node->childs == NULL)
+    return 1;
+  else
+    return 0;
+}
+
+void add_child(Node* node){
+
+  node->lenght++;
+  node->parent->childs = calloc((node->lenght), sizeof(Node*));
+  node->parent->childs[node->lenght] = node;
 
 }
 
 Node* get_parent(Node* node){
 
+  return NULL;
+
 }
 
-void get_childs(Node* node, Node* childs[]) {
+Node* get_parent_by_id(int id){
 
+  return NULL;
 }
 
 Node* next_child(Node* node){
-
+  return NULL;
 }
 
 Node* prev_child(Node* node){
-
+  return NULL;
 
 }
 
 // аргумент узел на котором мы находимся
 // возвр: первый узел следующего уровня
 Node* next_level(Node* node){
-
+  return NULL;
 }
 
 // аргумент узел котором мы находимся
 // возвр: первый узел предыдущего уровня
 Node* prev_level(Node* node){
-
+  return NULL;
 }
 
 // обойти дерево

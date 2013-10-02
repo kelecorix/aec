@@ -4,6 +4,7 @@
 #include "ac.h"
 #include "i2c.h"
 #include "site.h"
+#include "../log/file_logger.h"
 
 void ac_free() {
 //TODO: очистим ресурсы памяти
@@ -41,13 +42,19 @@ double ac_time_work(AC* ac) {
   return seconds;
 }
 
-/*
- * Рассчитаем моточасы
+/* Внутренняя функция передачи данных моточасов
+ *
  */
-long ac_moto_work(AC* ac) {
-  int time = ac->ac_time_work;
-  long moto = time * 1; // time * motoparameter 
-  return moto;
+static void send_moto(AC* ac) {
+
+  if (ac->mode == 1) {
+    ac->moto_start = time(NULL);
+    log_3("ac.c: Включим КОНД_%d\n", ac->num);
+  } else {
+    ac->moto_stop = time(NULL);
+    log_3("Моточасы KOND_%d %d %d %d\n", ac->num, (ac->moto_stop - ac->moto_start), ac->moto_stop, ac->moto_start);
+    logD(site->logger->dataLOG, 0, "Моточасы KOND_%d %d", ac->num, (ac->moto_stop - ac->moto_start));
+  }
 }
 
 /*
@@ -63,10 +70,10 @@ static int set_mode(AC* ac, int val) {
   char buf[1];
 
   if (ioctl(g_i2cFile, I2C_SLAVE, addr) < 0)
-    printf("Failed to acquire bus access and/or talk to slave.\n");
+    log_4("Failed to acquire bus access and/or talk to slave.\n");
 
   if (read(g_i2cFile, buf, 1) != 1)
-    log1("set_mode: Error reading from i2c\n");
+    log_4("set_mode: Error reading from i2c\n");
 
   value = (int) buf[0];
 
@@ -87,7 +94,7 @@ static int set_mode(AC* ac, int val) {
     set_i2c_register(g_i2cFile, addr, value, value);
 
     ac->mode = val;
-    send_moto_ac(ac);
+    send_moto(ac);
     i2cClose();
     return 1;
   } else {
@@ -96,20 +103,6 @@ static int set_mode(AC* ac, int val) {
   }
 }
 
-/* Внутренняя функция передачи данных моточасов
- *
- */
-static void send_moto_ac(AC* ac) {
-
-  if (ac->mode == 1) {
-    ac->moto_start = time(NULL);
-    log3("ac.c: Включим КОНД_%d\n", ac->num);
-  } else {
-    ac->moto_stop = time(NULL);
-    log3("Моточасы KOND_%d %d %d %d\n", ac->num, (ac->moto_stop - ac->moto_start), ac->moto_stop, ac->moto_start);
-    logD(site->logger->dataLOG, 0, "Моточасы KOND_%d %d", ac->num, (ac->moto_stop - ac->moto_start));
-  }
-}
 
 AC* ac_new(int i) {
   AC* ac = malloc(sizeof(AC));
@@ -119,7 +112,6 @@ AC* ac_new(int i) {
   ac->ac_start = ac_time_work;
   ac->ac_stop = ac_stop;
   ac->ac_time_work = ac_start;
-  ac->ac_moto_work = ac_moto_work;
   ac->set_mode = set_mode;
   ac->num = i;
 

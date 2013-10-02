@@ -23,15 +23,15 @@ LCD* lcd_new(int addr) {
   lcd->addr = addr;
 
   if ((lcd->fd = open(I2C_FILE_NAME, O_RDWR)) < 0) {
-    log1("Failed to open the i2c bus\n");
+    log_1("Failed to open the i2c bus\n");
     lcd->connect = 0;
   } else {
     lcd->connect = 1;
   }
 
-  log3("LCD addr: %d\n", addr);
+  log_3("LCD addr: %d\n", addr);
   if (ioctl(lcd->fd, I2C_SLAVE, addr) < 0) {
-    log1("Failed to acquire bus access and/or talk to slave.\n");
+    log_1("Failed to acquire bus access and/or talk to slave.\n");
     lcd->connect = 0;
   } else {
     lcd->connect = 1;
@@ -40,39 +40,28 @@ LCD* lcd_new(int addr) {
   return lcd;
 }
 
-/* Функция инициализации экрана
+/* Низкоуровневая функция записи на экран
  */
-void init(LCD* lcd) {
-  write_quartets(lcd, CMD_SIL | SIL_N);
-  write_quartets(lcd, CMD_EDC);
-  write_quartets(lcd, CMD_CAH);
-  write_quartets(lcd, CMD_SCMD | SCMD_ID);
-  write_quartets(lcd, CMD_EDC | EDC_D);
+void send(LCD* lcd, char bits) {
+  if (lcd->connect == -1)
+    reset(lcd);
+
+  if (lcd->connect == 1) {
+    char buf[1];
+    buf[0] = bits;
+    if (write(lcd->fd, buf, 1) != 1) {
+      printf("Failed to write to the i2c bus. **lcd.c**\n");
+      lcd->connect = 0;
+    }
+  }
 }
 
-/* Функция перезагрузки экрана
+/* Функция записи на экрн
  */
-void reset(LCD* lcd) {
-  send(lcd, 0xFF);
-  usleep(5000);
-  send(lcd, 0x03 + LCD_EN);
-  send(lcd, 0x03);
-  usleep(5000);
-  send(lcd, 0x03 + LCD_EN);
-  send(lcd, 0x03);
+void write_lcd(LCD* lcd, int bits) {
+  send(lcd, bits + LCD_EN);
+  send(lcd, bits);
   usleep(500);
-  send(lcd, 0x03 + LCD_EN);
-  send(lcd, 0x03);
-  usleep(500);
-  send(lcd, 0x02 + LCD_EN);
-  send(lcd, 0x02);
-  usleep(500);
-}
-
-/* Функция очистки экрана
- */
-void clear(LCD* lcd) {
-  write_quartets(lcd, CMD_CAH);
 }
 
 /* Функция записи полубайта на шину i2c
@@ -90,28 +79,28 @@ void write_char(LCD* lcd, char letter) {
   write_lcd(lcd, ((int) letter & 0x0F) | LCD_RS);
 }
 
-/* Функция записи на экрн
+/* Функция перевода курсора при записи
  */
-void write_lcd(LCD* lcd, int bits) {
-  send(lcd, bits + LCD_EN);
-  send(lcd, bits);
-  usleep(500);
-}
+void set_cursor(LCD* lcd, int str) {
 
-/* Низкоуровневая функция записи на экран
- */
-void send(LCD* lcd, char bits) {
-  if (lcd->connect == -1)
-    reset(lcd);
-
-  if (lcd->connect == 1) {
-    char buf[1];
-    buf[0] = bits;
-    if (write(lcd->fd, buf, 1) != 1) {
-      printf("Failed to write to the i2c bus. **lcd.c**\n");
-      lcd->connect = 0;
-    }
+  int DDRAMAddr;
+  switch (str) {
+  case 0:
+    DDRAMAddr = LCD_LINE0_DDRAMADDR;
+    break;
+  case 1:
+    DDRAMAddr = LCD_LINE1_DDRAMADDR;
+    break;
+  case 2:
+    DDRAMAddr = LCD_LINE2_DDRAMADDR;
+    break;
+  case 3:
+    DDRAMAddr = LCD_LINE3_DDRAMADDR;
+    break;
+  default:
+    DDRAMAddr = LCD_LINE0_DDRAMADDR;
   }
+  write_quartets(lcd, 1 << LCD_DDRAM | DDRAMAddr);
 }
 
 /* Функция последовательной записи символов
@@ -163,28 +152,37 @@ void lcd_line(LCD* lcd, char *s, int c) {
   }
 }
 
-/* Функция перевода курсора при записи
+/* Функция инициализации экрана
  */
-void set_cursor(LCD* lcd, int str) {
-
-  int DDRAMAddr;
-  switch (str) {
-  case 0:
-    DDRAMAddr = LCD_LINE0_DDRAMADDR;
-    break;
-  case 1:
-    DDRAMAddr = LCD_LINE1_DDRAMADDR;
-    break;
-  case 2:
-    DDRAMAddr = LCD_LINE2_DDRAMADDR;
-    break;
-  case 3:
-    DDRAMAddr = LCD_LINE3_DDRAMADDR;
-    break;
-  default:
-    DDRAMAddr = LCD_LINE0_DDRAMADDR;
-  }
-  write_quartets(lcd, 1 << LCD_DDRAM | DDRAMAddr);
+void init(LCD* lcd) {
+  write_quartets(lcd, CMD_SIL | SIL_N);
+  write_quartets(lcd, CMD_EDC);
+  write_quartets(lcd, CMD_CAH);
+  write_quartets(lcd, CMD_SCMD | SCMD_ID);
+  write_quartets(lcd, CMD_EDC | EDC_D);
 }
 
+/* Функция перезагрузки экрана
+ */
+void reset(LCD* lcd) {
+  send(lcd, 0xFF);
+  usleep(5000);
+  send(lcd, 0x03 + LCD_EN);
+  send(lcd, 0x03);
+  usleep(5000);
+  send(lcd, 0x03 + LCD_EN);
+  send(lcd, 0x03);
+  usleep(500);
+  send(lcd, 0x03 + LCD_EN);
+  send(lcd, 0x03);
+  usleep(500);
+  send(lcd, 0x02 + LCD_EN);
+  send(lcd, 0x02);
+  usleep(500);
+}
 
+/* Функция очистки экрана
+ */
+void clear(LCD* lcd) {
+  write_quartets(lcd, CMD_CAH);
+}

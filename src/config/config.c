@@ -7,6 +7,16 @@
 #include "../utils/hashmap.h"
 #include "../utils/utils.h"
 
+
+static int str_hash_fn(void *str) {
+  uint32_t hash = 5381;
+  char *p;
+
+  for (p = str; p && *p; p++)
+    hash = ((hash << 5) + hash) + *p;
+  return (int) hash;
+}
+
 ConfigTable* config_table_new() {
   ConfigTable* cfg = malloc(sizeof(ConfigTable));
   cfg->mTable = hashmapCreate(36, str_hash_fn, hashmapIntEquals);
@@ -54,10 +64,9 @@ char* getStr(ConfigTable* cfg, const char *key) {
   //remove /n from value
   strip_n(value);
 
-  if (value) {
-    //printf("Current value %s\n", value);
+  if (value)
     return value;
-  } else
+  else
     return "";
 }
 
@@ -136,16 +145,7 @@ void writeConfig(char filename[]) {
 
 }
 
-static int str_hash_fn(void *str) {
-  uint32_t hash = 5381;
-  char *p;
-
-  for (p = str; p && *p; p++)
-    hash = ((hash << 5) + hash) + *p;
-  return (int) hash;
-}
-
-static bool str_eq(void *key_a, void *key_b) {
-  return !strcmp((const char *) key_a, (const char *) key_b);
-}
+//static bool str_eq(void *key_a, void *key_b) {
+//  return !strcmp((const char *) key_a, (const char *) key_b);
+//}
 

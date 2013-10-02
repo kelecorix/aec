@@ -8,6 +8,7 @@
 #include "../hw/site.h"
 #include "../utils/utils.h"
 #include "../config/config.h"
+#include "../log/file_logger.h"
 
 OWNET_HANDLE create_server_conn(char *addr) {
 
@@ -15,7 +16,7 @@ OWNET_HANDLE create_server_conn(char *addr) {
 
   owh = OWNET_init(addr);
   if (owh < 0) {
-    printf("OWNET_init(%s) failed.\n", addr); //TODO: писать в лог о проблемах
+    log_2("OWNET_init(%s) failed.\n", addr);
   }
   return owh;
 }
@@ -82,7 +83,6 @@ float get_data(OWNET_HANDLE conn, char* mnt, char* filename, int lim) {
 
       // Проверим или данные входят в рабочий диапазон
       // -55 .. +125
-      // TODO: можно ли получить эти данные программно?
       if (d > -55.f && d < 125.f)
         return d;
       else
