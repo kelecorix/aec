@@ -47,40 +47,6 @@ void write_log(FILE* fp, char* msg, ...) {
   fclose(fp);
 }
 
-/*
- *
- *
- *
- */
-void write_dl(char* msg, int event_t) {
-
-  // event type, тип события
-  FILE* fp = gcfg->logger->dataLOG->fp;
-  char *filename = gcfg->logger->dataLOG->filepath;
-
-  struct tm* tm_info;
-  char date[50] = "";
-
-  fp = fopen(filename, "a");
-
-  if (!fp)
-    fprintf(stderr, "could not open log file %s", filename);
-
-  tm_info = NULL;
-  strftime(date, 25, "%Y:%m:%d %H:%M:%S", tm_info);
-  fprintf(fp, date);
-
-//  fprintf(fp, "|");
-//  sprintf(str, "%d", event_t);
-//  fprintf(fp, str);
-
-  fprintf(fp, "|");
-  fprintf(fp, msg);
-
-  fprintf(fp, "\n");
-  fclose(fp);
-
-}
 
 /*
  *
@@ -97,10 +63,15 @@ void write_data_log() {
   char date[50], str[80] = "";
   //int event_t = 1;           // event type, тип события
 
-  fp = fopen(filepath, "a");
+  fp = fopen(filepath, "at");
 
   if (!fp)
-    fprintf(stderr, "could not open log file %s", filepath);
+    fp = fopen(gcfg->logger->eventLOG->filepath, "wt");
+
+  if (!fp) {
+    printf("can not open event log for writing.\n");
+    return;   // bail out if we can't log
+  }
 
   timer = time(NULL);
   tm_info = localtime(&timer);
@@ -195,7 +166,15 @@ void log_1(char* msg, ...) {
   va_list args;
   FileLogWriter* flog = gcfg->logger->eventLOG;
   if (gcfg->debug >= 1) {
-    flog->fp = fopen(flog->filepath, "a");
+    flog->fp = fopen(flog->filepath, "at");
+
+    if (!flog->fp)
+      flog->fp = fopen(gcfg->logger->eventLOG->filepath, "wt");
+
+    if (!flog->fp) {
+      printf("can not open event log for writing.\n");
+      return;   // bail out if we can't log
+    }
     time_t timer;
     struct tm* tm_info;
     char date[50];
@@ -204,12 +183,12 @@ void log_1(char* msg, ...) {
     tm_info = localtime(&timer);
 
     strftime(date, 25, "%Y:%m:%d %H:%M:%S", tm_info);
-    fprintf(gcfg->logger->eventLOG->fp, date);
-    fprintf(gcfg->logger->eventLOG->fp, "|");
+    fprintf(flog->fp, date);
+    fprintf(flog->fp, "|");
     va_start(args, msg);
-    vfprintf(gcfg->logger->eventLOG->fp, msg, args);
+    vfprintf(flog->fp, msg, args);
     va_end(args);
-    fclose(gcfg->logger->eventLOG->fp);
+    fclose(flog->fp);
   }
   // pf - printf flag
   if (gcfg->gpf) {
@@ -272,7 +251,15 @@ void log_3(char* msg, ...) {
   va_list args;
   FileLogWriter* flog = gcfg->logger->eventLOG;
   if (gcfg->debug >= 3) {
-    gcfg->logger->eventLOG->fp = fopen(flog->filepath, "a");
+    flog->fp = fopen(flog->filepath, "at");
+
+    if (!flog->fp)
+      flog->fp = fopen(flog->filepath, "wt");
+
+    if (!flog->fp) {
+      printf("can not open event log for writing.\n");
+      return;   // bail out if we can't log
+    }
     time_t timer;
     struct tm* tm_info;
     char date[50];
@@ -281,12 +268,12 @@ void log_3(char* msg, ...) {
     tm_info = localtime(&timer);
 
     strftime(date, 25, "%Y:%m:%d %H:%M:%S", tm_info);
-    fprintf(gcfg->logger->eventLOG->fp, date);
-    fprintf(gcfg->logger->eventLOG->fp, "|");
+    fprintf(flog->fp, date);
+    fprintf(flog->fp, "|");
     va_start(args, msg);
-    vfprintf(gcfg->logger->eventLOG->fp, msg, args);
+    vfprintf(flog->fp, msg, args);
     va_end(args);
-    fclose(gcfg->logger->eventLOG->fp);
+    fclose(flog->fp);
   }
 
   // pf - printf flag
@@ -307,7 +294,15 @@ void log_4(char* msg, ...) {
   va_list args;
   FileLogWriter* flog = gcfg->logger->eventLOG;
   if (gcfg->debug >= 4) {
-    gcfg->logger->eventLOG->fp = fopen(flog->filepath, "a");
+    flog->fp = fopen(flog->filepath, "at");
+
+    if (!flog->fp)
+      flog->fp = fopen(flog->filepath, "wt");
+
+    if (!flog->fp) {
+      printf("can not open event log for writing.\n");
+      return;   // bail out if we can't log
+    }
     time_t timer;
     struct tm* tm_info;
     char date[50];
@@ -316,12 +311,12 @@ void log_4(char* msg, ...) {
     tm_info = localtime(&timer);
 
     strftime(date, 25, "%Y:%m:%d %H:%M:%S", tm_info);
-    fprintf(gcfg->logger->eventLOG->fp, date);
-    fprintf(gcfg->logger->eventLOG->fp, "|");
+    fprintf(flog->fp, date);
+    fprintf(flog->fp, "|");
     va_start(args, msg);
-    vfprintf(gcfg->logger->eventLOG->fp, msg, args);
+    vfprintf(flog->fp, msg, args);
     va_end(args);
-    fclose(gcfg->logger->eventLOG->fp);
+    fclose(flog->fp);
 
   }
 

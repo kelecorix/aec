@@ -16,8 +16,8 @@
 #include "utils/utils.h"
 
 Site* site;
-Cfg* gcfg;
-int gmode;
+Cfg*  gcfg;
+int   gmode;
 
 /*
  *

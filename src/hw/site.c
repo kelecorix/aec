@@ -1,6 +1,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 #include "ac.h"
 #include "throttle.h"
 #include "vent.h"
@@ -1593,7 +1594,7 @@ Cfg* new_gcfg(){
   gcfg->saddr  = "127.0.0.1:3001"; // адрес owfs сервера
   gcfg->mpoint = "/bus.0/"; // адрес для считывания owfs
   gcfg->ldir   = "/var/log/"; // директория для записи логов
-  gcfg->cdir   = get_app_dir(); // директ
+  gcfg->cdir   = concat(get_current_dir_name(), "/"); // директ
   gcfg->ltime  = 10;  // периодичность записи глобального лога
   gcfg->mtime  = 20;  // периодичность записи моточасов
   gcfg->filename = "freecooling.conf";

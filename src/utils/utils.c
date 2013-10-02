@@ -198,14 +198,3 @@ void revS(char str[])
   return;
 }
 
-/*
- *
- *
- *
- */
-char* get_app_dir(){
-
-  char* dir;
-
-  return dir;
-}
