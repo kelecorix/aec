@@ -13,6 +13,8 @@ void ac_free() {
 
 /* Внутренняя функция передачи данных моточасов
  *
+ *
+ *
  */
 static void send_moto(AC* ac) {
 
@@ -27,7 +29,9 @@ static void send_moto(AC* ac) {
 }
 
 /*
- * Изменим режим кондиционирования
+ *
+ *
+ *
  */
 static int set_mode(AC* ac, int val) {
 
@@ -71,7 +75,11 @@ static int set_mode(AC* ac, int val) {
   }
 }
 
-
+/*
+ *
+ *
+ *
+ */
 AC* ac_new(int i) {
   AC* ac = malloc(sizeof(AC));
   ac->mode = 0;

@@ -6,11 +6,21 @@
 #include <stdio.h>
 #include "i2c.h"
 
+/*
+ *
+ *
+ *
+ */
 typedef enum {
   NOERROR, ERROR, ERROR_HEAT
 } vent_error;
 
 //Ventilation
+/*
+ *
+ *
+ *
+ */
 typedef struct Vent {
 
   int mode; // 0 - OFF/ВЫКЛ, 1 - ON/ВКЛ

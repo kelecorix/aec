@@ -7,7 +7,11 @@
 #include "../utils/hashmap.h"
 #include "../utils/utils.h"
 
-
+/*
+ *
+ *
+ *
+ */
 static int str_hash_fn(void *str) {
   uint32_t hash = 5381;
   char *p;
@@ -16,7 +20,11 @@ static int str_hash_fn(void *str) {
     hash = ((hash << 5) + hash) + *p;
   return (int) hash;
 }
-
+/*
+ *
+ *
+ *
+ */
 ConfigTable* config_table_new() {
   ConfigTable* cfg = malloc(sizeof(ConfigTable));
   cfg->mTable = hashmapCreate(36, str_hash_fn, hashmapIntEquals);
@@ -25,6 +33,11 @@ ConfigTable* config_table_new() {
   return cfg;
 }
 
+/*
+ *
+ *
+ *
+ */
 void config_table_free() {
 
   //TODO: очистим ресурсы памяти

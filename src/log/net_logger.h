@@ -7,6 +7,11 @@
 #include <time.h>
 #include "logger.h"
 
+/*
+ *
+ *
+ *
+ */
 typedef struct NetLogWriter {
   char* server;
   int port;

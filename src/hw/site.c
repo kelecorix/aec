@@ -9,12 +9,21 @@
 #include "../config/config.h"
 #include "../log/logger.h"
 #include "site.h"
-//Site* site;
 
+/*
+ *
+ *
+ *
+ */
 void site_free() {
   //TODO: очистим ресурсы памяти
 }
 
+/*
+ *
+ *
+ *
+ */
 int read_sensors(Site* site) {
 
   OWNET_HANDLE conn = site->conn;
@@ -51,6 +60,11 @@ int read_sensors(Site* site) {
   return 0;
 }
 
+/*
+ *
+ *
+ *
+ */
 void run(Site* site) {
 
   log_2("Начало работы\n");
@@ -83,7 +97,11 @@ void run(Site* site) {
   //site_mode_fail_ac(site);
 }
 
-
+/*
+ *
+ *
+ *
+ */
 int set_ten(Site* site, int val) {
 
   i2cOpen();
@@ -122,7 +140,11 @@ int set_ten(Site* site, int val) {
   return 0;
 }
 
-
+/*
+ *
+ *
+ *
+ */
 int site_mode_fail_temp_ac(Site* site) {
 
   log_3("Авария по температуре: режим охлаждения кондиционером!\n");
@@ -272,6 +294,11 @@ int site_mode_fail_temp_ac(Site* site) {
   return 1;
 }
 
+/*
+ *
+ *
+ *
+ */
 int site_mode_fail_temp_uvo(Site* site) {
 
   log_3("site_mode_fail_temp_uvo: RUN\n");
@@ -422,7 +449,9 @@ int site_mode_fail_temp_uvo(Site* site) {
   return 1;
 }
 
-/* Превышена температура аварии - Аварийный режим охлаждения*/
+/* Превышена температура аварии - Аварийный режим охлаждения
+ *
+ */
 int site_mode_fail_temp(Site* site) {
 
   log_3("site_mode_fail_temp: Авария по температуре!\n");
@@ -446,7 +475,9 @@ int site_mode_fail_temp(Site* site) {
   return 1;
 }
 
-/* Режим охлаждения УВО */
+/* Режим охлаждения УВО
+ *
+ */
 int site_mode_uvo(Site* site) {
   log_1("Режим охлаждения УВО!\n");
   logD(site->logger->dataLOG, 0, "Режим охлаждения УВО!");
@@ -534,6 +565,11 @@ int site_mode_uvo(Site* site) {
   return 1;
 }
 
+/*
+ *
+ *
+ *
+ */
 void sub_uvo_vent(Site* site) {
 
   int a, v;
@@ -644,6 +680,11 @@ void sub_uvo_vent(Site* site) {
   }
 }
 
+/*
+ *
+ *
+ *
+ */
 int sub_uvo_pen(Site* site) {
 
   log_1("Мы в sub_uvo_pen\n");
@@ -716,6 +757,11 @@ int sub_uvo_pen(Site* site) {
   return EXIT_SUCCESS;
 }
 
+/*
+ *
+ *
+ *
+ */
 void sub_uvo_pow(Site* site) {
 
   log_2("******sub_uvo_pow*******\n");
@@ -751,7 +797,11 @@ void sub_uvo_pow(Site* site) {
 }
 
 // fail- флаг работы в аварийном режиме
-//
+/*
+ *
+ *
+ *
+ */
 void sub_uvo_th(Site* site, int fail) {
 
   log_2("*********sub_uvo_th**************\n");
@@ -827,6 +877,11 @@ void sub_uvo_th(Site* site, int fail) {
 
 }
 
+/*
+ *
+ *
+ *
+ */
 int sub_uvo_fail(Site* site) {
 
   log_3("sub_uvo_fail\n");
@@ -860,7 +915,9 @@ int sub_uvo_fail(Site* site) {
   return 1;
 }
 
-/* Режим охлаждения кондиционером */
+/* Режим охлаждения кондиционером
+ *
+ */
 int site_mode_ac(Site* site) {
   //проверил основные моменты
 
@@ -1015,7 +1072,9 @@ int site_mode_ac(Site* site) {
   return 1;
 }
 
-/* Режим догрева сайта */
+/* Режим догрева сайта
+ *
+ */
 int site_mode_heat(Site* site) {
 
   log_3("Режим догрева сайта!\n");
@@ -1290,7 +1349,9 @@ int site_mode_fail_uvo(Site* site) {
   return 1;
 }
 
-/* Авария кондиционеров - Охлаждение УВО */
+/* Авария кондиционеров - Охлаждение УВО
+ *
+ */
 int site_mode_fail_ac(Site* site) {
   log_3("Режим авария кондиционеров!\n");
   logD(site->logger->dataLOG, 0, "Режим авария кондиционеров!");
@@ -1449,11 +1510,21 @@ int site_mode_fail_ac(Site* site) {
   return 1;
 }
 
+/*
+ *
+ *
+ *
+ */
 ConfigTable* read_config(char* filepath) {
   ConfigTable* cfg = readConfig(filepath);
   return cfg;
 }
 
+/*
+ *
+ *
+ *
+ */
 int set_mode(Site* site, int val) {
 
   return 0;
@@ -1478,9 +1549,13 @@ int set_mode(Site* site, int val) {
 }
 
 
-
 //TODO: Переписать в виде синглетона
 //TODO: Добавить мьютексы для многопоточного доступа к переменным
+/*
+ *
+ *
+ *
+ */
 Site* site_new(char* filename) {
 
   Site* site = malloc(sizeof(Site));

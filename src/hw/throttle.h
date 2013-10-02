@@ -6,7 +6,11 @@
 #include <stdio.h>
 #include "i2c.h"
 
-// Заслонка
+/*
+ *
+ *
+ *
+ */
 typedef struct Throttle {
 
   int mode; // 0 - сайт, 1 улица

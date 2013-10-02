@@ -6,10 +6,20 @@
 #include <stdio.h>
 #include "i2c.h"
 
+/*
+ *
+ *
+ *
+ */
 typedef enum {
   NO_ERROR, NOPOWER, NODATA
 } ac_error;
 
+/*
+ *
+ *
+ *
+ */
 typedef struct AC {
 
   int mode; // 0 - OFF/ВЫКЛ, 1 - ON/ВКЛ

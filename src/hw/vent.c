@@ -8,17 +8,37 @@
 static int steps[11] = { 0xFF, 0xF8, 0xF7, 0xF6, 0xF3, 0xEE, 0xEC, 0xE6, 0xDC, 0xD3, 0x00 };
 
 // Таблицы преобразования обороты в шаг
+/*
+ *
+ *
+ *
+ */
 static int tts1[11][2] = { { 70, 120 }, { 240, 300 }, { 400, 480 }, { 520, 600 }, { 750, 820 }, { 890, 950 }, { 980, 1200 }, { 980, 1200 },
     { 1300, 1360 }, { 1200, 1600 }, { 1200, 1600 } };
 
+/*
+ *
+ *
+ *
+ */
 static int tts2[11][2] = { { 70, 120 }, { 300, 350 }, { 420, 480 }, { 550, 590 }, { 610, 680 }, { 730, 770 }, { 780, 820 }, { 830, 870 }, {
     830, 870 }, { 800, 1300 }, { 800, 1300 } };
 
+/*
+ *
+ *
+ *
+ */
 void vent_free() {
   //TODO: очистим ресурсы памяти
 
 }
 
+/*
+ *
+ *
+ *
+ */
 static void send_moto(Vent* vent, int pre_mode) {
 
   if (vent->mode == pre_mode)
@@ -35,6 +55,11 @@ static void send_moto(Vent* vent, int pre_mode) {
 }
 
 // Установим количество оборотов, 11 шагов управлен  ия скоростью
+/*
+ *
+ *
+ *
+ */
 int set_step(Vent* vent, int val) {
 
   if (val >= 0 && val <= 11) {
@@ -67,6 +92,11 @@ int set_step(Vent* vent, int val) {
   }
 }
 
+/*
+ *
+ *
+ *
+ */
 void i2c_get_tacho(int addr0, int addr1) {
 
   unsigned char rvalue0, rvalue1;
@@ -96,6 +126,11 @@ void i2c_get_tacho(int addr0, int addr1) {
   site->tacho2 = turns_to_step(site->tacho2_t, site->vents[1]->type);
 }
 
+/*
+ *
+ *
+ *
+ */
 int i2c_get_tacho_data(Vent* v, int addr) {
 
   unsigned char rvalue;
@@ -116,6 +151,11 @@ int i2c_get_tacho_data(Vent* v, int addr) {
   return turns;
 }
 
+/*
+ *
+ *
+ *
+ */
 int i2c_get_tacho_step(Vent* v, int addr) {
 
   unsigned char rvalue;
@@ -161,8 +201,11 @@ int turns_to_step(int turns, int type) {
   return step;
 }
 
-
-
+/*
+ *
+ *
+ *
+ */
 void test_vents() {
 
   int i, tacho1, tacho2, step1, step2;
@@ -188,6 +231,11 @@ void test_vents() {
   }
 }
 
+/*
+ *
+ *
+ *
+ */
 Vent* vent_new() {
   Vent* vent = malloc(sizeof(Vent));
   vent->mode = 0;

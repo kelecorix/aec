@@ -13,6 +13,11 @@
 #include "../config/config.h"
 #include "../log/logger.h"
 
+/*
+ *
+ *
+ *
+ */
 typedef struct Site {
 
   AC** acs; // массив кондционеров в соотв. с конфигурацией, обычно 1 или 2
@@ -62,6 +67,11 @@ typedef struct Site {
   
 } Site;
 
+/*
+ *
+ *
+ *
+ */
 extern Site* site;
 
 // Режимы работы 

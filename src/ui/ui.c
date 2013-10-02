@@ -7,8 +7,18 @@
 #include "../config/config.h"
 #include "ui.h"
 
+/*
+ *
+ *
+ *
+ */
 int dmode; // Мы либо в режиме редактирования 1, либо в режиме вывода 0
 
+/*
+ *
+ *
+ *
+ */
 void run_ui(Site* site) {
 
   // инициализируем экран
@@ -23,9 +33,6 @@ void run_ui(Site* site) {
 
   // инициализируем меню
   init_menu();
-
-  // установим обработчик нажатия
-  //setHandler(MSG_MENU_SELECT, &selectMenu);
 
   sleep(1);
 
@@ -42,19 +49,38 @@ void run_ui(Site* site) {
   }
 }
 
-
+/*
+ *
+ *
+ *
+ */
 int cpu_load() {
   return 1;
 }
 
+/*
+ *
+ *
+ *
+ */
 int mem_total() {
   return 1;
 }
 
+/*
+ *
+ *
+ *
+ */
 int uptime() {
   return 1;
 }
 
+/*
+ *
+ *
+ *
+ */
 char* net_address() {
   return ("0.0.0.0");
 }

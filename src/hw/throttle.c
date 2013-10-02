@@ -6,11 +6,26 @@
 #include "site.h"
 #include "../utils/utils.h"
 
+/*
+ *
+ *
+ *
+ */
 static int steps[11] = { 0xFF, 0xF8, 0xF7, 0xF6, 0xF3, 0xEE, 0xEC, 0xE6, 0xDC, 0xD3, 0x00 };
 
+/*
+ *
+ *
+ *
+ */
 static float tts[12][2] = { { 1.90, 2.22 }, { 1.90, 2.22 }, { 1.90, 2.22 }, { 2.40, 2.80 }, { 3.70, 4.00 }, { 5.00, 5.30 }, { 5.7, 6.1 }, {
     6.8, 7.2 }, { 7.8, 8.1 }, { 9.1, 9.4 }, { 9.9, 10.2 } };
 
+/*
+ *
+ *
+ *
+ */
 int set_position(Throttle* th, int val) {
 
   i2cOpen();
@@ -33,6 +48,11 @@ int set_position(Throttle* th, int val) {
   }
 }
 
+/*
+ *
+ *
+ *
+ */
 int i2c_get_th_data(int addr) {
 
   char buf[2];
@@ -61,6 +81,11 @@ int i2c_get_th_data(int addr) {
   return step;
 }
 
+/*
+ *
+ *
+ *
+ */
 int pos_to_step(float pos) {
 
   if (tts[site->th->position][0] <= pos && tts[site->th->position][1] >= pos)
@@ -69,10 +94,20 @@ int pos_to_step(float pos) {
   return -1;
 }
 
+/*
+ *
+ *
+ *
+ */
 void throttle_free() {
   //TODO: очистим ресурсы памяти
 }
 
+/*
+ *
+ *
+ *
+ */
 Throttle* throttle_new() {
   Throttle* th = malloc(sizeof(Throttle));
   th->mode = 0;
@@ -83,6 +118,11 @@ Throttle* throttle_new() {
   return th;
 }
 
+/*
+ *
+ *
+ *
+ */
 void test_throttle() {
 
   int i, step;

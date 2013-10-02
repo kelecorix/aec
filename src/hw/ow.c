@@ -10,6 +10,11 @@
 #include "../config/config.h"
 #include "../log/file_logger.h"
 
+/*
+ *
+ *
+ *
+ */
 OWNET_HANDLE create_server_conn(char *addr) {
 
   OWNET_HANDLE owh;
@@ -21,12 +26,22 @@ OWNET_HANDLE create_server_conn(char *addr) {
   return owh;
 }
 
+/*
+ *
+ *
+ *
+ */
 int close_server_conn(OWNET_HANDLE conn) {
 
   OWNET_close(conn);
   return 1;
 }
 
+/*
+ *
+ *
+ *
+ */
 float get_data(OWNET_HANDLE conn, char* mnt, char* filename, int lim) {
 
   // check if exists local file
@@ -93,6 +108,11 @@ float get_data(OWNET_HANDLE conn, char* mnt, char* filename, int lim) {
   }
 }
 
+/*
+ *
+ *
+ *
+ */
 int list_sensors(Site* site, char *tokens[]) {
 
 //  char *dirs = NULL;

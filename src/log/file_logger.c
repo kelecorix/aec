@@ -7,6 +7,11 @@
 #include "../hw/site.h"
 #include "../hw/vent.h"
 
+/*
+ *
+ *
+ *
+ */
 FileLogWriter* create_filelog(char* filename) {
 
   FileLogWriter* log = malloc(sizeof(FileLogWriter));
@@ -15,6 +20,11 @@ FileLogWriter* create_filelog(char* filename) {
   return log;
 }
 
+/*
+ *
+ *
+ *
+ */
 void write_log(FILE* fp, char* msg, ...) {
 
   va_list args;
@@ -36,6 +46,11 @@ void write_log(FILE* fp, char* msg, ...) {
   fclose(fp);
 }
 
+/*
+ *
+ *
+ *
+ */
 void write_dl(char* msg, int event_t) {
 
   // event type, тип события
@@ -66,6 +81,11 @@ void write_dl(char* msg, int event_t) {
 
 }
 
+/*
+ *
+ *
+ *
+ */
 void write_data_log(Site* site) {
 
   FILE* fp = site->logger->dataLOG->fp;
@@ -132,6 +152,11 @@ void write_data_log(Site* site) {
   fclose(fp);
 }
 
+/*
+ *
+ *
+ *
+ */
 void logD(FileLogWriter* flog, int pf, char* msg, ...) {
   va_list args;
 
@@ -160,6 +185,11 @@ void logD(FileLogWriter* flog, int pf, char* msg, ...) {
 }
 
 // Basic messages
+/*
+ *
+ *
+ *
+ */
 void log_1(char* msg, ...) {
   va_list args;
   FileLogWriter* flog = site->logger->eventLOG;
@@ -189,6 +219,11 @@ void log_1(char* msg, ...) {
 }
 
 // Light Debug
+/*
+ *
+ *
+ *
+ */
 void log_2(char* msg, ...) {
   va_list args;
   FileLogWriter* flog = site->logger->eventLOG;
@@ -218,6 +253,11 @@ void log_2(char* msg, ...) {
 }
 
 // Debug
+/*
+ *
+ *
+ *
+ */
 void log_3(char* msg, ...) {
   va_list args;
   FileLogWriter* flog = site->logger->eventLOG;
@@ -248,6 +288,11 @@ void log_3(char* msg, ...) {
 }
 
 // Deep Debug
+/*
+ *
+ *
+ *
+ */
 void log_4(char* msg, ...) {
   va_list args;
   FileLogWriter* flog = site->logger->eventLOG;

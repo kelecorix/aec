@@ -8,6 +8,11 @@
 #include "net_logger.h"
 #include "../hw/site.h"
 
+/*
+ *
+ *
+ *
+ */
 Logger* create_logger() {
 
   //printf("Создадим необходимые журналы\n");
@@ -21,6 +26,11 @@ Logger* create_logger() {
   return log;
 }
 
+/*
+ *
+ *
+ *
+ */
 void logger_free(Logger* logger) {
   //close_filelog(logger->dataLOG);
   //close_filelog(logger->eventLOG);
@@ -28,6 +38,11 @@ void logger_free(Logger* logger) {
   free(logger->eventLOG);
 }
 
+/*
+ *
+ *
+ *
+ */
 void run_logger(Site* site){
   printf("Запустим цикл логгера\n");
   while(1){
@@ -37,6 +52,11 @@ void run_logger(Site* site){
   }
 }
 
+/*
+ *
+ *
+ *
+ */
 void test_logger(){
 
  // write_dl("This is test of arbitrary write in data log" , 2);

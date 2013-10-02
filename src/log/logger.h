@@ -8,6 +8,11 @@
 #include "file_logger.h"
 #include "net_logger.h"
 
+/*
+ *
+ *
+ *
+ */
 typedef struct Logger {
   int level;
   FileLogWriter* dataLOG;   // журналирование данных

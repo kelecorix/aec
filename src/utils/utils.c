@@ -64,6 +64,11 @@ char* concat(char* str1, char* str2) {
   return new;
 }
 
+/*
+ *
+ *
+ *
+ */
 int concat3(char *first, char *second, char *third) {
 
   //char *total;
@@ -72,6 +77,11 @@ int concat3(char *first, char *second, char *third) {
 
 }
 
+/*
+ *
+ *
+ *
+ */
 char* string_copy(const char* s) {
   char* result;
   int l;
@@ -87,12 +97,22 @@ char* string_copy(const char* s) {
   return result;
 }
 
+/*
+ *
+ *
+ *
+ */
 void strip_n(char* s) {
   char *pos;
   if ((pos = strchr(s, '\n')) != NULL)
     *pos = '\0';
 }
 
+/*
+ *
+ *
+ *
+ */
 void strip_breaks(char* str) {
   char *write = str, *read = str;
   do
@@ -101,6 +121,11 @@ void strip_breaks(char* str) {
   while ((*write++ = *read++));
 }
 
+/*
+ *
+ *
+ *
+ */
 void strip_tabs(char* str) {
   char *write = str, *read = str;
   do
@@ -109,12 +134,22 @@ void strip_tabs(char* str) {
   while ((*write++ = *read++));
 }
 
+/*
+ *
+ *
+ *
+ */
 char* ltrim(char *s) {
   while (isspace(*s))
     s++;
   return s;
 }
 
+/*
+ *
+ *
+ *
+ */
 char* rtrim(char *s) {
   char* back = s + strlen(s);
   while (isspace(*--back))
@@ -123,10 +158,20 @@ char* rtrim(char *s) {
   return s;
 }
 
+/*
+ *
+ *
+ *
+ */
 char* trim(char *s) {
   return rtrim(ltrim(s));
 }
 
+/*
+ *
+ *
+ *
+ */
 void revS(char str[])
 {
   char c;

@@ -4,6 +4,11 @@
 #include <time.h>
 #include "logger.h"
 
+/*
+ *
+ *
+ *
+ */
 NetLogWriter* create_netlog(char* server, int port) {
 
   NetLogWriter* log = malloc(sizeof(NetLogWriter));
@@ -14,6 +19,11 @@ NetLogWriter* create_netlog(char* server, int port) {
 
 }
 
+/*
+ *
+ *
+ *
+ */
 int close_netlog(NetLogWriter* nlog) {
 
   return 0;

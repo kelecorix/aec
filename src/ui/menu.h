@@ -18,6 +18,11 @@
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
+/*
+ *
+ *
+ *
+ */
 typedef struct Node{
   int          id;
   char*        text;
@@ -30,14 +35,18 @@ typedef struct Node{
   int          lenght; // childs lenght
 } Node;
 
-
+/*
+ *
+ *
+ *
+ */
 typedef struct Tree{
+  int   length; //of nodes
+  int   depth;
+  int   height;
   Node* root;
   Node* curr;
   Node** nodes;
-  int    length; //of nodes
-  int   depth;
-  int   height;
 } Menu;
 
 void init_menu();
