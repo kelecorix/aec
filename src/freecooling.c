@@ -274,13 +274,13 @@ int main(int argc, char *argv[]) {
   }
 
   // Запустим программу в основном режиме
-  pthread_t threadA, threadU, threadL;
+  pthread_t threadA, threadU, threadL, threadM;
   void* retA = NULL;
   void* retU = NULL;
   void* retL = NULL;
+  void* retM = NULL;
 
   if (pthread_create(&threadA, NULL, (void *) run, (void*) site)) {
-    fprintf(stderr, "Error creating algo thread\n");
     log_4("Error creating algo thread\n");
     return 1;
   }
@@ -288,25 +288,29 @@ int main(int argc, char *argv[]) {
   sleep(4);
 
   if (pthread_create(&threadU, NULL, (void *) run_ui, (void*) site)) {
-    fprintf(stderr, "Error creating UI thread\n");
     log_4("Error creating UI thread\n");
     return 1;
   }
 
   sleep(4);
 
-  printf("Создадим поток журналирования\n");
   if (pthread_create(&threadL, NULL, (void *) run_logger, (void*) site)) {
-    fprintf(stderr, "Error creating Logger thread\n");
     log_4("Error creating Logger thread\n");
     return 1;
   }
 
   sleep(4);
 
+  // поток записи моточасов
+  if (pthread_create(&threadM, NULL, (void *) run_moto, (void*) site)) {
+    log_4("Error creating moto logger thread\n");
+    return 1;
+  }
+
   pthread_join(threadA, retA);
   pthread_join(threadU, retU);
   pthread_join(threadL, retL);
+  pthread_join(threadM, retM);
 
   return EXIT_SUCCESS;
 }

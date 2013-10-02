@@ -72,11 +72,11 @@ void run(Site* site) {
   log_2("Начало работы\n");
 
   // Установим значение регистра реле в 0
-//  i2cOpen();
-//  int addr = strtol(getStr(site->cfg, "a_relay"), NULL, 16);
-//  log_4("Управляем регистром, адрес %x\n", addr);
-//  set_i2c_register(g_i2cFile, addr, 0xFF, 0xFF);
-//  i2cClose();
+  i2cOpen();
+  int addr = strtol(getStr(site->cfg, "a_relay"), NULL, 16);
+  log_4("Управляем регистром, адрес %x\n", addr);
+  set_i2c_register(g_i2cFile, addr, 0xFF, 0xFF);
+  i2cClose();
 
   // По умолчанию
   site->th->set_position(site->th, 0);
@@ -1510,6 +1510,13 @@ int site_mode_fail_ac(Site* site) {
     }
   }
   return 1;
+}
+
+
+void run_moto(Site* site){
+
+
+
 }
 
 /*

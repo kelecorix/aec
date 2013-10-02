@@ -106,6 +106,7 @@ int site_mode_fail_mix(Site* site);
 int read_sensors();
 ConfigTable* read_config(char* filename);
 void run(Site* site);
+void run_moto(Site* site);
 int search_sensors(OWNET_HANDLE conn);
 Site* site_new();
 Cfg* new_gcfg();
