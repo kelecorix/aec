@@ -55,16 +55,22 @@ typedef struct Site {
   ConfigTable* cfg; // configuration for this particular  site
 
   OWNET_HANDLE conn;
-  char* mount_point;
 
   Logger* logger;
-  int debug; // Debug Level: 1,2,3,4
-  int gpf;   // Global print flag 
 
   int (*set_mode)(struct Site*, int value);
   int (*set_ten)(struct Site*, int value);
   double (*get_ac_time_work)(struct Site*);
-  
+
+  int debug; // Debug Level: 1,2,3,4
+  int gpf;   // Global print flag
+  char* saddr; // адрес owfs сервера
+  char* mpoint; // адрес для считывания owfs
+  char* ldir; // директория для записи логов
+  char* cdir; // директ
+  int ltime;  // периодичность записи глобального лога
+  int mtime;  // периодичность записи моточасов
+
 } Site;
 
 /*

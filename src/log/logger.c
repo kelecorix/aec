@@ -15,13 +15,12 @@
  */
 Logger* create_logger() {
 
-  //printf("Создадим необходимые журналы\n");
   Logger* log = malloc(sizeof(Logger));
-  log->dataLOG = create_filelog("data.log"); //TODO: считать путь из конфига
-  //log->dataLOG_n = create_netlog("", 80); //TODO: считать параметры из конфига
+  log->dataLOG = create_filelog(concat(site->cdir, "/data.log"));
+  //log->dataLOG_n = create_netlog("", 80);
 
-  log->eventLOG = create_filelog("event.log"); //TODO: считать путь из конфига
-  //log->eventLOG_n = create_netlog("", 80); //TODO: считать параметры из конфига
+  log->eventLOG = create_filelog(concat(site->cdir, "/event.log"));
+  //log->eventLOG_n = create_netlog("", 80);
 
   return log;
 }
@@ -32,8 +31,6 @@ Logger* create_logger() {
  *
  */
 void logger_free(Logger* logger) {
-  //close_filelog(logger->dataLOG);
-  //close_filelog(logger->eventLOG);
   free(logger->dataLOG);
   free(logger->eventLOG);
 }
@@ -59,7 +56,6 @@ void run_logger(Site* site){
  */
 void test_logger(){
 
- // write_dl("This is test of arbitrary write in data log" , 2);
   logD(site->logger->dataLOG, 0, "this is test for %s number %d", site->logger->dataLOG->filename, 12);
 
 }

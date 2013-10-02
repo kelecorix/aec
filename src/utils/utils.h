@@ -15,6 +15,6 @@ char* ltrim(char *s);
 char* rtrim(char *s);
 void strip_n(char* s);
 void revS(char str[]);
-char* ssprintf(char* msg, ...);
+char* get_app_dir();
 
 #endif /*UTILS_C_*/
