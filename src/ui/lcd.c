@@ -140,34 +140,6 @@ void lcd_line(Disp* lcd, char *s, int c) {
   }
 }
 
-/* Функция инициализации экрана
- */
-void init(Disp* lcd) {
-
-  printf("инициализация экрана\n");
-  int fd;
-  if ((fd = open(I2C_FILE_NAME, O_RDWR)) < 0) {
-    log_1("Failed to open the i2c bus\n");
-    lcd->connect = 0;
-  } else {
-    lcd->connect = 1;
-  }
-
-  log_3("LCD addr: %x, connect %d\n", lcd->addr, lcd->connect);
-  if (ioctl(fd, I2C_SLAVE, lcd->addr) < 0) {
-    log_1("Failed to acquire bus access and/or talk to slave.\n");
-    lcd->connect = 0;
-  } else {
-    lcd->connect = 1;
-  }
-
-  write_quartets(lcd, CMD_SIL | SIL_N);
-  write_quartets(lcd, CMD_EDC);
-  write_quartets(lcd, CMD_CAH);
-  write_quartets(lcd, CMD_SCMD | SCMD_ID);
-  write_quartets(lcd, CMD_EDC | EDC_D);
-}
-
 /* Функция перезагрузки экрана
  */
 void reset(Disp* lcd) {
@@ -186,6 +158,38 @@ void reset(Disp* lcd) {
   send(lcd, 0x02);
   usleep(500);
 }
+
+/* Функция инициализации экрана
+ */
+void init(Disp* lcd) {
+
+  printf("инициализация экрана\n");
+
+  if ((lcd->fd = open(I2C_FILE_NAME, O_RDWR)) < 0) {
+    log_1("Failed to open the i2c bus\n");
+    lcd->connect = 0;
+  } else {
+    lcd->connect = 1;
+  }
+
+  log_3("LCD addr: %x, connect %d\n", lcd->addr, lcd->connect);
+  if (ioctl(lcd->fd, I2C_SLAVE, lcd->addr) < 0) {
+    log_1("Failed to acquire bus access and/or talk to slave.\n");
+    lcd->connect = 0;
+  } else {
+    lcd->connect = 1;
+  }
+
+  reset(lcd);
+
+  write_quartets(lcd, CMD_SIL | SIL_N);
+  write_quartets(lcd, CMD_EDC);
+  write_quartets(lcd, CMD_CAH);
+  write_quartets(lcd, CMD_SCMD | SCMD_ID);
+  write_quartets(lcd, CMD_EDC | EDC_D);
+}
+
+
 
 /* Функция очистки экрана
  */

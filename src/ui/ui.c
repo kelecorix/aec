@@ -131,8 +131,9 @@ void run_ui(Site* site) {
   printf("addr: 0x%x\n", addr_lcd);
   Disp* lcd = lcd_new(addr_lcd);
 
+
   init(lcd);
-  reset(lcd);
+  //reset(lcd);
 
   // инициализируем клавиатуру
   // int addr_kb = strtol(getStr(site->cfg, (void *) "a_keyb"), (char **) NULL, 16);
