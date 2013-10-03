@@ -143,7 +143,7 @@ void run_ui(Site* site) {
   KB* kb = kb_new(addr_kb);
 
   printf("инициализируем меню\n");
-  init_menu();
+  //init_menu();
 
   sleep(1);
 
