@@ -127,6 +127,8 @@ void create_node(int id, int parent, int min, int max, char* text, char* cn){
   if (strcmp(node->cn, "") != 0)
     node->val = strtol(getStr(site->cfg, (void *) cn), (char **) NULL, 10);
 
+  node->parent->childs = malloc(9 * sizeof Node);
+
   add_child(node);
 }
 
@@ -173,11 +175,7 @@ void add_child(Node* node){
 
   printf("увеличим длину потомков %d \n", node->parent->lenght);
   node->parent->lenght++;
-  printf("выделим доп. память для потомков %d\n", node->parent->lenght);
-  realloc(node->parent->childs, (node->lenght-1)*sizeof(Node));
-  printf("добавим конкретную ноду\n");
-  int k = node->parent->lenght - 1;
-  node->parent->childs[k] = node;
+  node->parent->childs[node->parent->lenght--] = node;
 
 }
 
