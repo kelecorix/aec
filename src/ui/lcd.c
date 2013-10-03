@@ -24,21 +24,6 @@ Disp* lcd_new(int addr) {
   Disp* lcd = malloc(sizeof(Disp));
   lcd->addr = addr;
 
-  if ((lcd->fd = open(I2C_FILE_NAME, O_RDWR) < 0)) {
-    log_1("Failed to open the i2c bus\n");
-    lcd->connect = 0;
-  } else {
-    lcd->connect = 1;
-  }
-
-  log_3("LCD addr: %d\n", addr);
-  if (ioctl(lcd->fd, I2C_SLAVE, addr) < 0) {
-    log_1("Failed to acquire bus access and/or talk to slave.\n");
-    lcd->connect = 0;
-  } else {
-    lcd->connect = 1;
-  }
-
   return lcd;
 }
 
@@ -157,6 +142,22 @@ void lcd_line(Disp* lcd, char *s, int c) {
 /* Функция инициализации экрана
  */
 void init(Disp* lcd) {
+
+  if ((lcd->fd = open(I2C_FILE_NAME, O_RDWR) < 0)) {
+    log_1("Failed to open the i2c bus\n");
+    lcd->connect = 0;
+  } else {
+    lcd->connect = 1;
+  }
+
+  log_3("LCD addr: %d\n", lcd->addr);
+  if (ioctl(lcd->fd, I2C_SLAVE, lcd->addr) < 0) {
+    log_1("Failed to acquire bus access and/or talk to slave.\n");
+    lcd->connect = 0;
+  } else {
+    lcd->connect = 1;
+  }
+
   write_quartets(lcd, CMD_SIL | SIL_N);
   write_quartets(lcd, CMD_EDC);
   write_quartets(lcd, CMD_CAH);
