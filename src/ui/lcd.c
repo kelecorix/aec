@@ -160,8 +160,6 @@ void reset(Disp* lcd) {
  */
 void init(Disp* lcd) {
 
-  printf("инициализация экрана\n");
-
   if ((lcd->fd = open(I2C_FILE_NAME, O_RDWR)) < 0) {
     log_1("Failed to open the i2c bus\n");
     lcd->connect = 0;
