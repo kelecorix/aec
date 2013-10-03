@@ -24,21 +24,20 @@ Disp* lcd_new(int addr) {
   Disp* lcd = malloc(sizeof(Disp));
   lcd->addr = addr;
 
-//  if ((lcd->fd = open(I2C_FILE_NAME, O_RDWR) < 0)) {
-//    log_1("Failed to open the i2c bus\n");
-//    lcd->connect = 0;
-//  } else {
-//    lcd->connect = 1;
-//  }
-//
-//  log_3("LCD addr: %d\n", addr);
-//  if (ioctl(lcd->fd, I2C_SLAVE, addr) < 0) {
-//    log_1("Failed to acquire bus access and/or talk to slave.\n");
-//    lcd->connect = 0;
-//  } else {
-//    lcd->connect = 1;
-//  }
- //TODO: Восстановить
+  if ((lcd->fd = open(I2C_FILE_NAME, O_RDWR) < 0)) {
+    log_1("Failed to open the i2c bus\n");
+    lcd->connect = 0;
+  } else {
+    lcd->connect = 1;
+  }
+
+  log_3("LCD addr: %d\n", addr);
+  if (ioctl(lcd->fd, I2C_SLAVE, addr) < 0) {
+    log_1("Failed to acquire bus access and/or talk to slave.\n");
+    lcd->connect = 0;
+  } else {
+    lcd->connect = 1;
+  }
 
   return lcd;
 }
