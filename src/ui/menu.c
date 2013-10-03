@@ -260,10 +260,10 @@ void onKeyClicked(int key_code) {
 
 int readKeys(KB* kb) {
 
-  prinf("считаем нажатие\n");
+  printf("считаем нажатие\n");
   int key = 0;
   char buf[1];
-  printf("есть клавиатура? %d", kb->connect);
+  printf("есть клавиатура? %d\n", kb->connect);
   if (kb->connect<=0){
     return key;
   }
