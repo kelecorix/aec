@@ -268,9 +268,9 @@ int readKeys(KB* kb) {
     return key;
   }
 
-  int btn = 0;
   if (kb->connect == 1) {
-    if (read(btn, buf, 1) != 1) {
+    printf("Перед чтением\n");
+    if (read(kb->fd, buf, 1) != 1) {
       printf("BUTTONS Error reading from i2c\n");
       kb->connect = 0;
     } else{
