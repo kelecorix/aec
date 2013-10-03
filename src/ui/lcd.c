@@ -23,7 +23,7 @@ Disp* lcd_new(int addr) {
 
   Disp* lcd = malloc(sizeof(Disp));
   lcd->addr = addr;
-
+  printf("возврат");
   return lcd;
 }
 
