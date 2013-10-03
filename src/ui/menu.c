@@ -116,6 +116,7 @@ void create_node(int id, int parent, int min, int max, char* text, char* cn){
   node->max    = max;
   node->text   = text;
   node->cn     = cn;
+  node->lenght = 0;
   if(node->id != 0)
     node->parent = get_parent_by_id(parent);
   if (strcmp(node->cn, "") != 0)
@@ -171,9 +172,13 @@ void add_child(Node* node){
   if (node->id == 0)
     return; //это корневой узел
 
-  node->lenght++;
+  printf("увеличим длину потомков\n");
+  node->parent->lenght++;
+  printf("выделим доп. память для потомков\n");
   node->parent->childs = calloc((node->lenght), sizeof(Node));
-  node->parent->childs[node->lenght-1] = node;
+  printf("добавим конкретную ноду\n");
+  node->parent->childs[(node->lenght)-1] = node;
+
 }
 
 Node* get_parent(Node* node){
