@@ -1,8 +1,8 @@
 #ifndef KEYBOARD_H_
 #define KEYBOARD_H_
 
-#define KEY_LEFT  127
-#define KEY_RIGHT 447
+#define KEY_LEFT  247
+#define KEY_RIGHT 127
 #define KEY_UP    239
 #define KEY_DOWN  191
 #define KEY_OK    223

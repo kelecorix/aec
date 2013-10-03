@@ -306,9 +306,11 @@ void disp_item(Disp* lcd){
   reset(lcd);
   mnmode = 1;
 
+  char buf[100];
+  sprintf (buf, "%d",menu->curr->val);
   lcd_line(lcd, "     ^     "   , 0);
   lcd_line(lcd, menu->curr->text, 1);
-  lcd_line(lcd, menu->curr->val , 2);
+  lcd_line(lcd, buf             , 2);
   lcd_line(lcd, "     v     "   , 3);
 
 }
