@@ -145,8 +145,8 @@ void lcd_line(Disp* lcd, char *s, int c) {
 void init(Disp* lcd) {
 
   printf("инициализация экрана\n");
-
-  if ((lcd->fd = open(I2C_FILE_NAME, O_RDWR) < 0)) {
+  int fd;
+  if ((fd = open(I2C_FILE_NAME, O_RDWR) < 0)) {
     log_1("Failed to open the i2c bus\n");
     lcd->connect = 0;
   } else {
@@ -154,7 +154,7 @@ void init(Disp* lcd) {
   }
 
   log_3("LCD addr: %x, connect %d\n", lcd->addr, lcd->connect);
-  if (ioctl(lcd->fd, I2C_SLAVE, lcd->addr) < 0) {
+  if (ioctl(fd, I2C_SLAVE, lcd->addr) < 0) {
     log_1("Failed to acquire bus access and/or talk to slave.\n");
     lcd->connect = 0;
   } else {
