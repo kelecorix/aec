@@ -54,7 +54,7 @@ void create_menu();
 void create_node(int id, int parent, int min, int max, char* text, char* cn);
 void traverse();
 void add_node(Node* node);
-void add_child(Node* node);
+void add_child(Node* node, int lenght);
 Node* get_parent(Node* node);
 Node* get_parent_by_id(int id);
 Node* next_child(Node* node);

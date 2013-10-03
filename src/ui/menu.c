@@ -129,7 +129,7 @@ void create_node(int id, int parent, int min, int max, char* text, char* cn){
 
   node->childs = malloc(9 * sizeof(Node));
 
-  add_child(node);
+  add_child(node, node->lenght);
 }
 
 int getDepth(Menu* tree, Node* p){
@@ -166,7 +166,7 @@ int isLeaf(Node* node){
     return 0;
 }
 
-void add_child(Node* node){
+void add_child(Node* node, length){
 
   printf("Добавим ноду %d как потомка родителю\n", node->id);
 
@@ -175,7 +175,7 @@ void add_child(Node* node){
 
   printf("увеличим длину потомков %d \n", node->parent->lenght);
   node->parent->lenght++;
-  node->parent->childs[node->parent->lenght--] = node;
+  node->parent->childs[length] = node;
 
 }
 
