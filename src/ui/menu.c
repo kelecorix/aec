@@ -172,12 +172,12 @@ void add_child(Node* node){
     return; //это корневой узел
 
   printf("увеличим длину потомков %d \n", node->parent->lenght);
-  int k = node->lenght;
-  node->parent->lenght = k++;
+  node->parent->lenght++;
   printf("выделим доп. память для потомков %d\n", node->parent->lenght);
-  node->parent->childs = calloc((node->lenght), sizeof(Node));
+  node->parent->childs = realloc(node->parent->childs, (node->lenght-1)*sizeof(Node));
   printf("добавим конкретную ноду\n");
-  node->parent->childs[k--] = node;
+  int k = node->parent->lenght - 1;
+  node->parent->childs[k] = node;
 
 }
 
