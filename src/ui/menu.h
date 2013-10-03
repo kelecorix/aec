@@ -43,6 +43,16 @@ typedef struct Tree{
   Node** nodes;
 } Menu;
 
+typedef struct OutNode{
+  Node* node;
+  Node* status;
+} OutNode;
+
+OutNode** outs;
+
+
+
+
 void init_menu();
 void create_menu();
 void create_node(int id, int parent, int min, int max, char* text, char* cn);

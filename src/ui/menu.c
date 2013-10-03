@@ -11,9 +11,10 @@
 #include "menu.h"
 
 
-int mnmode;                   // режим редактирования или нет
+int mnmode; // режим редактирования или нет
 int mval;
 Menu* menu;
+OutNode** outs;
 
 void init_menu() {
   create_menu();
@@ -310,21 +311,29 @@ int readKeys(KB* kb) {
 void disp_item(Disp* lcd){
 
   reset(lcd);
-  int i,j;
-  Node* next;
-  lcd_line(lcd, menu->curr->parent, 0);
-  lcd_line(lcd, concat(">", menu->curr->text), 1);
+  int i, k;
+  Node* node;
+  lcd_line(lcd, menu->curr->parent->text, 0);
 
-  for(i=2;i<4;i++){
-    for(j=0; j<menu->curr->parent->lenght; j++){
-      next = menu->curr->parent->childs[j];
-      if(next->id != menu->curr->id)
-        break;
-    }
-    printf("запишем\n");
-    lcd_line(lcd, concat(" ", next->text), i);
+  for(i=0;i<menu->curr->parent->lenght;i++){
+    if(menu->curr->id == menu->curr->parent->childs[i])
+      k=i;
+      break;
   }
 
+  int j=1;
+  char* z;
+  for(i=k;i<menu->curr->parent->lenght;i++){
+    if(j==1)
+      z=">";
+    else
+      z=" ";
+    node = menu->curr->parent->childs[i];
+    lcd_line(lcd, concat(z, node->text), j);
+    j++;
+    if(j==4)
+      break;
+  }
 }
 
 void disp_item_edit(Disp* lcd){
