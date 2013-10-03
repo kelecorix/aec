@@ -112,7 +112,7 @@ void create_menu(){
  */
 void create_node(int id, int parent, int min, int max, char* text, char* cn){
 
-  printf("CСоздадим нод\n");
+  printf("Cоздадим нод\n");
 
   Node* node = menu->nodes[id];
 
@@ -129,7 +129,8 @@ void create_node(int id, int parent, int min, int max, char* text, char* cn){
 
   node->childs = malloc(9 * sizeof(Node));
 
-  add_child(node, node->parent->lenght);
+  if(node->id != 0)
+    add_child(node, node->parent->lenght);
 }
 
 int getDepth(Menu* tree, Node* p){
