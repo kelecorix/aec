@@ -176,12 +176,13 @@ void add_child(Node* node){
   if (node->id == 0)
     return; //это корневой узел
 
-  printf("увеличим длину потомков\n");
+  printf("увеличим длину потомков %d \n", node->parent->lenght);
   node->parent->lenght++;
-  printf("выделим доп. память для потомков\n");
+  printf("выделим доп. память для потомков %d\n", node->parent->lenght);
   node->parent->childs = calloc((node->lenght), sizeof(Node));
   printf("добавим конкретную ноду\n");
-  node->parent->childs[(node->lenght)-1] = node;
+  int k = node->lenght;
+  node->parent->childs[k-1] = node;
 
 }
 
