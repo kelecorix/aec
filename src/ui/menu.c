@@ -10,6 +10,7 @@
 #include "../config/config.h"
 
 int mnmode;                   // режим редактирования или нет
+int mval;
 Menu* menu;
 
 void init_menu() {
@@ -208,43 +209,49 @@ void traverse(){
 
 }
 
-void onKeyClicked(int key_code){
+void onKeyClicked(int key_code) {
 
   switch (key_code){
-    case KEY_LEFT:
-      menu->curr = prev_level(menu->curr);
+  case KEY_LEFT :
+    menu->curr = prev_level(menu->curr);
+    disp_item();
+    break;
+  case KEY_RIGHT :
+    //TODO: проверить или это первый вход в меню
+    // когда доходим до полследнего возвр к первому
+    menu->curr = next_child(menu->curr);
+    disp_item();
+    break;
+  case KEY_UP :
+    if (mnmode == 1) {
+      mval = menu->curr->val;
+      change_value(1);
+      disp_item_edit();
+    } else {
+      menu->curr = prev_child(menu->curr);
       disp_item();
-      break;
-    case KEY_RIGHT:
-      //TODO: проверить или это первый вход в меню
-      // когда доходим до полследнего возвр к первому
+    }
+    break;
+  case KEY_DOWN :
+    if (mnmode == 1) {
+      mval = menu->curr->val;
+      change_value(0);
+      disp_item_edit();
+    } else {
       menu->curr = next_child(menu->curr);
       disp_item();
-      break;
-    case KEY_UP:
-      if(mnmode=1)
-        change_value();
-      else
-        menu->curr = prev_child(menu->curr);
-      disp_item();
-      break;
-    case KEY_DOWN:
-      if(mnmode=1)
-        change_value();
-      else
-        menu->curr = next_child(menu->curr );
-      disp_item();
-      break;
-    case KEY_OK:
-      select_item();
-      disp_item();
-      break;
+    }
+    break;
+  case KEY_OK :
+    select_item();
+    disp_item_edit();
+    break;
   }
 }
 
 int readKeys(){
 
-  int key;
+  int key=0;
 
   // i2c read
 
@@ -258,8 +265,22 @@ void disp_item(){
 
 }
 
-void change_value(){
+void disp_item_edit(){
 
+  // i2c write на основани
+  // mval
+
+}
+
+void change_value(int direct){
+
+  if((mval==menu->curr->min) || (mval==menu->curr->min))
+    return; // граничные значения
+
+  if (direct == 0)
+    mval--;
+  else
+    mval++;
 }
 
 
@@ -269,4 +290,5 @@ void select_item(){
     mnmode = 0;
   else
     mnmode = 1;
+
 }

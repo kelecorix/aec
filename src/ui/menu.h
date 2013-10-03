@@ -66,6 +66,13 @@ int isLeaf(Node* node);
 int getDepth(Menu* menu, Node* p);
 int getHeight(Menu* menu);
 
+int readKeys();
+void disp_item();
+void disp_item_edit();
+void change_value();
+void select_item();
+
+
 #endif /*MENU_H_*/
 
 
