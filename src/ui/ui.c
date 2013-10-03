@@ -14,6 +14,7 @@
  *
  */
 int dmode; // Мы либо в режиме редактирования 1, либо в режиме вывода 0
+int omode;
 
 /*
  *
@@ -51,18 +52,15 @@ char* net_address() {
   return ("0.0.0.0");
 }
 
+void disp(lcd){
 
+  char tmp_time[50], tmp_temp_out[50], tmp_temp_in[50], tmp_temp_mix[50], tmp_temp_evapor1[50], tmp_temp_evapor2[50],
+      buffer[200];
 
-void disp(lcd, curr){
-
-  char tmp_value[50], tmp_time[50], tmp_temp_out[50], tmp_temp_in[50],
-       tmp_temp_mix[50], tmp_temp_evapor1[50], tmp_temp_evapor2[50], buffer[200];
-   int tek_znach = 25;
-   time_t rawtime;
-   struct tm * timeinfo;
-
-  switch (curr){
-  case 0 :
+  time_t rawtime;
+  struct tm * timeinfo;
+  if (omode == 1) {
+    // экран 1 - темп сайта , улицы
     time(&rawtime);
     timeinfo = localtime(&rawtime);
     sprintf(tmp_time, "%2d/%02d  %2d:%02d:%02d", timeinfo->tm_mday, 1 + timeinfo->tm_mon, timeinfo->tm_hour, timeinfo->tm_min,
@@ -83,9 +81,10 @@ void disp(lcd, curr){
     lcd_line(lcd, tmp_temp_in, 1);
     lcd_line(lcd, "Состояние работы", 2);
     lcd_line(lcd, tmp_time, 3);
+  }
 
-    break;
-  case 2000 :
+  //экран 2 - конд, конд, миксер, время
+  if (omode == 2) {
     time(&rawtime);
     timeinfo = localtime(&rawtime);
 
@@ -109,14 +108,19 @@ void disp(lcd, curr){
     } else {
       sprintf(tmp_temp_mix, "Миксер =  Ошибка");
     }
-
     lcd_line(lcd, tmp_temp_evapor1, 0);
     lcd_line(lcd, tmp_temp_evapor2, 1);
     lcd_line(lcd, tmp_temp_mix, 2);
     lcd_line(lcd, tmp_time, 3);
+  }
+
+  if (omode == 3) {
+
+    //экран - обороты вент, вент2, заслонка полож
 
   }
 }
+
 
 /*
  *
@@ -126,48 +130,37 @@ void disp(lcd, curr){
 void run_ui(Site* site) {
 
   printf("режим UI\n");
-  // инициализируем экран
+
+  printf("инициализируем экран");
   int addr_lcd = strtol(getStr(site->cfg, (void *) "a_lcd"), (char **) NULL, 16);
   printf("addr: 0x%x\n", addr_lcd);
   Disp* lcd = lcd_new(addr_lcd);
 
-
   init(lcd);
-  //reset(lcd);
 
-  // инициализируем клавиатуру
-  // int addr_kb = strtol(getStr(site->cfg, (void *) "a_keyb"), (char **) NULL, 16);
-  // KB* kb = kb_new(addr_kb);
+   printf("инициализируем клавиатуру");
+   int addr_kb = strtol(getStr(site->cfg, (void *) "a_keyb"), (char **) NULL, 16);
+   KB* kb = kb_new(addr_kb);
 
-  // инициализируем меню
-  //init_menu();
+  printf("инициализируем меню");
+  init_menu();
 
   sleep(1);
 
-  int click,out_curr=0, menu_curr=0;
+  int click =0;
   dmode = 0;
-  printf("цикл работы UI\n");
+  omode = 0;
+  printf("Начнем цикл работы UI\n");
   while (1) {
 
     // отслеживаем переход в меню
     click = readKeys();
-    if (click != NULL)
+    if (click != 0)   // 0-ошибка чтения
       onKeyClicked(click);
-
-    if (out_curr == 0) {
-      if (menu_curr == 0 || menu_curr == 2000) {
-        if (menu_curr == 0) {
-          menu_curr = 2000;
-        } else {
-          menu_curr = 0;
-        }
-      }
-      out_curr = 40;
-    }
 
     // выводим на экран показатели датчиков
     if (mnmode == 0)
-      disp(lcd, menu_curr);
+      disp(lcd);
 
   }
 }

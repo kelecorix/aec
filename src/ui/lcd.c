@@ -189,8 +189,6 @@ void init(Disp* lcd) {
   write_quartets(lcd, CMD_EDC | EDC_D);
 }
 
-
-
 /* Функция очистки экрана
  */
 void clear(Disp* lcd) {

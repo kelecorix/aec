@@ -9,12 +9,6 @@
 #include "../hw/site.h"
 #include "../config/config.h"
 
-#define KEY_LEFT  127
-#define KEY_RIGHT 447
-#define KEY_UP    239
-#define KEY_DOWN  191
-#define KEY_OK    223
-
 #define MAX(x, y) (((x) > (y)) ? (x) : (y))
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 
