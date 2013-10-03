@@ -125,9 +125,11 @@ void disp(lcd, curr){
  */
 void run_ui(Site* site) {
 
+  printf("режим UI\n");
   // инициализируем экран
   int addr_lcd = strtol(getStr(site->cfg, (void *) "a_lcd"), (char **) NULL, 16);
   Disp* lcd = lcd_new(addr_lcd);
+
   //lcd->init(lcd);
   //lcd->reset(lcd);
 
