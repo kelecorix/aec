@@ -163,7 +163,7 @@ void run_ui(Site* site) {
     if (click != 0)   // 0-ошибка чтения
       onKeyClicked(click);
 
-    if (difftime(time(NULL), time_start) == ddiff){
+    if (difftime(time(NULL), time_start) >= ddiff){
       printf("выводим на экран показатели датчиков\n");
       if (mnmode == 0)
         disp(lcd);
