@@ -9,7 +9,7 @@
 #include "../hw/site.h"
 #include "../config/config.h"
 
-int mode;                   // режим редактирования или нет
+int mnmode;                   // режим редактирования или нет
 Menu* menu;
 
 void init_menu() {
@@ -27,6 +27,8 @@ void create_menu(){
   for(i=0; i<menu->length; i++){
     menu->nodes[i] = malloc(sizeof(Node*));
   }
+
+  mnmode = 0;
 
   create_node(0, 0, 0, 0, "Меню", ""); // корневой узел
 
@@ -206,3 +208,65 @@ void traverse(){
 
 }
 
+void onKeyClicked(int key_code){
+
+  switch (key_code){
+    case KEY_LEFT:
+      menu->curr = prev_level(menu->curr);
+      disp_item();
+      break;
+    case KEY_RIGHT:
+      //TODO: проверить или это первый вход в меню
+      // когда доходим до полследнего возвр к первому
+      menu->curr = next_child(menu->curr);
+      disp_item();
+      break;
+    case KEY_UP:
+      if(mnmode=1)
+        change_value();
+      else
+        menu->curr = prev_child(menu->curr);
+      disp_item();
+      break;
+    case KEY_DOWN:
+      if(mnmode=1)
+        change_value();
+      else
+        menu->curr = next_child(menu->curr );
+      disp_item();
+      break;
+    case KEY_OK:
+      select_item();
+      disp_item();
+      break;
+  }
+}
+
+int readKeys(){
+
+  int key;
+
+  // i2c read
+
+  return key;
+}
+
+void disp_item(){
+
+  // i2c write на основани
+  // текущего узла
+
+}
+
+void change_value(){
+
+}
+
+
+void select_item(){
+
+  if (mnmode==1)
+    mnmode = 0;
+  else
+    mnmode = 1;
+}

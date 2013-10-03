@@ -36,10 +36,14 @@ void run_ui(Site* site) {
 
   sleep(1);
 
+  int click;
   dmode = 0;
   while (1) {
 
   // отслеживаем переход в меню
+  click = readKeys();
+  if (click!=NULL)
+    onKeyClicked(click);
 
   // выводим на экран показатели датчиков
 
@@ -48,6 +52,8 @@ void run_ui(Site* site) {
 
   }
 }
+
+
 
 /*
  *
