@@ -161,8 +161,8 @@ void run_ui(Site* site) {
   while (1) {
     printf("отслеживаем переход в меню\n");
     click = readKeys(kb);
-    if ((click != 0) && (click != 255))   // 0-ошибка чтения
-      onKeyClicked(click);
+    if ((click != 0) && (click != 255))   // 0, 255 ошибка чтения
+      onKeyClicked(lcd, click);
 
     if (difftime(time(NULL), time_start) >= ddiff){
       printf("выводим на экран показатели датчиков\n");

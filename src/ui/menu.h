@@ -65,7 +65,7 @@ void disp_item();
 void disp_item_edit();
 void change_value();
 void select_item();
-void onKeyClicked(int key_code);
+void onKeyClicked(Disp* lcd, int key_code);
 extern int mnmode;
 
 #endif /*MENU_H_*/

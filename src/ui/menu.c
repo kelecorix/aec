@@ -210,7 +210,12 @@ Node* next_level(Node* node){
 // аргумент узел котором мы находимся
 // возвр: первый узел предыдущего уровня
 Node* prev_level(Node* node){
-  return node->parent;
+  if(!isRoot(menu->curr))
+    return node->parent;
+  else{
+    mnmode =0;
+    return menu->curr;
+  }
 }
 
 // обойти дерево
@@ -218,18 +223,18 @@ void traverse(){
 
 }
 
-void onKeyClicked(int key_code) {
+void onKeyClicked(Disp* lcd, int key_code) {
   printf("нажата кнопка %d", key_code);
   switch (key_code){
   case KEY_LEFT :
     menu->curr = prev_level(menu->curr);
-    disp_item();
+    disp_item(lcd);
     break;
   case KEY_RIGHT :
     //TODO: проверить или это первый вход в меню
     // когда доходим до полследнего возвр к первому
     menu->curr = next_child(menu->curr);
-    disp_item();
+    disp_item(lcd);
     break;
   case KEY_UP :
     if (mnmode == 1) {
@@ -238,7 +243,7 @@ void onKeyClicked(int key_code) {
       disp_item_edit();
     } else {
       menu->curr = prev_child(menu->curr);
-      disp_item();
+      disp_item(lcd);
     }
     break;
   case KEY_DOWN :
@@ -248,12 +253,12 @@ void onKeyClicked(int key_code) {
       disp_item_edit();
     } else {
       menu->curr = next_child(menu->curr);
-      disp_item();
+      disp_item(lcd);
     }
     break;
   case KEY_OK :
     select_item();
-    disp_item_edit();
+    disp_item_edit(lcd);
     break;
   }
 }
@@ -286,16 +291,22 @@ int readKeys(KB* kb) {
   return key;
 }
 
-void disp_item(){
+void disp_item(Disp* lcd){
 
-  // i2c write на основани
-  // текущего узла
+  reset(lcd);
+  mnmode = 1;
+
+  lcd_line(lcd, "     ^     "   , 0);
+  lcd_line(lcd, menu->curr->text, 1);
+  lcd_line(lcd, menu->curr->val , 2);
+  lcd_line(lcd, "     v     "   , 3);
 
 }
 
-void disp_item_edit(){
+void disp_item_edit(Disp* lcd){
 
   // i2c write на основани
+
   // mval
 
 }
