@@ -145,6 +145,7 @@ void run_ui(Site* site) {
 
   int click,out_curr=0, menu_curr=0;
   dmode = 0;
+  printf("цикл работы UI\n");
   while (1) {
 
     // отслеживаем переход в меню
@@ -167,7 +168,6 @@ void run_ui(Site* site) {
     if (mnmode == 0)
       disp(lcd, menu_curr);
 
-    printf("цикл работы UI\n");
   }
 }
 
