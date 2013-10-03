@@ -5,9 +5,11 @@
 
 #include "lcd.h"
 #include "keyboard.h"
-#include "menu.h"
+#include "../utils/utils.h"
 #include "../hw/site.h"
 #include "../config/config.h"
+#include "menu.h"
+
 
 int mnmode;                   // режим редактирования или нет
 int mval;
@@ -318,6 +320,15 @@ void disp_item(Disp* lcd){
 void disp_item_edit(Disp* lcd){
 
   // i2c write на основани
+  reset(lcd);
+  mnmode = 1;
+  printf("подготовим вывод\n");
+  char buf[100];
+  sprintf (buf, "%d",menu->curr->val);
+  lcd_line(lcd, "     ^     "   , 0);
+  lcd_line(lcd, concat(menu->curr->text, ": Изм"), 1);
+  lcd_line(lcd, buf             , 2);
+  lcd_line(lcd, "     v     "   , 3);
 
   // mval
 
