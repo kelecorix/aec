@@ -60,7 +60,7 @@ int isLeaf(Node* node);
 int getDepth(Menu* menu, Node* p);
 int getHeight(Menu* menu);
 
-int readKeys();
+int readKeys(KB* kb);
 void disp_item();
 void disp_item_edit();
 void change_value();
