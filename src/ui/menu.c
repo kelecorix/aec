@@ -127,7 +127,7 @@ void create_node(int id, int parent, int min, int max, char* text, char* cn){
   if (strcmp(node->cn, "") != 0)
     node->val = strtol(getStr(site->cfg, (void *) cn), (char **) NULL, 10);
 
-  node->parent->childs = malloc(9 * sizeof(Node));
+  node->childs = malloc(9 * sizeof(Node));
 
   add_child(node);
 }
