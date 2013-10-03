@@ -148,7 +148,9 @@ void run_ui(Site* site) {
   printf("инициализируем меню\n");
   init_menu();
 
-  sleep(1);
+  printf("Текущий пункт меню номер %d", menu->curr->id);
+
+  sleep(2);
 
   int click = 0;
   mnmode = 0;
