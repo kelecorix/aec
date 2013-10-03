@@ -177,12 +177,12 @@ void add_child(Node* node){
     return; //это корневой узел
 
   printf("увеличим длину потомков %d \n", node->parent->lenght);
-  node->parent->lenght++;
+  int k = node->lenght;
+  node->parent->lenght = k++;
   printf("выделим доп. память для потомков %d\n", node->parent->lenght);
   node->parent->childs = calloc((node->lenght), sizeof(Node));
   printf("добавим конкретную ноду\n");
-  int k = node->lenght;
-  node->parent->childs[k-1] = node;
+  node->parent->childs[k--] = node;
 
 }
 
@@ -318,7 +318,7 @@ void disp_item(Disp* lcd){
   lcd_line(lcd, menu->curr->parent->text, 0);
 
   k=1;
-  for(i=0;i<menu->curr->parent->lenght;i++, k++){
+  for(i=1;i<menu->curr->parent->lenght;i++, k++){
     if(k==1)
       z = "<";
     else
