@@ -24,9 +24,9 @@ void create_menu(){
   printf("предварительная организация\n");
   menu = malloc(sizeof(Menu));
   menu->length = 47;
-  menu->nodes = calloc(menu->length, sizeof(Node*));
+  menu->nodes = calloc(menu->length, sizeof(Node));
   for(i=0; i<menu->length; i++){
-    menu->nodes[i] = malloc(sizeof(Node*));
+    menu->nodes[i] = malloc(sizeof(Node));
   }
 
   mnmode = 0;
