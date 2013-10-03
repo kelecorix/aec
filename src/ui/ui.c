@@ -63,6 +63,7 @@ void disp(Disp* lcd){
   printf("режим %d\n", omode);
   if (omode == 1) {
     // экран 1 - темп сайта , улицы
+    printf("экран1\n");
     time(&rawtime);
     timeinfo = localtime(&rawtime);
     sprintf(tmp_time, "%2d/%02d  %2d:%02d:%02d", timeinfo->tm_mday, 1 + timeinfo->tm_mon, timeinfo->tm_hour, timeinfo->tm_min,
@@ -83,10 +84,13 @@ void disp(Disp* lcd){
     lcd_line(lcd, tmp_temp_in, 1);
     lcd_line(lcd, "Состояние работы", 2);
     lcd_line(lcd, tmp_time, 3);
+
+    printf("экран1\n");
   }
 
   //экран 2 - конд, конд, миксер, время
   if (omode == 2) {
+    printf("экран1\n");
     time(&rawtime);
     timeinfo = localtime(&rawtime);
 
@@ -114,6 +118,7 @@ void disp(Disp* lcd){
     lcd_line(lcd, tmp_temp_evapor2, 1);
     lcd_line(lcd, tmp_temp_mix, 2);
     lcd_line(lcd, tmp_time, 3);
+    printf("экран1\n");
   }
 
   if (omode == 3) {
@@ -148,7 +153,7 @@ void run_ui(Site* site) {
   printf("инициализируем меню\n");
   init_menu();
 
-  printf("Текущий пункт меню номер %d", menu->curr->id);
+  printf("Текущий пункт меню номер %d\n", menu->curr->id);
 
   sleep(2);
 
