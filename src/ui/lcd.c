@@ -153,7 +153,7 @@ void init(Disp* lcd) {
     lcd->connect = 1;
   }
 
-  log_3("LCD addr: %d\n, connect %d", lcd->addr, lcd->connect);
+  log_3("LCD addr: %d, connect %d\n", lcd->addr, lcd->connect);
   if (ioctl(lcd->fd, I2C_SLAVE, lcd->addr) < 0) {
     log_1("Failed to acquire bus access and/or talk to slave.\n");
     lcd->connect = 0;
