@@ -107,6 +107,8 @@ void create_menu(){
  */
 void create_node(int id, int parent, int min, int max, char* text, char* cn){
 
+  printf("CСоздадим нод\n");
+
   Node* node = menu->nodes[id];
 
   node->id     = id;
