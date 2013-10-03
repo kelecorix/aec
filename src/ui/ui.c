@@ -52,7 +52,7 @@ char* net_address() {
   return ("0.0.0.0");
 }
 
-void disp(lcd){
+void disp(Disp* lcd){
 
   char tmp_time[50], tmp_temp_out[50], tmp_temp_in[50], tmp_temp_mix[50], tmp_temp_evapor1[50], tmp_temp_evapor2[50];
 
