@@ -317,11 +317,11 @@ void disp_item(Disp* lcd){
 
   for(i=2;i<4;i++){
     for(j=0; j<menu->curr->parent->lenght; j++){
-      next = menu->curr->parent->childs[0];
+      next = menu->curr->parent->childs[j];
       if(next->id != menu->curr->id)
         break;
     }
-
+    printf("запишем\n");
     lcd_line(lcd, concat(" ", next->text), i);
   }
 
