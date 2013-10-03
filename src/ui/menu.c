@@ -96,6 +96,8 @@ void create_menu(){
   create_node(44, 6, 0, 0, "Время сброса ШТРАФА", "");
   create_node(45, 6, 0, 0, "Записи в лог сервера", "");
   printf("Завершили создание нодов \n");
+  menu->root = menu->nodes[0];
+  menu->curr = menu->nodes[1];
 }
 
 /* Функция создания узла дерева меню
@@ -124,13 +126,6 @@ void create_node(int id, int parent, int min, int max, char* text, char* cn){
     node->parent = get_parent_by_id(parent);
   if (strcmp(node->cn, "") != 0)
     node->val = strtol(getStr(site->cfg, (void *) cn), (char **) NULL, 10);
-
-  // В конце
-  if (id == 0)
-    menu->root = node;
-
-  if (id == 1)
-    menu->curr = node;
 
   add_child(node);
 }
