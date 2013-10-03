@@ -65,7 +65,9 @@ void disp(Disp* lcd){
     // экран 1 - темп сайта , улицы
     printf("экран1\n");
     time(&rawtime);
+    printf("время\n");
     timeinfo = localtime(&rawtime);
+    printf("сделали структуру\n");
     sprintf(tmp_time, "%2d/%02d  %2d:%02d:%02d", timeinfo->tm_mday, 1 + timeinfo->tm_mon, timeinfo->tm_hour, timeinfo->tm_min,
         timeinfo->tm_sec);
 
@@ -85,12 +87,12 @@ void disp(Disp* lcd){
     lcd_line(lcd, "Состояние работы", 2);
     lcd_line(lcd, tmp_time, 3);
 
-    printf("экран1\n");
+    printf("экран1 конец\n");
   }
 
   //экран 2 - конд, конд, миксер, время
   if (omode == 2) {
-    printf("экран1\n");
+    printf("экран2\n");
     time(&rawtime);
     timeinfo = localtime(&rawtime);
 
@@ -118,7 +120,7 @@ void disp(Disp* lcd){
     lcd_line(lcd, tmp_temp_evapor2, 1);
     lcd_line(lcd, tmp_temp_mix, 2);
     lcd_line(lcd, tmp_time, 3);
-    printf("экран1\n");
+    printf("экран2 конец\n");
   }
 
   if (omode == 3) {
