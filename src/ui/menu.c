@@ -166,7 +166,7 @@ int isLeaf(Node* node){
 
 void add_child(Node* node){
 
-  printf("Добавим ноду %d как потомка родителю\n", id);
+  printf("Добавим ноду %d как потомка родителю\n", node->id);
 
   if (node->id == 0)
     return; //это корневой узел
