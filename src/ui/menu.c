@@ -125,10 +125,11 @@ void create_node(int id, int parent, int min, int max, char* text, char* cn){
     node->val = strtol(getStr(site->cfg, (void *) cn), (char **) NULL, 10);
 
   // В конце
-  if (id == 0) {
+  if (id == 0)
     menu->root = node;
+
+  if (id == 1)
     menu->curr = node;
-  }
 
   add_child(node);
 }
@@ -193,8 +194,8 @@ Node* get_parent_by_id(int id){
   return menu->nodes[id];
 }
 
-Node* next_child(Node* node){
-  return NULL;
+Node* next_child(Node* parent){
+  return parent;
 }
 
 Node* prev_child(Node* node){
@@ -239,7 +240,10 @@ void onKeyClicked(Disp* lcd, int key_code) {
   printf("нажата кнопка %d", key_code);
   switch (key_code){
   case KEY_LEFT :
-    menu->curr = prev_level(menu->curr);
+    if(mnmode == 0)
+      mnmode = 1;
+    else
+      menu->curr = prev_level(menu->curr);
     disp_item(lcd);
     break;
   case KEY_RIGHT :
@@ -306,14 +310,20 @@ int readKeys(KB* kb) {
 void disp_item(Disp* lcd){
 
   reset(lcd);
-  mnmode = 1;
-  printf("подготовим вывод\n");
-  char buf[100];
-  sprintf (buf, "%d",menu->curr->val);
-  lcd_line(lcd, "     ^     "   , 0);
-  lcd_line(lcd, menu->curr->text, 1);
-  lcd_line(lcd, buf             , 2);
-  lcd_line(lcd, "     v     "   , 3);
+  int i,j;
+  Node* next;
+  lcd_line(lcd, menu->curr->parent);
+  lcd_line(lcd, concat(">", menu->curr->text), 1);
+
+  for(i=2;i<4;i++){
+    for(j=0; j<menu->curr->parent->lenght; j++){
+      next = menu->curr->parent->childs[0];
+      if(next->id != menu->curr->id)
+        break;
+    }
+
+    lcd_line(lcd, next, 1);
+  }
 
 }
 
