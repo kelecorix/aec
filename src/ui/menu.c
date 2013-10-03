@@ -129,7 +129,7 @@ void create_node(int id, int parent, int min, int max, char* text, char* cn){
 
   node->childs = malloc(9 * sizeof(Node));
 
-  add_child(node, node->lenght);
+  add_child(node, node->parent->lenght);
 }
 
 int getDepth(Menu* tree, Node* p){
@@ -166,17 +166,13 @@ int isLeaf(Node* node){
     return 0;
 }
 
-void add_child(Node* node, length){
-
-  printf("Добавим ноду %d как потомка родителю\n", node->id);
+void add_child(Node* node, int length){
 
   if (node->id == 0)
     return; //это корневой узел
 
-  printf("увеличим длину потомков %d \n", node->parent->lenght);
-  node->parent->lenght++;
   node->parent->childs[length] = node;
-
+  node->parent->lenght++;
 }
 
 Node* get_parent(Node* node){
@@ -312,7 +308,7 @@ void disp_item(Disp* lcd){
 
   k=1;
   printf("перед циклам\n");
-  for(i=1;i< (menu->curr->parent->lenght);i++, k++){
+  for(i=0;i< (menu->curr->parent->lenght);i++, k++){
     if(k==1)
       z = "<";
     else
