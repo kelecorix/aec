@@ -46,22 +46,21 @@
  *
  */
 typedef struct Disp {
-
   int addr;
-  int fd; // дескриптор для работы с шиной
+  int fd;      // дескриптор для работы с шиной
   int connect; // -1 = unknown, 0 = not connected, 1 = connected
-
-  void (*init)(struct Disp*);
-  void (*reset)(struct Disp*);
-  void (*clear)(struct Disp*);
-  void (*write_quartets)(struct Disp*, int bits);
-  void (*write_char)(struct Disp*, char letter);
-  void (*write_lcd)(struct Disp*, int bits);
-  void (*send)(struct Disp*, char bits);
-  void (*lcd_line)(struct Disp*, char *s, int c);
-  void (*cursor_go)(struct Disp*, int c);
-
 } Disp;
+
+
+void init(Disp* lcd);
+void reset(Disp* lcd);
+void clear(Disp* lcd);
+void write_quartets(Disp* lcd, int bits);
+void write_char(Disp* lcd, char letter);
+void write_lcd(Disp* lcd, int bits);
+void send(Disp* lcd, char bits);
+void lcd_line(Disp* lcd, char *s, int c);
+void cursor_go(Disp* lcd, int c);
 
 Disp* lcd_new(int addr);
 

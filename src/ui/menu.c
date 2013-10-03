@@ -169,7 +169,6 @@ void add_child(Node* node){
   node->lenght++;
   node->parent->childs = calloc((node->lenght), sizeof(Node));
   node->parent->childs[node->lenght-1] = node;
-
 }
 
 Node* get_parent(Node* node){
@@ -187,20 +186,31 @@ Node* next_child(Node* node){
 }
 
 Node* prev_child(Node* node){
-  return NULL;
 
+  return NULL;
 }
 
-// аргумент узел на котором мы находимся
-// возвр: первый узел следующего уровня
 Node* next_level(Node* node){
-  return NULL;
+
+  int i;
+  Node* n;
+
+  for(i=node->id; i<menu->length; i++){
+    if(isLeaf(menu->nodes[i]))
+      continue;
+    else{
+      n=menu->nodes[i];
+      break;
+    }
+  }
+
+  return n;
 }
 
 // аргумент узел котором мы находимся
 // возвр: первый узел предыдущего уровня
 Node* prev_level(Node* node){
-  return NULL;
+  return node->parent;
 }
 
 // обойти дерево

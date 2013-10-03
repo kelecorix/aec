@@ -286,10 +286,10 @@ int main(int argc, char *argv[]) {
   void* retL = NULL;
   void* retM = NULL;
 
-  if (pthread_create(&threadA, NULL, (void *) run, (void*) site)) {
-    log_4("Error creating algo thread\n");
-    return 1;
-  }
+//  if (pthread_create(&threadA, NULL, (void *) run, (void*) site)) {
+//    log_4("Error creating algo thread\n");
+//    return 1;
+//  }
 
   sleep(4);
 
