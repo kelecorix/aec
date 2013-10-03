@@ -24,7 +24,7 @@ Disp* lcd_new(int addr) {
   Disp* lcd = malloc(sizeof(Disp));
   printf("память выделена\n");
   lcd->addr = addr;
-  printf("возврат");
+  printf("возврат\n");
   return lcd;
 }
 
