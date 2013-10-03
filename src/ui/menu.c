@@ -318,12 +318,13 @@ void disp_item(Disp* lcd){
   lcd_line(lcd, menu->curr->parent->text, 0);
 
   k=1;
+  printf("перед циклам\n");
   for(i=1;i<menu->curr->parent->lenght;i++, k++){
     if(k==1)
       z = "<";
     else
       z = " ";
-    printf("выведем потомков");
+    printf("выведем потомков\n");
     char* z2 = concat(z, menu->curr->parent->childs[i]->text);
     lcd_line(lcd, z2, k);
   }
