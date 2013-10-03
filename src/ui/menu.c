@@ -322,7 +322,7 @@ void disp_item(Disp* lcd){
         break;
     }
 
-    lcd_line(lcd, next, i);
+    lcd_line(lcd, concat(" ", next->text), i);
   }
 
 }
