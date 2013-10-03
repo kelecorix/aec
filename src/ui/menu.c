@@ -322,6 +322,7 @@ void disp_item(Disp* lcd){
       z = "<";
     else
       z = " ";
+    printf("выведем потомков");
     char* z2 = concat(z, menu->curr->parent->childs[i]->text);
     lcd_line(lcd, z2, k);
   }
