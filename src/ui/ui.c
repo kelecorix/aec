@@ -153,9 +153,9 @@ void run_ui(Site* site) {
   KB* kb = kb_new(addr_kb);
 
   printf("инициализируем меню\n");
-  init_menu();
+  //init_menu();
 
-  printf("Текущий пункт меню номер %d\n", menu->curr->id);
+ // printf("Текущий пункт меню номер %d\n", menu->curr->id);
 
   sleep(2);
 
