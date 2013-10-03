@@ -409,11 +409,10 @@ int site_mode_fail_temp_uvo(Site* site) {
       }
     }
 
-    if (site->acs[0]->mode == 1 || site->acs[1]->mode == 1) {
-      log_3("site_mode_fail_temp_uvo: Выключим кондиционеры\n");
-      for (a = 0; a < site->num_ac; a++) {
+    log_3("site_mode_fail_temp_uvo: Выключим кондиционеры\n");
+    for (a = 0; a < site->num_ac; a++) {
+      if (site->acs[a]->mode == 1)
         site->acs[a]->set_mode(site->acs[a], 0);
-      }
     }
 
     log_3("site_mode_fail_temp_uvo: Включены ли вентиляторы? site->vents[0]->mode = %d site->vents[1]->mode = %d\n",site->vents[0]->mode,site->vents[1]->mode);
@@ -579,12 +578,11 @@ void sub_uvo_vent(Site* site) {
 
   log_3("Среда позваляет работать на вентиляторах?\n");
   if ((temp_support - site->temp_out) >= 2) {
-    log_3("Да позваляет\n");
-    if ((site->acs[0]->mode == 1) || (site->acs[1]->mode == 1)) {
-      log_3("Кондиционеры были включены выключим\n");
-      for (a = 0; a < site->num_ac; a++) {
+    log_3("Да позволяет\n");
+    log_3("Кондиционеры были включены выключим\n");
+    for (a = 0; a < site->num_ac; a++) {
+      if (site->acs[a]->mode == 1)
         site->acs[a]->set_mode(site->acs[a], 0);
-      }
     }
 
     if (site->vents[0]->mode == 1 || site->vents[1]->mode == 1) {
@@ -714,11 +712,10 @@ int sub_uvo_pen(Site* site) {
       site_mode_ac(site);
     }
 
-    if (site->acs[0]->mode == 1 || site->acs[1]->mode == 1) {
-      log_3("Выключим кондиционеры\n");
-      for (a = 0; a < site->num_ac; a++) {
+    log_3("Выключим кондиционеры\n");
+    for (a = 0; a < site->num_ac; a++) {
+      if (site->acs[a]->mode == 1)
         site->acs[a]->set_mode(site->acs[a], 0);
-      }
     }
 
     if (site->temp_in < temp_heat) {
