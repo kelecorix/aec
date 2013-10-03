@@ -154,13 +154,12 @@ void run_ui(Site* site) {
   omode = 1;
   printf("Начнем цикл работы UI\n");
   while (1) {
-
-    // отслеживаем переход в меню
+    printf("отслеживаем переход в меню\n");
     click = readKeys(kb);
     if (click != 0)   // 0-ошибка чтения
       onKeyClicked(click);
 
-    // выводим на экран показатели датчиков
+    printf("выводим на экран показатели датчиков\n");
     if (mnmode == 0)
       disp(lcd);
 

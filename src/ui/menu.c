@@ -219,7 +219,7 @@ void traverse(){
 }
 
 void onKeyClicked(int key_code) {
-  printf("нажата кнопка %в", key_code);
+  printf("нажата кнопка %d", key_code);
   switch (key_code){
   case KEY_LEFT :
     menu->curr = prev_level(menu->curr);
@@ -270,7 +270,7 @@ int readKeys(KB* kb) {
     return key;
   }
 
-  int btn;
+  int btn = 0;
   if (kb->connect == 1) {
     if (read(btn, buf, 1) != 1) {
       printf("BUTTONS Error reading from i2c\n");
