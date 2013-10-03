@@ -21,6 +21,7 @@
 typedef struct Cfg {
   int debug; // Debug Level: 1,2,3,4
   int gpf;   // Global print flag
+  int motodrop;
   char* saddr; // адрес owfs сервера
   char* mpoint; // адрес для считывания owfs
   char* ldir; // директория для записи логов

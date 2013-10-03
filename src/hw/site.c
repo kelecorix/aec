@@ -1515,32 +1515,32 @@ int site_mode_fail_ac(Site* site) {
 
 void run_moto(Site* site) {
 
-  sleep(gcfg->mtime * 60);
+  while (1) {
+    sleep(gcfg->mtime * 60);
+    // выполним сброс моточасов кондиционеров
+    int i;
+    for (i = 0; i < site->num_ac; i++) {
 
-  // выполним сброс моточасов кондиционеров
-  int i;
-  for (i = 0; i < site->num_ac; i++) {
+      site->acs[i]->moto_stop = time(NULL);
+      log_3("Моточасы KOND_%d %d %d %d\n", site->acs[i]->num, (site->acs[i]->moto_stop - site->acs[i]->moto_start), site->acs[i]->moto_stop,
+          site->acs[i]->moto_start);
+      logD(gcfg->logger->dataLOG, 0, "Моточасы KOND_%d %d", site->acs[i]->num, (site->acs[i]->moto_stop - site->acs[i]->moto_start));
 
-    site->acs[i]->moto_stop = time(NULL);
-    log_3("Моточасы KOND_%d %d %d %d\n", site->acs[i]->num, (site->acs[i]->moto_stop - site->acs[i]->moto_start), site->acs[i]->moto_stop,
-        site->acs[i]->moto_start);
-    logD(gcfg->logger->dataLOG, 0, "Моточасы KOND_%d %d", site->acs[i]->num, (site->acs[i]->moto_stop - site->acs[i]->moto_start));
+      site->acs[i]->moto_start = time(NULL);
+    }
 
-    site->acs[i]->moto_start = time(NULL);
+    // выполним сброс моточасов вентиляции
+    for (i = 0; i < 2; i++) {
+
+      site->vents[i]->moto_stop = time(NULL);
+      log_3("Моточасы VENT_%d %d %d %d\n", site->vents[i]->type, (site->vents[i]->moto_stop - site->vents[i]->moto_start),
+          site->vents[i]->moto_stop, site->vents[i]->moto_start);
+      logD(gcfg->logger->dataLOG, 0, "Моточасы VENT_%d %d", site->vents[i]->type, (site->vents[i]->moto_stop - site->vents[i]->moto_start));
+
+      site->vents[i]->moto_start = time(NULL);
+
+    }
   }
-
-  // выполним сброс моточасов вентиляции
-  for (i = 0; i < 2; i++) {
-
-    site->vents[i]->moto_stop = time(NULL);
-    log_3("Моточасы VENT_%d %d %d %d\n", site->vents[i]->type, (site->vents[i]->moto_stop - site->vents[i]->moto_start),
-        site->vents[i]->moto_stop, site->vents[i]->moto_start);
-    logD(gcfg->logger->dataLOG, 0, "Моточасы VENT_%d %d", site->vents[i]->type, (site->vents[i]->moto_stop - site->vents[i]->moto_start));
-
-    site->vents[i]->moto_start = time(NULL);
-
-  }
-
 }
 
 /*
@@ -1627,7 +1627,7 @@ Cfg* new_gcfg(){
   gcfg->ldir   = "/var/log/"; // директория для записи логов
   gcfg->cdir   = concat(get_current_dir_name(), "/"); // директ
   gcfg->ltime  = 10;  // периодичность записи глобального лога
-  gcfg->mtime  = 20;  // периодичность записи моточасов
+  gcfg->mtime  = 0;  // периодичность записи моточасов
   gcfg->filename = "freecooling.conf";
   gcfg->edir = "emul/";
   return gcfg;

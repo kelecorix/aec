@@ -217,7 +217,7 @@ void process_args(int argc, char *argv[]) {
       printf("\n");
       printf("Ключ: -tm\n");
       printf("\tПредназначен для указания периодичности записи наработки моточасов оборудования\n");
-      printf("\tВ минутах.");
+      printf("\tВ минутах.По умолчанию: 0, без записи.");
       printf("\tНапример: freecooling -tm 30 \n");
 
       printf("\n");
@@ -286,12 +286,12 @@ int main(int argc, char *argv[]) {
   void* retL = NULL;
   void* retM = NULL;
 
-//  if (pthread_create(&threadA, NULL, (void *) run, (void*) site)) {
-//    log_4("Error creating algo thread\n");
-//    return 1;
-//  }
-//
-//  sleep(4);
+  if (pthread_create(&threadA, NULL, (void *) run, (void*) site)) {
+    log_4("Error creating algo thread\n");
+    return 1;
+  }
+
+  sleep(4);
 
   if (pthread_create(&threadU, NULL, (void *) run_ui, (void*) site)) {
     log_4("Error creating UI thread\n");
@@ -300,23 +300,24 @@ int main(int argc, char *argv[]) {
 
   sleep(4);
 
-//  if (pthread_create(&threadL, NULL, (void *) run_logger, (void*) site)) {
-//    log_4("Error creating Logger thread\n");
-//    return 1;
-//  }
-//
-//  sleep(4);
+  if (pthread_create(&threadL, NULL, (void *) run_logger, (void*) site)) {
+    log_4("Error creating Logger thread\n");
+    return 1;
+  }
+
+  sleep(4);
 
   // поток записи моточасов
-//  if (pthread_create(&threadM, NULL, (void *) run_moto, (void*) site)) {
-//    log_4("Error creating moto logger thread\n");
-//    return 1;
-//  }
-
-//  pthread_join(threadA, retA);
-//  pthread_join(threadU, retU);
-//  pthread_join(threadL, retL);
-//  pthread_join(threadM, retM);
+  if (gcfg->mtime > 0) {
+    if (pthread_create(&threadM, NULL, (void *) run_moto, (void*) site)) {
+      log_4("Error creating moto logger thread\n");
+      return 1;
+    }
+  }
+  pthread_join(threadA, retA);
+  pthread_join(threadU, retU);
+  pthread_join(threadL, retL);
+  pthread_join(threadM, retM);
 
   return EXIT_SUCCESS;
 }

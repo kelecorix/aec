@@ -72,6 +72,7 @@ void disp_item_edit();
 void change_value();
 void select_item();
 
+extern int mnmode;
 
 #endif /*MENU_H_*/
 
