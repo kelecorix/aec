@@ -58,6 +58,7 @@ void disp(lcd){
 
   time_t rawtime;
   struct tm * timeinfo;
+  printf("режим %d\n", omode);
   if (omode == 1) {
     // экран 1 - темп сайта , улицы
     time(&rawtime);
