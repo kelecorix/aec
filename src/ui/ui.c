@@ -155,6 +155,7 @@ void run_ui(Site* site) {
   dmode = 0;
   omode = 1;
   ddiff = 2;
+  time_start = time(NULL);
 
   printf("Начнем цикл работы UI\n");
   while (1) {
