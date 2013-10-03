@@ -319,7 +319,7 @@ void disp_item(Disp* lcd){
 
   k=1;
   printf("перед циклам\n");
-  for(i=1;i<menu->curr->parent->lenght;i++, k++){
+  for(i=1;i< (menu->curr->parent->lenght);i++, k++){
     if(k==1)
       z = "<";
     else
