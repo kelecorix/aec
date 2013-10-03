@@ -312,7 +312,7 @@ void disp_item(Disp* lcd){
   reset(lcd);
   int i,j;
   Node* next;
-  lcd_line(lcd, menu->curr->parent);
+  lcd_line(lcd, menu->curr->parent, 0);
   lcd_line(lcd, concat(">", menu->curr->text), 1);
 
   for(i=2;i<4;i++){
@@ -322,7 +322,7 @@ void disp_item(Disp* lcd){
         break;
     }
 
-    lcd_line(lcd, next, 1);
+    lcd_line(lcd, next, i);
   }
 
 }
