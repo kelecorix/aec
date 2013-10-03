@@ -174,7 +174,7 @@ void add_child(Node* node){
   printf("увеличим длину потомков %d \n", node->parent->lenght);
   node->parent->lenght++;
   printf("выделим доп. память для потомков %d\n", node->parent->lenght);
-  node->parent->childs = realloc(node->parent->childs, (node->lenght-1)*sizeof(Node));
+  realloc(node->parent->childs, (node->lenght-1)*sizeof(Node));
   printf("добавим конкретную ноду\n");
   int k = node->parent->lenght - 1;
   node->parent->childs[k] = node;
