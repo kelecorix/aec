@@ -146,7 +146,7 @@ void run_ui(Site* site) {
   KB* kb = kb_new(addr_kb);
 
   printf("инициализируем меню\n");
-  //init_menu();
+  init_menu();
 
   sleep(1);
 
@@ -161,7 +161,7 @@ void run_ui(Site* site) {
   while (1) {
     printf("отслеживаем переход в меню\n");
     click = readKeys(kb);
-    if (click != 0)   // 0-ошибка чтения
+    if ((click != 0) && (click != 255))   // 0-ошибка чтения
       onKeyClicked(click);
 
     if (difftime(time(NULL), time_start) >= ddiff){
@@ -170,6 +170,7 @@ void run_ui(Site* site) {
         disp(lcd);
       time_start = time(NULL);
     }
+    sleep(0.5);
   }
 }
 

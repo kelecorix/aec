@@ -21,7 +21,7 @@ void init_menu() {
 void create_menu(){
 
   int i;
-
+  printf("предварительная организация\n");
   menu = malloc(sizeof(Menu));
   menu->length = 47;
   menu->nodes = calloc(menu->length, sizeof(Node*));
@@ -30,7 +30,7 @@ void create_menu(){
   }
 
   mnmode = 0;
-
+  printf("Начинаем создавать пункты\n");
   create_node(0, 0, 0, 0, "Меню", ""); // корневой узел
 
   create_node(1, 0, 0, 0, "Температуры", "");
@@ -260,10 +260,10 @@ void onKeyClicked(int key_code) {
 
 int readKeys(KB* kb) {
 
-  printf("считаем нажатие\n");
+  //printf("считаем нажатие\n");
   int key = 0;
   char buf[1];
-  printf("есть клавиатура? %d\n", kb->connect);
+  //printf("есть клавиатура? %d\n", kb->connect);
   if (kb->connect == -1) {
     reset_kb(kb);
   }
@@ -272,12 +272,12 @@ int readKeys(KB* kb) {
   }
 
   if (kb->connect == 1) {
-    printf("Перед чтением\n");
+   // printf("Перед чтением\n");
     if (read(kb->fd, buf, 1) != 1) {
       printf("BUTTONS Error reading from i2c\n");
       kb->connect = 0;
     } else {
-      printf("значение %d\n", buf[0]);
+     // printf("значение %d\n", buf[0]);
       key = (uint) buf[0];
       return key;
     }
