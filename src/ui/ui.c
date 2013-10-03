@@ -155,7 +155,7 @@ void run_ui(Site* site) {
   printf("инициализируем меню\n");
   init_menu();
 
-  printf("Текущий пункт меню номер %d\n", menu->curr->parent->lenght);
+  printf("Текущий пункт меню номер %d\n", menu->curr->parent->childs[0]->text);
 
   sleep(2);
 
