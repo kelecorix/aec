@@ -263,10 +263,7 @@ int readKeys(KB* kb) {
   int key = 0;
   char buf[1];
 
-  if (kb->connect  == -1) {
-    return key;
-  }
-  if (kb->connect  == 0) {
+  if (kb->connect  <=0){
     return key;
   }
 
