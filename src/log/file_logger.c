@@ -215,7 +215,7 @@ void log_2(char* msg, ...) {
 
     if (!flog->fp) {
       printf("can not open event log for writing.\n");
-      return;   // bail out if we can't log
+      return;
     }
     time_t timer;
     struct tm* tm_info;
