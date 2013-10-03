@@ -48,10 +48,6 @@ typedef struct OutNode{
   Node* status;
 } OutNode;
 
-OutNode** outs;
-
-
-
 
 void init_menu();
 void create_menu();
