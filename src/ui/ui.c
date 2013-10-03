@@ -155,7 +155,7 @@ void run_ui(Site* site) {
   printf("Начнем цикл работы UI\n");
   while (1) {
     printf("отслеживаем переход в меню\n");
-    //click = readKeys(kb);
+    click = readKeys(kb);
     if (click != 0)   // 0-ошибка чтения
       onKeyClicked(click);
 

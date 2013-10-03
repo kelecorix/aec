@@ -273,6 +273,7 @@ int readKeys(KB* kb) {
       printf("BUTTONS Error reading from i2c\n");
       kb->connect = 0;
     } else{
+      printf("значение %d", buf[0]);
       key = (uint) buf[0];
       return key;
     }
