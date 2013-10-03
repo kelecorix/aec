@@ -260,6 +260,7 @@ void onKeyClicked(int key_code) {
 
 int readKeys(KB* kb) {
 
+  prinf("считаем нажатие\n");
   int key = 0;
   char buf[1];
   printf("есть клавиатура? %d", kb->connect);
@@ -273,7 +274,7 @@ int readKeys(KB* kb) {
       printf("BUTTONS Error reading from i2c\n");
       kb->connect = 0;
     } else{
-      printf("значение %d", buf[0]);
+      printf("значение %d\n", buf[0]);
       key = (uint) buf[0];
       return key;
     }
