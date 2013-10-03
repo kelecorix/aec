@@ -19,7 +19,16 @@ void init_menu() {
 
 void create_menu(){
 
+  int i;
+
   menu = malloc(sizeof(Menu));
+  menu->length = 47;
+  menu->nodes = calloc(menu->length, sizeof(Node*));
+  for(i=0; i<menu->length; i++){
+    menu->nodes[i] = malloc(sizeof(Node*));
+  }
+
+  create_node(0, 0, 0, 0, "Меню", ""); // корневой узел
 
   create_node(1, 0, 0, 0, "Температуры", "");
   create_node(2, 0, 0, 0, "Оборудование", "");
@@ -40,46 +49,46 @@ void create_menu(){
   create_node(19, 1,  0, 30, "Дельта конд 2", "diff_ac_2");
 
   // Меню оборудование
-  create_node(21, 2, 0, 1, "Миксер", "is_mix");  // Да/НЕТ
-  create_node(22, 2, 0, 1, "ТЭН", "is_ten");     // Да/НЕТ
-  create_node(23, 2, 0, 2, "Кол. кондиционеров", "num_ac");
+  create_node(20, 2, 0, 1, "Миксер", "is_mix");  // Да/НЕТ
+  create_node(21, 2, 0, 1, "ТЭН", "is_ten");     // Да/НЕТ
+  create_node(22, 2, 0, 2, "Кол. кондиционеров", "num_ac");
 
   // Меню Лог Ошибок
-  create_node(31, 3, 0, 0, "Просмотреть", "");
-  create_node(32, 3, 0, 0, "Очистить", "");
+  create_node(23, 3, 0, 0, "Просмотреть", "");
+  create_node(24, 3, 0, 0, "Очистить", "");
 
   // Меню Установка датчиков
-  create_node(41, 4, 0, 0, "Наличие", "");
-  create_node(42, 4, 0, 0, "Адреса", "");
-  create_node(43, 4, 0, 0, "Установка", "");
+  create_node(25, 4, 0, 0, "Наличие", "");
+  create_node(26, 4, 0, 0, "Адреса", "");
+  create_node(27, 4, 0, 0, "Установка", "");
 
   // Меню Установка датчиков - Наличие
-  create_node(411, 4, 0, 0, "Улица", "");
-  create_node(412, 4, 0, 0, "Сайт", "");
-  create_node(413, 4, 0, 0, "Миксер", "");
-  create_node(414, 4, 0, 0, "Кондиционер1", "");
-  create_node(415, 4, 0, 0, "Кондиционер2", "");
+  create_node(28, 4, 0, 0, "Улица", "");
+  create_node(29, 4, 0, 0, "Сайт", "");
+  create_node(30, 4, 0, 0, "Миксер", "");
+  create_node(31, 4, 0, 0, "Кондиционер1", "");
+  create_node(32, 4, 0, 0, "Кондиционер2", "");
 
   // Меню Установка датчиков - Адреса
-  create_node(421, 4, 0, 0, "Улица", "");
-  create_node(422, 4, 0, 0, "Сайт", "");
-  create_node(423, 4, 0, 0, "Миксер", "");
-  create_node(424, 4, 0, 0, "Кондиционер1", "");
-  create_node(425, 4, 0, 0, "Кондиционер2", "");
+  create_node(33, 4, 0, 0, "Улица", "");
+  create_node(34, 4, 0, 0, "Сайт", "");
+  create_node(35, 4, 0, 0, "Миксер", "");
+  create_node(36, 4, 0, 0, "Кондиционер1", "");
+  create_node(37, 4, 0, 0, "Кондиционер2", "");
 
   // Меню Установка датчиков - Установка
-  create_node(431, 4, 0, 0, "Установка", "");
+  create_node(38, 4, 0, 0, "Установка", "");
 
   // Меню Установка времени
-  create_node(51, 5, 0, 0, "Установка даты", "");
-  create_node(52, 5, 0, 0, "Установка времени", "");
+  create_node(39, 5, 0, 0, "Установка даты", "");
+  create_node(40, 5, 0, 0, "Установка времени", "");
 
   // Меню Установка интервала
-  create_node(61, 6, 0, 0, "Принятие решение", "");
-  create_node(62, 6, 0, 0, "Мин.работы вентилятора", "");
-  create_node(63, 6, 0, 0, "Время аварии конд.", "");
-  create_node(64, 6, 0, 0, "Время сброса ШТРАФА", "");
-  create_node(65, 6, 0, 0, "Записи в лог сервера", "");
+  create_node(41, 6, 0, 0, "Принятие решение", "");
+  create_node(42, 6, 0, 0, "Мин.работы вентилятора", "");
+  create_node(43, 6, 0, 0, "Время аварии конд.", "");
+  create_node(44, 6, 0, 0, "Время сброса ШТРАФА", "");
+  create_node(45, 6, 0, 0, "Записи в лог сервера", "");
 
 }
 
@@ -95,23 +104,24 @@ void create_menu(){
  */
 void create_node(int id, int parent, int min, int max, char* text, char* cn){
 
-  Node* node = malloc(sizeof(Node));
+  Node* node = menu->nodes[id];
 
   node->id     = id;
   node->min    = min;
   node->max    = max;
   node->text   = text;
   node->cn     = cn;
-  node->parent = get_parent_by_id(parent);
-  node->val    = strtol(getStr(site->cfg, (void *) cn), (char **) NULL, 10);
+  if(node->id != 0)
+    node->parent = get_parent_by_id(parent);
+  if (strcmp(node->cn, "") != 0)
+    node->val = strtol(getStr(site->cfg, (void *) cn), (char **) NULL, 10);
 
   // В конце
   if (id == 0) {
     menu->root = node;
     menu->curr = node;
   }
-  menu->length++;
-  menu->nodes[menu->length] = node;
+
   add_child(node);
 }
 
@@ -151,9 +161,12 @@ int isLeaf(Node* node){
 
 void add_child(Node* node){
 
+  if (node->id == 0)
+    return; //это корневой узел
+
   node->lenght++;
-  node->parent->childs = calloc((node->lenght), sizeof(Node*));
-  node->parent->childs[node->lenght] = node;
+  node->parent->childs = calloc((node->lenght), sizeof(Node));
+  node->parent->childs[node->lenght-1] = node;
 
 }
 
@@ -164,8 +177,7 @@ Node* get_parent(Node* node){
 }
 
 Node* get_parent_by_id(int id){
-
-  return NULL;
+  return menu->nodes[id];
 }
 
 Node* next_child(Node* node){

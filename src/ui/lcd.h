@@ -8,7 +8,7 @@
 #include <string.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
-#include "../hw/site.h"
+
 
 // Define pin nr for EN and RS
 #define LCD_RS 0x20
@@ -45,25 +45,24 @@
  *
  *
  */
-typedef struct LCD {
+typedef struct Disp {
 
-  Site* site;
   int addr;
   int fd; // дескриптор для работы с шиной
   int connect; // -1 = unknown, 0 = not connected, 1 = connected
 
-  void (*init)(struct LCD*);
-  void (*reset)(struct LCD*);
-  void (*clear)(struct LCD*);
-  void (*write_quartets)(struct LCD*, int bits);
-  void (*write_char)(struct LCD*, char letter);
-  void (*write_lcd)(struct LCD*, int bits);
-  void (*send)(struct LCD*, char bits);
-  void (*lcd_line)(struct LCD*, char *s, int c);
-  void (*cursor_go)(struct LCD*, int c);
+  void (*init)(struct Disp*);
+  void (*reset)(struct Disp*);
+  void (*clear)(struct Disp*);
+  void (*write_quartets)(struct Disp*, int bits);
+  void (*write_char)(struct Disp*, char letter);
+  void (*write_lcd)(struct Disp*, int bits);
+  void (*send)(struct Disp*, char bits);
+  void (*lcd_line)(struct Disp*, char *s, int c);
+  void (*cursor_go)(struct Disp*, int c);
 
-} LCD;
+} Disp;
 
-LCD* lcd_new(int addr);
+Disp* lcd_new(int addr);
 
 #endif /* LCD_H_ */

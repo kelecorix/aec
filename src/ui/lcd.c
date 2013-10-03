@@ -5,8 +5,10 @@
 #include <string.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
-#include "lcd.h"
+#include "../hw/site.h"
 #include "../hw/i2c.h"
+#include "lcd.h"
+
 
 const unsigned char rusTable[64] = { 0x41, 0xA0, 0x42, 0xA1, 0xE0, 0x45, 0xA3, 0xA4, 0xA5, 0xA6, 0x4B, 0xA7, 0x4D, 0x48, 0x4F, 0xA8, 0x50,
     0x43, 0x54, 0xA9, 0xAA, 0x58, 0xE1, 0xAB, 0xAC, 0xE2, 0xAD, 0xAE, 0x62, 0xAF, 0xB0, 0xB1, 0x61, 0xB2, 0xB3, 0xB4, 0xE3, 0x65, 0xB6,
@@ -17,32 +19,33 @@ const unsigned char rusTable[64] = { 0x41, 0xA0, 0x42, 0xA1, 0xE0, 0x45, 0xA3, 0
  * Параметры:
  *            int addr - адрес на шине i2c
  */
-LCD* lcd_new(int addr) {
+Disp* lcd_new(int addr) {
 
-  LCD* lcd = malloc(sizeof(LCD));
+  Disp* lcd = malloc(sizeof(Disp));
   lcd->addr = addr;
 
-  if ((lcd->fd = open(I2C_FILE_NAME, O_RDWR)) < 0) {
-    log_1("Failed to open the i2c bus\n");
-    lcd->connect = 0;
-  } else {
-    lcd->connect = 1;
-  }
-
-  log_3("LCD addr: %d\n", addr);
-  if (ioctl(lcd->fd, I2C_SLAVE, addr) < 0) {
-    log_1("Failed to acquire bus access and/or talk to slave.\n");
-    lcd->connect = 0;
-  } else {
-    lcd->connect = 1;
-  }
+//  if ((lcd->fd = open(I2C_FILE_NAME, O_RDWR) < 0)) {
+//    log_1("Failed to open the i2c bus\n");
+//    lcd->connect = 0;
+//  } else {
+//    lcd->connect = 1;
+//  }
+//
+//  log_3("LCD addr: %d\n", addr);
+//  if (ioctl(lcd->fd, I2C_SLAVE, addr) < 0) {
+//    log_1("Failed to acquire bus access and/or talk to slave.\n");
+//    lcd->connect = 0;
+//  } else {
+//    lcd->connect = 1;
+//  }
+ //TODO: Восстановить
 
   return lcd;
 }
 
 /* Низкоуровневая функция записи на экран
  */
-void send(LCD* lcd, char bits) {
+void send(Disp* lcd, char bits) {
   if (lcd->connect == -1)
     reset(lcd);
 
@@ -58,7 +61,7 @@ void send(LCD* lcd, char bits) {
 
 /* Функция записи на экрн
  */
-void write_lcd(LCD* lcd, int bits) {
+void write_lcd(Disp* lcd, int bits) {
   send(lcd, bits + LCD_EN);
   send(lcd, bits);
   usleep(500);
@@ -66,7 +69,7 @@ void write_lcd(LCD* lcd, int bits) {
 
 /* Функция записи полубайта на шину i2c
  */
-void write_quartets(LCD* lcd, int bits) {
+void write_quartets(Disp* lcd, int bits) {
   write_lcd(lcd, (bits >> 4) & 0x0F);
   write_lcd(lcd, bits & 0x0F);
   usleep(500);
@@ -74,14 +77,14 @@ void write_quartets(LCD* lcd, int bits) {
 
 /* Функция записи символа
  */
-void write_char(LCD* lcd, char letter) {
+void write_char(Disp* lcd, char letter) {
   write_lcd(lcd, (((int) letter >> 4) & 0x0F) | LCD_RS);
   write_lcd(lcd, ((int) letter & 0x0F) | LCD_RS);
 }
 
 /* Функция перевода курсора при записи
  */
-void set_cursor(LCD* lcd, int str) {
+void set_cursor(Disp* lcd, int str) {
 
   int DDRAMAddr;
   switch (str) {
@@ -105,7 +108,7 @@ void set_cursor(LCD* lcd, int str) {
 
 /* Функция последовательной записи символов
  */
-void lcd_line(LCD* lcd, char *s, int c) {
+void lcd_line(Disp* lcd, char *s, int c) {
 
   int i;
   int wyw_s = 0;
@@ -154,7 +157,7 @@ void lcd_line(LCD* lcd, char *s, int c) {
 
 /* Функция инициализации экрана
  */
-void init(LCD* lcd) {
+void init(Disp* lcd) {
   write_quartets(lcd, CMD_SIL | SIL_N);
   write_quartets(lcd, CMD_EDC);
   write_quartets(lcd, CMD_CAH);
@@ -164,7 +167,7 @@ void init(LCD* lcd) {
 
 /* Функция перезагрузки экрана
  */
-void reset(LCD* lcd) {
+void reset(Disp* lcd) {
   send(lcd, 0xFF);
   usleep(5000);
   send(lcd, 0x03 + LCD_EN);
@@ -183,6 +186,6 @@ void reset(LCD* lcd) {
 
 /* Функция очистки экрана
  */
-void clear(LCD* lcd) {
+void clear(Disp* lcd) {
   write_quartets(lcd, CMD_CAH);
 }

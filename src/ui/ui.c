@@ -23,9 +23,9 @@ void run_ui(Site* site) {
 
   // инициализируем экран
   int addr_lcd = strtol(getStr(site->cfg, (void *) "a_lcd"), (char **) NULL, 16);
-  LCD* lcd = lcd_new(addr_lcd);
-  lcd->init(lcd);
-  lcd->reset(lcd);
+  Disp* lcd = lcd_new(addr_lcd);
+  //lcd->init(lcd);
+  //lcd->reset(lcd);
 
   // инициализируем клавиатуру
   // int addr_kb = strtol(getStr(site->cfg, (void *) "a_keyb"), (char **) NULL, 16);
