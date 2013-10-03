@@ -300,20 +300,21 @@ int main(int argc, char *argv[]) {
 
   sleep(4);
 
-  if (pthread_create(&threadL, NULL, (void *) run_logger, (void*) site)) {
-    log_4("Error creating Logger thread\n");
-    return 1;
-  }
+//  if (pthread_create(&threadL, NULL, (void *) run_logger, (void*) site)) {
+//    log_4("Error creating Logger thread\n");
+//    return 1;
+//  }
+//
+//  sleep(4);
+//
+//  // поток записи моточасов
+//  if (gcfg->mtime > 0) {
+//    if (pthread_create(&threadM, NULL, (void *) run_moto, (void*) site)) {
+//      log_4("Error creating moto logger thread\n");
+//      return 1;
+//    }
+//  }
 
-  sleep(4);
-
-  // поток записи моточасов
-  if (gcfg->mtime > 0) {
-    if (pthread_create(&threadM, NULL, (void *) run_moto, (void*) site)) {
-      log_4("Error creating moto logger thread\n");
-      return 1;
-    }
-  }
   pthread_join(threadA, retA);
   pthread_join(threadU, retU);
   pthread_join(threadL, retL);
