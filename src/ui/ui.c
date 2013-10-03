@@ -150,7 +150,7 @@ void run_ui(Site* site) {
   int click = 0;
   mnmode = 0;
   dmode = 0;
-  omode = 0;
+  omode = 1;
   printf("Начнем цикл работы UI\n");
   while (1) {
 
