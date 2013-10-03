@@ -313,26 +313,18 @@ void disp_item(Disp* lcd){
   reset(lcd);
   int i, k;
   Node* node;
+  char* z;
   lcd_line(lcd, menu->curr->parent->text, 0);
 
-  for(i=0;i<menu->curr->parent->lenght;i++){
-    if(menu->curr->id == menu->curr->parent->childs[i])
-      k=i;
-      break;
-  }
-
-  int j=1;
-  char* z;
-  for(i=k;i<menu->curr->parent->lenght;i++){
-    if(j==1)
-      z=">";
+  k=1;
+  for(i=0;i<menu->curr->parent->lenght;i++, k++){
+    if(k==1)
+      z = "<";
     else
-      z=" ";
-    node = menu->curr->parent->childs[i];
-    lcd_line(lcd, concat(z, node->text), j);
-    j++;
-    if(j==4)
-      break;
+      z = " ";
+    char* z2 = concat(z, menu->curr->parent->childs[i]->text);
+    lcd_line(lcd, z2, k);
+
   }
 }
 
