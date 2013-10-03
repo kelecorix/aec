@@ -20,11 +20,8 @@ const unsigned char rusTable[64] = { 0x41, 0xA0, 0x42, 0xA1, 0xE0, 0x45, 0xA3, 0
  *            int addr - адрес на шине i2c
  */
 Disp* lcd_new(int addr) {
-  log_2("выделение памяти\n");
   Disp* lcd = malloc(sizeof(Disp));
-  printf("память выделена\n");
   lcd->addr = addr;
-  printf("возврат\n");
   return lcd;
 }
 

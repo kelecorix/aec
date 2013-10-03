@@ -54,8 +54,7 @@ char* net_address() {
 
 void disp(lcd){
 
-  char tmp_time[50], tmp_temp_out[50], tmp_temp_in[50], tmp_temp_mix[50], tmp_temp_evapor1[50], tmp_temp_evapor2[50],
-      buffer[200];
+  char tmp_time[50], tmp_temp_out[50], tmp_temp_in[50], tmp_temp_mix[50], tmp_temp_evapor1[50], tmp_temp_evapor2[50];
 
   time_t rawtime;
   struct tm * timeinfo;
@@ -131,30 +130,31 @@ void run_ui(Site* site) {
 
   printf("режим UI\n");
 
-  printf("инициализируем экран");
+  printf("инициализируем экран\n");
   int addr_lcd = strtol(getStr(site->cfg, (void *) "a_lcd"), (char **) NULL, 16);
   printf("addr: 0x%x\n", addr_lcd);
   Disp* lcd = lcd_new(addr_lcd);
 
+  printf("инициализация экрана\n");
   init(lcd);
 
-   printf("инициализируем клавиатуру");
-   int addr_kb = strtol(getStr(site->cfg, (void *) "a_keyb"), (char **) NULL, 16);
-   KB* kb = kb_new(addr_kb);
+  printf("инициализируем клавиатуру\n");
+  int addr_kb = strtol(getStr(site->cfg, (void *) "a_keyb"), (char **) NULL, 16);
+  KB* kb = kb_new(addr_kb);
 
-  printf("инициализируем меню");
+  printf("инициализируем меню\n");
   init_menu();
 
   sleep(1);
 
-  int click =0;
+  int click = 0;
   dmode = 0;
   omode = 0;
   printf("Начнем цикл работы UI\n");
   while (1) {
 
     // отслеживаем переход в меню
-    click = readKeys();
+    click = readKeys(kb);
     if (click != 0)   // 0-ошибка чтения
       onKeyClicked(click);
 
