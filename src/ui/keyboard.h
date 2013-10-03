@@ -16,6 +16,6 @@ typedef struct KB {
 } KB;
 
 KB* kb_new(int addr);
-
+void reset_kb(KB* kb);
 
 #endif /* KEYBOARD_H_ */

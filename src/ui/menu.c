@@ -264,7 +264,10 @@ int readKeys(KB* kb) {
   int key = 0;
   char buf[1];
   printf("есть клавиатура? %d\n", kb->connect);
-  if (kb->connect<=0){
+  if (kb->connect == -1) {
+    reset_kb(kb);
+  }
+  if (kb->connect == 0) {
     return key;
   }
 
@@ -273,7 +276,7 @@ int readKeys(KB* kb) {
     if (read(kb->fd, buf, 1) != 1) {
       printf("BUTTONS Error reading from i2c\n");
       kb->connect = 0;
-    } else{
+    } else {
       printf("значение %d\n", buf[0]);
       key = (uint) buf[0];
       return key;

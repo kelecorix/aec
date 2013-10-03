@@ -14,7 +14,9 @@
  *
  */
 int dmode; // Мы либо в режиме редактирования 1, либо в режиме вывода 0
-int omode;
+int omode; // Режим вывода
+int ddiff; // задержка вывода
+time_t time_start;
 
 /*
  *
@@ -152,6 +154,7 @@ void run_ui(Site* site) {
   mnmode = 0;
   dmode = 0;
   omode = 1;
+  ddiff = 2;
 
   printf("Начнем цикл работы UI\n");
   while (1) {
@@ -160,11 +163,12 @@ void run_ui(Site* site) {
     if (click != 0)   // 0-ошибка чтения
       onKeyClicked(click);
 
-    printf("выводим на экран показатели датчиков\n");
-    if (mnmode == 0)
-      disp(lcd);
-
-    sleep(1);
+    if (difftime(time(NULL), time_start) == ddiff){
+      printf("выводим на экран показатели датчиков\n");
+      if (mnmode == 0)
+        disp(lcd);
+      time_start = time(NULL);
+    }
   }
 }
 

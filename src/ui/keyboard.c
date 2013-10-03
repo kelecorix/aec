@@ -11,17 +11,22 @@ KB* kb_new(int addr) {
   kb->address = addr;
   kb->connect = -1;
 
+  reset_kb(kb);
+
+  return kb;
+}
+
+void reset_kb(KB* kb){
   if ((kb->fd = open(I2C_FILE_NAME, O_RDWR)) < 0) {
     log_1("Failed to open the i2c bus\n");
     kb->connect = 0;
   } else {
     kb->connect = 1;
   }
-  if (ioctl(kb->fd, I2C_SLAVE, addr) < 0) {
+  if (ioctl(kb->fd, I2C_SLAVE, kb->address) < 0) {
     log_1("Failed to acquire bus access and/or talk to slave.\n");
     kb->connect = 0;
   } else {
     kb->connect = 1;
   }
-  return kb;
 }
