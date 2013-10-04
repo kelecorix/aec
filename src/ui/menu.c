@@ -109,20 +109,22 @@ Node* get_parent_by_id(int id){
 
 void add_child_to_parent(Node* parent, Node* node){
 
-  int* tmp = NULL;
+  Node** tmp = NULL;
 
   if (node->id == 0)
     return; //это корневой узел
   printf("родитель %d, потомка %d,c длиной %d \n", parent->id, node->id, parent->lenght);
   parent->lenght++;
   printf("длина после: %d\n", parent->lenght);
-  tmp = realloc(parent->childs, parent->lenght*sizeof(Node));
+  tmp = realloc(parent->childs, parent->lenght * sizeof(Node));
   if (tmp == NULL){
     printf("function failed to allocate storage\n");
+    free(parent->childs);
   }
+  parent->childs = tmp;
+
   int k = parent->lenght;
   parent->childs[k--] = node;
-
 
 }
 
@@ -149,6 +151,7 @@ void create_node(int id, int parent, int min, int max, char* text, char* cn){
   node->text   = text;
   node->cn     = cn;
   node->lenght = 0;
+  node->childs = malloc(sizeof(Node));
   if(node->id != 0)
     node->parent = get_parent_by_id(parent);
   if (strcmp(node->cn, "") != 0)
