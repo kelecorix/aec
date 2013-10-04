@@ -273,7 +273,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if (mnmode == 1) {
       mval = menu->curr->val;
       change_value(1);
-      disp_item_edit();
+      //disp_item_edit();
     } else {
       menu->curr = prev_child(menu->curr);
       disp_item(lcd);
@@ -283,7 +283,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if (mnmode == 1) {
       mval = menu->curr->val;
       change_value(0);
-      disp_item_edit();
+      //disp_item_edit();
     } else {
       menu->curr = next_child(menu->curr);
       disp_item(lcd);
@@ -291,7 +291,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
     break;
   case KEY_OK :
     select_item();
-    disp_item_edit(lcd);
+    //disp_item_edit(lcd);
     break;
   }
 }
@@ -350,7 +350,7 @@ void disp_item(Disp* lcd){
     printf("id %d\n", menu->curr->childs[i]->id);
     printf("перед об %s \n", menu->curr->childs[i]->text);
     out = concat(z, menu->curr->childs[i]->text);
-    printf(out);
+    printf("после об %s \n", out;
     lcd_line(lcd, out, k);
   }
 
