@@ -174,7 +174,7 @@ void run_ui(Site* site) {
   time_start = time(NULL);
 
   printf("Начнем цикл работы UI\n");
-  while (1) {
+  for (;;) {
     printf("отслеживаем переход в меню\n");
     //click = readKeys(kb);
     //if ((click != 0) && (click != 255))   // 0, 255 ошибка чтения
