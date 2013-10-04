@@ -9,6 +9,7 @@ KB* kb_new(int addr) {
   printf("создадим клавиатуру\n");
   KB* kb = malloc(sizeof(KB));
   kb->address = addr;
+  kb->fd = 0;
   kb->connect = -1;
   printf("пререзет\n");
   reset_kb(kb);
@@ -25,7 +26,7 @@ void reset_kb(KB* kb){
   } else {
     kb->connect = 1;
   }
-  printf("врезете2\n");
+  printf("врезете2 %d\n", kb->fd);
   if (ioctl(kb->fd, I2C_SLAVE, kb->address) < 0) {
     log_1("Failed to acquire bus access and/or talk to slave.\n");
     kb->connect = 0;
