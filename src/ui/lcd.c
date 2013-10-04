@@ -28,7 +28,7 @@ Disp* lcd_new(int addr) {
 /* Низкоуровневая функция записи на экран
  */
 void send(Disp* lcd, char bits) {
-  printf("send\n");
+  //printf("send\n");
 
   if (lcd->connect == -1)
     reset(lcd);
@@ -46,7 +46,7 @@ void send(Disp* lcd, char bits) {
 /* Функция записи на экрн
  */
 void write_lcd(Disp* lcd, int bits) {
-  printf("write_lcd\n");
+  //printf("write_lcd\n");
   send(lcd, bits + LCD_EN);
   send(lcd, bits);
   usleep(500);
@@ -55,7 +55,7 @@ void write_lcd(Disp* lcd, int bits) {
 /* Функция записи полубайта на шину i2c
  */
 void write_quartets(Disp* lcd, int bits) {
-  printf("write_quart\n");
+  //printf("write_quart\n");
   write_lcd(lcd, (bits >> 4) & 0x0F);
   write_lcd(lcd, bits & 0x0F);
   usleep(500);
@@ -64,7 +64,7 @@ void write_quartets(Disp* lcd, int bits) {
 /* Функция записи символа
  */
 void write_char(Disp* lcd, char letter) {
-  printf("write_char\n");
+  //printf("write_char\n");
   write_lcd(lcd, (((int) letter >> 4) & 0x0F) | LCD_RS);
   write_lcd(lcd, ((int) letter & 0x0F) | LCD_RS);
 }
@@ -72,7 +72,7 @@ void write_char(Disp* lcd, char letter) {
 /* Функция перевода курсора при записи
  */
 void set_cursor(Disp* lcd, int str) {
-  printf("set_cursor\n");
+  //printf("set_cursor\n");
   int DDRAMAddr;
   switch (str) {
   case 0:
