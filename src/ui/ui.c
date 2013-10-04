@@ -128,6 +128,14 @@ void disp(Disp* lcd){
     //экран - обороты вент, вент2, заслонка полож
 
   }
+
+//  free(tmp_time);
+//  free(tmp_temp_out);
+//  free(tmp_temp_in);
+//  free(tmp_temp_mix);
+//  free(tmp_temp_evapor1);
+//  free(tmp_temp_evapor2);
+
 }
 
 
@@ -169,7 +177,7 @@ void run_ui(Site* site) {
 
   printf("Начнем цикл работы UI\n");
   while (1) {
-    printf("отслеживаем переход в меню\n");
+    //printf("отслеживаем переход в меню\n");
     click = readKeys(kb);
     if ((click != 0) && (click != 255))   // 0, 255 ошибка чтения
       onKeyClicked(lcd, click);
