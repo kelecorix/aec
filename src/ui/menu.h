@@ -51,7 +51,7 @@ typedef struct OutNode{
 
 void init_menu();
 void create_menu();
-void create_node(int id, int parent, int min, int max, char* text, char* cn);
+void create_node(int id, int parent, int min, int max, char* ctext, char* cn);
 void traverse();
 void add_node(Node* node);
 void add_child_to_parent(Node* parent, Node* node);
