@@ -276,7 +276,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
   case KEY_RIGHT :
     //TODO: проверить или это первый вход в меню
     // когда доходим до полследнего возвр к первому
-    menu->curr = next_child(menu->curr);
+    //menu->curr = next_child(menu->curr);
     pos--;
     disp_item(lcd);
     break;
@@ -337,7 +337,7 @@ int readKeys(KB* kb) {
 
 // for branches
 void disp_item(Disp* lcd){
-
+  printf("показ\n");
   reset(lcd);
   int i, k;
 
@@ -356,6 +356,7 @@ void disp_item(Disp* lcd){
       z = " ";
     lcd_line(lcd, concat(z, menu->curr->childs[i]->text), k);
   }
+
 }
 
 
