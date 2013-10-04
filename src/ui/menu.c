@@ -351,11 +351,12 @@ void disp_item(Disp* lcd){
   printf("количество потомков %d \n", menu->curr->lenght);
 
   for(i=0; i<3; i++){
-    if(i==pos){
+
+    if(i==pos)
       z = ">";
-      chld = chld+i;}
     else
       z = " ";
+
     printf("i  %d\n", i);
     printf("pos %d\n", pos);
     printf("chld %d\n", chld);
@@ -363,6 +364,9 @@ void disp_item(Disp* lcd){
     out = concat(z, menu->curr->childs[chld+i]->text);
     printf("после об %s \n", out);
     lcd_line(lcd, out, i+1);
+
+    if(i==3)
+      chld = chld+i;
   }
   sleep(1);
 }
