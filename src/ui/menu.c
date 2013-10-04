@@ -374,6 +374,7 @@ void disp_item(Disp* lcd){
     entr = 1;
     pos = -1;
   }
+  entr++;
   sleep(1);
 }
 
