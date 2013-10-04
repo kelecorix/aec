@@ -140,9 +140,6 @@ void run_ui(Site* site) {
 
   printf("режим UI\n");
 
-  printf("инициализируем меню\n");
-    init_menu();
-
   printf("инициализируем экран\n");
   int addr_lcd = strtol(getStr(site->cfg, (void *) "a_lcd"), (char **) NULL, 16);
   printf("addr: 0x%x\n", addr_lcd);
@@ -156,6 +153,9 @@ void run_ui(Site* site) {
   KB* kb = kb_new(addr_kb);
 
   printf("Текущий пункт меню номер %d, братьев у него %d \n", menu->curr->id, menu->curr->parent->lenght);
+
+  printf("инициализируем меню\n");
+    init_menu();
 
   sleep(2);
 
