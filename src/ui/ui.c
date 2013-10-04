@@ -86,7 +86,7 @@ void disp(Disp* lcd){
     //printf("3\n");
     printf("0\n");
     lcd_line(lcd, tmp_temp_out, 0);
-    printf("1\n");
+    printf("1 %s \n", tmp_temp_in);
     lcd_line(lcd, tmp_temp_in, 1);
     printf("2\n");
     lcd_line(lcd, "Состояние работы", 2);
