@@ -21,7 +21,7 @@ void reset_kb(KB* kb){
   printf("врезете\n");
 
   if ((kb->fd = open(I2C_FILE_NAME, O_RDWR)) < 0) {
-    log_1("Failed to open the i2c bus\n");
+    log_4("Failed to open the i2c bus\n");
     kb->connect = 0;
   } else {
     kb->connect = 1;
