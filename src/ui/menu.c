@@ -353,7 +353,7 @@ void disp_item(Disp* lcd){
     printf("после об %s \n", out);
     lcd_line(lcd, out, k);
   }
-
+  sleep(1);
 }
 
 
