@@ -357,7 +357,9 @@ void disp_item(Disp* lcd){
       z = "<";
     else
       z = " ";
-    printf("перед об\n");
+    printf("i  %d\n", i);
+    printf("id %d\n", menu->curr->childs[i]->id);
+    printf("перед об %s \n", menu->curr->childs[i]->text);
     out = concat(z, menu->curr->childs[i]->text);
     printf(out);
     lcd_line(lcd, out, k);
