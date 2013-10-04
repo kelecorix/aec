@@ -267,7 +267,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
   case KEY_LEFT :
     if(mnmode == 0){
       mnmode = 1;
-      pos++;
+      pos--;
     }
 //    else
 //      menu->curr = prev_level(menu->curr);
@@ -277,7 +277,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
     //TODO: проверить или это первый вход в меню
     // когда доходим до полследнего возвр к первому
     //menu->curr = next_child(menu->curr);
-    pos--;
+    pos++;
     disp_item(lcd);
     break;
   case KEY_UP :
@@ -348,7 +348,7 @@ void disp_item(Disp* lcd){
     i=pos-3;
   else
     i=0;
-
+  printf("перед циклом\n");
   for(k=1; i<pos+3;i++,k++){
     if(k==1)
       z = "<";
