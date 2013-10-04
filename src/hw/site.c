@@ -1515,6 +1515,9 @@ void run_moto(Site* site) {
   while (1) {
     sleep(gcfg->mtime * 60);
     // выполним сброс моточасов кондиционеров
+    // TODO: проверить, что работает
+    //       проверить по дате
+    //       проверить
     int i;
     for (i = 0; i < site->num_ac; i++) {
 
@@ -1525,6 +1528,7 @@ void run_moto(Site* site) {
 
       site->acs[i]->moto_start = time(NULL);
     }
+
 
     // выполним сброс моточасов вентиляции
     for (i = 0; i < 2; i++) {

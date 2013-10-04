@@ -315,10 +315,10 @@ int main(int argc, char *argv[]) {
 //    }
 //  }
 
-  pthread_join(threadA, retA);
-  pthread_join(threadU, retU);
-  pthread_join(threadL, retL);
-  pthread_join(threadM, retM);
+//  pthread_join(threadA, retA);
+//  pthread_join(threadU, retU);
+//  pthread_join(threadL, retL);
+//  pthread_join(threadM, retM);
 
   return EXIT_SUCCESS;
 }

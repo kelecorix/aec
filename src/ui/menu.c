@@ -13,6 +13,7 @@
 
 int mnmode; // режим редактирования или нет
 int mval;
+int pos;  //текущая позиция от 0 до 2
 Menu* menu;
 OutNode** outs;
 
@@ -25,14 +26,14 @@ void create_menu(){
 
   int i;
   printf("предварительная организация\n");
+
   menu = malloc(sizeof(Menu));
   menu->length = 47;
-  menu->nodes = calloc(menu->length, sizeof(Node));
-  for(i=0; i<menu->length; i++){
-    menu->nodes[i] = malloc(sizeof(Node));
-  }
+  menu->nodes = malloc(47*sizeof(Node*));
 
   mnmode = 0;
+  pos = -1;
+
   printf("Начинаем создавать пункты\n");
   create_node(0, 0, 0, 0, "Меню", ""); // корневой узел
   printf("Первый блок\n");
@@ -96,8 +97,10 @@ void create_menu(){
   create_node(44, 6, 0, 0, "Время сброса ШТРАФА", "");
   create_node(45, 6, 0, 0, "Записи в лог сервера", "");
   printf("Завершили создание нодов \n");
+
   menu->root = menu->nodes[0];
-  menu->curr = menu->nodes[1];
+  menu->curr = menu->nodes[0];
+
 }
 
 /* Функция создания узла дерева меню
@@ -114,7 +117,7 @@ void create_node(int id, int parent, int min, int max, char* text, char* cn){
 
   printf("Cоздадим нод\n");
 
-  Node* node = menu->nodes[id];
+  Node* node = malloc(sizeof(Node));
 
   node->id     = id;
   node->min    = min;
@@ -127,10 +130,11 @@ void create_node(int id, int parent, int min, int max, char* text, char* cn){
   if (strcmp(node->cn, "") != 0)
     node->val = strtol(getStr(site->cfg, (void *) cn), (char **) NULL, 10);
 
-  node->childs = malloc(9 * sizeof(Node));
-
   if(node->id != 0)
     add_child(node, node->parent->lenght);
+
+  menu->nodes[id] = node;
+
 }
 
 int getDepth(Menu* tree, Node* p){
@@ -172,8 +176,6 @@ void add_child(Node* node, int length){
   if (node->id == 0)
     return; //это корневой узел
 
-  node->parent->childs[length] = node;
-  node->parent->lenght++;
 }
 
 Node* get_parent(Node* node){
@@ -232,8 +234,10 @@ void onKeyClicked(Disp* lcd, int key_code) {
   printf("нажата кнопка %d", key_code);
   switch (key_code){
   case KEY_LEFT :
-    if(mnmode == 0)
+    if(mnmode == 0){
       mnmode = 1;
+      pos++;
+    }
     else
       menu->curr = prev_level(menu->curr);
     disp_item(lcd);
@@ -242,6 +246,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
     //TODO: проверить или это первый вход в меню
     // когда доходим до полследнего возвр к первому
     menu->curr = next_child(menu->curr);
+    pos--;
     disp_item(lcd);
     break;
   case KEY_UP :
@@ -299,6 +304,7 @@ int readKeys(KB* kb) {
   return key;
 }
 
+// for branches
 void disp_item(Disp* lcd){
 
   reset(lcd);
@@ -307,19 +313,22 @@ void disp_item(Disp* lcd){
   char* z;
   lcd_line(lcd, menu->curr->parent->text, 0);
 
-  k=1;
-  printf("перед циклам\n");
-  for(i=0;i< (menu->curr->parent->lenght);i++, k++){
+  if (pos>=3)
+    i=pos-3;
+  else
+    i=0;
+
+  for(k=1; i<pos+3;i++,k++){
     if(k==1)
       z = "<";
     else
       z = " ";
-    printf("выведем потомков\n");
-    char* z2 = concat(z, menu->curr->parent->childs[i]->text);
-    lcd_line(lcd, z2, k);
+    lcd_line(lcd, concat(z, menu->curr->childs[i]->text), k);
   }
 }
 
+
+// for leafs
 void disp_item_edit(Disp* lcd){
 
   // i2c write на основани
