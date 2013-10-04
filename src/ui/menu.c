@@ -341,7 +341,7 @@ void disp_item(Disp* lcd){
   reset(lcd);
   int i, k;
 
-  char* z;
+  char* z, out;
   lcd_line(lcd, menu->curr->text, 0);
 
   if (pos>=3)
@@ -349,12 +349,17 @@ void disp_item(Disp* lcd){
   else
     i=0;
   printf("перед циклом\n");
+  printf("количество потомков %d \n", menu->curr->lenght);
+
   for(k=1; i<pos+3;i++,k++){
     if(k==1)
       z = "<";
     else
       z = " ";
-    lcd_line(lcd, concat(z, menu->curr->childs[i]->text), k);
+
+    out = concat(z, menu->curr->childs[i]->text);
+    printf(out);
+    lcd_line(lcd, out, k);
   }
 
 }
