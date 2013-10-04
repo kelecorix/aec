@@ -372,6 +372,7 @@ void disp_item(Disp* lcd){
   if(entr == 3){
     chld = chld+1;
     entr = 1;
+    pos = 0;
   }
   sleep(1);
 }
