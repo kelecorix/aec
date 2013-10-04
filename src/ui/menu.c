@@ -127,7 +127,10 @@ void add_child_to_parent(Node* parent, Node* node){
   int k = parent->lenght;
   parent->childs[k--] = node;
   printf("длина после2: %d\n", parent->lenght);
-  printf("id добавленного: %d\n", parent->childs[k--]->id);
+  int i;
+  for(i=0;i<parent->lenght;i++){
+    printf("id добавленного: %d\n", parent->childs[i]->id);
+  }
 }
 
 
