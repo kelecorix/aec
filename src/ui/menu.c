@@ -118,8 +118,6 @@ Node* get_parent_by_id(int id){
 
 void add_child_to_parent(Node* parent, Node* node){
 
-  Node** tmp = NULL;
-
   if (node->id == 0)
     return; //это корневой узел
 
@@ -158,16 +156,16 @@ void create_node(int id, int parent, int min, int max, char* ctext, char* cn){
   for(i=0;i<9;i++){
     node->childs[i] = malloc(sizeof(Node));
   }
-  if(node->id != 0)
-    node->parent = get_parent_by_id(parent);
+
+
   if (strcmp(node->cn, "") != 0)
     node->val = strtol(getStr(site->cfg, (void *) cn), (char **) NULL, 10);
 
-  if(node->id != 0)
+  if(node->id > 0)
+    node->parent = get_parent_by_id(parent);
     add_child_to_parent(node->parent, node);
 
   menu->nodes[id] = node;
-
 }
 
 int getDepth(Menu* tree, Node* p){
