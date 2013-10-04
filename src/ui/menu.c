@@ -113,7 +113,7 @@ void add_child_to_parent(Node* parent, Node* node){
 
   if (node->id == 0)
     return; //это корневой узел
-  printf("длина до: %d \n", node->lenght);
+  printf("родитель %d, потомка %d,c длиной %d \n", parent->id, node->id, parent->lenght);
   tmp = realloc(parent->childs, sizeof(Node) * parent->lenght++);
   if (tmp == NULL){
     printf("function failed to allocate storage\n");
