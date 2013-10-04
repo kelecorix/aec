@@ -266,6 +266,9 @@ void onKeyClicked(Disp* lcd, int key_code) {
     //TODO: проверить или это первый вход в меню
     // когда доходим до полследнего возвр к первому
     //menu->curr = next_child(menu->curr);
+    if(mnmode == 0){
+      mnmode = 1;
+    }
     pos++;
     disp_item(lcd);
     break;
