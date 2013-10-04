@@ -13,7 +13,8 @@
 
 int mnmode; // режим редактирования или нет
 int mval;
-int pos;  //текущая позиция от 0 до 2
+int pos;  // текущая позиция от 1 до 3
+int chld; // id текущего нода
 Menu* menu;
 OutNode** outs;
 
@@ -38,6 +39,7 @@ void create_menu(){
 
   mnmode = 0;
   pos = -1;
+  chld = 0;
 
   //printf("Начинаем создавать пункты\n");
   create_node(0, 0, 0, 0, "Меню", ""); // корневой узел
@@ -48,6 +50,7 @@ void create_menu(){
   create_node(4, 0, 0, 0, "Установка датчиков", "");
   create_node(5, 0, 0, 0, "Установка времени", "");
   create_node(6, 0, 0, 0, "Установка интервалов", "");
+
   //printf("Второй блок\n");
   // Меню температуры
   create_node(11, 1, 10, 40, "Поддержания", "temp_support");
@@ -256,10 +259,11 @@ void onKeyClicked(Disp* lcd, int key_code) {
   case KEY_LEFT :
     if(mnmode == 0){
       mnmode = 1;
-      pos--;
     }
 //    else
 //      menu->curr = prev_level(menu->curr);
+    if(pos>0)
+      pos--;
     disp_item(lcd);
     break;
   case KEY_RIGHT :
@@ -269,7 +273,8 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if(mnmode == 0){
       mnmode = 1;
     }
-    pos++;
+    if(pos<3)
+      pos++;
     disp_item(lcd);
     break;
   case KEY_UP :
@@ -331,7 +336,7 @@ int readKeys(KB* kb) {
 void disp_item(Disp* lcd){
   printf("показ\n");
   reset(lcd);
-  int i, k;
+  int i;
 
   if(isLeaf(menu->curr))
     return;
@@ -339,26 +344,21 @@ void disp_item(Disp* lcd){
   char *z, *out;
   lcd_line(lcd, menu->curr->text, 0);
 
-  if (pos>=3)
-    i=pos-3;
-  else
-    i=0;
   printf("перед циклом\n");
   printf("количество потомков %d \n", menu->curr->lenght);
 
-
-  k=1;
-  for(; i<=(pos+3); i++,k++){
-    if(k==i)
+  for(i=0; i<3; i++){
+    if(i==pos){
       z = "<";
+      chld = menu->curr->childs[i]->id;}
     else
       z = " ";
     printf("i  %d\n", i);
-    printf("id %d\n", menu->curr->childs[i]->id);
-    printf("перед об %s \n", menu->curr->childs[i]->text);
-    out = concat(z, menu->curr->childs[i]->text);
+    printf("id %d\n", menu->curr->childs[chld+i]->id);
+    printf("перед об %s \n", menu->curr->childs[chld+i]->text);
+    out = concat(z, menu->curr->childs[chld+i]->text);
     printf("после об %s \n", out);
-    lcd_line(lcd, out, k);
+    lcd_line(lcd, out, i+1);
   }
   sleep(1);
 }
