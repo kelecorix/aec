@@ -42,6 +42,7 @@ void create_menu(){
   mnmode = 0;
   pos = -1;
   chld = 0;
+  entr = 1;
 
   //printf("Начинаем создавать пункты\n");
   create_node(0, 0, 0, 0, "Меню", ""); // корневой узел
@@ -370,7 +371,7 @@ void disp_item(Disp* lcd){
   }
   if(entr == 3){
     chld = chld+1;
-    entr = 0;
+    entr = 1;
   }
   sleep(1);
 }
