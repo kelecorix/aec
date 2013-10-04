@@ -96,7 +96,7 @@ void set_cursor(Disp* lcd, int str) {
 /* Функция последовательной записи символов
  */
 void lcd_line(Disp* lcd, char *s, int c) {
-  printf("lcd_line\n");
+  //printf("lcd_line\n");
   int i;
   int wyw_s = 0;
   unsigned char zap;
