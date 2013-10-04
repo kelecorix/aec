@@ -260,8 +260,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
     }
 //    else
 //      menu->curr = prev_level(menu->curr);
-    if(pos>0)
-      pos--;
+
     disp_item(lcd);
     break;
   case KEY_RIGHT :
@@ -270,29 +269,33 @@ void onKeyClicked(Disp* lcd, int key_code) {
     //menu->curr = next_child(menu->curr);
     if(mnmode == 0){
       mnmode = 1;
+    } else {
+      menu->curr = menu->curr->childs[0];
     }
-    if(pos<3)
-      pos++;
     disp_item(lcd);
     break;
   case KEY_UP :
     if (mnmode == 1) {
-      mval = menu->curr->val;
-      change_value(1);
-      //disp_item_edit();
+      //mval = menu->curr->val;
+      //change_value(1);
+      disp_item_edit();
+      if(pos>0)
+        pos--;
     } else {
-      menu->curr = prev_child(menu->curr);
+      //menu->curr = prev_child(menu->curr);
       disp_item(lcd);
     }
     break;
   case KEY_DOWN :
     if (mnmode == 1) {
-      mval = menu->curr->val;
-      change_value(0);
-      //disp_item_edit();
+      //mval = menu->curr->val;
+      //change_value(0);
+      if(pos<3)
+        pos++;
+      disp_item_edit();
     } else {
-      menu->curr = next_child(menu->curr);
-      disp_item(lcd);
+      //menu->curr = next_child(menu->curr);
+      //disp_item(lcd);
     }
     break;
   case KEY_OK :
