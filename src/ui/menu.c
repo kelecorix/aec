@@ -120,7 +120,7 @@ void add_child_to_parent(Node* parent, Node* node){
   if (node->id == 0)
     return; //это корневой узел
 
-  //printf("родитель %d, потомка %d,c длиной %d \n", parent->id, node->id, parent->lenght);
+  printf("родитель %d, потомка %d,c длиной %d \n", parent->id, node->id, parent->lenght);
   parent->lenght++;
   //printf("длина после: %d\n", parent->lenght);
 //  tmp = (Node**) realloc(parent->childs, parent->lenght * sizeof(Node));
@@ -135,7 +135,7 @@ void add_child_to_parent(Node* parent, Node* node){
   //printf("длина после2: %d\n", parent->lenght);
   //int i;
   //for(i=0;i<parent->lenght;i++){
-  printf("text добавленного: %s\n", node->text);
+  printf("text добавленного: %s\n", parent->childs[k]->text);
   //}
 }
 
