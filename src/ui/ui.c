@@ -174,23 +174,23 @@ void run_ui(Site* site) {
   time_start = time(NULL);
 
   printf("Начнем цикл работы UI\n");
-  for (;;) {
+  while(1) {
     printf("отслеживаем переход в меню\n");
-    //click = readKeys(kb);
-    //if ((click != 0) && (click != 255))   // 0, 255 ошибка чтения
-    //  onKeyClicked(lcd, click);
+    click = readKeys(kb);
+    if ((click != 0) && (click != 255))   // 0, 255 ошибка чтения
+      onKeyClicked(lcd, click);
 
 
     //disp(lcd);
-    sleep(1);
-//    if ((time(NULL) - time_start) >= ddiff){
-//      printf("выводим на экран показатели датчиков\n");
-//      if (mnmode == 0)
-//        disp(lcd);
-//      printf("после disp\n");
-//      time_start = time(NULL);
-//      printf("после time\n");
-//    }
+    //sleep(1);
+    if ((time(NULL) - time_start) >= ddiff){
+      printf("выводим на экран показатели датчиков\n");
+      if (mnmode == 0)
+        disp(lcd);
+      printf("после disp\n");
+      time_start = time(NULL);
+      printf("после time\n");
+    }
   }
 
 }
