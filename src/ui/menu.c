@@ -135,7 +135,7 @@ void add_child_to_parent(Node* parent, Node* node){
   //printf("длина после2: %d\n", parent->lenght);
   //int i;
   //for(i=0;i<parent->lenght;i++){
-  printf("text добавленного: %s\n", parent->childs[0]->text);
+  printf("text добавленного: %s\n", node->text);
   //}
 }
 
@@ -160,7 +160,6 @@ void create_node(int id, int parent, int min, int max, char* ctext, char* cn){
   node->min    = min;
   node->max    = max;
   node->text   = ctext;
-  printf("%s", node->text);
   node->cn     = cn;
   node->lenght = 0;
   node->childs = malloc(9 * sizeof(Node*));
