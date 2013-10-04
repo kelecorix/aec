@@ -342,7 +342,7 @@ void disp_item(Disp* lcd){
   int i, k;
 
   char* z;
-  lcd_line(lcd, menu->curr->parent->text, 0);
+  lcd_line(lcd, menu->curr->text, 0);
 
   if (pos>=3)
     i=pos-3;
