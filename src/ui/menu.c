@@ -113,6 +113,7 @@ void add_child_to_parent(Node* parent, Node* node){
 
   if (node->id == 0)
     return; //это корневой узел
+
   printf("родитель %d, потомка %d,c длиной %d \n", parent->id, node->id, parent->lenght);
   parent->lenght++;
   printf("длина после: %d\n", parent->lenght);
@@ -125,6 +126,7 @@ void add_child_to_parent(Node* parent, Node* node){
 
   int k = parent->lenght;
   parent->childs[k--] = node;
+  printf("длина после2: %d\n", parent->lenght);
 
 }
 
