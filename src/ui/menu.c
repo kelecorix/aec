@@ -24,7 +24,6 @@ void init_menu() {
 
 void create_menu(){
 
-  int i;
   printf("предварительная организация\n");
 
   menu = malloc(sizeof(Menu));
@@ -112,7 +111,7 @@ void add_child_to_parent(Node* parent, Node* node){
 
   if (node->id == 0)
     return; //это корневой узел
-  printf("длина до: %\n", node);
+  printf("длина до: %d \n", node->lenght);
   int tmp = realloc(parent->childs, sizeof(Node) * parent->lenght++);
   if (tmp == NULL){
     printf("function failed to allocate storage\n");
