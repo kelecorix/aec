@@ -39,16 +39,16 @@ void create_menu(){
   mnmode = 0;
   pos = -1;
 
-  printf("Начинаем создавать пункты\n");
+  //printf("Начинаем создавать пункты\n");
   create_node(0, 0, 0, 0, "Меню", ""); // корневой узел
-  printf("Первый блок\n");
+  //printf("Первый блок\n");
   create_node(1, 0, 0, 0, "Температуры", "");
   create_node(2, 0, 0, 0, "Оборудование", "");
   create_node(3, 0, 0, 0, "Лог Ошибок", "");
   create_node(4, 0, 0, 0, "Установка датчиков", "");
   create_node(5, 0, 0, 0, "Установка времени", "");
   create_node(6, 0, 0, 0, "Установка интервалов", "");
-  printf("Второй блок\n");
+  //printf("Второй блок\n");
   // Меню температуры
   create_node(11, 1, 10, 40, "Поддержания", "temp_support");
   create_node(12, 1,  1, 10, "Дельта поддержания", "diff");
@@ -59,49 +59,49 @@ void create_menu(){
   create_node(17, 1,  0, 20, "Дельта окружающей", "diff_out");
   create_node(18, 1,  0, 30, "Дельта конд 1", "diff_ac_1");
   create_node(19, 1,  0, 30, "Дельта конд 2", "diff_ac_2");
-  printf("Третий блок\n");
+  //printf("Третий блок\n");
   // Меню оборудование
   create_node(20, 2, 0, 1, "Миксер", "is_mix");  // Да/НЕТ
   create_node(21, 2, 0, 1, "ТЭН", "is_ten");     // Да/НЕТ
   create_node(22, 2, 0, 2, "Кол. кондиционеров", "num_ac");
-  printf("Чертвертый блок\n");
+  //printf("Чертвертый блок\n");
   // Меню Лог Ошибок
   create_node(23, 3, 0, 0, "Просмотреть", "");
   create_node(24, 3, 0, 0, "Очистить", "");
-  printf("Пятый блок блок\n");
+  //printf("Пятый блок блок\n");
   // Меню Установка датчиков
   create_node(25, 4, 0, 0, "Наличие", "");
   create_node(26, 5, 0, 0, "Адреса", "");
   create_node(27, 4, 0, 0, "Установка", "");
-  printf("Шестой блок\n");
+  //printf("Шестой блок\n");
   // Меню Установка датчиков - Наличие
   create_node(28, 25, 0, 0, "Улица", "");
   create_node(29, 25, 0, 0, "Сайт", "");
   create_node(30, 25, 0, 0, "Миксер", "");
   create_node(31, 25, 0, 0, "Кондиционер1", "");
   create_node(32, 25, 0, 0, "Кондиционер2", "");
-  printf("Седьмой блок\n");
+  //printf("Седьмой блок\n");
   // Меню Установка датчиков - Адреса
   create_node(33, 26, 0, 0, "Улица", "");
   create_node(34, 26, 0, 0, "Сайт", "");
   create_node(35, 26, 0, 0, "Миксер", "");
   create_node(36, 26, 0, 0, "Кондиционер1", "");
   create_node(37, 26, 0, 0, "Кондиционер2", "");
-  printf("Восьмой блок\n");
+  //printf("Восьмой блок\n");
   // Меню Установка датчиков - Установка
   create_node(38, 27, 0, 0, "Установка", "");
-  printf("Девятый блок\n");
+  //printf("Девятый блок\n");
   // Меню Установка времени
   create_node(39, 5, 0, 0, "Установка даты", "");
   create_node(40, 5, 0, 0, "Установка времени", "");
-  printf("Десятый блок\n");
+  //printf("Десятый блок\n");
   // Меню Установка интервала
   create_node(41, 6, 0, 0, "Принятие решение", "");
   create_node(42, 6, 0, 0, "Мин.работы вентилятора", "");
   create_node(43, 6, 0, 0, "Время аварии конд.", "");
   create_node(44, 6, 0, 0, "Время сброса ШТРАФА", "");
   create_node(45, 6, 0, 0, "Записи в лог сервера", "");
-  printf("Завершили создание нодов \n");
+  //printf("Завершили создание нодов \n");
 
   menu->root = menu->nodes[0];
   menu->curr = menu->nodes[0];
@@ -120,9 +120,9 @@ void add_child_to_parent(Node* parent, Node* node){
   if (node->id == 0)
     return; //это корневой узел
 
-  printf("родитель %d, потомка %d,c длиной %d \n", parent->id, node->id, parent->lenght);
+  //printf("родитель %d, потомка %d,c длиной %d \n", parent->id, node->id, parent->lenght);
   parent->lenght++;
-  printf("длина после: %d\n", parent->lenght);
+  //printf("длина после: %d\n", parent->lenght);
 //  tmp = (Node**) realloc(parent->childs, parent->lenght * sizeof(Node));
 //  if (tmp == NULL){
 //    printf("function failed to allocate storage\n");
@@ -132,11 +132,11 @@ void add_child_to_parent(Node* parent, Node* node){
 
   int k = parent->lenght;
   parent->childs[k--] = node;
-  printf("длина после2: %d\n", parent->lenght);
-  int i;
-  for(i=0;i<parent->lenght;i++){
-    printf("id добавленного: %d\n", parent->childs[i]->id);
-  }
+  //printf("длина после2: %d\n", parent->lenght);
+  //int i;
+  //for(i=0;i<parent->lenght;i++){
+    //printf("id добавленного: %d\n", parent->childs[i]->id);
+  //}
 }
 
 

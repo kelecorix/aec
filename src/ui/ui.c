@@ -180,7 +180,6 @@ void run_ui(Site* site) {
         disp(lcd);
       time_start = time(NULL);
     }
-
   }
 }
 
