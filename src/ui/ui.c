@@ -180,13 +180,13 @@ void run_ui(Site* site) {
     if ((click != 0) && (click != 255))   // 0, 255 ошибка чтения
       onKeyClicked(lcd, click);
 
-    disp(lcd);
-//    if ((time(NULL) - time_start) >= ddiff){
-//      printf("выводим на экран показатели датчиков\n");
-//      if (mnmode == 0)
-//        //disp(lcd);
-//      time_start = time(NULL);
-//    }
+    //disp(lcd);
+    if ((time(NULL) - time_start) >= ddiff){
+      printf("выводим на экран показатели датчиков\n");
+      if (mnmode == 0)
+        disp(lcd);
+      time_start = time(NULL);
+    }
   }
 }
 
