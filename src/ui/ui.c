@@ -181,7 +181,7 @@ void run_ui(Site* site) {
     //  onKeyClicked(lcd, click);
 
 
-    disp(lcd);
+    //disp(lcd);
     sleep(1);
 //    if ((time(NULL) - time_start) >= ddiff){
 //      printf("выводим на экран показатели датчиков\n");
