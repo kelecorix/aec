@@ -84,13 +84,13 @@ void disp(Disp* lcd){
       sprintf(tmp_temp_in, "Сайт   =  Ошибка");
     }
     //printf("3\n");
-    printf("0\n");
+    //printf("0\n");
     lcd_line(lcd, tmp_temp_out, 0);
-    printf("1 %s \n", tmp_temp_in);
+    //printf("1 %s \n", tmp_temp_in);
     lcd_line(lcd, tmp_temp_in, 1);
-    printf("2\n");
+    //printf("2\n");
     lcd_line(lcd, "Состояние работы", 2);
-    printf("3\n");
+    //printf("3\n");
     lcd_line(lcd, tmp_time, 3);
 
     printf("экран1 конец\n");
