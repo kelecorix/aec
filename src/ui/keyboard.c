@@ -6,17 +6,18 @@
 #include "../hw/i2c.h"
 
 KB* kb_new(int addr) {
-
+  printf("создадим клавиатуру\n");
   KB* kb = malloc(sizeof(KB));
   kb->address = addr;
   kb->connect = -1;
-
+  printf("пререзет\n");
   reset_kb(kb);
 
   return kb;
 }
 
 void reset_kb(KB* kb){
+
   if ((kb->fd = open(I2C_FILE_NAME, O_RDWR)) < 0) {
     log_1("Failed to open the i2c bus\n");
     kb->connect = 0;
