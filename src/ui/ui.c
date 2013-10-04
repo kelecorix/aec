@@ -177,8 +177,8 @@ void run_ui(Site* site) {
   while (1) {
     printf("отслеживаем переход в меню\n");
     //click = readKeys(kb);
-    if ((click != 0) && (click != 255))   // 0, 255 ошибка чтения
-      onKeyClicked(lcd, click);
+    //if ((click != 0) && (click != 255))   // 0, 255 ошибка чтения
+    //  onKeyClicked(lcd, click);
 
     //disp(lcd);
     if ((time(NULL) - time_start) >= ddiff){
