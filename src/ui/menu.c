@@ -365,7 +365,7 @@ void disp_item(Disp* lcd){
     printf("после об %s \n", out);
     lcd_line(lcd, out, i+1);
 
-    if(i==3)
+    if(i==2)
       chld = chld+i;
   }
   sleep(1);
