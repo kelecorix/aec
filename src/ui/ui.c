@@ -152,7 +152,7 @@ void run_ui(Site* site) {
   int addr_kb = strtol(getStr(site->cfg, (void *) "a_keyb"), (char **) NULL, 16);
   KB* kb = kb_new(addr_kb);
 
-  printf(""---\n");
+  printf("---\n");
   printf("инициализируем меню\n");
     init_menu();
 
