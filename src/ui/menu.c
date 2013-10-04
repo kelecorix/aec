@@ -15,6 +15,8 @@ int mnmode; // режим редактирования или нет
 int mval;
 int pos;  // текущая позиция от 1 до 3
 int chld; // id текущего нода
+int entr;
+
 Menu* menu;
 OutNode** outs;
 
@@ -269,6 +271,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
     //menu->curr = next_child(menu->curr);
     if(mnmode == 0){
       mnmode = 1;
+      chld = 0;
       pos++;
     } else {
       menu->curr = menu->curr->childs[0];
@@ -364,9 +367,10 @@ void disp_item(Disp* lcd){
     out = concat(z, menu->curr->childs[chld+i]->text);
     printf("после об %s \n", out);
     lcd_line(lcd, out, i+1);
-
-    if(i==2)
-      chld = chld+i;
+  }
+  if(entr == 3){
+    chld = chld+1;
+    entr = 0;
   }
   sleep(1);
 }
