@@ -130,12 +130,12 @@ void disp(Disp* lcd){
 
   }
 
-//  free(tmp_time);
-//  free(tmp_temp_out);
-//  free(tmp_temp_in);
-//  free(tmp_temp_mix);
-//  free(tmp_temp_evapor1);
-//  free(tmp_temp_evapor2);
+  free(tmp_time);
+  free(tmp_temp_out);
+  free(tmp_temp_in);
+  free(tmp_temp_mix);
+  free(tmp_temp_evapor1);
+  free(tmp_temp_evapor2);
 
 }
 
