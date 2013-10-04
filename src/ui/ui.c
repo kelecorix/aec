@@ -69,8 +69,8 @@ void disp(Disp* lcd){
     printf("время\n");
     timeinfo = localtime(&rawtime);
     printf("сделали структуру\n");
-    sprintf(tmp_time, "%2d/%02d  %2d:%02d:%02d", timeinfo->tm_mday, 1 + timeinfo->tm_mon, timeinfo->tm_hour, timeinfo->tm_min,
-        timeinfo->tm_sec);
+    //sprintf(tmp_time, "%2d/%02d  %2d:%02d:%02d", timeinfo->tm_mday, 1 + timeinfo->tm_mon, timeinfo->tm_hour, timeinfo->tm_min,
+    //    timeinfo->tm_sec);
 
     if (site->temp_out != -100.0) {
       sprintf(tmp_temp_out, "Улица  = %2.2f°C", site->temp_out);
