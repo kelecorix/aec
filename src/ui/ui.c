@@ -129,14 +129,6 @@ void disp(Disp* lcd){
     //экран - обороты вент, вент2, заслонка полож
 
   }
-
-  free(tmp_time);
-  free(tmp_temp_out);
-  free(tmp_temp_in);
-  free(tmp_temp_mix);
-  free(tmp_temp_evapor1);
-  free(tmp_temp_evapor2);
-
 }
 
 
