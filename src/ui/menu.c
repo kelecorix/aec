@@ -269,8 +269,8 @@ void onKeyClicked(Disp* lcd, int key_code) {
       mnmode = 1;
       pos++;
     }
-    else
-      menu->curr = prev_level(menu->curr);
+//    else
+//      menu->curr = prev_level(menu->curr);
     disp_item(lcd);
     break;
   case KEY_RIGHT :
