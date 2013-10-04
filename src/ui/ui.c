@@ -185,6 +185,7 @@ void run_ui(Site* site) {
       printf("выводим на экран показатели датчиков\n");
       if (mnmode == 0)
         disp(lcd);
+      printf("после disp\n");
       time_start = time(NULL);
     }
   }
