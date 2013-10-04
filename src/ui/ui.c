@@ -61,6 +61,7 @@ void disp(Disp* lcd){
   time_t rawtime;
   struct tm * timeinfo;
   printf("режим %d\n", omode);
+
   if (omode == 1) {
     // экран 1 - темп сайта , улицы
     printf("экран1\n");
@@ -185,7 +186,7 @@ void run_ui(Site* site) {
     if ((time(NULL) - time_start) >= ddiff){
       printf("выводим на экран показатели датчиков\n");
       if (mnmode == 0)
-        disp(lcd);
+        //disp(lcd);
       time_start = time(NULL);
     }
   }
