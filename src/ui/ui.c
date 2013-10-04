@@ -156,7 +156,7 @@ void run_ui(Site* site) {
   printf("инициализируем меню\n");
     init_menu();
 
-  printf("Текущий пункт меню номер %d, братьев у него %d \n", menu->curr->id);
+  printf("Текущий пункт меню номер %d \n", menu->curr->id);
 
   sleep(2);
 
@@ -169,7 +169,7 @@ void run_ui(Site* site) {
 
   printf("Начнем цикл работы UI\n");
   while (1) {
-    //printf("отслеживаем переход в меню\n");
+    printf("отслеживаем переход в меню\n");
     click = readKeys(kb);
     if ((click != 0) && (click != 255))   // 0, 255 ошибка чтения
       onKeyClicked(lcd, click);
