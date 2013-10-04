@@ -71,22 +71,26 @@ void disp(Disp* lcd){
     printf("сделали структуру\n");
     sprintf(tmp_time, "%2d/%02d  %2d:%02d:%02d", timeinfo->tm_mday, 1 + timeinfo->tm_mon, timeinfo->tm_hour, timeinfo->tm_min,
         timeinfo->tm_sec);
-    printf("1\n");
+
     if (site->temp_out != -100.0) {
       sprintf(tmp_temp_out, "Улица  = %2.2f°C", site->temp_out);
     } else {
       sprintf(tmp_temp_out, "Улица  =  Ошибка");
     }
-    printf("2\n");
+    //printf("2\n");
     if (site->temp_in != -100.0) {
       sprintf(tmp_temp_in, "Сайт   = %2.2f°C", site->temp_in);
     } else {
       sprintf(tmp_temp_in, "Сайт   =  Ошибка");
     }
-    printf("3\n");
+    //printf("3\n");
+    printf("0\n");
     lcd_line(lcd, tmp_temp_out, 0);
+    printf("1\n");
     lcd_line(lcd, tmp_temp_in, 1);
+    printf("2\n");
     lcd_line(lcd, "Состояние работы", 2);
+    printf("3\n");
     lcd_line(lcd, tmp_time, 3);
 
     printf("экран1 конец\n");
