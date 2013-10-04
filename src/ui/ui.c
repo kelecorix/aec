@@ -187,6 +187,7 @@ void run_ui(Site* site) {
         disp(lcd);
       printf("после disp\n");
       time_start = time(NULL);
+      printf("после time\n");
     }
   }
 
