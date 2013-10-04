@@ -103,6 +103,26 @@ void create_menu(){
 
 }
 
+
+Node* get_parent_by_id(int id){
+  return menu->nodes[id];
+}
+
+void add_child_to_parent(Node* parent, Node* node){
+
+  if (node->id == 0)
+    return; //это корневой узел
+  printf("длина до: %\n", node);
+  int tmp = realloc(parent->childs, sizeof(Node) * parent->lenght++);
+  if (tmp == NULL){
+    printf("function failed to allocate storage\n");
+  }
+  parent->childs[parent->lenght-1] = node;
+  printf("длина после: %d\n", parent->lenght);
+
+}
+
+
 /* Функция создания узла дерева меню
  *
  *  Параметры:
@@ -131,7 +151,7 @@ void create_node(int id, int parent, int min, int max, char* text, char* cn){
     node->val = strtol(getStr(site->cfg, (void *) cn), (char **) NULL, 10);
 
   if(node->id != 0)
-    add_child(node, node->parent->lenght);
+    add_child_to_parent(node->parent, node);
 
   menu->nodes[id] = node;
 
@@ -171,21 +191,11 @@ int isLeaf(Node* node){
     return 0;
 }
 
-void add_child(Node* node, int length){
-
-  if (node->id == 0)
-    return; //это корневой узел
-
-}
 
 Node* get_parent(Node* node){
 
   return NULL;
 
-}
-
-Node* get_parent_by_id(int id){
-  return menu->nodes[id];
 }
 
 Node* next_child(Node* parent){
