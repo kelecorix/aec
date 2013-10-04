@@ -348,11 +348,12 @@ void disp_item(Disp* lcd){
   for(i=0; i<3; i++){
     if(i==pos){
       z = ">";
-      chld = menu->curr->childs[chld+i]->id;}
+      chld = chld+i;}
     else
       z = " ";
     printf("i  %d\n", i);
     printf("id %d\n", menu->curr->childs[chld+i]->id);
+    printf("chld %d\n", chld);
     printf("перед об %s \n", menu->curr->childs[chld+i]->text);
     out = concat(z, menu->curr->childs[chld+i]->text);
     printf("после об %s \n", out);
