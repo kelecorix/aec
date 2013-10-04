@@ -195,7 +195,7 @@ int isRoot(Node* node){
 }
 
 int isLeaf(Node* node){
-  if(node->childs == NULL)
+  if(node->lenght == 0)
     return 1;
   else
     return 0;
