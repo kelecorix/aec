@@ -26,9 +26,15 @@ void create_menu(){
 
   printf("предварительная организация\n");
 
+  int i;
   menu = malloc(sizeof(Menu));
   menu->length = 47;
-  menu->nodes = malloc(47*sizeof(Node*));
+  menu->nodes = (Node** ) malloc(47*sizeof(Node*));
+
+  for(i=0;i<47;i++)
+  {
+    menu->nodes[i] = (Node* ) malloc(sizeof(Node));
+  }
 
   mnmode = 0;
   pos = -1;
@@ -117,12 +123,12 @@ void add_child_to_parent(Node* parent, Node* node){
   printf("родитель %d, потомка %d,c длиной %d \n", parent->id, node->id, parent->lenght);
   parent->lenght++;
   printf("длина после: %d\n", parent->lenght);
-  tmp = realloc(parent->childs, parent->lenght * sizeof(Node));
-  if (tmp == NULL){
-    printf("function failed to allocate storage\n");
-    free(parent->childs);
-  }
-  parent->childs = tmp;
+//  tmp = (Node**) realloc(parent->childs, parent->lenght * sizeof(Node));
+//  if (tmp == NULL){
+//    printf("function failed to allocate storage\n");
+//    free(parent->childs);
+//  }
+//  parent->childs = tmp;
 
   int k = parent->lenght;
   parent->childs[k--] = node;
@@ -149,14 +155,17 @@ void create_node(int id, int parent, int min, int max, char* text, char* cn){
   printf("Cоздадим нод\n");
 
   Node* node = malloc(sizeof(Node));
-
+  int i;
   node->id     = id;
   node->min    = min;
   node->max    = max;
   node->text   = text;
   node->cn     = cn;
   node->lenght = 0;
-  node->childs = malloc(sizeof(Node));
+  node->childs = malloc(9 * sizeof(Node*));
+  for(i=0;i<9;i++){
+    node->childs[i] = malloc(sizeof(Node));
+  }
   if(node->id != 0)
     node->parent = get_parent_by_id(parent);
   if (strcmp(node->cn, "") != 0)
