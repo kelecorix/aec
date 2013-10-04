@@ -160,6 +160,7 @@ void create_node(int id, int parent, int min, int max, char* ctext, char* cn){
   node->min    = min;
   node->max    = max;
   node->text   = ctext;
+  printf("%s", node->text);
   node->cn     = cn;
   node->lenght = 0;
   node->childs = malloc(9 * sizeof(Node*));
