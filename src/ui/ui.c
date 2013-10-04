@@ -143,8 +143,6 @@ void run_ui(Site* site) {
   printf("инициализируем меню\n");
     init_menu();
 
-  return;
-
   printf("инициализируем экран\n");
   int addr_lcd = strtol(getStr(site->cfg, (void *) "a_lcd"), (char **) NULL, 16);
   printf("addr: 0x%x\n", addr_lcd);
