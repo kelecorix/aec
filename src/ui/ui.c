@@ -60,15 +60,15 @@ void disp(Disp* lcd){
 
   time_t rawtime;
   struct tm * timeinfo;
-  printf("режим %d\n", omode);
+  //printf("режим %d\n", omode);
 
   if (omode == 1) {
     // экран 1 - темп сайта , улицы
-    printf("экран1\n");
+    //printf("экран1\n");
     time(&rawtime);
-    printf("время\n");
+    //printf("время\n");
     timeinfo = localtime(&rawtime);
-    printf("сделали структуру\n");
+    //printf("сделали структуру\n");
     sprintf(tmp_time, "%2d/%02d  %2d:%02d:%02d", timeinfo->tm_mday, 1 + timeinfo->tm_mon, timeinfo->tm_hour, timeinfo->tm_min,
         timeinfo->tm_sec);
 
@@ -93,7 +93,7 @@ void disp(Disp* lcd){
     //printf("3\n");
     lcd_line(lcd, tmp_time, 3);
 
-    printf("экран1 конец\n");
+    //printf("экран1 конец\n");
   }
 
   //экран 2 - конд, конд, миксер, время
@@ -176,7 +176,7 @@ void run_ui(Site* site) {
   printf("Начнем цикл работы UI\n");
   while(1) {
     printf("отслеживаем переход в меню\n");
-    //click = readKeys(kb);
+    click = readKeys(kb);
     //if ((click != 0) && (click != 255))   // 0, 255 ошибка чтения
     //  onKeyClicked(lcd, click);
 
@@ -184,12 +184,12 @@ void run_ui(Site* site) {
     //disp(lcd);
     //sleep(1);
     if ((time(NULL) - time_start) >= ddiff){
-      printf("выводим на экран показатели датчиков\n");
+      //printf("выводим на экран показатели датчиков\n");
       if (mnmode == 0)
         disp(lcd);
-      printf("после disp\n");
+      //printf("после disp\n");
       time_start = time(NULL);
-      printf("после time\n");
+      //printf("после time\n");
     }
   }
 
