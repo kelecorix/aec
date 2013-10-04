@@ -28,7 +28,7 @@ void reset_kb(KB* kb){
   }
   printf("врезете2 %d, %x \n", kb->fd, kb->address);
   if (ioctl(kb->fd, I2C_SLAVE, kb->address) < 0) {
-    log_1("Failed to acquire bus access and/or talk to slave.\n");
+    log_4("Failed to acquire bus access and/or talk to slave.\n");
     kb->connect = 0;
   } else {
     kb->connect = 1;
