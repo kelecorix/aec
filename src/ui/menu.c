@@ -364,6 +364,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
     //перед if
     printf("Меню - %s %d\n", menu->curr->childs[chld+pos]->text, menu->curr->childs[chld+pos]->lenght);
     if(isLeaf(menu->curr->childs[chld+pos])){
+      printf("в ифе\n");
       select_item();
     }
     break;
@@ -479,7 +480,7 @@ void change_value(int direct){
 
 
 void select_item(Disp* lcd){
-
+  printf("установим режим выбора\n");
   if (emode == 1){
     // сохраняем значения выходим обратно
     emode=0;
