@@ -290,7 +290,6 @@ void onKeyClicked(Disp* lcd, int key_code) {
 
       if(pos == -1 && chld>0){
         pos = 2;
-        chld--;
         disp_item(lcd);
       }
       pos--;
@@ -404,7 +403,7 @@ void disp_item(Disp* lcd) {
   }
 
   entr++;
-  if (entr == 3) {
+  if (pos == 3) {
     chld = chld++;
     entr = 0;
     pos = -1;
