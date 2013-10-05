@@ -296,6 +296,11 @@ void onKeyClicked(Disp* lcd, int key_code) {
       pos--;
 
       disp_item(lcd);
+      if (pos == 3) {
+        chld = chld--;
+        entr = 0;
+        pos = 0;
+      }
       break;
     }
 
@@ -320,6 +325,11 @@ void onKeyClicked(Disp* lcd, int key_code) {
 
       pos++;
       disp_item(lcd);
+      if (pos == 3) {
+        chld = chld++;
+        entr = 0;
+        pos = 0;
+      }
     }
     if(emode == 1){
       // режим редактирования значения
@@ -404,11 +414,7 @@ void disp_item(Disp* lcd) {
   }
 
   entr++;
-  if (pos == 3) {
-    chld = chld++;
-    entr = 0;
-    pos = 0;
-  }
+
 
   usleep(50000);
 }
