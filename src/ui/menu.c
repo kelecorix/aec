@@ -275,7 +275,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
       disp_item(lcd);
     }
 
-    if (mnmode == 1 )
+    if (mnmode == 1 ){
       // перейдем на уровень вниз
       // если это не лист
       if(!isLeaf(menu->curr))
