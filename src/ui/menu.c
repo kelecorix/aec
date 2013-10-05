@@ -336,7 +336,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
 
       // 3 количество позиций для вывода
       int tmp = chld;
-      if (tmp+3 > menu->curr->lenght)//защита от дурака
+      if (tmp+4 >= menu->curr->lenght)//защита от дурака
         break;
 
       pos++;
