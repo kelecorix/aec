@@ -458,10 +458,10 @@ void disp_item_edit(Disp* lcd){
   printf("подготовим вывод 2 \n");
   char buf[100];
   sprintf (buf, "%d", menu->curr->val);
-  lcd_line(lcd, "     ^     "   , 0);
+  lcd_line(lcd, "       \u2191     "   , 0);
   lcd_line(lcd, concat(menu->curr->text, ": Изм"), 1);
   lcd_line(lcd, buf             , 2);
-  lcd_line(lcd, "     v     "   , 3);
+  lcd_line(lcd, "       v     "   , 3);
 
   // mval
 
