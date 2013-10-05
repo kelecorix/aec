@@ -281,11 +281,9 @@ void onKeyClicked(Disp* lcd, int key_code) {
     break;
   case KEY_UP :
     if (mnmode == 1) {
-      //mval = menu->curr->val;
-      //change_value(1);
-      if (chld > menu->curr->lenght-2)
-        chld--;
 
+      if(chld==0) // защита от дурака
+        return;
 
       if(pos==-1)
         pos=0;
@@ -293,20 +291,25 @@ void onKeyClicked(Disp* lcd, int key_code) {
         pos--;
 
       disp_item();
-    } else {
+    }
+    if(mnmode == 0){
+      // режим редактирования значения
       //menu->curr = prev_child(menu->curr);
       //disp_item(lcd);
-      disp_item();
     }
     break;
   case KEY_DOWN :
     if (mnmode == 1) {
-      //mval = menu->curr->val;
-      //change_value(0);
+
+      if (chld > menu->curr->lenght-2)//защита от дурака
+        chld--;
+
       pos++;
       disp_item(lcd);
-    } else {
-      //menu->curr = next_child(menu->curr);
+    }
+    if(mnmode == 0){
+      // режим редактирования значения
+      //menu->curr = prev_child(menu->curr);
       //disp_item(lcd);
     }
     break;
@@ -346,15 +349,15 @@ int readKeys(KB* kb) {
 }
 
 // for branches
-void disp_item(Disp* lcd){
-  //printf("показ\n");
+void disp_item(Disp* lcd) {
+  printf("показ\n");
 
-  if(isLeaf(menu->curr))
+  if (isLeaf(menu->curr))
     return;
 
-  if (chld > menu->curr->lenght-2){
-    entr=0;
-   return;
+  if (chld > menu->curr->lenght - 2) {
+    entr = 0;
+    return;
   }
 
   reset(lcd);
@@ -363,29 +366,29 @@ void disp_item(Disp* lcd){
   char *z, *out;
   lcd_line(lcd, menu->curr->text, 0);
 
-  //printf("перед циклом\n");
+  printf("перед циклом\n");
   //printf("количество потомков %d \n", menu->curr->lenght);
 
-  for(i=0; i<3; i++){
+  for (i = 0; i < 3; i++) {
 
-    if(i==pos)
+    if (i == pos)
       z = ">";
     else
       z = " ";
 
     printf("%d %d %d %d\n", chld, i, pos, entr);
-    if((chld+i)<menu->curr->lenght){
+    if ((chld + i) < menu->curr->lenght) {
       //printf("%s \n", menu->curr->childs[chld+i]->text);
-      out = concat(z, menu->curr->childs[chld+i]->text);
-      lcd_line(lcd, out, i+1);
+      out = concat(z, menu->curr->childs[chld + i]->text);
+      lcd_line(lcd, out, i + 1);
     } else {
-      lcd_line(lcd, "                ",i+1);
+      lcd_line(lcd, "                ", i + 1);
     }
   }
 
   entr++;
-  if(entr == 3){
-    chld = chld+2;
+  if (entr == 3) {
+    chld = chld + 2;
     entr = 0;
     pos = -1;
   }
