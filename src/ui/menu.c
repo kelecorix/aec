@@ -263,13 +263,12 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if (mnmode == 0)
       mnmode = 1;
 
-    if (mnmode == 1 && !(menu->curr->id == 0))
+    if (mnmode == 1 && !(menu->curr->id == 1))
       menu->curr = menu->curr->parent;
     else{
       mnmode=0;
       break;
     }
-
 
     printf("LEFT %d %d %d\n", chld, pos, entr);
 
