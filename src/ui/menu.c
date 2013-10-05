@@ -265,10 +265,10 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if (mnmode == 0)
       mnmode = 1;
 
-    if (mnmode == 1 )
-      if(menu->curr->id >= 1)
+    if (mnmode == 1 ){
+      if(menu->curr->id >= 1){
         menu->curr = menu->curr->parent;
-      else{
+      }  else{
         mnmode=0;
         break;
       }
