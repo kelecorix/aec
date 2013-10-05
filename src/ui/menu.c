@@ -351,8 +351,8 @@ void disp_item(Disp* lcd){
   if(isLeaf(menu->curr))
     return;
 
-  if (chld < menu->curr->lenght)
-    return;
+  //if (chld < menu->curr->lenght)
+  //  return;
 
   char *z, *out;
   lcd_line(lcd, menu->curr->text, 0);
