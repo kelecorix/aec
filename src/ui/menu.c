@@ -289,20 +289,13 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if (mnmode == 1) {
       printf("UP %d %d %d\n", chld, pos, entr);
 
-      if(chld==0) // защита от дурака
-        return;
-
       if(pos<-1)
         return;
 
-      if(pos==0){
-        pos=2; //возврат вниз предыдущего экрана
-      }
-      else{
-        pos--;
-      }
+      pos--;
 
       disp_item(lcd);
+      break;
     }
 
     if(emode==1){
