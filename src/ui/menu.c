@@ -411,7 +411,7 @@ void disp_item(Disp* lcd) {
 
   entr++;
   if (entr == 3) {
-    chld = chld + 2;
+    chld = chld++;
     entr = 0;
     pos = 0;
   }
