@@ -270,7 +270,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
       mnmode = 1;
       chld = 0;
       pos++;
-      menu->curr = menu->curr->childs[chld];
+      //menu->curr = menu->curr->childs[chld];
       disp_item(lcd);
     }
 
