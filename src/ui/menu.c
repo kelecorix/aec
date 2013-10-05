@@ -343,6 +343,13 @@ int readKeys(KB* kb) {
 // for branches
 void disp_item(Disp* lcd){
   printf("показ\n");
+
+  if(entr == 3){
+    chld = chld+1;
+    entr = 1;
+    pos = -1;
+  }
+
   reset(lcd);
   int i;
 
@@ -370,12 +377,9 @@ void disp_item(Disp* lcd){
     printf("после об %s \n", out);
     lcd_line(lcd, out, i+1);
   }
+
   entr++;
-  if(entr == 3){
-    chld = chld+1;
-    entr = 1;
-    pos = -1;
-  }
+
   sleep(1);
 }
 
