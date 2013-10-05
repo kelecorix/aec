@@ -324,6 +324,8 @@ void onKeyClicked(Disp* lcd, int key_code) {
       if (chld > menu->curr->lenght-1)//защита от дурака
       return;
 
+      pos++;
+
       if (pos == 3) {
         chld = chld+2;
         entr = 0;
