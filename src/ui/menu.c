@@ -272,6 +272,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
       pos++;
       //menu->curr = menu->curr->childs[chld];
       disp_item(lcd);
+      break;
     }
 
     if (mnmode == 1 ){
@@ -283,7 +284,6 @@ void onKeyClicked(Disp* lcd, int key_code) {
         disp_item(lcd);
       }
     }
-
     break;
   case KEY_UP :
     if (mnmode == 1) {
