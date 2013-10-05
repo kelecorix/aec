@@ -348,7 +348,7 @@ void disp_item(Disp* lcd){
   if(isLeaf(menu->curr))
     return;
 
-  if ((chld+2) >= menu->curr->lenght){
+  if ((chld+1) >= menu->curr->lenght){
     entr=0;
    return;
   }
