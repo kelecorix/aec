@@ -291,23 +291,26 @@ void onKeyClicked(Disp* lcd, int key_code) {
       if(chld==0) // защита от дурака
         return;
 
-      if(pos==-1)
+      if(pos<-1)
         return;
-      else
+      else{
         pos--;
-
-      disp_item(lcd);
+        disp_item(lcd);
+      }
     }
+
     if(emode==1){
       // режим редактирования значения
       //menu->curr = prev_child(menu->curr);
       //disp_item(lcd);
     }
+
     if(mnmode == 0){
      // находимся в режиме вывода
      // изменим отображение экрана
 
     }
+
     break;
   case KEY_DOWN :
     if (mnmode == 1) {
