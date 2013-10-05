@@ -360,6 +360,7 @@ void disp_item(Disp* lcd) {
     entr = 0;
     return;
   }
+  printf("после проверки детей\n");
 
   reset(lcd);
   int i;
