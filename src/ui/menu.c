@@ -343,7 +343,7 @@ int readKeys(KB* kb) {
 
 // for branches
 void disp_item(Disp* lcd){
-  printf("показ\n");
+  //printf("показ\n");
 
   reset(lcd);
   int i;
