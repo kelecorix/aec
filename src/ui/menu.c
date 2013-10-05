@@ -294,6 +294,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
         menu->curr = menu->curr->childs[0];
         disp_item(lcd);
       }
+
     }
     break;
   case KEY_UP :
@@ -360,6 +361,8 @@ void onKeyClicked(Disp* lcd, int key_code) {
     break;
   case KEY_OK :
     //если это лист, тогда перейдем в редактирование
+    //перед if
+    printf("кол.во - %d", menu->curr->lenght);
     if(isLeaf(menu->curr)){
       select_item();
     }
