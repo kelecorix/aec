@@ -351,8 +351,8 @@ void disp_item(Disp* lcd){
   char *z, *out;
   lcd_line(lcd, menu->curr->text, 0);
 
-  printf("перед циклом\n");
-  printf("количество потомков %d \n", menu->curr->lenght);
+  //printf("перед циклом\n");
+  //printf("количество потомков %d \n", menu->curr->lenght);
 
   for(i=0; i<3; i++){
 
