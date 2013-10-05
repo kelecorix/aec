@@ -253,6 +253,12 @@ void onKeyClicked(Disp* lcd, int key_code) {
   printf("нажата кнопка %d\n", key_code);
   switch (key_code){
   case KEY_LEFT :
+
+    if(emode==1){
+      emode=0;
+      disp_item(lcd);
+    }
+
     if (mnmode == 0)
       mnmode = 1;
 
