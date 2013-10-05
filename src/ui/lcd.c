@@ -145,6 +145,7 @@ void lcd_line(Disp* lcd, char *s, int c) {
 /* Функция перезагрузки экрана
  */
 void reset(Disp* lcd) {
+  printf("в send\n");
   send(lcd, 0xFF);
   usleep(5000);
   send(lcd, 0x03 + LCD_EN);
