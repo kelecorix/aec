@@ -288,7 +288,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if (mnmode == 1) {
 
       if (pos == 0) {
-        chld = chld--;
+        chld = chld-2;
         entr = 0;
         pos = 2;
       } else
@@ -326,7 +326,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
       return;
 
       if (pos == 3) {
-        chld = chld++;
+        chld = chld+2;
         entr = 0;
         pos = 0;
       } else
