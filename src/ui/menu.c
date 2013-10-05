@@ -277,9 +277,11 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if (mnmode == 1 ){
       // перейдем на уровень вниз
       // если это не лист
-      printf("ушли вниз\n");
-      if(!isLeaf(menu->curr))
+      if(!isLeaf(menu->curr)){
+        printf("ушли вниз\n");
         menu->curr = menu->curr->childs[0];
+        disp_item(lcd);
+      }
     }
 
     break;
@@ -294,9 +296,9 @@ void onKeyClicked(Disp* lcd, int key_code) {
       else
         pos--;
 
-      disp_item();
+      disp_item(lcd);
     }
-    if(mnmode == 0 && emode==1){
+    if(emode==1){
       // режим редактирования значения
       //menu->curr = prev_child(menu->curr);
       //disp_item(lcd);
@@ -316,7 +318,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
       pos++;
       disp_item(lcd);
     }
-    if(mnmode == 0){
+    if(emode == 1){
       // режим редактирования значения
       //menu->curr = prev_child(menu->curr);
       //disp_item(lcd);
