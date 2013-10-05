@@ -293,10 +293,15 @@ void onKeyClicked(Disp* lcd, int key_code) {
 
       if(pos<-1)
         return;
+
+      if(pos==0){
+        pos=2; //возврат вниз предыдущего экрана
+        chld = chld-2;}
       else{
         pos--;
-        disp_item(lcd);
       }
+      disp_item(lcd);
+
     }
 
     if(emode==1){
@@ -407,7 +412,7 @@ void disp_item(Disp* lcd) {
   if (entr == 3) {
     chld = chld + 2;
     entr = 0;
-    pos = -1;
+    pos = 0;
   }
 
   usleep(50000);
