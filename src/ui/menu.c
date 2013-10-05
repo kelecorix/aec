@@ -295,11 +295,6 @@ void onKeyClicked(Disp* lcd, int key_code) {
         pos--;
 
       printf("UP %d %d %d\n", chld, pos, entr);
-//      if(pos == -1 && chld>0){
-//        pos = 2;
-//        disp_item(lcd);
-//        break;
-//      }
 
       disp_item(lcd);
 
@@ -322,7 +317,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
   case KEY_DOWN :
     if (mnmode == 1) {
 
-      if (chld >= menu->curr->lenght-1)//защита от дурака
+      if (chld > menu->curr->lenght-1)//защита от дурака
       return;
 
       if (pos == 3) {
@@ -332,6 +327,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
       } else
         pos++;
 
+      printf("DOWN %d %d %d\n", chld, pos, entr);
       disp_item(lcd);
       break;
     }
