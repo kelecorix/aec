@@ -17,6 +17,7 @@ int mval;
 int pos;  // текущая позиция от 1 до 3
 int chld; // id текущего нода
 int entr;
+int nempty;
 
 Menu* menu;
 OutNode** outs;
@@ -335,8 +336,8 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if (mnmode == 1) {
 
       // 3 количество позиций для вывода
-      int tmp = chld;
-      if (tmp+4 >= menu->curr->lenght)//защита от дурака
+
+      if (nempty-pos == 1)//защита от дурака, след.строка пустая
         break;
 
       pos++;
@@ -429,8 +430,10 @@ void disp_item(Disp* lcd) {
       //printf("%s \n", menu->curr->childs[chld+i]->text);
       out = concat(z, menu->curr->childs[chld + i]->text);
       lcd_line(lcd, out, i + 1);
+      nempty=0;
     } else {
       lcd_line(lcd, "                ", i + 1);
+      nempty = i+1;
     }
   }
 
