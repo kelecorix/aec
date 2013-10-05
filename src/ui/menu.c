@@ -459,7 +459,7 @@ void disp_item_edit(Disp* lcd){
   char buf[100];
   sprintf (buf, "%d", menu->curr->val);
   lcd_line(lcd, "       \u2191     "   , 0);
-  lcd_line(lcd, concat(menu->curr->text, ": Изм"), 1);
+  lcd_line(lcd, concat(menu->curr->text, ":"), 1);
   lcd_line(lcd, buf             , 2);
   lcd_line(lcd, "       v     "   , 3);
 
