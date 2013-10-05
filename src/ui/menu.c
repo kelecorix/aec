@@ -286,7 +286,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
         return;
 
       if(pos==-1)
-        pos=0;
+        return;
       else
         pos--;
 
