@@ -271,7 +271,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
         menu->curr = menu->curr->parent;
       }  else{
         mnmode=0;
-        pos=0;
+        pos=-1;
         chld=0;
         disp(lcd);
         break;
