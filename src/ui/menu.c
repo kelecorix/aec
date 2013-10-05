@@ -262,7 +262,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if(mnmode == 0)
       mnmode = 1;
 
-    if (mnmode == 1)
+    if (mnmode == 1 && !(menu->curr->id==0))
       menu->curr = menu->curr->parent;
 
     printf("LEFT %d %d %d\n", chld, pos, entr);
@@ -362,7 +362,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
   case KEY_OK :
     //если это лист, тогда перейдем в редактирование
     //перед if
-    printf("кол.во - %d", menu->curr->lenght);
+    printf("Меню - %d", menu->curr->childs[chld+pos]->text, menu->curr->childs[chld+pos]->lenght);
     if(isLeaf(menu->curr->childs[chld+pos])){
       select_item();
     }
