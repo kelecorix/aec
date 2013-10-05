@@ -291,6 +291,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
       if(pos == -1 && chld>0){
         pos = 2;
         disp_item(lcd);
+        break;
       }
       pos--;
 
