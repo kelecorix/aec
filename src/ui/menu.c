@@ -289,7 +289,8 @@ void onKeyClicked(Disp* lcd, int key_code) {
 
     } else {
       //menu->curr = prev_child(menu->curr);
-      disp_item(lcd);
+      //disp_item(lcd);
+      disp_item();
     }
     break;
   case KEY_DOWN :
@@ -369,12 +370,12 @@ void disp_item(Disp* lcd){
     printf("после об %s \n", out);
     lcd_line(lcd, out, i+1);
   }
+  entr++;
   if(entr == 3){
     chld = chld+1;
     entr = 1;
     pos = -1;
   }
-  entr++;
   sleep(1);
 }
 
