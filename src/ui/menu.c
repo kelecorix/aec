@@ -265,6 +265,13 @@ void onKeyClicked(Disp* lcd, int key_code) {
       menu->curr = menu->curr->parent;
 
     printf("LEFT %d %d %d\n", chld, pos, entr);
+
+    if (isLeaf(menu->curr)){
+      emode = 1;
+      disp_item_edit(lcd);
+      break;
+    }
+
     disp_item(lcd);
     break;
   case KEY_RIGHT :
@@ -347,8 +354,9 @@ void onKeyClicked(Disp* lcd, int key_code) {
     break;
   case KEY_OK :
     //если это лист, тогда перейдем в редактирование
-    if(isLeaf(menu->curr))
+    if(isLeaf(menu->curr)){
       select_item();
+    }
     break;
   }
 }
@@ -458,11 +466,16 @@ void change_value(int direct){
 }
 
 
-void select_item(){
+void select_item(Disp* lcd){
 
-  if (mnmode==1)
-    mnmode = 0;
-  else
-    mnmode = 1;
+//  if (mnmode==1)
+//    mnmode = 0;
+//  else
+//    mnmode = 1;
+//
+  if (emode == 1){
+    // сохраняем значения выходим обратно
+    disp_item(lcd);
+  }
 
 }
