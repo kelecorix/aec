@@ -335,7 +335,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if (mnmode == 1) {
 
       if (chld >= menu->curr->lenght-1)//защита от дурака
-      return;
+        break;
 
       pos++;
 
