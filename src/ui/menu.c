@@ -42,7 +42,7 @@ void create_menu(){
   mnmode = 0;
   pos = -1;
   chld = 0;
-  entr = 1;
+  entr = 0;
 
   //printf("Начинаем создавать пункты\n");
   create_node(0, 0, 0, 0, "Меню", ""); // корневой узел
@@ -344,11 +344,7 @@ int readKeys(KB* kb) {
 void disp_item(Disp* lcd){
   printf("показ\n");
 
-  if(entr == 3){
-    chld = chld+1;
-    entr = 1;
-    pos = 0;
-  }
+
 
   reset(lcd);
   int i;
@@ -369,10 +365,9 @@ void disp_item(Disp* lcd){
     else
       z = " ";
 
-    printf("C I N E  %d\n", i);
     printf("%d %d %d %d\n", chld, i, pos, entr);
     if(chld<menu->curr->lenght){
-      printf("%s \n", menu->curr->childs[chld+i]->text);
+      //printf("%s \n", menu->curr->childs[chld+i]->text);
       out = concat(z, menu->curr->childs[chld+i]->text);
       lcd_line(lcd, out, i+1);
     } else {
@@ -381,6 +376,11 @@ void disp_item(Disp* lcd){
   }
 
   entr++;
+  if(entr == 3){
+    chld = chld+1;
+    entr = 0;
+    pos = 0;
+  }
 
   sleep(1);
 }
