@@ -277,8 +277,9 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if (mnmode == 1 ){
       // перейдем на уровень вниз
       // если это не лист
+      printf("ушли вниз\n");
       if(!isLeaf(menu->curr))
-        menu->curr = menu->curr->childs[chld];
+        menu->curr = menu->curr->childs[0];
     }
 
     break;
