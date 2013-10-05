@@ -289,9 +289,9 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if (mnmode == 1 ){
       // перейдем на уровень вниз
       // если это не лист
-      if(!isLeaf(menu->curr)){
+      if(!isLeaf(menu->curr->childs[chld+pos])){
         printf("RIGHT %d %d %d\n", chld, pos, entr);
-        menu->curr = menu->curr->childs[0];
+        menu->curr = menu->curr->childs[chld+pos];
         disp_item(lcd);
       }
 
@@ -363,7 +363,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
     //если это лист, тогда перейдем в редактирование
     //перед if
     printf("кол.во - %d", menu->curr->lenght);
-    if(isLeaf(menu->curr)){
+    if(isLeaf(menu->curr->childs[chld+pos])){
       select_item();
     }
     break;
@@ -423,8 +423,9 @@ void disp_item(Disp* lcd) {
 
   for (i = 0; i < 3; i++) {
 
-    if (i == pos)
+    if (i == pos){
       z = ">";
+    }
     else
       z = " ";
 
