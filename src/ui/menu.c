@@ -296,7 +296,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
 
     if (emode == 1) {
       // режим редактирования значения
-      disp_item_edit(lcd, mval--);
+      disp_item_edit(lcd, mval++);
       break;
     }
 
