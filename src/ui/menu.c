@@ -354,6 +354,7 @@ void disp_item(Disp* lcd) {
 
   if (isLeaf(menu->curr))
     return;
+  printf("после проверка листа\n");
 
   if (chld > menu->curr->lenght - 2) {
     entr = 0;
