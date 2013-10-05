@@ -257,6 +257,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if(emode==1){
       emode=0;
       disp_item(lcd);
+      break;
     }
 
     if (mnmode == 0)
