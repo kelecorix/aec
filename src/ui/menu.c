@@ -290,7 +290,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
       if (pos == 0) {
         chld = chld--;
         entr = 0;
-        pos = 0;
+        pos = 2;
       } else
         pos--;
 
@@ -325,13 +325,15 @@ void onKeyClicked(Disp* lcd, int key_code) {
       if (chld >= menu->curr->lenght-1)//защита от дурака
       return;
 
-      pos++;
-      disp_item(lcd);
       if (pos == 3) {
         chld = chld++;
         entr = 0;
         pos = 0;
-      }
+      } else
+        pos++;
+
+      disp_item(lcd);
+      break;
     }
     if(emode == 1){
       // режим редактирования значения
