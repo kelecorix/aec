@@ -337,7 +337,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
 
       // 3 количество позиций для вывода
 
-      if (nempty-pos == 1)//защита от дурака, след.строка пустая
+      if (nempty-pos == 2)//защита от дурака, след.строка пустая
         break;
 
       pos++;
