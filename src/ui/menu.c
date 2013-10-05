@@ -407,7 +407,7 @@ void disp_item(Disp* lcd) {
   if (pos == 3) {
     chld = chld++;
     entr = 0;
-    pos = -1;
+    pos = 0;
   }
 
   usleep(50000);
