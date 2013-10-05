@@ -255,7 +255,7 @@ void traverse(){
 }
 
 void onKeyClicked(Disp* lcd, int key_code) {
-  printf("нажата кнопка %d", key_code);
+  printf("нажата кнопка %d\n", key_code);
   switch (key_code){
   case KEY_LEFT :
     if(mnmode == 0){
