@@ -68,7 +68,7 @@ int getHeight(Menu* menu);
 
 int readKeys(KB* kb);
 void disp_item(Disp* lcd);
-void disp_item_edit(Disp* lcd);
+void disp_item_edit(Disp* lcd, int num);
 void change_value();
 void select_item();
 void onKeyClicked(Disp* lcd, int key_code);
