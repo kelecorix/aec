@@ -306,7 +306,8 @@ void onKeyClicked(Disp* lcd, int key_code) {
         pos--;
 
       if(chld==-2) // Защита от дурака
-        break;
+        chld = 0;
+        //break;
 
       printf("UP %d %d %d\n", chld, pos, entr);
 
