@@ -369,12 +369,10 @@ void disp_item(Disp* lcd){
     else
       z = " ";
 
-    printf("i  %d\n", i);
-    printf("pos %d\n", pos);
-    printf("chld %d\n", chld);
-    printf("перед об %s \n", menu->curr->childs[chld+i]->text);
+    printf("CHILD I N E  %d\n", i);
+    printf("%d %d %d %d\n", chld, i, pos, entr);
+    printf("%s \n", menu->curr->childs[chld+i]->text);
     out = concat(z, menu->curr->childs[chld+i]->text);
-    printf("после об %s \n", out);
     lcd_line(lcd, out, i+1);
   }
 
