@@ -269,6 +269,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
 
     if (isLeaf(menu->curr)){
       emode = 1;
+      mnmode = 0;
       mval = menu->curr->childs[chld+pos]->val;
       disp_item_edit(lcd, mval);
       break;
@@ -324,6 +325,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if(emode==1){
       // режим редактирования значения
       disp_item_edit(lcd, mval--);
+      break;
     }
 
     if(mnmode == 0){
@@ -356,6 +358,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if(emode == 1){
       // режим редактирования значения
       disp_item_edit(lcd, mval--);
+      break;
     }
     break;
   case KEY_OK :
@@ -484,9 +487,11 @@ void select_item(Disp* lcd){
   if (emode == 1){
     // сохраняем значения выходим обратно
     emode=0;
+    mnmode=1;
     disp_item(lcd);
   } else {
     emode=1;
+    mnmode=0;
     mval = menu->curr->childs[chld+pos]->val;
     disp_item_edit(lcd, mval);
   }
