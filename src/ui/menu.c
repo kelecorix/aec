@@ -322,8 +322,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
 
     if(emode==1){
       // режим редактирования значения
-      //menu->curr = prev_child(menu->curr);
-      //disp_item(lcd);
+      disp_item_edit(lcd, mval--);
     }
 
     if(mnmode == 0){
@@ -355,8 +354,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
     }
     if(emode == 1){
       // режим редактирования значения
-      //menu->curr = prev_child(menu->curr);
-      //disp_item(lcd);
+      disp_item_edit(lcd, mval--);
     }
     break;
   case KEY_OK :
@@ -450,20 +448,21 @@ void disp_item(Disp* lcd) {
 
 
 // for leafs
-void disp_item_edit(Disp* lcd){
+void disp_item_edit(Disp* lcd, int num){
 
   printf("подготовим вывод\n");
   // i2c write на основани
   reset(lcd);
   printf("подготовим вывод 2 \n");
   char buf[100];
-  sprintf (buf, "%d", menu->curr->childs[chld+pos]->val);
+  sprintf (buf, "%d", num);
+
   lcd_line(lcd, "       ^     "   , 0);
   lcd_line(lcd, concat(menu->curr->childs[chld+pos]->text, ":"), 1);
   lcd_line(lcd, concat("       ", buf), 2);
   lcd_line(lcd, "       v     "   , 3);
 
-  // mval
+  // mvalb
 
 }
 
@@ -487,6 +486,7 @@ void select_item(Disp* lcd){
     disp_item(lcd);
   } else {
     emode=1;
+    mval = menu->curr->childs[chld+pos]->val;
     disp_item_edit(lcd);
   }
 
