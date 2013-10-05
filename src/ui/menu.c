@@ -262,8 +262,8 @@ void onKeyClicked(Disp* lcd, int key_code) {
       break;
     }
 
-    if (mnmode == 0)
-      mnmode = 1;
+//    if (mnmode == 0)
+//      mnmode = 1;
 
     printf("id %d\n", menu->curr->id);
     if (mnmode == 1 ){
@@ -271,7 +271,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
         menu->curr = menu->curr->parent;
       }  else{
         mnmode=0;
-        break;
+        return;
       }
     }
 
