@@ -365,7 +365,7 @@ void disp_item(Disp* lcd){
       z = " ";
 
     printf("%d %d %d %d\n", chld, i, pos, entr);
-    if(chld<menu->curr->lenght){
+    if((chld+i)<menu->curr->lenght){
       //printf("%s \n", menu->curr->childs[chld+i]->text);
       out = concat(z, menu->curr->childs[chld+i]->text);
       lcd_line(lcd, out, i+1);
