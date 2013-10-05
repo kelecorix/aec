@@ -362,7 +362,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
   case KEY_OK :
     //если это лист, тогда перейдем в редактирование
     //перед if
-    printf("Меню - %s %d", menu->curr->childs[chld+pos]->text, menu->curr->childs[chld+pos]->lenght);
+    printf("Меню - %s %d\n", menu->curr->childs[chld+pos]->text, menu->curr->childs[chld+pos]->lenght);
     if(isLeaf(menu->curr->childs[chld+pos])){
       select_item();
     }
