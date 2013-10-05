@@ -271,7 +271,8 @@ void onKeyClicked(Disp* lcd, int key_code) {
         menu->curr = menu->curr->parent;
       }  else{
         mnmode=0;
-        return;
+        disp(lcd);
+        break;
       }
     }
 
@@ -302,8 +303,8 @@ void onKeyClicked(Disp* lcd, int key_code) {
         printf("RIGHT %d %d %d\n", chld, pos, entr);
         menu->curr = menu->curr->childs[chld + pos];
         disp_item(lcd);
+        break;
       }
-
     }
     break;
   case KEY_UP :
