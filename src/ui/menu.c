@@ -283,7 +283,10 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if (mnmode == 1) {
       //mval = menu->curr->val;
       //change_value(1);
-      pos--;
+      if(pos==-1)
+        pos=0;
+      else
+        pos--;
       disp_item();
 
     } else {
@@ -375,7 +378,7 @@ void disp_item(Disp* lcd){
   if(entr == 3){
     chld = chld+1;
     entr = 0;
-    pos = 0;
+    pos = -1;
   }
 
   sleep(1);
