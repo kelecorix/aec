@@ -288,6 +288,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
   case KEY_UP :
     if (mnmode == 1) {
       printf("UP %d %d %d\n", chld, pos, entr);
+
       if(chld==0) // защита от дурака
         return;
 
@@ -296,13 +297,12 @@ void onKeyClicked(Disp* lcd, int key_code) {
 
       if(pos==0){
         pos=2; //возврат вниз предыдущего экрана
-        //chld = chld-2;
       }
       else{
         pos--;
       }
-      disp_item(lcd);
 
+      disp_item(lcd);
     }
 
     if(emode==1){
@@ -321,8 +321,8 @@ void onKeyClicked(Disp* lcd, int key_code) {
   case KEY_DOWN :
     if (mnmode == 1) {
 
-      if (chld > menu->curr->lenght-2)//защита от дурака
-        chld--;
+      if (chld >= menu->curr->lenght-1)//защита от дурака
+      return;
 
       pos++;
       disp_item(lcd);
@@ -377,7 +377,7 @@ void disp_item(Disp* lcd) {
     return;
   printf("после проверка листа\n");
 
-  if (chld > menu->curr->lenght - 2) {
+  if (chld > (menu->curr->lenght - 1)) {
     entr = 0;
     return;
   }
