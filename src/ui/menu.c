@@ -288,9 +288,11 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if (mnmode == 1) {
       printf("UP %d %d %d\n", chld, pos, entr);
 
-      if(pos<-1)
-        return;
-
+      if(pos == -1 && chld>0){
+        pos = 2;
+        chld--;
+        disp_item(lcd);
+      }
       pos--;
 
       disp_item(lcd);
@@ -405,7 +407,7 @@ void disp_item(Disp* lcd) {
   if (entr == 3) {
     chld = chld++;
     entr = 0;
-    pos = 0;
+    pos = -1;
   }
 
   usleep(50000);
