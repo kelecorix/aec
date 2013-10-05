@@ -286,14 +286,13 @@ void onKeyClicked(Disp* lcd, int key_code) {
     break;
   case KEY_UP :
     if (mnmode == 1) {
+      pos--;
       printf("UP %d %d %d\n", chld, pos, entr);
-
       if(pos == -1 && chld>0){
         pos = 2;
         disp_item(lcd);
         break;
       }
-      pos--;
 
       disp_item(lcd);
       if (pos == 3) {
