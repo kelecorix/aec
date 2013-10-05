@@ -258,9 +258,13 @@ void onKeyClicked(Disp* lcd, int key_code) {
   printf("нажата кнопка %d\n", key_code);
   switch (key_code){
   case KEY_LEFT :
-    if(mnmode == 0){
+    if(mnmode == 0)
       mnmode = 1;
-    }
+
+    if (mnmode == 1)
+      menu->curr = menu->curr->parent;
+
+    printf("LEFT %d %d %d\n", chld, pos, entr);
     disp_item(lcd);
     break;
   case KEY_RIGHT :
@@ -278,7 +282,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
       // перейдем на уровень вниз
       // если это не лист
       if(!isLeaf(menu->curr)){
-        printf("ушли вниз\n");
+        printf("RIGHT %d %d %d\n", chld, pos, entr);
         menu->curr = menu->curr->childs[0];
         disp_item(lcd);
       }
