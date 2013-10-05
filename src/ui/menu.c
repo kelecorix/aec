@@ -296,7 +296,8 @@ void onKeyClicked(Disp* lcd, int key_code) {
 
       if(pos==0){
         pos=2; //возврат вниз предыдущего экрана
-        chld = chld-2;}
+        //chld = chld-2;
+      }
       else{
         pos--;
       }
