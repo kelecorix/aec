@@ -283,8 +283,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if (mnmode == 1) {
       //mval = menu->curr->val;
       //change_value(1);
-      if(pos>0)
-        pos--;
+      pos--;
       disp_item();
 
     } else {
@@ -297,8 +296,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if (mnmode == 1) {
       //mval = menu->curr->val;
       //change_value(0);
-      if(pos<3)
-        pos++;
+      pos++;
       disp_item(lcd);
     } else {
       //menu->curr = next_child(menu->curr);
@@ -343,8 +341,6 @@ int readKeys(KB* kb) {
 // for branches
 void disp_item(Disp* lcd){
   printf("показ\n");
-
-
 
   reset(lcd);
   int i;
