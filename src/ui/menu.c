@@ -384,7 +384,7 @@ void disp_item(Disp* lcd){
     pos = -1;
   }
 
-  //sleep(1);
+  usleep(50000);
 }
 
 
