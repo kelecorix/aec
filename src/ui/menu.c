@@ -10,7 +10,6 @@
 #include "../config/config.h"
 #include "menu.h"
 
-
 int mnmode; // режим меню или вывод экрана на дисплей
 int emode;
 int mval;
@@ -26,19 +25,17 @@ void init_menu() {
   create_menu();
 }
 
-
-void create_menu(){
+void create_menu() {
 
   printf("предварительная организация\n");
 
   int i;
   menu = malloc(sizeof(Menu));
   menu->length = 47;
-  menu->nodes = (Node** ) malloc(47*sizeof(Node*));
+  menu->nodes = (Node**) malloc(47 * sizeof(Node*));
 
-  for(i=0;i<47;i++)
-  {
-    menu->nodes[i] = (Node* ) malloc(sizeof(Node));
+  for (i = 0; i < 47; i++) {
+    menu->nodes[i] = (Node*) malloc(sizeof(Node));
   }
 
   mnmode = 0;
@@ -59,14 +56,14 @@ void create_menu(){
   //printf("Второй блок\n");
   // Меню температуры
   create_node(11, 1, 10, 40, "Поддержания", "temp_support");
-  create_node(12, 1,  1, 10, "Дельта поддерж", "diff");
-  create_node(13, 1,-10, 20, "Догрева", "temp_heat");
-  create_node(14, 1,-10, 20, "Росы улица", "temp_dew");
-  create_node(15, 1,-10, 20, "Миксер", "temp_mix");
-  create_node(16, 1,  0, 80, "Аварии", "temp_fail");
-  create_node(17, 1,  0, 20, "Дельта окруж", "diff_out");
-  create_node(18, 1,  0, 30, "Дельта конд 1", "diff_ac_1");
-  create_node(19, 1,  0, 30, "Дельта конд 2", "diff_ac_2");
+  create_node(12, 1, 1, 10, "Дельта поддерж", "diff");
+  create_node(13, 1, -10, 20, "Догрева", "temp_heat");
+  create_node(14, 1, -10, 20, "Росы улица", "temp_dew");
+  create_node(15, 1, -10, 20, "Миксер", "temp_mix");
+  create_node(16, 1, 0, 80, "Аварии", "temp_fail");
+  create_node(17, 1, 0, 20, "Дельта окруж", "diff_out");
+  create_node(18, 1, 0, 30, "Дельта конд 1", "diff_ac_1");
+  create_node(19, 1, 0, 30, "Дельта конд 2", "diff_ac_2");
   //printf("Третий блок\n");
   // Меню оборудование
   create_node(20, 2, 0, 1, "Миксер", "is_mix");  // Да/НЕТ
@@ -116,12 +113,11 @@ void create_menu(){
 
 }
 
-
-Node* get_parent_by_id(int id){
+Node* get_parent_by_id(int id) {
   return menu->nodes[id];
 }
 
-void add_child_to_parent(Node* parent, Node* node){
+void add_child_to_parent(Node* parent, Node* node) {
 
   if (node->id == 0)
     return; //это корневой узел
@@ -134,7 +130,6 @@ void add_child_to_parent(Node* parent, Node* node){
 
 }
 
-
 /* Функция создания узла дерева меню
  *
  *  Параметры:
@@ -145,93 +140,92 @@ void add_child_to_parent(Node* parent, Node* node){
  *            text   - текст меню
  *            ct     - имя параметра в конфиге, если есть
  */
-void create_node(int id, int parent, int min, int max, char* ctext, char* cn){
+void create_node(int id, int parent, int min, int max, char* ctext, char* cn) {
 
   printf("Cоздадим нод\n");
 
   Node* node = malloc(sizeof(Node));
   int i;
-  node->id     = id;
-  node->min    = min;
-  node->max    = max;
-  node->text   = ctext;
-  node->cn     = cn;
+  node->id = id;
+  node->min = min;
+  node->max = max;
+  node->text = ctext;
+  node->cn = cn;
   node->lenght = 0;
   node->childs = malloc(9 * sizeof(Node*));
-  for(i=0;i<9;i++){
+  for (i = 0; i < 9; i++) {
     node->childs[i] = malloc(sizeof(Node));
   }
 
   if (strcmp(node->cn, "") != 0)
     node->val = strtol(getStr(site->cfg, (void *) cn), (char **) NULL, 10);
 
-  if(node->id > 0)
+  if (node->id > 0)
     node->parent = get_parent_by_id(parent);
-    add_child_to_parent(node->parent, node);
+  add_child_to_parent(node->parent, node);
 
   menu->nodes[id] = node;
 }
 
-int getDepth(Menu* tree, Node* p){
-  if(isRoot(p))
+int getDepth(Menu* tree, Node* p) {
+  if (isRoot(p))
     return 0;
   else
     return 1 + getDepth(tree, p->parent);
 }
 
-int getHeight(Menu* tree){
+int getHeight(Menu* tree) {
   Node* node;
   int i, h = 0;
 
-  for(i=0; i< menu->length; i++){
+  for (i = 0; i < menu->length; i++) {
     node = tree->nodes[i];
-    if(isLeaf(node))
+    if (isLeaf(node))
       h = MAX(h, getDepth(tree, node));
   }
 
   return h;
 }
 
-int isRoot(Node* node){
+int isRoot(Node* node) {
   if (node->parent == NULL)
     return 1;
   else
     return 0;
 }
 
-int isLeaf(Node* node){
-  if(node->lenght == 0)
+int isLeaf(Node* node) {
+  if (node->lenght == 0)
     return 1;
   else
     return 0;
 }
 
-
-Node* get_parent(Node* node){
+Node* get_parent(Node* node) {
 
   return NULL;
 
 }
 
-Node* next_child(Node* parent){
+Node* next_child(Node* parent) {
   return parent;
 }
 
-Node* prev_child(Node* node){
+Node* prev_child(Node* node) {
 
   return NULL;
 }
 
-Node* next_level(Node* node){
+Node* next_level(Node* node) {
 
   int i;
   Node* n;
 
-  for(i=node->id; i<menu->length; i++){
-    if(isLeaf(menu->nodes[i]))
+  for (i = node->id; i < menu->length; i++) {
+    if (isLeaf(menu->nodes[i]))
       continue;
-    else{
-      n=menu->nodes[i];
+    else {
+      n = menu->nodes[i];
       break;
     }
   }
@@ -241,17 +235,17 @@ Node* next_level(Node* node){
 
 // аргумент узел котором мы находимся
 // возвр: первый узел предыдущего уровня
-Node* prev_level(Node* node){
-  if(!isRoot(menu->curr))
+Node* prev_level(Node* node) {
+  if (!isRoot(menu->curr))
     return node->parent;
-  else{
+  else {
     mnmode = 0;
     return menu->curr;
   }
 }
 
 // обойти дерево
-void traverse(){
+void traverse() {
 
 }
 
@@ -259,18 +253,17 @@ void onKeyClicked(Disp* lcd, int key_code) {
   printf("нажата кнопка %d\n", key_code);
   switch (key_code){
   case KEY_LEFT :
-    if(mnmode == 0)
+    if (mnmode == 0)
       mnmode = 1;
 
-    if (mnmode == 1 && !(menu->curr->id==0))
+    if (mnmode == 1 && !(menu->curr->id == 0))
       menu->curr = menu->curr->parent;
 
     printf("LEFT %d %d %d\n", chld, pos, entr);
 
-    if (isLeaf(menu->curr)){
+    if (isLeaf(menu->curr)) {
       emode = 1;
-      mnmode = 0;
-      mval = menu->curr->childs[chld+pos]->val;
+      mval = menu->curr->childs[chld + pos]->val;
       disp_item_edit(lcd, mval);
       break;
     }
@@ -279,7 +272,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
     break;
   case KEY_RIGHT :
 
-    if(mnmode == 0){
+    if (mnmode == 0) {
       mnmode = 1;
       chld = 0;
       pos++;
@@ -288,32 +281,39 @@ void onKeyClicked(Disp* lcd, int key_code) {
       break;
     }
 
-    if (mnmode == 1 ){
+    if (mnmode == 1) {
       // перейдем на уровень вниз
       // если это не лист
-      if(!isLeaf(menu->curr->childs[chld+pos])){
+      if (!isLeaf(menu->curr->childs[chld + pos])) {
         printf("RIGHT %d %d %d\n", chld, pos, entr);
-        menu->curr = menu->curr->childs[chld+pos];
+        menu->curr = menu->curr->childs[chld + pos];
         disp_item(lcd);
       }
 
     }
     break;
   case KEY_UP :
+
+    if (emode == 1) {
+      // режим редактирования значения
+      disp_item_edit(lcd, mval--);
+      break;
+    }
+
     if (mnmode == 1) {
 
       if (pos == 0) {
-        chld = chld-2;
+        chld = chld - 2;
         entr = 0;
         pos = 2;
       } else
         pos--;
 
-      if(chld==-2){ // Защита от дурака
+      if (chld == -2) { // Защита от дурака
         chld = 0;
         pos = 0;
       }
-        //break;
+      //break;
 
       printf("UP %d %d %d\n", chld, pos, entr);
 
@@ -322,31 +322,32 @@ void onKeyClicked(Disp* lcd, int key_code) {
       break;
     }
 
-    if(emode==1){
-      // режим редактирования значения
-      disp_item_edit(lcd, mval--);
-      break;
-    }
-
-    if(mnmode == 0){
-     // находимся в режиме вывода
-     // изменим отображение экрана
+    if (mnmode == 0) {
+      // находимся в режиме вывода
+      // изменим отображение экрана
 
     }
 
     break;
   case KEY_DOWN :
+
+    if (emode == 1) {
+      // режим редактирования значения
+      disp_item_edit(lcd, mval--);
+      break;
+    }
+
     if (mnmode == 1) {
 
       // 3 количество позиций для вывода
 
-      if (nempty-pos == 2)//защита от дурака, след.строка пустая
+      if (nempty - pos == 2)     //защита от дурака, след.строка пустая
         break;
 
       pos++;
 
       if (pos == 3) {
-        chld = chld+2;
+        chld = chld + 2;
         entr = 0;
         pos = 0;
       }
@@ -355,17 +356,13 @@ void onKeyClicked(Disp* lcd, int key_code) {
       disp_item(lcd);
       break;
     }
-    if(emode == 1){
-      // режим редактирования значения
-      disp_item_edit(lcd, mval--);
-      break;
-    }
+
     break;
   case KEY_OK :
     //если это лист, тогда перейдем в редактирование
     //перед if
-    printf("Меню - %s %d\n", menu->curr->childs[chld+pos]->text, menu->curr->childs[chld+pos]->lenght);
-    if(isLeaf(menu->curr->childs[chld+pos])){
+    printf("Меню - %s %d\n", menu->curr->childs[chld + pos]->text, menu->curr->childs[chld + pos]->lenght);
+    if (isLeaf(menu->curr->childs[chld + pos])) {
       printf("в ифе\n");
       select_item(lcd);
     }
@@ -426,10 +423,9 @@ void disp_item(Disp* lcd) {
 
   for (i = 0; i < 3; i++) {
 
-    if (i == pos){
+    if (i == pos) {
       z = ">";
-    }
-    else
+    } else
       z = " ";
 
     //printf("%d %d %d %d\n", chld, i, pos, entr);
@@ -437,42 +433,40 @@ void disp_item(Disp* lcd) {
       //printf("%s \n", menu->curr->childs[chld+i]->text);
       out = concat(z, menu->curr->childs[chld + i]->text);
       lcd_line(lcd, out, i + 1);
-      nempty=0;
+      nempty = 0;
     } else {
       lcd_line(lcd, "                ", i + 1);
-      nempty = i+1;
+      nempty = i + 1;
     }
   }
 
   entr++;
 
-
   usleep(50000);
 }
 
-
 // for leafs
-void disp_item_edit(Disp* lcd, int num){
+void disp_item_edit(Disp* lcd, int num) {
 
   printf("подготовим вывод\n");
   // i2c write на основани
   reset(lcd);
   printf("подготовим вывод 2 \n");
   char buf[100];
-  sprintf (buf, "%d", num);
+  sprintf(buf, "%d", num);
 
-  lcd_line(lcd, "       ^     "   , 0);
-  lcd_line(lcd, concat(menu->curr->childs[chld+pos]->text, ":"), 1);
+  lcd_line(lcd, "       ^     ", 0);
+  lcd_line(lcd, concat(menu->curr->childs[chld + pos]->text, ":"), 1);
   lcd_line(lcd, concat("       ", buf), 2);
-  lcd_line(lcd, "       v     "   , 3);
+  lcd_line(lcd, "       v     ", 3);
 
   // mvalb
 
 }
 
-void change_value(int direct){
+void change_value(int direct) {
 
-  if((mval==menu->curr->min) || (mval==menu->curr->min))
+  if ((mval == menu->curr->min) || (mval == menu->curr->min))
     return; // граничные значения
 
   if (direct == 0)
@@ -481,18 +475,15 @@ void change_value(int direct){
     mval++;
 }
 
-
-void select_item(Disp* lcd){
+void select_item(Disp* lcd) {
   printf("установим режим выбора\n");
-  if (emode == 1){
+  if (emode == 1) {
     // сохраняем значения выходим обратно
-    emode=0;
-    mnmode=1;
+    emode = 0;
     disp_item(lcd);
   } else {
-    emode=1;
-    mnmode=0;
-    mval = menu->curr->childs[chld+pos]->val;
+    emode = 1;
+    mval = menu->curr->childs[chld + pos]->val;
     disp_item_edit(lcd, mval);
   }
 
