@@ -11,7 +11,8 @@
 #include "menu.h"
 
 
-int mnmode; // режим редактирования или нет
+int mnmode; // режим меню или вывод экрана на дисплей
+int emode;
 int mval;
 int pos;  // текущая позиция от 1 до 3
 int chld; // id текущего нода
@@ -261,23 +262,26 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if(mnmode == 0){
       mnmode = 1;
     }
-//    else
-//      menu->curr = prev_level(menu->curr);
-
     disp_item(lcd);
     break;
   case KEY_RIGHT :
     //TODO: проверить или это первый вход в меню
     // когда доходим до полследнего возвр к первому
-    //menu->curr = next_child(menu->curr);
+
     if(mnmode == 0){
       mnmode = 1;
       chld = 0;
       pos++;
-    } else {
-      menu->curr = menu->curr->childs[0];
+      disp_item(lcd);
     }
-    disp_item(lcd);
+
+    if (mnmode == 1 )
+      // перейдем на уровень вниз
+      // если это не лист
+      if(!isLeaf(menu->curr))
+        menu->curr = menu->curr->childs[chld];
+    }
+
     break;
   case KEY_UP :
     if (mnmode == 1) {
@@ -292,10 +296,15 @@ void onKeyClicked(Disp* lcd, int key_code) {
 
       disp_item();
     }
-    if(mnmode == 0){
+    if(mnmode == 0 && emode==1){
       // режим редактирования значения
       //menu->curr = prev_child(menu->curr);
       //disp_item(lcd);
+    }
+    if(mnmode == 0){
+     // находимся в режиме вывода
+     // изменим отображение экрана
+
     }
     break;
   case KEY_DOWN :
@@ -314,8 +323,9 @@ void onKeyClicked(Disp* lcd, int key_code) {
     }
     break;
   case KEY_OK :
-    select_item();
-    //disp_item_edit(lcd);
+    //если это лист, тогда перейдем в редактирование
+    if(isLeaf(menu->curr))
+      select_item();
     break;
   }
 }
@@ -369,7 +379,7 @@ void disp_item(Disp* lcd) {
   lcd_line(lcd, menu->curr->text, 0);
 
   printf("перед циклом\n");
-  //printf("количество потомков %d \n", menu->curr->lenght);
+  printf("количество потомков %d \n", menu->curr->lenght);
 
   for (i = 0; i < 3; i++) {
 
