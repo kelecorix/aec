@@ -363,7 +363,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
     //если это лист, тогда перейдем в редактирование
     //перед if
     printf("Меню - %s %d\n", menu->curr->childs[chld+pos]->text, menu->curr->childs[chld+pos]->lenght);
-    if((isLeaf(menu->curr->childs[chld+pos]))==1){
+    if(isLeaf(menu->curr->childs[chld+pos])){
       select_item();
     }
     break;
