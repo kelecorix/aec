@@ -287,8 +287,8 @@ void onKeyClicked(Disp* lcd, int key_code) {
         pos=0;
       else
         pos--;
-      disp_item();
 
+      disp_item();
     } else {
       //menu->curr = prev_child(menu->curr);
       //disp_item(lcd);
@@ -348,7 +348,7 @@ void disp_item(Disp* lcd){
   if(isLeaf(menu->curr))
     return;
 
-  if ((chld+1) >= menu->curr->lenght){
+  if (chld > menu->curr->lenght-2){
     entr=0;
    return;
   }
