@@ -365,7 +365,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
     printf("Меню - %s %d\n", menu->curr->childs[chld+pos]->text, menu->curr->childs[chld+pos]->lenght);
     if(isLeaf(menu->curr->childs[chld+pos])){
       printf("в ифе\n");
-      select_item();
+      select_item(lcd);
     }
     break;
   }
