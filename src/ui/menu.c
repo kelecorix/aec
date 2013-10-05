@@ -292,6 +292,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
         pos = 0;
       } else
         pos--;
+
       printf("UP %d %d %d\n", chld, pos, entr);
       if(pos == -1 && chld>0){
         pos = 2;
@@ -375,17 +376,17 @@ int readKeys(KB* kb) {
 
 // for branches
 void disp_item(Disp* lcd) {
-  printf("показ\n");
+  //printf("показ\n");
 
   if (isLeaf(menu->curr))
     return;
-  printf("после проверка листа\n");
+  //printf("после проверка листа\n");
 
 //  if (chld > (menu->curr->lenght - 1)) {
 //    entr = 0;
 //    return;
 //  }
-  printf("после проверки детей\n");
+  //printf("после проверки детей\n");
 
   reset(lcd);
   int i;
@@ -393,8 +394,8 @@ void disp_item(Disp* lcd) {
   char *z, *out;
   lcd_line(lcd, menu->curr->text, 0);
 
-  printf("перед циклом\n");
-  printf("количество потомков %d \n", menu->curr->lenght);
+  //printf("перед циклом\n");
+  //printf("количество потомков %d \n", menu->curr->lenght);
 
   for (i = 0; i < 3; i++) {
 
@@ -403,7 +404,7 @@ void disp_item(Disp* lcd) {
     else
       z = " ";
 
-    printf("%d %d %d %d\n", chld, i, pos, entr);
+    //printf("%d %d %d %d\n", chld, i, pos, entr);
     if ((chld + i) < menu->curr->lenght) {
       //printf("%s \n", menu->curr->childs[chld+i]->text);
       out = concat(z, menu->curr->childs[chld + i]->text);
