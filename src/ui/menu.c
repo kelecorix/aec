@@ -334,7 +334,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
   case KEY_DOWN :
     if (mnmode == 1) {
 
-      if (chld >= menu->curr->lenght-2)//защита от дурака
+      if (chld >= menu->curr->lenght-1)//защита от дурака
       return;
 
       pos++;
