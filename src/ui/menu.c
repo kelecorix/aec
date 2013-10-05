@@ -281,7 +281,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
     break;
   case KEY_UP :
     if (mnmode == 1) {
-
+      printf("UP %d %d %d\n", chld, pos, entr);
       if(chld==0) // защита от дурака
         return;
 
