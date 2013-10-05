@@ -330,8 +330,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
         chld = chld+2;
         entr = 0;
         pos = 0;
-      } else
-        pos++;
+      }
 
       printf("DOWN %d %d %d\n", chld, pos, entr);
       disp_item(lcd);
