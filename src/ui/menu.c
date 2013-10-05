@@ -283,6 +283,10 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if (mnmode == 1) {
       //mval = menu->curr->val;
       //change_value(1);
+      if (chld > menu->curr->lenght-2)
+        chld--;
+
+
       if(pos==-1)
         pos=0;
       else
