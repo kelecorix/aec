@@ -94,7 +94,7 @@ void run(Site* site) {
     site->acs[a]->set_mode(site->acs[a], 1);
   }
 
-  //site_mode_uvo(site);
+  site_mode_uvo(site);
   //site_mode_fail_uvo(site);
   //site_mode_fail_ac(site);
 }

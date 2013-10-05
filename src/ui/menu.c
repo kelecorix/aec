@@ -249,6 +249,8 @@ void traverse() {
 
 }
 
+//TODO: по лево идем дальше или в паарметр, окей только
+//
 void onKeyClicked(Disp* lcd, int key_code) {
   printf("нажата кнопка %d\n", key_code);
   switch (key_code){
