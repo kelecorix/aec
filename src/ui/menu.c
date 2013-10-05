@@ -345,14 +345,14 @@ int readKeys(KB* kb) {
 void disp_item(Disp* lcd){
   //printf("показ\n");
 
-  reset(lcd);
-  int i;
-
   if(isLeaf(menu->curr))
     return;
 
-  //if (chld < menu->curr->lenght)
-  //  return;
+  if (chld > menu->curr->lenght)
+   return;
+
+  reset(lcd);
+  int i;
 
   char *z, *out;
   lcd_line(lcd, menu->curr->text, 0);
@@ -379,12 +379,12 @@ void disp_item(Disp* lcd){
 
   entr++;
   if(entr == 3){
-    chld = chld+1;
+    chld = chld+2;
     entr = 0;
     pos = -1;
   }
 
-  sleep(1);
+  //sleep(1);
 }
 
 
