@@ -347,7 +347,7 @@ void disp_item(Disp* lcd){
   if(entr == 3){
     chld = chld+1;
     entr = 1;
-    pos = -1;
+    pos = 0;
   }
 
   reset(lcd);
@@ -369,7 +369,7 @@ void disp_item(Disp* lcd){
     else
       z = " ";
 
-    printf("CHILD I N E  %d\n", i);
+    printf("C I N E  %d\n", i);
     printf("%d %d %d %d\n", chld, i, pos, entr);
     printf("%s \n", menu->curr->childs[chld+i]->text);
     out = concat(z, menu->curr->childs[chld+i]->text);
