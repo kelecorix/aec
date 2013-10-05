@@ -161,7 +161,6 @@ void create_node(int id, int parent, int min, int max, char* ctext, char* cn){
     node->childs[i] = malloc(sizeof(Node));
   }
 
-
   if (strcmp(node->cn, "") != 0)
     node->val = strtol(getStr(site->cfg, (void *) cn), (char **) NULL, 10);
 
@@ -370,10 +369,10 @@ void disp_item(Disp* lcd) {
     return;
   printf("после проверка листа\n");
 
-  if (chld > (menu->curr->lenght - 1)) {
-    entr = 0;
-    return;
-  }
+//  if (chld > (menu->curr->lenght - 1)) {
+//    entr = 0;
+//    return;
+//  }
   printf("после проверки детей\n");
 
   reset(lcd);
