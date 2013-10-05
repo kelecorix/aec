@@ -265,13 +265,12 @@ void onKeyClicked(Disp* lcd, int key_code) {
     disp_item(lcd);
     break;
   case KEY_RIGHT :
-    //TODO: проверить или это первый вход в меню
-    // когда доходим до полследнего возвр к первому
 
     if(mnmode == 0){
       mnmode = 1;
       chld = 0;
       pos++;
+      menu->curr = menu->curr->childs[chld];
       disp_item(lcd);
     }
 
