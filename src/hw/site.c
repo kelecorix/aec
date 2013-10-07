@@ -55,8 +55,8 @@ int read_sensors(Site* site) {
 
   site->th_r = i2c_get_th_data(strtol(a_th_adc, NULL, 16));
 
-  if ((site->temp_out == -100) || (site->temp_in == -100)
-      (site->temp_mix == -100) || (site->temp_evapor1 == -100)
+  if ((site->temp_out == -100) || (site->temp_in == -100) ||
+      (site->temp_mix == -100) || (site->temp_evapor1 == -100) ||
       (site->temp_evapor2 == -100)){
     return 1;
   }
