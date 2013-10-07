@@ -439,6 +439,9 @@ void onKeyClicked(Disp* lcd, int key_code) {
     break;
   case KEY_RIGHT :
 
+    if(emode==1)
+      break;
+
     if (mnmode == 0) {
       mnmode = 1;
       chld = 0;

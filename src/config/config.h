@@ -26,7 +26,7 @@ typedef struct ConfigTable {
 } ConfigTable;
 
 char* getStr(ConfigTable* cfg, const char *key) ;
-ConfigTable* readConfig(char filename[]);
+ConfigTable* readConfig(char* filename);
 void writeConfig(char* filename);
 
 /* Structure of configuration file 
