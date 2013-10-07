@@ -31,26 +31,22 @@ int read_sensors(Site* site) {
   OWNET_HANDLE conn = gcfg->conn;
   char *mnt = gcfg->mpoint;
 
-  char *s_temp_out = getStr(site->cfg, (void *) "s_temp_outdoor");
-  char *s_temp_in = getStr(site->cfg, (void *) "s_temp_indoor");
-  char *s_temp_mix = getStr(site->cfg, (void *) "s_temp_mix");
+  char *s_temp_out     = getStr(site->cfg, (void *) "s_temp_outdoor");
+  char *s_temp_in      = getStr(site->cfg, (void *) "s_temp_indoor");
+  char *s_temp_mix     = getStr(site->cfg, (void *) "s_temp_mix");
   char *s_temp_evapor1 = getStr(site->cfg, (void *) "s_temp_evapor1");
   char *s_temp_evapor2 = getStr(site->cfg, (void *) "s_temp_evapor2");
 
-  char *a_tacho_in = getStr(site->cfg, (void *) "a_tacho_flow_in");
+  char *a_tacho_in  = getStr(site->cfg, (void *) "a_tacho_flow_in");
   char *a_tacho_out = getStr(site->cfg, (void *) "a_tacho_flow_out");
-  char *a_th_adc = getStr(site->cfg, (void *) "a_throttle_adc");
+  char *a_th_adc    = getStr(site->cfg, (void *) "a_throttle_adc");
 
-  site->temp_out = get_data(conn, mnt, s_temp_out, 100);
-  site->temp_in = get_data(conn, mnt, s_temp_in, 100);
-  site->temp_mix = get_data(conn, mnt, s_temp_mix, 100);
+  site->temp_out     = get_data(conn, mnt, s_temp_out, 100);
+  site->temp_in      = get_data(conn, mnt, s_temp_in, 100);
+  site->temp_mix     = get_data(conn, mnt, s_temp_mix, 100);
   site->temp_evapor1 = get_data(conn, mnt, s_temp_evapor1, 100);
   site->temp_evapor2 = get_data(conn, mnt, s_temp_evapor2, 100);
 
-
-  //TODO: переделать более грамотно, а что если
-  // у нас 5 кондиционеров
-  // Первый читаем в обязательном порядке
   site->acs[0]->temp = site->temp_evapor1;
   if(site->num_ac == 2)
     site->acs[1]->temp = site->temp_evapor2;
@@ -58,6 +54,12 @@ int read_sensors(Site* site) {
   i2c_get_tacho(strtol(a_tacho_in, NULL, 16), strtol(a_tacho_out, NULL, 16));
 
   site->th_r = i2c_get_th_data(strtol(a_th_adc, NULL, 16));
+
+  if ((site->temp_out == -100) || (site->temp_in == -100)
+      (site->temp_mix == -100) || (site->temp_evapor1 == -100)
+      (site->temp_evapor2 == -100)){
+    return 1;
+  }
 
   return 0;
 }
@@ -135,7 +137,6 @@ int set_ten(Site* site, int val) {
     i2cClose();
     return 1;
   } else {
-    // wrong value
     // неправильное значение
     return 0;
   }
@@ -192,7 +193,7 @@ int site_mode_fail_temp_ac(Site* site) {
     ret = read_sensors(site);
     if (ret != 0) {
       //Ошибка чтения датчиков
-      //site_mode_fail_ac(site);
+      //site_mode_fail_temp_uvo(site);
       continue;
     }
 
@@ -493,8 +494,7 @@ int site_mode_uvo(Site* site) {
   ret = read_sensors(site);
   if (ret != 0) {
     //Ошибка чтения датчиков
-
-    site_mode_fail_uvo(site);
+    site_mode_fail_temp_uvo(site);
   }
 
   log_3("Переведем заслонку site->temp_out = %f temp_dew = %f\n", site->temp_out, temp_dew);
@@ -516,9 +516,10 @@ int site_mode_uvo(Site* site) {
 
   log_3("Перед while UVO\n");
   while (1) {
+
     ret = read_sensors(site);
     if (ret != 0)
-      site_mode_fail_uvo(site);
+      site_mode_fail_temp_ac(site);
 
     site->power = 1;
 
@@ -954,10 +955,8 @@ int site_mode_ac(Site* site) {
     int ret;
     ret = read_sensors(site);
 
-    if (ret != 0) {
-      //Ошибка чтения датчиков
+    if (ret != 0)
       site_mode_fail_ac(site);
-    }
 
     if (difftime(time(NULL), site->time_pre) <= 5) { //секунды
       sleep(1);
@@ -1104,10 +1103,8 @@ int site_mode_heat(Site* site) {
     while (i < 300) {
       int ret;
       ret = read_sensors(site);
-      if (ret != 0) {
-        //Ошибка чтения датчиков
-        site_mode_fail_uvo(site);
-      }
+      if (ret != 0)
+        site_mode_fail_temp_ac(site);
 
       if (((time(NULL) - site->th->time_start) >= 30) && site->th_r_exists) {
         if (difftime(time(NULL), site->th->time_start) >= 30) {
@@ -1138,10 +1135,8 @@ int site_mode_heat(Site* site) {
     // читаем датчики
     int ret;
     ret = read_sensors(site);
-    if (ret != 0) {
-      //Ошибка чтения датчиков
+    if (ret != 0)
       site_mode_fail_uvo(site);
-    }
 
     if (difftime(time(NULL), site->time_pre) <= 5) //30
     { //секунды
