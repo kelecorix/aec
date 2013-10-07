@@ -509,8 +509,9 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if (mnmode == 1) {
 
       // 3 количество позиций для вывода
+      // DOWN 3 2 3 0
       printf("DOWN %d %d %d %d\n", chld, pos, entr, nempty);
-      if ((nempty - pos >= 2) || (nempty-pos == -3))     //защита от дурака, след.строка пустая
+      if ((nempty - pos >= 2) || ((pos == 2) && ((chld+3)>=menu->curr->lenght)))     //защита от дурака, след.строка пустая
         break;
 
       pos++;
