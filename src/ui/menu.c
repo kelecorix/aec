@@ -516,7 +516,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
       pos++;
 
       if (pos == 3) {
-        chld = chld + 2;
+        chld = chld + 3;
         entr = 0;
         pos = 0;
       }
