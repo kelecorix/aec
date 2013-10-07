@@ -456,6 +456,8 @@ void onKeyClicked(Disp* lcd, int key_code) {
         menu->curr = menu->curr->childs[chld + pos];
         disp_item(lcd);
         break;
+      }else{
+        select_item(lcd);
       }
     }
     break;
@@ -509,7 +511,6 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if (mnmode == 1) {
 
       // 3 количество позиций для вывода
-      // DOWN 3 2 3 0
       printf("DOWN %d %d %d %d\n", chld, pos, entr, nempty);
       if ((nempty - pos >= 2) || ((pos == 2) && ((chld+3)>=menu->curr->lenght)))     //защита от дурака, след.строка пустая
         break;
