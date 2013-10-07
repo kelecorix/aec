@@ -14,8 +14,8 @@
  *
  */
 int dmode; // Мы либо в режиме редактирования 1, либо в режиме вывода 0
-int omode; // Режим вывода
 int ddiff; // задержка вывода
+
 time_t time_start;
 
 /*
@@ -53,89 +53,6 @@ int uptime() {
 char* net_address() {
   return ("0.0.0.0");
 }
-
-void disp(Disp* lcd){
-
-  char tmp_time[50], tmp_temp_out[50], tmp_temp_in[50], tmp_temp_mix[50], tmp_temp_evapor1[50], tmp_temp_evapor2[50];
-
-  time_t rawtime;
-  struct tm * timeinfo;
-  //printf("режим %d\n", omode);
-
-  if (omode == 1) {
-    // экран 1 - темп сайта , улицы
-    //printf("экран1\n");
-    time(&rawtime);
-    //printf("время\n");
-    timeinfo = localtime(&rawtime);
-    //printf("сделали структуру\n");
-    sprintf(tmp_time, "%2d/%02d  %2d:%02d:%02d", timeinfo->tm_mday, 1 + timeinfo->tm_mon, timeinfo->tm_hour, timeinfo->tm_min,
-        timeinfo->tm_sec);
-
-    if (site->temp_out != -100.0) {
-      sprintf(tmp_temp_out, "Улица  = %2.2f°C", site->temp_out);
-    } else {
-      sprintf(tmp_temp_out, "Улица  =  Ошибка");
-    }
-    //printf("2\n");
-    if (site->temp_in != -100.0) {
-      sprintf(tmp_temp_in, "Сайт   = %2.2f°C", site->temp_in);
-    } else {
-      sprintf(tmp_temp_in, "Сайт   =  Ошибка");
-    }
-    //printf("3\n");
-    //printf("0\n");
-    lcd_line(lcd, tmp_temp_out, 0);
-    //printf("1 %s \n", tmp_temp_in);
-    lcd_line(lcd, tmp_temp_in, 1);
-    //printf("2\n");
-    lcd_line(lcd, "Состояние работы", 2);
-    //printf("3\n");
-    lcd_line(lcd, tmp_time, 3);
-
-    //printf("экран1 конец\n");
-  }
-
-  //экран 2 - конд, конд, миксер, время
-  if (omode == 2) {
-    printf("экран2\n");
-    time(&rawtime);
-    timeinfo = localtime(&rawtime);
-
-    sprintf(tmp_time, "%2d/%02d  %2d:%02d:%02d", timeinfo->tm_mday, 1 + timeinfo->tm_mon, timeinfo->tm_hour, timeinfo->tm_min,
-        timeinfo->tm_sec);
-
-    if (site->temp_evapor1 != -100.0) {
-      sprintf(tmp_temp_evapor1, "Конд1  = %2.2f°C", site->temp_evapor1);
-    } else {
-      sprintf(tmp_temp_evapor1, "Конд1  =  Ошибка");
-    }
-
-    if (site->temp_evapor2 != -100.0) {
-      sprintf(tmp_temp_evapor2, "Конд2  = %2.2f°C", site->temp_evapor2);
-    } else {
-      sprintf(tmp_temp_evapor2, "Конд2  =  Ошибка");
-    }
-
-    if (site->temp_mix != -100.0) {
-      sprintf(tmp_temp_mix, "Миксер = %2.2f°C", site->temp_mix);
-    } else {
-      sprintf(tmp_temp_mix, "Миксер =  Ошибка");
-    }
-    lcd_line(lcd, tmp_temp_evapor1, 0);
-    lcd_line(lcd, tmp_temp_evapor2, 1);
-    lcd_line(lcd, tmp_temp_mix, 2);
-    lcd_line(lcd, tmp_time, 3);
-    printf("экран2 конец\n");
-  }
-
-  if (omode == 3) {
-
-    //экран - обороты вент, вент2, заслонка полож
-
-  }
-}
-
 
 /*
  *

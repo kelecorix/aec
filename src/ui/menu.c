@@ -13,10 +13,11 @@
 int mnmode; // режим меню или вывод экрана на дисплей
 int emode;
 int mval;
-int pos;  // текущая позиция от 1 до 3
-int chld; // id текущего нода
+int pos;   // текущая позиция от 1 до 3
+int chld;  // id текущего нода
 int entr;
 int nempty;
+int omode; // Режим вывода
 
 Menu* menu;
 OutNode** outs;
@@ -229,7 +230,6 @@ Node* next_level(Node* node) {
       break;
     }
   }
-
   return n;
 }
 
@@ -246,6 +246,154 @@ Node* prev_level(Node* node) {
 
 // обойти дерево
 void traverse() {
+
+}
+
+void disp(Disp* lcd){
+
+  char tmp_time[50], tmp_temp_out[50], tmp_temp_in[50], tmp_temp_mix[50], tmp_temp_evapor1[50], tmp_temp_evapor2[50];
+
+  time_t rawtime;
+  struct tm * timeinfo;
+  //printf("режим %d\n", omode);
+
+  if (omode == 1) {
+    // экран 1 - темп сайта , улицы
+    //printf("экран1\n");
+    time(&rawtime);
+    //printf("время\n");
+    timeinfo = localtime(&rawtime);
+    //printf("сделали структуру\n");
+    sprintf(tmp_time, "%2d/%02d  %2d:%02d:%02d", timeinfo->tm_mday, 1 + timeinfo->tm_mon, timeinfo->tm_hour, timeinfo->tm_min,
+        timeinfo->tm_sec);
+
+    if (site->temp_out != -100.0) {
+      sprintf(tmp_temp_out, "Улица  = %2.2f°C", site->temp_out);
+    } else {
+      sprintf(tmp_temp_out, "Улица  =  Ошибка");
+    }
+    //printf("2\n");
+    if (site->temp_in != -100.0) {
+      sprintf(tmp_temp_in, "Сайт   = %2.2f°C", site->temp_in);
+    } else {
+      sprintf(tmp_temp_in, "Сайт   =  Ошибка");
+    }
+    //printf("3\n");
+    //printf("0\n");
+    lcd_line(lcd, tmp_temp_out, 0);
+    //printf("1 %s \n", tmp_temp_in);
+    lcd_line(lcd, tmp_temp_in, 1);
+    //printf("2\n");
+    lcd_line(lcd, "Состояние работы", 2);
+    //printf("3\n");
+    lcd_line(lcd, tmp_time, 3);
+
+    //printf("экран1 конец\n");
+  }
+
+  //экран 2 - конд, конд, миксер, время
+  if (omode == 2) {
+    printf("экран2\n");
+    time(&rawtime);
+    timeinfo = localtime(&rawtime);
+
+    sprintf(tmp_time, "%2d/%02d  %2d:%02d:%02d", timeinfo->tm_mday, 1 + timeinfo->tm_mon, timeinfo->tm_hour, timeinfo->tm_min,
+        timeinfo->tm_sec);
+
+    if (site->temp_evapor1 != -100.0) {
+      sprintf(tmp_temp_evapor1, "Конд1  = %2.2f°C", site->temp_evapor1);
+    } else {
+      sprintf(tmp_temp_evapor1, "Конд1  =  Ошибка");
+    }
+
+    if (site->temp_evapor2 != -100.0) {
+      sprintf(tmp_temp_evapor2, "Конд2  = %2.2f°C", site->temp_evapor2);
+    } else {
+      sprintf(tmp_temp_evapor2, "Конд2  =  Ошибка");
+    }
+
+    if (site->temp_mix != -100.0) {
+      sprintf(tmp_temp_mix, "Миксер = %2.2f°C", site->temp_mix);
+    } else {
+      sprintf(tmp_temp_mix, "Миксер =  Ошибка");
+    }
+    lcd_line(lcd, tmp_temp_evapor1, 0);
+    lcd_line(lcd, tmp_temp_evapor2, 1);
+    lcd_line(lcd, tmp_temp_mix, 2);
+    lcd_line(lcd, tmp_time, 3);
+    printf("экран2 конец\n");
+  }
+
+  if (omode == 3) {
+
+    //экран - обороты вент, вент2, заслонка полож
+
+  }
+}
+
+// for branches
+void disp_item(Disp* lcd) {
+  //printf("показ\n");
+
+  if (isLeaf(menu->curr))
+    return;
+  //printf("после проверка листа\n");
+
+//  if (chld > (menu->curr->lenght - 1)) {
+//    entr = 0;
+//    return;
+//  }
+  //printf("после проверки детей\n");
+
+  reset(lcd);
+  int i;
+
+  char *z, *out;
+  lcd_line(lcd, menu->curr->text, 0);
+
+  //printf("перед циклом\n");
+  //printf("количество потомков %d \n", menu->curr->lenght);
+
+  for (i = 0; i < 3; i++) {
+
+    if (i == pos) {
+      z = ">";
+    } else
+      z = " ";
+
+    //printf("%d %d %d %d\n", chld, i, pos, entr);
+    if ((chld + i) < menu->curr->lenght) {
+      //printf("%s \n", menu->curr->childs[chld+i]->text);
+      out = concat(z, menu->curr->childs[chld + i]->text);
+      lcd_line(lcd, out, i + 1);
+      nempty = 0;
+    } else {
+      lcd_line(lcd, "                ", i + 1);
+      nempty = i + 1;
+    }
+  }
+
+  entr++;
+
+  usleep(50000);
+}
+
+// for leafs
+void disp_item_edit(Disp* lcd, int num) {
+
+  printf("подготовим вывод\n");
+  // i2c write на основани
+  reset(lcd);
+  printf("подготовим вывод 2 \n");
+  char buf[100];
+  sprintf(buf, "%d", num);
+
+  lcd_line(lcd, "       ^     ", 0);
+  lcd_line(lcd, concat(menu->curr->childs[chld + pos]->text, ":"), 1);
+  lcd_line(lcd, concat("       ", buf), 2);
+  lcd_line(lcd, "       v     ", 3);
+
+  // mvalb
 
 }
 
@@ -417,72 +565,6 @@ int readKeys(KB* kb) {
   }
 
   return key;
-}
-
-// for branches
-void disp_item(Disp* lcd) {
-  //printf("показ\n");
-
-  if (isLeaf(menu->curr))
-    return;
-  //printf("после проверка листа\n");
-
-//  if (chld > (menu->curr->lenght - 1)) {
-//    entr = 0;
-//    return;
-//  }
-  //printf("после проверки детей\n");
-
-  reset(lcd);
-  int i;
-
-  char *z, *out;
-  lcd_line(lcd, menu->curr->text, 0);
-
-  //printf("перед циклом\n");
-  //printf("количество потомков %d \n", menu->curr->lenght);
-
-  for (i = 0; i < 3; i++) {
-
-    if (i == pos) {
-      z = ">";
-    } else
-      z = " ";
-
-    //printf("%d %d %d %d\n", chld, i, pos, entr);
-    if ((chld + i) < menu->curr->lenght) {
-      //printf("%s \n", menu->curr->childs[chld+i]->text);
-      out = concat(z, menu->curr->childs[chld + i]->text);
-      lcd_line(lcd, out, i + 1);
-      nempty = 0;
-    } else {
-      lcd_line(lcd, "                ", i + 1);
-      nempty = i + 1;
-    }
-  }
-
-  entr++;
-
-  usleep(50000);
-}
-
-// for leafs
-void disp_item_edit(Disp* lcd, int num) {
-
-  printf("подготовим вывод\n");
-  // i2c write на основани
-  reset(lcd);
-  printf("подготовим вывод 2 \n");
-  char buf[100];
-  sprintf(buf, "%d", num);
-
-  lcd_line(lcd, "       ^     ", 0);
-  lcd_line(lcd, concat(menu->curr->childs[chld + pos]->text, ":"), 1);
-  lcd_line(lcd, concat("       ", buf), 2);
-  lcd_line(lcd, "       v     ", 3);
-
-  // mvalb
-
 }
 
 void change_value(int direct) {
