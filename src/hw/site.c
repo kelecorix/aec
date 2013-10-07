@@ -280,7 +280,7 @@ int site_mode_fail_temp_ac(Site* site) {
         log_3("да есть живые кондиционеры site->temp_in - site->temp_out = %f > 6 ?\n", (site->temp_in - site->temp_out));
         if (((site->temp_in - site->temp_out) > 6) && (site->vents[0]->error != ERROR && site->vents[1]->error != ERROR)) {
           log_3("ДА перейдем в site_mode_fail_temp_uvo\n");
-          site_mode_fail_temp_uvo(site);
+          site_mode_fail_uvo(site);
         } else {
           log_3("НЕТ продолжим охлаждать кондиционером\n");
           continue;
@@ -318,7 +318,6 @@ int site_mode_fail_temp_uvo(Site* site) {
     site->vents[v]->set_step(site->vents[v], 11);
     site->vents[v]->time_start = time(NULL);
   }
-
 
   //По умолчанию: кондиц. выкл.
   for (a = 0; a < site->num_ac; a++) {
@@ -1275,7 +1274,8 @@ int site_mode_fail_uvo(Site* site) {
     ret = read_sensors(site);
     if (ret != 0) {
       //Ошибка чтения датчиков
-      continue;
+      site_mode_fail_temp_uvo(site);
+      //continue;
     }
 
     if (difftime(time(NULL), site->time_pre) <= 5) { //секунды
