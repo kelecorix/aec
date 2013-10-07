@@ -152,7 +152,13 @@ ConfigTable* readConfig(char *filename) {
 }
 
 /*Write table to config */
-void writeConfig(char filename[]) {
+void writeConfig(char* filename) {
+
+  FILE* fp;
+
+  fp = fopen(filename, "w");
+
+
 
 }
 
