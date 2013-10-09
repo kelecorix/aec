@@ -796,15 +796,14 @@ void sub_uvo_pow(Site* site) {
   }
 }
 
-// fail- флаг работы в аварийном режиме
 /*
  *
  *
- *
+ * fail- флаг работы в аварийном режиме
  */
 void sub_uvo_th(Site* site, int fail) {
 
-  // проверим или существует заслонка
+  /* проверим или существует заслонка */
   if(!site->th_exists)
     return;
 
@@ -1510,6 +1509,9 @@ int site_mode_fail_ac(Site* site) {
 }
 
 
+/*
+ *
+ */
 void run_moto(Site* site) {
 
   while (1) {
@@ -1605,8 +1607,8 @@ Site* site_new() {
   gcfg->conn = 0;
   site->cfg = read_config(concat(gcfg->cdir, gcfg->filename));
 
-  int *array = getArr(site->cfg, "vent1_steps");
-  int c = array[0];
+  //int *array = getArr(site->cfg, "vent1_steps");
+  //int c = array[0];
 
   site->th_exists = atoi(getStr(site->cfg, (void *) "is_throttle"));
   if(site->th_exists)
@@ -1625,6 +1627,9 @@ Site* site_new() {
   return site;
 }
 
+/*
+ *
+ */
 Cfg* new_gcfg(){
 
   Cfg* gcfg = malloc(sizeof(Cfg));

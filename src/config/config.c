@@ -20,7 +20,8 @@ static int str_hash_fn(void *str) {
     hash = ((hash << 5) + hash) + *p;
   return (int) hash;
 }
-/*
+
+/* Функция создания новой таблицы конфигурации
  *
  *
  *
@@ -44,32 +45,46 @@ void config_table_free() {
 
 }
 
-/*Return true if the key is used in the table  */
+/* Return true if the key is used in the table
+ *
+ */
 bool isDefined(ConfigTable* cfg, char key[]) {
   return hashmapContainsKey(cfg->mTable, key);
 }
 
-/*Return true if this key is identified as static*/
+/* Return true if this key is identified as static
+ *
+ */
 bool isOptional(ConfigTable* cfg, char key[]) {
   return hashmapGet(cfg->mOptional, key); //values are 0 or 1;
 }
 
-/*Return true if this key is static, i.e can't be changed*/
+/* Return true if this key is static, i.e can't be changed
+ *
+ */
 bool isStatic(ConfigTable* cfg, char key[]) {
   return hashmapGet(cfg->mStatic, key); //values are 0 or 1
 }
 
-/*Make a key static*/
+/* Make a key static
+ *
+ *
+ */
 void makeStatic(ConfigTable* cfg, char key[]) {
   hashmapPut(cfg->mStatic, key, "1");
 }
 
-/*Make a key optional*/
+/* Make a key optional
+ *
+ *
+ */
 void makeOptional(ConfigTable* cfg, char key[]) {
   hashmapPut(cfg->mStatic, key, "1");
 }
 
-/*Get string parameter from table */
+/* Get string parameter from table
+ *
+ */
 char* getStr(ConfigTable* cfg, const char *key) {
   char *value;
   value = hashmapGet(cfg->mTable, (void *) key);
@@ -82,7 +97,9 @@ char* getStr(ConfigTable* cfg, const char *key) {
     return "";
 }
 
-/*Get string parameter from table */
+/* Get string parameter from table
+ *
+ */
 int* getArr(ConfigTable* cfg, const char *key) {
   char *value;
   value = hashmapGet(cfg->mTable, (void *) key);
@@ -93,17 +110,23 @@ int* getArr(ConfigTable* cfg, const char *key) {
     return 0;
 }
 
-/*Set or change value in the table */
+/* Set or change value in the table
+ *
+ */
 void set(ConfigTable* cfg, char key[], char value[]) {
   hashmapPut(cfg->mTable, key, value);
 }
 
-/*Remove key from table */
+/* Remove key from table
+ *
+ */
 bool unset(ConfigTable* cfg, char key[]) {
   return hashmapRemove(cfg->mTable, key);
 }
 
-/*Read table from config */
+/* Read table from config
+ *
+ */
 ConfigTable* readConfig(char *filename) {
   ConfigTable* cfg;
   FILE *fp;
@@ -175,7 +198,10 @@ ConfigTable* readConfig(char *filename) {
   return cfg;
 }
 
-/*Write table to config */
+/* Write table to config
+ *
+ *
+ */
 void writeConfig(char* filename) {
 
   FILE* fp;
@@ -186,6 +212,10 @@ void writeConfig(char* filename) {
 
 }
 
+/*
+ *
+ *
+ */
 int getArray(char *tokens[], int length){
 
   int i, j, *values;
