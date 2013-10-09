@@ -15,13 +15,13 @@ static int steps[11] = { 0xFF, 0xF8, 0xF7, 0xF6, 0xF3, 0xEE, 0xEC, 0xE6, 0xDC, 0
  * приточного вентилятора в шаг управления
  * Сама таблица содержится в конфигурационном файле
  */
-static int tts1[11][2];
+static int *tts1;
 
 /* Таблица преобразования оборотов
  * вытяжного вентилятора в шаг управления
  * Сама таблица содержится в конфигурационном файле
  */
-static int tts2[11][2];
+static int *tts2;
 
 /*
  *
@@ -187,12 +187,12 @@ int turns_to_step(int turns, int type) {
   int step=-5;
 
   if (type == 0) {
-    if ((turns >= tts1[site->vents[0]->step][0]) && (turns <= tts1[site->vents[0]->step][1])) {
+    if (turns >= tts1[site->vents[0]->step]) {
       step = site->vents[0]->step;
     }
   }
   if (type == 1) {
-    if ((turns >= tts2[site->vents[1]->step][0]) && (turns <= tts2[site->vents[0]->step][1])) {
+    if (turns >= tts2[site->vents[1]->step]) {
       step = site->vents[1]->step;
     }
   }
@@ -241,5 +241,7 @@ Vent* vent_new() {
   vent->error = NOERROR;
 
   vent->set_step = set_step;
+  tts1 = getArr(site->cfg, "vent1_steps");
+  tts2 = getArr(site->cfg, "vent2_steps");
   return vent;
 }

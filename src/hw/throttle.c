@@ -15,7 +15,7 @@ static int steps[11] = { 0xFF, 0xF8, 0xF7, 0xF6, 0xF3, 0xEE, 0xEC, 0xE6, 0xDC, 0
  * приточного вентилятора в шаг управления
  * Сама таблица содержится в конфигурационном файле
  */
-static float tts[12][2];
+static float *tts;
 
 /* Установка позиции заслонки
  *
@@ -84,7 +84,7 @@ int i2c_get_th_data(int addr) {
  */
 int pos_to_step(float pos) {
 
-  if (tts[site->th->position][0] <= pos && tts[site->th->position][1] >= pos)
+  if (tts[site->th->position] >= pos)
     return site->th->position;
 
   return -1;
@@ -108,7 +108,7 @@ Throttle* throttle_new() {
   Throttle* th = malloc(sizeof(Throttle));
   th->mode = 0;
   th->exist = 1; // Проверка наличия заслонки
-
+  tts = getArr(site->cfg, "vent1_steps"); // TODO: Использовать загрузку float массива
   th->set_position = set_position;
 
   return th;
