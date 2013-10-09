@@ -804,6 +804,10 @@ void sub_uvo_pow(Site* site) {
  */
 void sub_uvo_th(Site* site, int fail) {
 
+  // проверим или существует заслонка
+  if(!site->th_exists)
+    return;
+
   log_2("*********sub_uvo_th**************\n");
   int v;
   float temp_dew = strtof(getStr(site->cfg, (void *) "temp_dew"), NULL);
@@ -1596,11 +1600,18 @@ Site* site_new() {
 
   site->vents[0]->type = 0;  // приточный
   site->vents[1]->type = 1;
-  site->th = throttle_new();
   site->penalty = 0;
   site->temp_in_prev = 0;
   gcfg->conn = 0;
   site->cfg = read_config(concat(gcfg->cdir, gcfg->filename));
+
+  int *array = getArr(site->cfg, "vent1_steps");
+  int c = array[0];
+
+  site->th_exists = atoi(getStr(site->cfg, (void *) "is_throttle"));
+  if(site->th_exists)
+    site->th = throttle_new();
+
   site->set_mode = set_mode;
   site->set_ten = set_ten;
   int num_ac = atoi(getStr(site->cfg, (void *) "num_ac"));

@@ -51,6 +51,62 @@ int splitString(char *string, char *items[], char splitChar) {
   return chunks;
 }
 
+/* This splits a string into X parts given the split character.
+ *
+ */
+int splitStringA(char *string, char* items, char splitChar){
+
+  /* Declare local variables.  */
+  char temp[128];
+  int stringLength = 0;
+  int chunks = 0;
+  int pos = 0;
+  int x;
+
+  /* Check if the given string is NULL.  */
+  if (string == (char *) NULL) {
+    return (0);
+  }
+
+  /* Get the length of the string.  */
+  stringLength = (int) strlen(string);
+  if (stringLength == 0) {
+    return (0);
+  }
+
+  /* Calculate length of items arra */
+  for (x=0; x < stringLength; x++) {
+    if(string[x]==splitChar){
+      chunks++;
+    }
+  }
+  chunks++;
+
+  items = (char*) malloc(sizeof(char) * chunks);
+
+  chunks=0;
+  for (x = 0; x < stringLength; x++) {
+      if (string[x] == splitChar) {
+
+        temp[pos++] = 0;
+        chunks++;
+        items[chunks] = strdup(temp);
+
+        memset(temp, sizeof(temp), '\0');
+
+        pos = 0;
+
+      }else {
+        temp[pos++] = string[x];
+      }
+  }
+
+  temp[pos++] = 0;
+  items[chunks++] = strdup(temp);
+  return chunks;
+
+}
+
 /* Smart strings concatenation*/
 char* concat(char* str1, char* str2) {
 
@@ -196,5 +252,9 @@ void revS(char str[])
   *p = c;
 
   return;
+}
+
+void length(void* array){
+
 }
 

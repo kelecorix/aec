@@ -391,17 +391,13 @@ void disp_item_edit(Disp* lcd, int num) {
   char buf[100];
   sprintf(buf, "%d", num);
 
-  lcd_line(lcd, "       ^     ", 0);
-  lcd_line(lcd, concat(menu->curr->childs[chld + pos]->text, ":"), 1);
+  lcd_line(lcd, concat(menu->curr->childs[chld + pos]->text, ":"), 0);
+  lcd_line(lcd, "       ^     ", 1);
   lcd_line(lcd, concat("       ", buf), 2);
   lcd_line(lcd, "       v     ", 3);
 
-  // mvalb
-
 }
 
-//TODO: по лево идем дальше или в паарметр, окей только
-//
 void onKeyClicked(Disp* lcd, int key_code) {
   printf("нажата кнопка %d\n", key_code);
   switch (key_code){

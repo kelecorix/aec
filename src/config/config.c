@@ -82,6 +82,17 @@ char* getStr(ConfigTable* cfg, const char *key) {
     return "";
 }
 
+/*Get string parameter from table */
+int* getArr(ConfigTable* cfg, const char *key) {
+  char *value;
+  value = hashmapGet(cfg->mTable, (void *) key);
+
+  if (value)
+    return value;
+  else
+    return 0;
+}
+
 /*Set or change value in the table */
 void set(ConfigTable* cfg, char key[], char value[]) {
   hashmapPut(cfg->mTable, key, value);
@@ -121,17 +132,34 @@ ConfigTable* readConfig(char *filename) {
     if (line[i] == '\0')
       continue;
 
+    int stringLength = 0;
+    int x;
+    int chnk = 0;
+    /* Calculate number of tokens */
+    stringLength = (int) strlen(line);
+     for (x=0; x < stringLength; x++) {
+       if(line[x]==' '){
+         chnk++;
+       }
+     }
+     chnk++;
+
     // Split string in series of tokens
-    char *tokens[3]; // type name value
+    char *tokens[chnk]; // type name value
     int ret = splitString(line, tokens, ' ');
 
     // if string tokenized well
     if (ret > 1) {
 
-      hashmapPut(cfg->mTable, tokens[1], tokens[2]);
+      if (strcmp(tokens[3], "") == 0) {
+        // Значит нужно считать как значение
+        hashmapPut(cfg->mTable, tokens[1], tokens[2]);
+      } else {
+        // Значит нужно считать массив значений
+        hashmapPut(cfg->mTable, tokens[1], getArray(tokens, chnk));
+      }
 
-      if (strcmp(tokens[0], "$static")==0)
-      {
+      if (strcmp(tokens[0], "$static") == 0) {
         hashmapPut(cfg->mStatic, tokens[1], "1");
         hashmapPut(cfg->mOptional, tokens[1], "0");
       } else {
@@ -139,10 +167,6 @@ ConfigTable* readConfig(char *filename) {
         hashmapPut(cfg->mStatic, tokens[1], "0");
       }
     }
-
-    //printf("Retrieved line of length %zu :\n", read);
-    //printf("%s", line);
-
   }
 
   //if (line)
@@ -160,6 +184,17 @@ void writeConfig(char* filename) {
 
 
 
+}
+
+int getArray(char *tokens[], int length){
+
+  int i, j, *values;
+  values = malloc(sizeof(int)*length);
+  for(i=2, j=0; i< length; i++, j++){
+    values[j]= strtol(tokens[i], NULL, 10);
+  }
+
+  return values;
 }
 
 //static bool str_eq(void *key_a, void *key_b) {
