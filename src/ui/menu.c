@@ -18,6 +18,9 @@ int chld;  // id текущего нода
 int entr;
 int nempty;
 int omode; // Режим вывода
+int pre_pos;
+int pre_chld;
+
 
 Menu* menu;
 OutNode** outs;
