@@ -596,5 +596,4 @@ void select_item(Disp* lcd) {
     mval = menu->curr->childs[chld + pos]->val;
     disp_item_edit(lcd, mval);
   }
-
 }
