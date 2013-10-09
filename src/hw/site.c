@@ -316,7 +316,7 @@ int site_mode_fail_temp_uvo(Site* site) {
   site->penalty = 0;
 
   for (v = 0; v < 2; v++) {
-    site->vents[v]->set_step(site->vents[v], 11);
+    site->vents[v]->set_step(site->vents[v], 10);
     site->vents[v]->time_start = time(NULL);
   }
 
@@ -394,7 +394,7 @@ int site_mode_fail_temp_uvo(Site* site) {
       if (site->temp_out <= site->temp_in) {
 
         for (v = 0; v < 2; v++) {
-          site->vents[v]->set_step(site->vents[v], 11);
+          site->vents[v]->set_step(site->vents[v], 10);
           site->vents[v]->time_start = time(NULL);
         }
       }
@@ -441,7 +441,7 @@ int site_mode_fail_temp_uvo(Site* site) {
       site->temp_in_prev = site->temp_in;
 
       for (v = 0; v < 2; v++) {
-        site->vents[v]->set_step(site->vents[v], 11);
+        site->vents[v]->set_step(site->vents[v], 10);
         site->vents[v]->time_start = time(NULL);
       }
     }
@@ -659,7 +659,7 @@ void sub_uvo_vent(Site* site) {
 
       if ((site->temp_out > 12) || (site->vents[0]->error == ERROR || site->vents[1]->error == ERROR)) {
         for (v = 0; v < 2; v++) {
-          site->vents[v]->set_step(site->vents[v], 11);
+          site->vents[v]->set_step(site->vents[v], 10);
           site->vents[v]->time_start = time(NULL);
         }
       } else {
@@ -741,7 +741,7 @@ int sub_uvo_pen(Site* site) {
 
       if (site->temp_out <= site->temp_in) {
         for (v = 0; v < 2; v++) {
-          site->vents[v]->set_step(site->vents[v], 11);
+          site->vents[v]->set_step(site->vents[v], 10);
         }
       }
 
@@ -775,7 +775,7 @@ void sub_uvo_pow(Site* site) {
 
   if (site->temp_out < site->temp_in) {
     for (v = 0; v < 2; v++) {
-      site->vents[v]->set_step(site->vents[v], 11);
+      site->vents[v]->set_step(site->vents[v], 10);
     }
   }
 
@@ -783,7 +783,7 @@ void sub_uvo_pow(Site* site) {
 
     if (site->temp_out <= site->temp_in) {
       for (v = 0; v < 2; v++) {
-        site->vents[v]->set_step(site->vents[v], 11);
+        site->vents[v]->set_step(site->vents[v], 10);
       }
     }
 
@@ -1181,7 +1181,7 @@ int site_mode_heat(Site* site) {
         // TODO: Проверить по описанию
         if (site->vents[0]->mode == 0) {
           //site->vents[0]->set_mode(site->vents[0], 1);
-          site->vents[0]->set_step(site->vents[0], 11);
+          site->vents[0]->set_step(site->vents[0], 10);
           site->vents[0]->time_start = time(NULL);
         }
 
@@ -1377,7 +1377,7 @@ int site_mode_fail_ac(Site* site) {
     if (ret != 0) {
       //Ошибка чтения датчиков
       for (v = 0; v < 2; v++) {
-        site->vents[v]->set_step(site->vents[v], 11); // 100%
+        site->vents[v]->set_step(site->vents[v], 10); // 100%
         site->vents[v]->time_start = time(NULL);
       }
       continue;
@@ -1423,7 +1423,7 @@ int site_mode_fail_ac(Site* site) {
           if (site->vents[v]->mode == 0) {
 
             log_3("Температура на улице ниже температуры в сайте включим вентиляторы\n");
-            site->vents[v]->set_step(site->vents[v], 11); // 100%
+            site->vents[v]->set_step(site->vents[v], 10); // 100%
             site->vents[v]->time_start = time(NULL);
           }
         }
@@ -1457,7 +1457,7 @@ int site_mode_fail_ac(Site* site) {
 
             if (site->temp_out <= site->temp_in) {
               for (v = 0; v < 2; v++) {
-                site->vents[v]->set_step(site->vents[v], 11);
+                site->vents[v]->set_step(site->vents[v], 10);
               }
             }
 
