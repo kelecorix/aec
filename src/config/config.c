@@ -110,6 +110,32 @@ int* getArr(ConfigTable* cfg, const char *key) {
     return 0;
 }
 
+/* Compare 2 arrays
+ *
+ */
+int cmpArr(int* values1, int* values2){
+
+  int i, size1, size2, eq=1; // 0 - array are not equal 
+  // check sizes
+  size1 = sizeof(values1) / sizeof(int);
+  size2 = sizeof(values2) / sizeof(int);
+
+  if (size1 != size2) 
+    return eq=0;
+
+  // sizes are ok compare each element
+  for (i=0; i < size1; i++) {
+    if (values1[i] != values2[i]){
+      eq = 0;
+      break;
+    }
+  }
+    
+  return eq;
+
+}
+
+
 /* Set or change value in the table
  *
  */
@@ -204,12 +230,92 @@ ConfigTable* readConfig(char *filename) {
  */
 void writeConfig(char* filename) {
 
-  FILE* fp;
+  FILE *fp, *fp2;
+  char *line = NULL;
+  size_t len = 0;
+  ssize_t read;
 
-  fp = fopen(filename, "w");
+  char* key    = NULL;
+  char* value  = NULL;
+  int   values;
 
+  //ConfigTable* cfg = config_table_new();
 
+  fp = fopen(filename, "r");
+  fp2 = fopen("replica", write);
 
+  if (fp == NULL)
+    exit(EXIT_FAILURE);
+
+  while ((read = getline(&line, &len, fp)) != -1) {
+    int i = 0;
+
+    // copy string, which starts from space
+    if (line[i] == ' ')
+      fwrite (line , sizeof(char), sizeof(line), fp2);
+
+    // copy comments line
+    if (line[i] == '#')
+      fwrite (line , sizeof(char), sizeof(line), fp2);
+
+    // copy blank lines
+    if (line[i] == '\0')
+      fwrite (line , sizeof(char), sizeof(line), fp2);
+
+      int stringLength = 0;
+      int x;
+      int chnk = 0;
+      
+      /* Calculate number of tokens */
+      stringLength = (int) strlen(line);
+      for (x=0; x < stringLength; x++) {
+	if(line[x]==' '){
+	  chnk++;
+	}
+      }
+      chnk++;
+
+      // Split string in series of tokens
+      char *tokens[chnk]; // type name value
+      int ret = splitString(line, tokens, ' ');
+      
+      // if string tokenized well
+      if (ret > 1) {
+	if (strcmp(tokens[3], "") == 0) {
+          // Значит нужно считать как значение
+	  key = tokens[1];
+	  value = tokens[2];
+	  
+	  // compare current value, with value from hashtable
+	  if (value != hashmapGet(site->cfg, key)) {
+	    // value changed
+	    // write new value
+	    fwrite();
+	  } else {
+	    // write as is
+	    //fwrite( , , fp2);
+	  }
+	  
+	} else {
+	  // Значит нужно считать массив значений
+	  key = tokens[1];
+	  values = getArray(tokens, chnk);
+
+	  // compare array of values, with values from hashtable
+	  if(!cmpArrays(values, getArray(site->cfg, key))) {
+	    // some values changed, so rewrite hole array
+	    // in it's current condition
+	    // write new value
+	    //fwrite( , sizeof(char), sizeof(values), fp2); // !!!!
+
+	  } else {
+	    // write as is 
+	    fwrite();
+
+	}
+
+      }
+  }
 }
 
 /*
