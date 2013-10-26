@@ -101,7 +101,7 @@ void run() {
     site->acs[a]->set_mode(site->acs[a], 1);
   }
 
-  site_mode_uvo();
+  //site_mode_uvo();
   //site_mode_fail_uvo();
   //site_mode_fail_ac();
 }

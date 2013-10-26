@@ -270,7 +270,6 @@ void writeConfig(char* filename) {
 
   char* key = NULL;
   char* value = NULL;
-  int values;
 
   //ConfigTable* cfg = config_table_new();
 
@@ -338,12 +337,12 @@ void writeConfig(char* filename) {
           values = getArrayI(values, tokens, chnk);
 
           // compare array of values, with values from hashtable
-          if (!cmpArr(values, values)) {
+          if (memcmp(values, hashmapGet(site->cfg, key), length)==1) {
             // some values changed, so rewrite hole array
             // in it's current condition
             // write new value
             for (i = 0; i < length; i++) {
-              fwrite(itoa(values[i], val, 10), sizeof(char), sizeof(value), fp2); // !!!!
+              fwrite(itoa(values[i], val, 10), sizeof(char), sizeof(value), fp2);
             }
           }
 
@@ -356,7 +355,7 @@ void writeConfig(char* filename) {
           }
         } else {
           // write as is
-          //fwrite();
+          // fwrite();
         }
       }
 
@@ -392,6 +391,26 @@ int getArrayF(float *values, char *tokens[], int length){
   return 0;
 }
 
+void test_config(){
+
+  // 2. Беспорядочно меняем значения
+  // 3. Беспорядочно меняем значения в массиве
+  // 4. Выполняем запись нового конфига
+
+  hashmapPut(site->cfg->mTable, "temp_support", rand());
+  hashmapPut(site->cfg->mTable, "temp_dew", rand());
+
+  int i, *arr;
+  arr = malloc(10*sizeof(int));
+  for(i=0; i<10; i++){
+    arr[i] = rand();
+  }
+
+  hashmapPut(site->cfg->mTable, "vent2_steps", arr);
+
+  writeConfig(concat(gcfg->cdir, "freecooling.conf"));
+
+}
 
 //static bool str_eq(void *key_a, void *key_b) {
 //  return !strcmp((const char *) key_a, (const char *) key_b);

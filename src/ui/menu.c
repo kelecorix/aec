@@ -398,6 +398,12 @@ void disp_item_edit(Disp* lcd, int num) {
 
 }
 
+void save_value(){
+
+  hashmapPut(site->cfg->mTable, menu->curr->cn, mval);
+
+}
+
 void onKeyClicked(Disp* lcd, int key_code) {
   printf("нажата кнопка %d\n", key_code);
   switch (key_code){
@@ -534,6 +540,14 @@ void onKeyClicked(Disp* lcd, int key_code) {
   case KEY_OK :
     //если это лист, тогда перейдем в редактирование
     //перед if
+    if(emode==1){
+      // мы нажали ОК в режиме редактирования, значит нужно
+      // сохранить значение
+      save_value();
+      // TODO: вернуться в предыдущее меню
+      disp_item(lcd);
+    }
+
     printf("Меню - %s %d\n", menu->curr->childs[chld + pos]->text, menu->curr->childs[chld + pos]->lenght);
     if (isLeaf(menu->curr->childs[chld + pos])) {
       printf("в ифе\n");
