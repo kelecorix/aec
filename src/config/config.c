@@ -124,7 +124,7 @@ int* getArrI(ConfigTable* cfg, const char *key) {
 
 float* getArrF(ConfigTable* cfg, const char *key) {
 
-  float *lvalues = (int *) hashmapGet(cfg->mTable, (void *) key);
+  float *lvalues = (float *) hashmapGet(cfg->mTable, (void *) key);
   return (lvalues+1);
 
 }
