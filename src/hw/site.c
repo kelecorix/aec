@@ -491,10 +491,12 @@ int site_mode_uvo(Site* site) {
   int ret, res;
   float temp_dew = strtof(getStr(site->cfg, (void *) "temp_dew"), NULL);
 
+  printf("до чтения датчиков\n");
   // читаем датчики
   ret = read_sensors(site);
   if (ret != 0) {
     //Ошибка чтения датчиков
+    printf("ошибка чтения датчиков\n");
     site_mode_fail_temp_uvo(site);
   }
 
