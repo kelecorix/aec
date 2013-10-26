@@ -119,7 +119,6 @@ int getArrI(ConfigTable* cfg, const char *key, int *values) {
   }
 
   memmove(values, (lvalues+1), (length-1));
-  values[3];
   return 0;
 
 }
