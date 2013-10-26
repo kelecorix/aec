@@ -285,7 +285,7 @@ int site_mode_fail_temp_ac() {
         log_3("да есть живые кондиционеры site->temp_in - site->temp_out = %f > 6 ?\n", (site->temp_in - site->temp_out));
         if (((site->temp_in - site->temp_out) > 6) && (site->vents[0]->error != ERROR && site->vents[1]->error != ERROR)) {
           log_3("ДА перейдем в site_mode_fail_temp_uvo\n");
-          site_mode_fail_uvo();
+          site_mode_fail_uvo("из авария по температуре");
         } else {
           log_3("НЕТ продолжим охлаждать кондиционером\n");
           continue;
@@ -609,7 +609,7 @@ void sub_uvo_vent() {
               site->vents[v]->error = ERROR;
             }
             log_3("Авария уво переход на аварийное охлаждение кондиционером\n");
-            site_mode_fail_uvo();
+            site_mode_fail_uvo("из работа вентиляции");
           } else {
             log_3("Вентиляторы вращаются\n");
             for (v = 0; v < 2; v++) {
@@ -1253,11 +1253,14 @@ int site_mode_heat() {
 
 /* Авария УВО -
  * Авария вентиляторов - Авария датчиков -
- * Авария заслонки - Авария охлаждения кондиционером */
-int site_mode_fail_uvo() {
+ * Авария заслонки - Авария охлаждения кондиционером
+ * from - строка передающая сообщение, обычно указывает откуда
+ * был произведен переход
+ */
+int site_mode_fail_uvo(char* from) {
 
   log_3("site_mode_fail_uvo: Режим авария УВО!\n");
-  logD(gcfg->logger->dataLOG, 0, "Режим авария УВО!");
+  logD(gcfg->logger->dataLOG, 0, concat("Режим авария УВО! ", concat(from, "\n")));
   //    "Режим авария УВО");
   site->mode = 4;
   site->time_pre = time(NULL);

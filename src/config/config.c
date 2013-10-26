@@ -267,14 +267,14 @@ void writeConfig(char* filename) {
   size_t len = 0;
   ssize_t read;
 
-  char* key    = NULL;
-  char* value  = NULL;
-  int   values;
+  char* key = NULL;
+  char* value = NULL;
+  int values;
 
   //ConfigTable* cfg = config_table_new();
 
   fp = fopen(filename, "r");
-  //fp2 = fopen("replica", write);
+  fp2 = fopen("replica", "w");
 
   if (fp == NULL)
     exit(EXIT_FAILURE);
@@ -284,69 +284,69 @@ void writeConfig(char* filename) {
 
     // copy string, which starts from space
     if (line[i] == ' ')
-      fwrite (line , sizeof(char), sizeof(line), fp2);
+      fwrite(line, sizeof(char), sizeof(line), fp2);
 
     // copy comments line
     if (line[i] == '#')
-      fwrite (line , sizeof(char), sizeof(line), fp2);
+      fwrite(line, sizeof(char), sizeof(line), fp2);
 
     // copy blank lines
     if (line[i] == '\0')
-      fwrite (line , sizeof(char), sizeof(line), fp2);
+      fwrite(line, sizeof(char), sizeof(line), fp2);
 
-      int stringLength = 0;
-      int x;
-      int chnk = 0;
-      
-      /* Calculate number of tokens */
-      stringLength = (int) strlen(line);
-      for (x=0; x < stringLength; x++) {
-	if(line[x]==' '){
-	  chnk++;
-	}
+    int stringLength = 0;
+    int x;
+    int chnk = 0;
+
+    /* Calculate number of tokens */
+    stringLength = (int) strlen(line);
+    for (x = 0; x < stringLength; x++) {
+      if (line[x] == ' ') {
+        chnk++;
       }
-      chnk++;
+    }
+    chnk++;
 
-      // Split string in series of tokens
-      char *tokens[chnk]; // type name value
-      int ret = splitString(line, tokens, ' ');
-      
-      // if string tokenized well
-      if (ret > 1) {
-	if (strcmp(tokens[3], "") == 0) {
-          // Значит нужно считать как значение
-	  key = tokens[1];
-	  value = tokens[2];
-	  
-	  // compare current value, with value from hashtable
-	  //if (value != hashmapGet(site->cfg, key)) {
-	    // value changed
-	    // write new value
-	    //fwrite();
-	  //} else {
-	    // write as is
-	    //fwrite( , , fp2);
-	  //}
-	  
-	} else {
-	  // Значит нужно считать массив значений
-	  key = tokens[1];
-	  //values = getArray(tokens, chnk);
+    // Split string in series of tokens
+    char *tokens[chnk]; // type name value
+    int ret = splitString(line, tokens, ' ');
 
-	  // compare array of values, with values from hashtable
-	  //if(!cmpArrays(values, getArray(site->cfg, key))) {
-	    // some values changed, so rewrite hole array
-	    // in it's current condition
-	    // write new value
-	    //fwrite( , sizeof(char), sizeof(values), fp2); // !!!!
+    // if string tokenized well
+    if (ret > 1) {
+      if (chnk < 3) {
+        // Значит нужно считать как значение
+        key = tokens[1];
+        value = tokens[2];
 
-	  //} else {
-	    // write as is 
-	    //fwrite();
-	//}
-	  }
+        // compare current value, with value from hashtable
+        if (value != hashmapGet(site->cfg, key)) {
+         value changed
+         write new value
+        fwrite();
+        } else {
+        // write as is
+        fwrite( , , fp2);
+        }
 
+      } else {
+        // Значит нужно считать и записать массив значений
+        key = tokens[1];
+        values = getArray(tokens, chnk);
+
+        // compare array of values, with values from hashtable
+        if(!cmpArrays(values, getArray(site->cfg, key))) {
+        // some values changed, so rewrite hole array
+        // in it's current condition
+        // write new value
+        fwrite( , sizeof(char), sizeof(values), fp2); // !!!!
+
+        } else {
+        // write as is
+        fwrite();
+        }
       }
+
+    }
   }
 }
 

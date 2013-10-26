@@ -102,7 +102,7 @@ void sub_uvo_th(int fail);
 int sub_uvo_fail();
 int site_mode_ac();
 int site_mode_heat();
-int site_mode_fail_uvo();
+int site_mode_fail_uvo(char* from);
 int site_mode_fail_ac();
 int site_mode_fail_mix();
 int read_sensors();
