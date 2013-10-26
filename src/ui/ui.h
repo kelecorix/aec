@@ -16,6 +16,6 @@
 #define mode_intro 5
 #define mode_MENU 6
 
-void run_ui(Site* site);
+void run_ui();
 
 #endif /*UI_H_*/

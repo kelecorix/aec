@@ -287,21 +287,21 @@ int main(int argc, char *argv[]) {
   void* retL = NULL;
   void* retM = NULL;
 
-  if (pthread_create(&threadA, NULL, (void *) run, (void*) site)) {
+  if (pthread_create(&threadA, NULL, (void *) run, NULL)) {
     log_4("Error creating algo thread\n");
     return 1;
   }
 
   sleep(4);
 
-  if (pthread_create(&threadU, NULL, (void *) run_ui, (void*) site)) {
+  if (pthread_create(&threadU, NULL, (void *) run_ui, NULL)) {
     log_4("Error creating UI thread\n");
     return 1;
   }
 
   sleep(4);
 
-  if (pthread_create(&threadL, NULL, (void *) run_logger, (void*) site)) {
+  if (pthread_create(&threadL, NULL, (void *) run_logger, NULL)) {
     log_4("Error creating Logger thread\n");
     return 1;
   }
@@ -310,7 +310,7 @@ int main(int argc, char *argv[]) {
 
   // поток записи моточасов
   if (gcfg->mtime > 0) {
-    if (pthread_create(&threadM, NULL, (void *) run_moto, (void*) site)) {
+    if (pthread_create(&threadM, NULL, (void *) run_moto, NULL)) {
       log_4("Error creating moto logger thread\n");
       return 1;
     }

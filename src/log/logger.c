@@ -47,7 +47,7 @@ void logger_free(Logger* logger) {
  *
  *
  */
-void run_logger(Site* site){
+void run_logger(){
   printf("Запустим цикл логгера\n");
   while(1){
     printf("Цикл работы логгера\n");

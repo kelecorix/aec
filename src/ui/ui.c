@@ -59,7 +59,7 @@ char* net_address() {
  *
  *
  */
-void run_ui(Site* site) {
+void run_ui() {
 
   printf("режим UI\n");
 
