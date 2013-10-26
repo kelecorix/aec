@@ -403,7 +403,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
   switch (key_code){
   case KEY_LEFT :
 
-    printf("LEFT %d %d %d\n", chld, pos, entr);
+    printf("LEFT %d %d %d %d\n", chld, pos, entr, nempty);
 
     if(emode==1){
       emode=0;
@@ -418,6 +418,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if (mnmode == 1 ){
       if(menu->curr->id > 0){
         menu->curr = menu->curr->parent;
+        pos=-1;
       }  else{
         mnmode=0;
         pos=-1;
@@ -454,7 +455,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
       // перейдем на уровень вниз
       // если это не лист
       if (!isLeaf(menu->curr->childs[chld + pos])) {
-        printf("RIGHT %d %d %d\n", chld, pos, entr);
+        printf("RIGHT %d %d %d %d\n", chld, pos, entr, nempty);
         menu->curr = menu->curr->childs[chld + pos];
         disp_item(lcd);
         break;
@@ -487,7 +488,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
       }
       //break;
 
-      printf("UP %d %d %d\n", chld, pos, entr);
+      printf("UP %d %d %d %d\n", chld, pos, entr, nempty);
 
       disp_item(lcd);
 
