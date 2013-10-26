@@ -82,7 +82,8 @@ void run(Site* site) {
   i2cClose();
 
   // По умолчанию
-  site->th->set_position(site->th, 0);
+  if(site->th_exists)
+    site->th->set_position(site->th, 0);
   site->th_r_exists = 0;
   site->tacho1_exists = 1;
   site->tacho2_exists = 1;
