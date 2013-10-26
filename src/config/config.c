@@ -225,9 +225,18 @@ ConfigTable* readConfig(char *filename) {
         hashmapPut(cfg->mTable, tokens[1], tokens[2]);
       } else {
         // Значит нужно считать массив значений
-        int ret, *values; // первые 2 значения имена, еще 1 слот под значение длины
-        values = malloc((chnk-1)*sizeof(int));
-        ret = getArray(values, tokens, chnk);
+        int ret, *values; // первые 2 значения имена, 3й тип массива еще 1 слот под значение длины
+
+        if (strcmp(tokens[2], "int") == 0 ){
+          values = malloc((chnk-2)*sizeof(int));
+          ret = getArrayI(values, tokens, chnk);
+        }
+
+        if (strcmp(tokens[2], "float") == 0){
+          values = malloc((chnk-2)*sizeof(float));
+          ret = getArrayF(values, tokens, chnk);
+        }
+
         hashmapPut(cfg->mTable, tokens[1], values);
       }
 
@@ -345,17 +354,30 @@ void writeConfig(char* filename) {
  *
  *
  */
-int getArray(int *values, char *tokens[], int length){
+int getArrayI(int *values, char *tokens[], int length){
 
   int i, j;
   //values = malloc(sizeof(int)*length);
-  values[0] = length-2;// первые 2 элемента это опция и имя
-  for(i=2, j=1; i< length; i++, j++){
+  values[0] = length-3;// первые 2 элемента это опция и имя, 3й тип
+  for(i=3, j=1; i< length; i++, j++){
     values[j]= strtol(tokens[i], NULL, 10);
   }
 
   return 0;
 }
+
+int getArrayF(float *values, char *tokens[], int length){
+
+  int i, j;
+  //values = malloc(sizeof(int)*length);
+  values[0] = length-3;// первые 2 элемента это опция и имя, 3й тип
+  for(i=3, j=1; i< length; i++, j++){
+    values[j]= strtol(tokens[i], NULL, 10);
+  }
+
+  return 0;
+}
+
 
 //static bool str_eq(void *key_a, void *key_b) {
 //  return !strcmp((const char *) key_a, (const char *) key_b);
