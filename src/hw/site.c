@@ -852,7 +852,7 @@ void sub_uvo_th(int fail) {
             }
           }
           if (!fail) {
-            site_mode_fail_uvo();
+            site_mode_fail_uvo("ошибка заслонки");
           }
         }
       }
@@ -1130,7 +1130,7 @@ int site_mode_heat() {
           } else {
 
             log_3("заслонка не исправна\n");
-            site_mode_fail_uvo();
+            site_mode_fail_uvo("заслонка не исправна ");
           }
         }
         i++;
@@ -1145,7 +1145,7 @@ int site_mode_heat() {
     int ret;
     ret = read_sensors();
     if (ret != 0)
-      site_mode_fail_uvo();
+      site_mode_fail_uvo("ошибка чтения датчиков");
 
     if (difftime(time(NULL), site->time_pre) <= 5) //30
     { //секунды
@@ -1583,7 +1583,7 @@ int set_mode(int val) {
     if (val == 3)
       site_mode_heat();
     if (val == 4)
-      site_mode_fail_uvo();
+      site_mode_fail_uvo("");
     if (val == 5)
       site_mode_fail_ac();
     if (val == 6)

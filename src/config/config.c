@@ -6,6 +6,7 @@
 #include "config.h"
 #include "../utils/hashmap.h"
 #include "../utils/utils.h"
+#include "../hw/site.h"
 
 /*
  *
@@ -320,29 +321,42 @@ void writeConfig(char* filename) {
 
         // compare current value, with value from hashtable
         if (value != hashmapGet(site->cfg, key)) {
-         value changed
-         write new value
-        fwrite();
+          //value changed
+          //write new value
+          //fwrite();
         } else {
-        // write as is
-        fwrite( , , fp2);
+          // write as is
+          fwrite(value, sizeof(char), sizeof(value), fp2);
         }
 
       } else {
         // Значит нужно считать и записать массив значений
-        key = tokens[1];
-        values = getArray(tokens, chnk);
+        if (strcmp(tokens[2], "int")) {
+          int length = 0, value, *values;
+          char *val="";
+          key = tokens[1];
+          values = getArrayI(values, tokens, chnk);
 
-        // compare array of values, with values from hashtable
-        if(!cmpArrays(values, getArray(site->cfg, key))) {
-        // some values changed, so rewrite hole array
-        // in it's current condition
-        // write new value
-        fwrite( , sizeof(char), sizeof(values), fp2); // !!!!
+          // compare array of values, with values from hashtable
+          if (!cmpArr(values, values)) {
+            // some values changed, so rewrite hole array
+            // in it's current condition
+            // write new value
+            for (i = 0; i < length; i++) {
+              fwrite(itoa(values[i], val, 10), sizeof(char), sizeof(value), fp2); // !!!!
+            }
+          }
 
+          if (strcmp(tokens[2], "float")) {
+            int length=0;
+            float value, *values;
+            key = tokens[1];
+            values = getArrayF(values, tokens, chnk);
+
+          }
         } else {
-        // write as is
-        fwrite();
+          // write as is
+          //fwrite();
         }
       }
 
