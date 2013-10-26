@@ -1595,6 +1595,25 @@ int set_mode(Site* site, int val) {
 Site* site_new() {
 
   Site* site = malloc(sizeof(Site));
+  site->cfg  = read_config(concat(gcfg->cdir, gcfg->filename));
+
+  site->penalty = 0;
+  site->temp_in_prev = 0;
+  gcfg->conn = 0;
+
+  site->set_mode = set_mode;
+  site->set_ten  = set_ten;
+
+  int num_ac = atoi(getStr(site->cfg, (void *) "num_ac"));
+  site->acs = malloc(num_ac * sizeof(int*));
+  site->num_ac = num_ac;
+
+  log_2("Количество кондишек: %d\n", site->num_ac);
+  return site;
+}
+
+void pop_hw() {
+
   int i;
   for (i = 0; i < 2; i++) {
     site->vents[i] = vent_new();
@@ -1602,29 +1621,15 @@ Site* site_new() {
 
   site->vents[0]->type = 0;  // приточный
   site->vents[1]->type = 1;
-  site->penalty = 0;
-  site->temp_in_prev = 0;
-  gcfg->conn = 0;
-  site->cfg = read_config(concat(gcfg->cdir, gcfg->filename));
-
-  //int *array = getArr(site->cfg, "vent1_steps");
-  //int c = array[0];
 
   site->th_exists = atoi(getStr(site->cfg, (void *) "is_throttle"));
-  if(site->th_exists)
+  if (site->th_exists)
     site->th = throttle_new();
 
-  site->set_mode = set_mode;
-  site->set_ten = set_ten;
-  int num_ac = atoi(getStr(site->cfg, (void *) "num_ac"));
-  site->acs = malloc(num_ac * sizeof(int*));
-  site->num_ac = num_ac;
-
-  for(i=0; i < (site->num_ac); i++){
+  for (i = 0; i < (site->num_ac); i++) {
     site->acs[i] = ac_new(i);
   }
-  log_2("Количество кондишек: %d\n", site->num_ac);
-  return site;
+
 }
 
 /*

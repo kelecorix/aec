@@ -23,10 +23,10 @@ typedef enum {
  */
 typedef struct Vent {
 
-  int mode; // 0 - OFF/ВЫКЛ, 1 - ON/ВКЛ
+  int mode;  // 0 - OFF/ВЫКЛ, 1 - ON/ВКЛ
   int turns; // обороты, значения мз таблицы 
   int step;  // шаг в соотв. с оборотами
-  int type; // 0 - приточный/in, 1 - вытяжной
+  int type;  // 0 - приточный/in, 1 - вытяжной
   long time_work;
   time_t time_start;
   time_t time_stop;

@@ -4,6 +4,7 @@
 #include "throttle.h"
 #include "i2c.h"
 #include "site.h"
+#include "../config/config.h"
 #include "../utils/utils.h"
 
 /* Значения шагов управления положением заслонки
@@ -99,16 +100,17 @@ void throttle_free() {
   //TODO: очистим ресурсы памяти
 }
 
+
 /*
  *
  *
  *
  */
-Throttle* throttle_new() {
+Throttle* throttle_new(Site* site) {
   Throttle* th = malloc(sizeof(Throttle));
   th->mode = 0;
   th->exist = 1; // Проверка наличия заслонки
-  tts = getArr(site->cfg, "vent1_steps"); // TODO: Использовать загрузку float массива
+  getArrF(site->cfg, "vent1_steps", tts); // TODO: Использовать загрузку float массива
   th->set_position = set_position;
 
   return th;

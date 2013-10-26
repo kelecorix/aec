@@ -97,18 +97,44 @@ char* getStr(ConfigTable* cfg, const char *key) {
     return "";
 }
 
-/* Get string parameter from table
+/* Get array value from table
  *
  */
-int* getArr(ConfigTable* cfg, const char *key) {
-  char *value;
-  value = hashmapGet(cfg->mTable, (void *) key);
+int getArrI(ConfigTable* cfg, const char *key, int *values) {
 
-  if (value)
-    return value;
-  else
-    return 0;
+  int *mnm= NULL;
+  int *lvalues = (int *) hashmapGet(cfg->mTable, (void *) key);
+
+  int length = lvalues[0];// первый элемент это размер массива
+
+  mnm = (int *) realloc (values, length * sizeof(int));
+
+  if (mnm!=NULL) {
+    values=mnm;
+  }
+  else {
+    free (values);
+    puts ("Error (re)allocating memory");
+    return 1;
+  }
+
+  memmove(values, (lvalues+1), (length-1));
+  values[3];
+  return 0;
+
 }
+
+int getArrF(ConfigTable* cfg, const char *key, float *values) {
+
+  float *lvalues;
+  lvalues = hashmapGet(cfg->mTable, (void *) key);
+  int length = sizeof(lvalues)/sizeof(float);
+  values = malloc(length);
+  memmove (values, lvalues, length);
+
+  return 0;
+}
+
 
 /* Compare 2 arrays
  *
@@ -200,12 +226,15 @@ ConfigTable* readConfig(char *filename) {
     // if string tokenized well
     if (ret > 1) {
 
-      if (strcmp(tokens[3], "") == 0) {
+      if (chnk <= 3) {
         // Значит нужно считать как значение
         hashmapPut(cfg->mTable, tokens[1], tokens[2]);
       } else {
         // Значит нужно считать массив значений
-        hashmapPut(cfg->mTable, tokens[1], getArray(tokens, chnk));
+        int ret, *values; // первые 2 значения имена, еще 1 слот под значение длины
+        values = malloc((chnk-1)*sizeof(int));
+        ret = getArray(values, tokens, chnk);
+        hashmapPut(cfg->mTable, tokens[1], values);
       }
 
       if (strcmp(tokens[0], "$static") == 0) {
@@ -242,7 +271,7 @@ void writeConfig(char* filename) {
   //ConfigTable* cfg = config_table_new();
 
   fp = fopen(filename, "r");
-  fp2 = fopen("replica", write);
+  //fp2 = fopen("replica", write);
 
   if (fp == NULL)
     exit(EXIT_FAILURE);
@@ -287,50 +316,51 @@ void writeConfig(char* filename) {
 	  value = tokens[2];
 	  
 	  // compare current value, with value from hashtable
-	  if (value != hashmapGet(site->cfg, key)) {
+	  //if (value != hashmapGet(site->cfg, key)) {
 	    // value changed
 	    // write new value
-	    fwrite();
-	  } else {
+	    //fwrite();
+	  //} else {
 	    // write as is
 	    //fwrite( , , fp2);
-	  }
+	  //}
 	  
 	} else {
 	  // Значит нужно считать массив значений
 	  key = tokens[1];
-	  values = getArray(tokens, chnk);
+	  //values = getArray(tokens, chnk);
 
 	  // compare array of values, with values from hashtable
-	  if(!cmpArrays(values, getArray(site->cfg, key))) {
+	  //if(!cmpArrays(values, getArray(site->cfg, key))) {
 	    // some values changed, so rewrite hole array
 	    // in it's current condition
 	    // write new value
 	    //fwrite( , sizeof(char), sizeof(values), fp2); // !!!!
 
-	  } else {
+	  //} else {
 	    // write as is 
-	    fwrite();
-
-	}
+	    //fwrite();
+	//}
+	  }
 
       }
   }
 }
 
-/*
+/* Первое значение values длина массива
  *
  *
  */
-int getArray(char *tokens[], int length){
+int getArray(int *values, char *tokens[], int length){
 
-  int i, j, *values;
-  values = malloc(sizeof(int)*length);
-  for(i=2, j=0; i< length; i++, j++){
+  int i, j;
+  //values = malloc(sizeof(int)*length);
+  values[0] = length-2;// первые 2 элемента это опция и имя
+  for(i=2, j=1; i< length; i++, j++){
     values[j]= strtol(tokens[i], NULL, 10);
   }
 
-  return values;
+  return 0;
 }
 
 //static bool str_eq(void *key_a, void *key_b) {

@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "i2c.h"
 #include "site.h"
+#include "../config/config.h"
 #include "vent.h"
 
 /* Значения шагов управления оборотами вентиляции
@@ -15,13 +16,13 @@ static int steps[11] = { 0xFF, 0xF8, 0xF7, 0xF6, 0xF3, 0xEE, 0xEC, 0xE6, 0xDC, 0
  * приточного вентилятора в шаг управления
  * Сама таблица содержится в конфигурационном файле
  */
-static int *tts1;
+static int *tts1 = NULL;
 
 /* Таблица преобразования оборотов
  * вытяжного вентилятора в шаг управления
  * Сама таблица содержится в конфигурационном файле
  */
-static int *tts2;
+static int *tts2 = NULL;
 
 /*
  *
@@ -240,11 +241,20 @@ void test_vents() {
  */
 Vent* vent_new() {
   Vent* vent = malloc(sizeof(Vent));
+
+  getArrI(site->cfg, "vent1_steps", tts1);
+  getArrI(site->cfg, "vent2_steps", tts2);
+
+  int i = tts1[5];
+  if (i == 0)
+    return NULL;
+
   vent->mode = 0;
   vent->error = NOERROR;
 
   vent->set_step = set_step;
-  tts1 = getArr(site->cfg, "vent1_steps");
-  tts2 = getArr(site->cfg, "vent2_steps");
+
   return vent;
 }
+
+

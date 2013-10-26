@@ -25,8 +25,10 @@ typedef struct ConfigTable {
 
 } ConfigTable;
 
-char* getStr(ConfigTable* cfg, const char *key) ;
-int* getArr(ConfigTable* cfg, const char *key);
+char* getStr(ConfigTable* cfg, const char *key);
+int getArrI(ConfigTable* cfg, const char *key, int *values);
+int getArrF(ConfigTable* cfg, const char *key, float *values);
+int getArray(int *values, char *tokens[], int length);
 ConfigTable* readConfig(char* filename);
 void writeConfig(char* filename);
 

@@ -260,6 +260,7 @@ int main(int argc, char *argv[]) {
   gcfg->logger = create_logger();
 
   site = site_new();
+  pop_hw();
 
   if (site->cfg)
     log_2("Config was read ok!\n");
