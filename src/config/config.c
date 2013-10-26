@@ -372,7 +372,7 @@ int getArrayF(float *values, char *tokens[], int length){
   //values = malloc(sizeof(int)*length);
   values[0] = length-3;// первые 2 элемента это опция и имя, 3й тип
   for(i=3, j=1; i< length; i++, j++){
-    values[j]= strtol(tokens[i], NULL, 10);
+    values[j]= strtof(tokens[i], NULL);
   }
 
   return 0;
