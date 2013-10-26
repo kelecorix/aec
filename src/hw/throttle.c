@@ -106,7 +106,7 @@ void throttle_free() {
  *
  *
  */
-Throttle* throttle_new(Site* site) {
+Throttle* throttle_new() {
   Throttle* th = malloc(sizeof(Throttle));
   th->mode = 0;
   th->exist = 1; // Проверка наличия заслонки
