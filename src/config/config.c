@@ -100,26 +100,25 @@ char* getStr(ConfigTable* cfg, const char *key) {
 /* Get array value from table
  *
  */
-int getArrI(ConfigTable* cfg, const char *key, int *values) {
+int* getArrI(ConfigTable* cfg, const char *key) {
 
-  int *mnm= NULL;
+  //int *mnm= NULL, *values=NULL;
   int *lvalues = (int *) hashmapGet(cfg->mTable, (void *) key);
 
-  int length = lvalues[0];// первый элемент это размер массива
-
-  mnm = (int *) realloc (values, length * sizeof(int));
-
-  if (mnm!=NULL) {
-    values=mnm;
-  }
-  else {
-    free (values);
-    puts ("Error (re)allocating memory");
-    return 1;
-  }
-
-  memmove(values, (lvalues+1), (length-1));
-  return 0;
+//  int length = lvalues[0];// первый элемент это размер массива
+//
+//  mnm = (int *) realloc (values, length * sizeof(int));
+//
+//  if (mnm!=NULL) {
+//    values=mnm;
+//  }
+//  else {
+//    free (values);
+//    puts ("Error (re)allocating memory");
+//  }
+//
+//  memmove(values, (lvalues+1), (length-1));
+  return (lvalues+1);
 
 }
 

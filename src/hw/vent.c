@@ -242,12 +242,8 @@ void test_vents() {
 Vent* vent_new() {
   Vent* vent = malloc(sizeof(Vent));
 
-  getArrI(site->cfg, "vent1_steps", tts1);
-  getArrI(site->cfg, "vent2_steps", tts2);
-
-  int i = tts1[5];
-  if (i == 0)
-    return NULL;
+  tts1 = getArrI(site->cfg, "vent1_steps");
+  tts2 = getArrI(site->cfg, "vent2_steps");
 
   vent->mode = 0;
   vent->error = NOERROR;
