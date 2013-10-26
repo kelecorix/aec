@@ -54,9 +54,9 @@ int read_sensors(Site* site) {
   site->acs[0]->temp = site->temp_evapor1;
   if(site->num_ac == 2)
     site->acs[1]->temp = site->temp_evapor2;
-
+  printf("после установки температур\n");
   i2c_get_tacho(strtol(a_tacho_in, NULL, 16), strtol(a_tacho_out, NULL, 16));
-
+  printf("после получения таходанных\n");
   site->th_r = i2c_get_th_data(strtol(a_th_adc, NULL, 16));
 
   if ((site->temp_out == -100) || (site->temp_in == -100) ||
