@@ -244,7 +244,7 @@ void process_args(int argc, char *argv[]) {
 }
 
 int main(int argc, char *argv[]) {
-
+  printf("старт\n");
   int opts = 0; //0 - no need to process cli options, 1 - process options
   gmode = 0;
   if (argc == 1)
