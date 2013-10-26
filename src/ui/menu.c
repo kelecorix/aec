@@ -418,7 +418,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if (mnmode == 1 ){
       if(menu->curr->id > 0){
         menu->curr = menu->curr->parent;
-        pos=-1;
+        pos=0;
       }  else{
         mnmode=0;
         pos=-1;
