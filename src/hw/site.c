@@ -29,6 +29,7 @@ void site_free() {
  */
 int read_sensors(Site* site) {
 
+  printf("чтение датчиков\n");
   OWNET_HANDLE conn = gcfg->conn;
   char *mnt = gcfg->mpoint;
 
@@ -42,12 +43,14 @@ int read_sensors(Site* site) {
   char *a_tacho_out = getStr(site->cfg, (void *) "a_tacho_flow_out");
   char *a_th_adc    = getStr(site->cfg, (void *) "a_throttle_adc");
 
+  printf("перед получением данных\n");
   site->temp_out     = get_data(conn, mnt, s_temp_out, 100);
   site->temp_in      = get_data(conn, mnt, s_temp_in, 100);
   site->temp_mix     = get_data(conn, mnt, s_temp_mix, 100);
   site->temp_evapor1 = get_data(conn, mnt, s_temp_evapor1, 100);
   site->temp_evapor2 = get_data(conn, mnt, s_temp_evapor2, 100);
 
+  printf("после получения данных\n");
   site->acs[0]->temp = site->temp_evapor1;
   if(site->num_ac == 2)
     site->acs[1]->temp = site->temp_evapor2;
