@@ -251,17 +251,17 @@ int main(int argc, char *argv[]) {
     opts = 0;
   else
     opts = 1;
-  printf("считали опции");
+  printf("считали опции\n");
   gcfg = new_gcfg();
 
   if (opts)
     process_args(argc, argv);
-  printf("обработали опции");
+  printf("обработали опции\n");
   gcfg->logger = create_logger();
 
   site = site_new();
   pop_hw();
-  printf("создали оборудование");
+  printf("создали оборудование\n");
   if (site->cfg)
     log_2("Config was read ok!\n");
 
