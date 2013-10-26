@@ -110,7 +110,7 @@ Throttle* throttle_new(Site* site) {
   Throttle* th = malloc(sizeof(Throttle));
   th->mode = 0;
   th->exist = 1; // Проверка наличия заслонки
-  getArrF(site->cfg, "vent1_steps", tts); // TODO: Использовать загрузку float массива
+  tts = getArrF(site->cfg, "vent1_steps");
   th->set_position = set_position;
 
   return th;

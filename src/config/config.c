@@ -122,15 +122,11 @@ int* getArrI(ConfigTable* cfg, const char *key) {
 
 }
 
-int getArrF(ConfigTable* cfg, const char *key, float *values) {
+float* getArrF(ConfigTable* cfg, const char *key) {
 
-  float *lvalues;
-  lvalues = hashmapGet(cfg->mTable, (void *) key);
-  int length = sizeof(lvalues)/sizeof(float);
-  values = malloc(length);
-  memmove (values, lvalues, length);
+  float *lvalues = (int *) hashmapGet(cfg->mTable, (void *) key);
+  return (lvalues+1);
 
-  return 0;
 }
 
 
