@@ -54,12 +54,13 @@ int i2c_get_th_data(int addr) {
 
   char buf[2];
 
+  printf("перед открытием i2c \n");
   i2cOpen();
 
   if (ioctl(g_i2cFile, I2C_SLAVE, addr) < 0) {
     printf("Failed to acquire bus access and/or talk to slave.\n");
   }
-
+  printf("перед считыванием данных\n");
   read(g_i2cFile, buf, 2);
 
   i2cClose();
