@@ -328,8 +328,8 @@ void writeConfig(char* filename) {
             fprintf(fp2, tvalue);
 
           if (strcmp(type, "hex") == 0) {
-            int val = strtol(tvalue, NULL, 10);
-            fprintf(fp2, "%x", val);
+            int val = strtol(tvalue, NULL, 16);
+            fprintf(fp2, "0x%x", val);
           }
 
           fprintf(fp2, "\n");
@@ -429,6 +429,9 @@ void writeConfig(char* filename) {
   }
   fclose(fp);
   fclose(fp2);
+
+  //replace config with replica
+
 }
 
 /* Первое значение values длина массива
