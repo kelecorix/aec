@@ -28,8 +28,8 @@ typedef struct ConfigTable {
 char* getStr(ConfigTable* cfg, const char *key);
 int* getArrI(ConfigTable* cfg, const char *key);
 float* getArrF(ConfigTable* cfg, const char *key);
-int getArrayI(int *values, char *tokens[], int length);
-int getArrayF(float *values, char *tokens[], int length);
+void getArrayI(int *values, char *tokens[], int length);
+void getArrayF(float *values, char *tokens[], int length);
 ConfigTable* readConfig(char* filename);
 void writeConfig(char* filename);
 

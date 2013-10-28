@@ -98,29 +98,15 @@ char* getStr(ConfigTable* cfg, const char *key) {
     return "";
 }
 
+
+
 /* Get array value from table
  *
  */
 int* getArrI(ConfigTable* cfg, const char *key) {
 
-  //int *mnm= NULL, *values=NULL;
   int *lvalues = (int *) hashmapGet(cfg->mTable, (void *) key);
-
-//  int length = lvalues[0];// первый элемент это размер массива
-//
-//  mnm = (int *) realloc (values, length * sizeof(int));
-//
-//  if (mnm!=NULL) {
-//    values=mnm;
-//  }
-//  else {
-//    free (values);
-//    puts ("Error (re)allocating memory");
-//  }
-//
-//  memmove(values, (lvalues+1), (length-1));
   return (lvalues+1);
-
 }
 
 float* getArrF(ConfigTable* cfg, const char *key) {
@@ -221,24 +207,27 @@ ConfigTable* readConfig(char *filename) {
     // if string tokenized well
     if (ret > 1) {
 
-      if (chnk <= 3) {
+      if (chnk <= 4) {
         // Значит нужно считать как значение
-        hashmapPut(cfg->mTable, tokens[1], tokens[2]);
+        strip_n(tokens[3]);
+        hashmapPut(cfg->mTable, tokens[1], tokens[3]);
+
       } else {
         // Значит нужно считать массив значений
-        int ret, *values; // первые 2 значения имена, 3й тип массива еще 1 слот под значение длины
+        // первые 2 значения имена, 3й тип массива еще 1 слот под значение длины
 
         if (strcmp(tokens[2], "int") == 0 ){
+          int *values;
           values = malloc((chnk-2)*sizeof(int));
-          ret = getArrayI(values, tokens, chnk);
+          getArrayI(values, tokens, chnk);
+          hashmapPut(cfg->mTable, tokens[1], values);
         }
-
         if (strcmp(tokens[2], "float") == 0){
+          float *values;
           values = malloc((chnk-2)*sizeof(float));
-          ret = getArrayF(values, tokens, chnk);
+          getArrayF(values, tokens, chnk);
+          hashmapPut(cfg->mTable, tokens[1], values);
         }
-
-        hashmapPut(cfg->mTable, tokens[1], values);
       }
 
       if (strcmp(tokens[0], "$static") == 0) {
@@ -269,9 +258,7 @@ void writeConfig(char* filename) {
   ssize_t read;
 
   char* key = NULL;
-  char* value = NULL;
-
-  //ConfigTable* cfg = config_table_new();
+  char* type = NULL;
 
   fp = fopen(filename, "r");
   fp2 = fopen("replica", "w");
@@ -283,16 +270,25 @@ void writeConfig(char* filename) {
     int i = 0;
 
     // copy string, which starts from space
-    if (line[i] == ' ')
-      fwrite(line, sizeof(char), sizeof(line), fp2);
+    if (line[i] == ' ') {
+      fprintf(fp2, line);
+      fprintf(fp2, "\n");
+      continue;
+    }
 
     // copy comments line
-    if (line[i] == '#')
-      fwrite(line, sizeof(char), sizeof(line), fp2);
+    if (line[i] == '#') {
+      fprintf(fp2, line);
+      continue;
+    }
 
     // copy blank lines
-    if (line[i] == '\0')
-      fwrite(line, sizeof(char), sizeof(line), fp2);
+    if (line[i] == '\0') {
+      fprintf(fp2, line);
+      fprintf(fp2, "\n");
+      fprintf(fp2, "\n");
+      continue;
+    }
 
     int stringLength = 0;
     int x;
@@ -313,102 +309,171 @@ void writeConfig(char* filename) {
 
     // if string tokenized well
     if (ret > 1) {
-      if (chnk < 3) {
+      if (chnk <= 4) {
         // Значит нужно считать как значение
         key = tokens[1];
-        value = tokens[2];
-
+        type = tokens[2];
+        char *cvalue = tokens[2];
+        char *tvalue = hashmapGet(site->cfg->mTable, key);
         // compare current value, with value from hashtable
-        if (value != hashmapGet(site->cfg, key)) {
+        if (strcmp(cvalue, tvalue) != 0) {
           //value changed
           //write new value
-          //fwrite();
+          fprintf(fp2, tokens[0]);
+          fprintf(fp2, " ");
+          fprintf(fp2, tokens[1]);
+          fprintf(fp2, " ");
+
+          if ((strcmp(type, "int") == 0) || (strcmp(type, "string") == 0))
+            fprintf(fp2, tvalue);
+
+          if (strcmp(type, "hex") == 0) {
+            int val = strtol(tvalue, NULL, 10);
+            fprintf(fp2, "%x", val);
+          }
+
+          fprintf(fp2, "\n");
+          fprintf(fp2, "\n");
+
         } else {
           // write as is
-          fwrite(value, sizeof(char), sizeof(value), fp2);
+          fprintf(fp2, line);
+          fprintf(fp2, "\n");
+          fprintf(fp2, "\n");
         }
 
       } else {
         // Значит нужно считать и записать массив значений
-        if (strcmp(tokens[2], "int")) {
-          int length = 0, value, *values;
-          char *val="";
+        if (strcmp(tokens[2], "int") == 0) {
+          int length = 0, value, *values = NULL, *cvalues, *values2;
+
           key = tokens[1];
-          values = getArrayI(values, tokens, chnk);
+
+          int j;
+          cvalues = malloc((chnk - 3) * sizeof(int));
+          for (j = 3, i = 0; i < chnk - 3; i++, j++) {
+            cvalues[i] = strtol(tokens[j], NULL, 10); // values read from config
+          }
+
+          values = hashmapGet(site->cfg->mTable, key); // 1й элемент длина массива
+          values2 = malloc(values[0] * sizeof(int));
+          memcpy(values2, values + 1, values[0] * sizeof(int));
+          int bt = sizeof(cvalues);
 
           // compare array of values, with values from hashtable
-          if (memcmp(values, hashmapGet(site->cfg, key), length)==1) {
+          if (memcmp(values2, cvalues, bt) > 0) {
             // some values changed, so rewrite hole array
             // in it's current condition
             // write new value
+            fprintf(fp2, tokens[0]);
+            fprintf(fp2, " ");
+            fprintf(fp2, tokens[1]);
+            fprintf(fp2, " ");
+            fprintf(fp2, tokens[2]);
+            fprintf(fp2, " ");
+            length = chnk - 3;
             for (i = 0; i < length; i++) {
-              fwrite(itoa(values[i], val, 10), sizeof(char), sizeof(value), fp2);
+              fprintf(fp2, "%d", values2[i]);
+              fprintf(fp2, " ");
             }
+            fprintf(fp2, "\n");
+            fprintf(fp2, "\n");
+          } else {
+            fprintf(fp2, line);
+            fprintf(fp2, "\n");
+          }
+        }
+
+        if (strcmp(tokens[2], "float") == 0) {
+          int length = 0, value;
+          float *values = NULL, *cvalues, *values2;
+
+          key = tokens[1];
+
+          int j;
+          cvalues = malloc((chnk - 3) * sizeof(float));
+          for (j = 3, i = 0; i < chnk - 3; i++, j++) {
+            cvalues[i] = strtol(tokens[j], NULL, 10); // values read from config
           }
 
-          if (strcmp(tokens[2], "float")) {
-            int length=0;
-            float value, *values;
-            key = tokens[1];
-            values = getArrayF(values, tokens, chnk);
+          values = hashmapGet(site->cfg->mTable, key); // 1й элемент длина массива
+          values2 = malloc(values[0] * sizeof(float));
+          memcpy(values2, values + 1, values[0] * sizeof(float));
+          int bt = sizeof(cvalues);
 
+          // compare array of values, with values from hashtable
+          if (memcmp(values2, cvalues, bt) > 0) {
+            // some values changed, so rewrite hole array
+            // in it's current condition
+            // write new value
+            fprintf(fp2, tokens[0]);
+            fprintf(fp2, " ");
+            fprintf(fp2, tokens[1]);
+            fprintf(fp2, " ");
+            fprintf(fp2, tokens[2]);
+            fprintf(fp2, " ");
+            length = chnk - 3;
+            for (i = 0; i < length; i++) {
+              fprintf(fp2, "%f", values2[i]);
+              fprintf(fp2, " ");
+            }
+            fprintf(fp2, "\n");
+            fprintf(fp2, "\n");
+          } else {
+            fprintf(fp2, line);
+            fprintf(fp2, "\n");
           }
-        } else {
-          // write as is
-          // fwrite();
         }
       }
-
     }
   }
+  fclose(fp);
+  fclose(fp2);
 }
 
 /* Первое значение values длина массива
  *
  *
  */
-int getArrayI(int *values, char *tokens[], int length){
-
+void getArrayI(int *values, char *tokens[], int length){
   int i, j;
-  //values = malloc(sizeof(int)*length);
   values[0] = length-3;// первые 2 элемента это опция и имя, 3й тип
   for(i=3, j=1; i< length; i++, j++){
     values[j]= strtol(tokens[i], NULL, 10);
   }
-
-  return 0;
 }
 
-int getArrayF(float *values, char *tokens[], int length){
-
+void getArrayF(float *values, char *tokens[], int length){
   int i, j;
-  //values = malloc(sizeof(int)*length);
+  values = malloc(sizeof(int)*length);
   values[0] = length-3;// первые 2 элемента это опция и имя, 3й тип
   for(i=3, j=1; i< length; i++, j++){
     values[j]= strtof(tokens[i], NULL);
   }
-
-  return 0;
 }
 
 void test_config(){
 
-  // 2. Беспорядочно меняем значения
-  // 3. Беспорядочно меняем значения в массиве
-  // 4. Выполняем запись нового конфига
-
-  hashmapPut(site->cfg->mTable, "temp_support", rand());
-  hashmapPut(site->cfg->mTable, "temp_dew", rand());
+  int val;
+  char cval[20];
+  val = rand() % 20;
+  sprintf(cval, "%d", val);
+  hashmapPut(site->cfg->mTable, "temp_support", cval);
+  val = rand() % 20;
+  sprintf(cval, "%d", val);
+  hashmapPut(site->cfg->mTable, "temp_dew", cval);
 
   int i, *arr;
   arr = malloc(10*sizeof(int));
   for(i=0; i<10; i++){
-    arr[i] = rand();
+    arr[i] = rand() % 1000;
   }
 
   hashmapPut(site->cfg->mTable, "vent2_steps", arr);
 
-  writeConfig(concat(gcfg->cdir, "freecooling.conf"));
+  //if(temp_support < -20.f) {
+    writeConfig(concat(gcfg->cdir, "freecooling.conf"));
+  //}
 
 }
 

@@ -399,7 +399,9 @@ void disp_item_edit(Disp* lcd, int num) {
 }
 
 void save_value(){
-  hashmapPut(site->cfg->mTable, menu->curr->cn, mval);
+  char cval[20];
+  sprintf(cval, "%d", mval);
+  hashmapPut(site->cfg->mTable, menu->curr->cn, cval);
   writeConfig(concat(gcfg->cdir, "freecooling.conf"));
 }
 
