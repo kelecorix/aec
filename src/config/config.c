@@ -431,6 +431,8 @@ void writeConfig(char* filename) {
   fclose(fp2);
 
   //replace config with replica
+  remove(fp);
+  rename("replica", filename);
 
 }
 
