@@ -1508,8 +1508,11 @@ int site_mode_fail_ac() {
 
           log_3("Да замерз пойдем греть\n");
           site_mode_heat();
+        } else {
+          site_mode_uvo();
         }
-        continue;
+
+        //continue;
       }
 
       log_3("Переход на функцию логики управления заслонкой\n");
