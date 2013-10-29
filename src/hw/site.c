@@ -75,36 +75,37 @@ int read_sensors() {
  */
 void run() {
 
-  //log_2("Начало работы\n");
+  log_2("Начало работы\n");
 
   // Установим значение регистра реле в 0
-//  i2cOpen();
-//  int addr = strtol(getStr(site->cfg, "a_relay"), NULL, 16);
-//  log_4("Управляем регистром, адрес %x\n", addr);
-//  set_i2c_register(g_i2cFile, addr, 0xFF, 0xFF);
-//  i2cClose();
+  i2cOpen();
+  int addr = strtol(getStr(site->cfg, "a_relay"), NULL, 16);
+  log_4("Управляем регистром, адрес %x\n", addr);
+  set_i2c_register(g_i2cFile, addr, 0xFF, 0xFF);
+  i2cClose();
 
-//  // По умолчанию
-//  if(site->th_exists)
-//    site->th->set_position(site->th, 0);
-//  site->th_r_exists = 0;
-//  site->tacho1_exists = 1;
-//  site->tacho2_exists = 1;
-//
-//  //остановим вентиляторы
-//  site->vents[0]->set_step(site->vents[0], 0);
-//  site->vents[1]->set_step(site->vents[1], 0);
-//
-//  //По умолчанию: кондиц. вкл.
-//  int a;
-//  for (a = 0; a < site->num_ac; a++) {
-//    site->acs[a]->set_mode(site->acs[a], 1);
-//  }
+  // По умолчанию
+  if(site->th_exists)
+    site->th->set_position(site->th, 0);
+  site->th_r_exists = 0;
+  site->tacho1_exists = 1;
+  site->tacho2_exists = 1;
 
-  test_config();
-  //site_mode_uvo();
+  //остановим вентиляторы
+  site->vents[0]->set_step(site->vents[0], 0);
+  site->vents[1]->set_step(site->vents[1], 0);
+
+  //По умолчанию: кондиц. вкл.
+  int a;
+  for (a = 0; a < site->num_ac; a++) {
+    site->acs[a]->set_mode(site->acs[a], 1);
+  }
+
+
+  site_mode_uvo();
   //site_mode_fail_uvo();
   //site_mode_fail_ac();
+  //test_config();
 }
 
 /*
