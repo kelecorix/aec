@@ -323,6 +323,8 @@ void writeConfig(char* filename) {
           fprintf(fp2, " ");
           fprintf(fp2, tokens[1]);
           fprintf(fp2, " ");
+          fprintf(fp2, tokens[2]);
+          fprintf(fp2, " ");
 
           if ((strcmp(type, "int") == 0) || (strcmp(type, "string") == 0))
             fprintf(fp2, tvalue);
