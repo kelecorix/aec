@@ -260,25 +260,25 @@ int main(int argc, char *argv[]) {
   gcfg->logger = create_logger();
 
   site = site_new();
-//  pop_hw();
-//  printf("создали оборудование\n");
-//  if (site->cfg)
-//    log_2("Config was read ok!\n");
-//
-//  gcfg->conn = create_server_conn(gcfg->saddr);
-//
-//  if (gcfg->conn == 0)
-//    log_4("OWFS connection established!\n");
-//  else
-//    log_4("OWFS connection not fins. Fire up OWFS server!\n");
-//
-//  sleep(4);
-//
-//  // Выполняем тестирование оборудования
-//  if (gmode == 2) {
-//    i2cTestHardware();
-//    exit(1);
-//  }
+  pop_hw();
+  printf("создали оборудование\n");
+  if (site->cfg)
+    log_2("Config was read ok!\n");
+
+  gcfg->conn = create_server_conn(gcfg->saddr);
+
+  if (gcfg->conn == 0)
+    log_4("OWFS connection established!\n");
+  else
+    log_4("OWFS connection not fins. Fire up OWFS server!\n");
+
+  sleep(4);
+
+  // Выполняем тестирование оборудования
+  if (gmode == 2) {
+    i2cTestHardware();
+    exit(1);
+  }
 
   // Запустим программу в основном режиме
   pthread_t threadA, threadU, threadL, threadM;
@@ -294,32 +294,32 @@ int main(int argc, char *argv[]) {
 
   sleep(4);
 
-//  if (pthread_create(&threadU, NULL, (void *) run_ui, NULL)) {
-//    log_4("Error creating UI thread\n");
-//    return 1;
-//  }
+  if (pthread_create(&threadU, NULL, (void *) run_ui, NULL)) {
+    log_4("Error creating UI thread\n");
+    return 1;
+  }
 
-//  sleep(4);
+  sleep(4);
 
-//  if (pthread_create(&threadL, NULL, (void *) run_logger, NULL)) {
-//    log_4("Error creating Logger thread\n");
-//    return 1;
-//  }
+  if (pthread_create(&threadL, NULL, (void *) run_logger, NULL)) {
+    log_4("Error creating Logger thread\n");
+    return 1;
+  }
 
-//  sleep(4);
-//
-//  // поток записи моточасов
-//  if (gcfg->mtime > 0) {
-//    if (pthread_create(&threadM, NULL, (void *) run_moto, NULL)) {
-//      log_4("Error creating moto logger thread\n");
-//      return 1;
-//    }
-//  }
+  sleep(4);
+
+  // поток записи моточасов
+  if (gcfg->mtime > 0) {
+    if (pthread_create(&threadM, NULL, (void *) run_moto, NULL)) {
+      log_4("Error creating moto logger thread\n");
+      return 1;
+    }
+  }
 
   pthread_join(threadA, retA);
-//  pthread_join(threadU, retU);
-//  pthread_join(threadL, retL);
-//  pthread_join(threadM, retM);
+  pthread_join(threadU, retU);
+  pthread_join(threadL, retL);
+  pthread_join(threadM, retM);
 
   return EXIT_SUCCESS;
 }
