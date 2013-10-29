@@ -433,8 +433,9 @@ void writeConfig(char* filename) {
   fclose(fp2);
 
   //replace config with replica
-  remove(fp);
+  remove(filename);
   rename("replica", filename);
+  printf("Конфигурация обновлена!\n");
 
 }
 
