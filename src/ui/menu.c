@@ -403,6 +403,7 @@ void save_value(){
   sprintf(cval, "%d", mval);
   hashmapPut(site->cfg->mTable, menu->curr->cn, cval);
   writeConfig(concat(gcfg->cdir, "freecooling.conf"));
+  menu->curr->childs[chld + pos]->val = mval;
 }
 
 void onKeyClicked(Disp* lcd, int key_code) {
