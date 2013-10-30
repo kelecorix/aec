@@ -646,13 +646,15 @@ void change_value(int direct) {
 
 void select_item(Disp* lcd) {
   printf("установим режим выбора\n");
+
   if (emode == 1) {
     // сохраняем значения выходим обратно
     emode = 0;
     disp_item(lcd);
   } else {
-    // TODO: Переходим в специфические режимы
-    //
+
+// TODO: Переходим в специфические режимы
+//
 
 //  if (strcmp(node->cn, "l"))
 //    node->val = -100;
