@@ -466,7 +466,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
       if (!isLeaf(menu->curr->childs[chld + pos])) {
         printf("RIGHT %d %d %d %d\n", chld, pos, entr, nempty);
         menu->curr = menu->curr->childs[chld + pos];
-        pos=0;
+        pos=0; // для того, чтоб попадать на первый пункт меню
         disp_item(lcd);
         break;
       }else{
