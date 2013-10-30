@@ -27,6 +27,7 @@ typedef struct Node{
   struct Node* parent;
   struct Node** childs;
   int          lenght; // childs lenght
+  void*        ptr_param; // addres of variable
 } Node;
 
 /*
@@ -51,7 +52,7 @@ typedef struct OutNode{
 
 void init_menu();
 void create_menu();
-void create_node(int id, int parent, int min, int max, char* ctext, char* cn);
+void create_node(int id, int parent, int min, int max, char* ctext, char* cn, void* param);
 void traverse();
 void add_node(Node* node);
 void add_child_to_parent(Node* parent, Node* node);
@@ -70,6 +71,8 @@ int readKeys(KB* kb);
 void disp(Disp* lcd);
 void disp_item(Disp* lcd);
 void disp_item_edit(Disp* lcd, int num);
+void disp_log(Disp* lcd);
+void clear_log();
 void change_value();
 void select_item();
 void onKeyClicked(Disp* lcd, int key_code);

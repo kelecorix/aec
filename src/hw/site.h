@@ -70,6 +70,12 @@ typedef struct Site {
   int tacho1_exists;   // таходатчик1 существует
   int tacho2_exists;   // таходатчик2 существует
 
+  int sens_out; // датчик снаружи
+  int sens_in;  // датчик внутри
+  int sens_mix; // датчик миксера
+  int sens_ac1; // датчик конд.1
+  int sens_ac2; // датчик конд.2
+
   int penalty; // штраф
   int th_check; // throttle check - флаг проверки заслонки
   time_t time_pre; // время предыдущего решения в секундах

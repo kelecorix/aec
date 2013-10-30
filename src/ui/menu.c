@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <time.h>
 #include <math.h>
+#include <sys/time.h>
 
 #include "lcd.h"
 #include "keyboard.h"
@@ -47,70 +48,77 @@ void create_menu() {
   chld = 0;
   entr = 0;
 
-  //printf("Начинаем создавать пункты\n");
-  create_node(0, 0, 0, 0, "Меню", ""); // корневой узел
-  //printf("Первый блок\n");
-  create_node(1, 0, 0, 0, "Температуры", "");
-  create_node(2, 0, 0, 0, "Оборудование", "");
-  create_node(3, 0, 0, 0, "Лог Ошибок", "");
-  create_node(4, 0, 0, 0, "Уст. датчиков", "");
-  create_node(5, 0, 0, 0, "Уст. времени", "");
-  create_node(6, 0, 0, 0, "Уст. интервалов", "");
+  // Последняя запись может соответствовать
+  // "" - узел перехода
+  // "xxxxxxx_xxxx" - пункт конфигурации
+  // "v" -
+  // "x" -
+  // "i" -
+  // ""
 
-  //printf("Второй блок\n");
-  // Меню температуры
-  create_node(11, 1, 10, 40, "Поддержания", "temp_support");
-  create_node(12, 1, 1, 10, "Дельта поддерж", "diff");
-  create_node(13, 1, -10, 20, "Догрева", "temp_heat");
-  create_node(14, 1, -10, 20, "Росы улица", "temp_dew");
-  create_node(15, 1, -10, 20, "Миксер", "temp_mix");
-  create_node(16, 1, 0, 80, "Аварии", "temp_fail");
-  create_node(17, 1, 0, 20, "Дельта окруж", "diff_out");
-  create_node(18, 1, 0, 30, "Дельта конд 1", "diff_ac_1");
-  create_node(19, 1, 0, 30, "Дельта конд 2", "diff_ac_2");
-  //printf("Третий блок\n");
-  // Меню оборудование
-  create_node(20, 2, 0, 1, "Миксер", "is_mix");  // Да/НЕТ
-  create_node(21, 2, 0, 1, "ТЭН", "is_ten");     // Да/НЕТ
-  create_node(22, 2, 0, 2, "Кол. конд", "num_ac");
-  //printf("Чертвертый блок\n");
-  // Меню Лог Ошибок
-  create_node(23, 3, 0, 0, "Просмотреть", "");
-  create_node(24, 3, 0, 0, "Очистить", "");
-  //printf("Пятый блок блок\n");
+  // Корневой узел
+  create_node(0, 0, 0, 0, "Меню", "", NULL);
+
+  // Главное меню
+  create_node(1, 0, 0, 0, "Температуры"    , "", NULL);
+  create_node(2, 0, 0, 0, "Оборудование"   , "", NULL);
+  create_node(3, 0, 0, 0, "Лог Ошибок"     , "", NULL);
+  create_node(4, 0, 0, 0, "Уст. датчиков"  , "", NULL);
+  create_node(5, 0, 0, 0, "Уст. времени"   , "", NULL);
+  create_node(6, 0, 0, 0, "Уст. интервалов", "", NULL);
+
+  // Температуры
+  create_node(11, 1, 10, 40, "Поддержания"  ,"temp_support", NULL);
+  create_node(12, 1, 1, 10, "Дельта поддерж", "diff", NULL);
+  create_node(13, 1, -10, 20, "Догрева"     , "temp_heat", NULL);
+  create_node(14, 1, -10, 20, "Росы улица"  , "temp_dew", NULL);
+  create_node(15, 1, -10, 20, "Миксер"      , "temp_mix", NULL);
+  create_node(16, 1, 0, 80, "Аварии"        , "temp_fail", NULL);
+  create_node(17, 1, 0, 20, "Дельта окруж"  , "diff_out", NULL);
+  create_node(18, 1, 0, 30, "Дельта конд 1" , "diff_ac_1", NULL);
+  create_node(19, 1, 0, 30, "Дельта конд 2" , "diff_ac_2", NULL);
+
+  // Оборудование
+  create_node(20, 2, 0, 1, "Миксер"   , "is_mix", NULL);  // Да/НЕТ
+  create_node(21, 2, 0, 1, "ТЭН"      , "is_ten", NULL);     // Да/НЕТ
+  create_node(22, 2, 0, 2, "Кол. конд", "num_ac", NULL);
+
+  // Лог Ошибок
+  create_node(23, 3, 0, 0, "Просмотреть", "l" , NULL); // mval -100
+  create_node(24, 3, 0, 0, "Очистить"   , "cl", NULL);   // mval -200
+
   // Меню Установка датчиков
-  create_node(25, 4, 0, 0, "Наличие", "");
-  create_node(26, 5, 0, 0, "Адреса", "");
-  create_node(27, 4, 0, 0, "Установка", "");
-  //printf("Шестой блок\n");
-  // Меню Установка датчиков - Наличие
-  create_node(28, 25, 0, 1, "Улица", "");
-  create_node(29, 25, 0, 1, "Сайт", "");
-  create_node(30, 25, 0, 1, "Миксер", "");
-  create_node(31, 25, 0, 1, "Конд1", "");
-  create_node(32, 25, 0, 1, "Конд2", "");
-  //printf("Седьмой блок\n");
-  // Меню Установка датчиков - Адреса
-  create_node(33, 26, 0, 0, "Улица", "s_temp_outdoor");
-  create_node(34, 26, 0, 0, "Сайт", "s_temp_indoor");
-  create_node(35, 26, 0, 0, "Миксер", "s_temp_mix");
-  create_node(36, 26, 0, 0, "Конд1", "s_temp_evapor1");
-  create_node(37, 26, 0, 0, "Конд2", "s_temp_evapor2");
-  //printf("Восьмой блок\n");
-  // Меню Установка датчиков - Установка
-  create_node(38, 27, 0, 0, "Установка", "");
-  //printf("Девятый блок\n");
+  create_node(25, 4, 0, 0, "Наличие"  , "", NULL);
+  create_node(26, 5, 0, 0, "Адреса"   , "", NULL);
+  create_node(27, 4, 0, 0, "Установка", "", NULL);
+
+  // Установка датчиков - Наличие
+  create_node(28, 25, 0, 1, "Улица"  , "", &site->sens_out);
+  create_node(29, 25, 0, 1, "Сайт"   , "", &site->sens_in);
+  create_node(30, 25, 0, 1, "Миксер" , "", &site->sens_mix);
+  create_node(31, 25, 0, 1, "Конд1"  , "", &site->sens_ac1);
+  create_node(32, 25, 0, 1, "Конд2"  , "", &site->sens_ac2);
+
+  // Установка датчиков - Адреса
+  create_node(33, 26, 0, 0, "Улица" , "s_temp_outdoor", NULL);
+  create_node(34, 26, 0, 0, "Сайт"  , "s_temp_indoor" , NULL);
+  create_node(35, 26, 0, 0, "Миксер", "s_temp_mix"    , NULL);
+  create_node(36, 26, 0, 0, "Конд1" , "s_temp_evapor1", NULL);
+  create_node(37, 26, 0, 0, "Конд2" , "s_temp_evapor2", NULL);
+
+  // Установка датчиков - Установка
+  create_node(38, 27, 0, 0, "Установка", "i", NULL); //mval -300
+
   // Меню Установка времени
-  create_node(39, 5, 0, 0, "Уст. даты", "");
-  create_node(40, 5, 0, 0, "Уст. времени", "");
-  //printf("Десятый блок\n");
+  create_node(39, 5, 0, 0, "Уст. даты", "d", NULL);  //mval -400
+  create_node(40, 5, 0, 0, "Уст. времени", "t", NULL); //mvak -500
+
   // Меню Установка интервала
-  create_node(41, 6, 0, 0, "Принятие решение", "");
-  create_node(42, 6, 0, 0, "Мин.раб вент", "");
-  create_node(43, 6, 0, 0, "Время аварии конд.", "");
-  create_node(44, 6, 0, 0, "Время сброса ШТРАФА", "");
-  create_node(45, 6, 0, 0, "Записи в лог сервера", "");
-  //printf("Завершили создание нодов \n");
+  create_node(41, 6, 0, 0, "Принятие решение"    , "time_decision"     , NULL);
+  create_node(42, 6, 0, 0, "Мин.раб вент"        , "time_vent_min_work", NULL);
+  create_node(43, 6, 0, 0, "Время аварии конд."  , "time_fail_ac"      , NULL);
+  create_node(44, 6, 0, 0, "Время сброса ШТРАФА" , "time_penalty"      , NULL);
+  create_node(45, 6, 0, 0, "Записи в лог сервера", "time_log"          , NULL);
 
   menu->root = menu->nodes[0];
   menu->curr = menu->nodes[0];
@@ -144,7 +152,7 @@ void add_child_to_parent(Node* parent, Node* node) {
  *            text   - текст меню
  *            ct     - имя параметра в конфиге, если есть
  */
-void create_node(int id, int parent, int min, int max, char* ctext, char* cn) {
+void create_node(int id, int parent, int min, int max, char* ctext, char* cn, void* param) {
 
   printf("Cоздадим нод\n");
 
@@ -156,6 +164,7 @@ void create_node(int id, int parent, int min, int max, char* ctext, char* cn) {
   node->text = ctext;
   node->cn = cn;
   node->lenght = 0;
+  node->ptr_param = param;
   node->childs = malloc(9 * sizeof(Node*));
   for (i = 0; i < 9; i++) {
     node->childs[i] = malloc(sizeof(Node));
@@ -164,8 +173,10 @@ void create_node(int id, int parent, int min, int max, char* ctext, char* cn) {
   if (strcmp(node->cn, "") != 0)
     node->val = strtol(getStr(site->cfg, (void *) cn), (char **) NULL, 10);
 
+//
   if (node->id > 0)
     node->parent = get_parent_by_id(parent);
+
   add_child_to_parent(node->parent, node);
 
   menu->nodes[id] = node;
@@ -336,26 +347,15 @@ void disp(Disp* lcd){
 
 // for branches
 void disp_item(Disp* lcd) {
-  //printf("показ\n");
 
   if (isLeaf(menu->curr))
     return;
-  //printf("после проверка листа\n");
-
-//  if (chld > (menu->curr->lenght - 1)) {
-//    entr = 0;
-//    return;
-//  }
-  //printf("после проверки детей\n");
 
   reset(lcd);
   int i;
 
   char *z, *out;
   lcd_line(lcd, menu->curr->text, 0);
-
-  //printf("перед циклом\n");
-  //printf("количество потомков %d \n", menu->curr->lenght);
 
   for (i = 0; i < 3; i++) {
 
@@ -364,9 +364,7 @@ void disp_item(Disp* lcd) {
     } else
       z = " ";
 
-    //printf("%d %d %d %d\n", chld, i, pos, entr);
     if ((chld + i) < menu->curr->lenght) {
-      //printf("%s \n", menu->curr->childs[chld+i]->text);
       out = concat(z, menu->curr->childs[chld + i]->text);
       lcd_line(lcd, out, i + 1);
       nempty = 0;
@@ -396,6 +394,52 @@ void disp_item_edit(Disp* lcd, int num) {
   lcd_line(lcd, concat("       ", buf), 2);
   lcd_line(lcd, "       v     ", 3);
 
+}
+
+void disp_log(Disp* lcd){
+
+  reset(lcd);
+  int i, rd;
+  char *z, *out;
+
+  lcd_line(lcd, "Лог: ", 0);
+
+  // выводим по 3 строки
+
+  FILE *fp;
+  char *line = NULL;
+  size_t len = 0;
+  ssize_t read;
+
+  fp = fopen(concat(gcfg->ldir, "event.log"), "r");
+  if (fp == NULL)
+    exit(EXIT_FAILURE);
+
+
+  while ((read = getline(&line, &len, fp)) != -1) {
+
+    if (i == pos) {
+      z = ">";
+    } else
+      z = " ";
+
+    out = concat(z, "");
+    lcd_line(lcd, out, i + 1);
+
+
+
+
+
+
+    // обнулим счетчик вывода строка
+    if (rd==3)
+      rd=0;
+
+  }
+}
+
+void clear_log(){
+  remove(concat(gcfg->ldir, "event.log"));
 }
 
 void save_value(){
@@ -607,6 +651,24 @@ void select_item(Disp* lcd) {
     emode = 0;
     disp_item(lcd);
   } else {
+    // TODO: Переходим в специфические режимы
+    //
+
+//  if (strcmp(node->cn, "l"))
+//    node->val = -100;
+//
+//  if (strcmp(node->cn, "cl"))
+//    node->val = -200;
+//
+//  if (strcmp(node->cn, "i"))
+//    node->val = -300;
+//
+//  if (strcmp(node->cn, "d"))
+//    node->val = -400;
+//
+//  if (strcmp(node->cn, "t"))
+//    node->val = -500;
+
     emode = 1;
     mval = menu->curr->childs[chld + pos]->val;
     disp_item_edit(lcd, mval);
