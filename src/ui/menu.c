@@ -462,6 +462,8 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if (mnmode == 1) {
       // перейдем на уровень вниз
       // если это не лист
+      // установим позицию на первом меню
+      pos=1;
       if (!isLeaf(menu->curr->childs[chld + pos])) {
         printf("RIGHT %d %d %d %d\n", chld, pos, entr, nempty);
         menu->curr = menu->curr->childs[chld + pos];
