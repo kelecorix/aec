@@ -187,15 +187,15 @@ void test_relay(){
 
   for(i=0; i<8; i++){
     ret = read(g_i2cFile, buf, 1);
-    printf("read: %d", ret);
+    printf("read: %d\n", ret);
     value = (int) buf[0];
     bit=i;
     value |= (1 << bit);
-    printf("val: %x", value);
+    printf("val: %x\n", value);
     set_i2c_register(g_i2cFile, addr, value, value);
     sleep(1);
     value &= ~(1 << bit);
-    printf("val %x", value);
+    printf("val %x\n", value);
     set_i2c_register(g_i2cFile, addr, value, value);
   }
 
