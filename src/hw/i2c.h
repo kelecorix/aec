@@ -20,6 +20,7 @@ int set_i2c_register(int file, unsigned char addr, unsigned char reg,
     unsigned char value);
 int get_i2c_register(int file, unsigned char addr, unsigned char reg,
     unsigned char *val);
+int set_relay(int relay, int cond);
 
 extern int g_i2cFile;
 

@@ -14,6 +14,15 @@
 
 int g_i2cFile;
 
+#define RELE1 strtol(getStr(site->cfg, "relay_1"), NULL, 10)
+#define RELE2 strtol(getStr(site->cfg, "relay_2"), NULL, 10)
+#define RELE3 strtol(getStr(site->cfg, "relay_3"), NULL, 10)
+#define RELE4 strtol(getStr(site->cfg, "relay_4"), NULL, 10)
+#define RELE5 strtol(getStr(site->cfg, "relay_5"), NULL, 10)
+#define RELE6 strtol(getStr(site->cfg, "relay_6"), NULL, 10)
+#define RELE7 strtol(getStr(site->cfg, "relay_7"), NULL, 10)
+#define RELE8 strtol(getStr(site->cfg, "relay_8"), NULL, 10)
+
 // open the Linux device
 /*
  *
@@ -165,6 +174,58 @@ int get_i2c_register_adc(int file, unsigned char addr, unsigned char reg,
   return 0;
 }
 
+/* Устанавливает значение из списка реле
+ *
+ *  int relay - номер реле по счету в буфере,
+ *  связано с define, т.к нумерация на плате может варьироваться
+ *
+ *  int cond - 0/1 состояние включить или выключить
+ *
+ *  Необходимо обратить внимание на способ переключения
+ *  битов, на плате организована инверсная логика. Поэтому
+ *  установкой маски с 0 выполняется включение, с 1 выклю
+ *  чение
+ */
+int set_relay(int relay, int cond){
+
+  int addr, value, bit;
+  addr = strtol(getStr(site->cfg, "a_relay"), NULL, 16);
+  char buf[1];
+
+  bit = relay;
+  i2cOpen();
+
+  if (ioctl(g_i2cFile, I2C_SLAVE, addr) < 0){
+    log_4("Failed to acquire bus access and/or talk to slave.\n");
+    return 1;
+  }
+
+  if (read(g_i2cFile, buf, 1) != 1){
+    log_4("set_mode: Error reading from i2c\n");
+    return 1;
+  }
+
+  value = (int) buf[0];
+
+  // На плате используется
+  // инверсная логика
+
+  if (cond == 0) {
+      value &= ~(1 << bit); // выключили
+      set_i2c_register(g_i2cFile, addr, value, value);
+  }
+
+  if (cond == 1) {
+    value |= (1 << bit);   // включили реле
+    set_i2c_register(g_i2cFile, addr, value, value);
+  }
+
+  i2cClose();
+
+  return 0;
+}
+
+
 void test_relay(){
 
   int addr, value, bit, i, ret;
@@ -187,16 +248,20 @@ void test_relay(){
 
   set_i2c_register(g_i2cFile, addr, 0xFF, 0xFF);
 
+
+  set_relay(RELE1, 1);
+  set_relay(RELE1, 0);
+
   for(i=0; i<8; i++){
     ret = read(g_i2cFile, buf, 1);
     printf("read: %d\n", ret);
     value = (int) buf[0];
     bit=i;
-    value &= ~(1 << bit);
+    value &= ~(1 << bit); // сняли
     printf("val: %x \n", value);
     set_i2c_register(g_i2cFile, addr, value, value);
     sleep(1);
-    value |= (1 << bit);
+    value |= (1 << bit); // установили
     printf("val %x \n", value);
     set_i2c_register(g_i2cFile, addr, value, value);
   }
