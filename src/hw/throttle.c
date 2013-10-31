@@ -145,7 +145,6 @@ void test_throttle() {
 
     step = i2c_get_th_data(strtol(a_th_adc, NULL, 16));
     printf("Шаг %d: заслонка в %d [ADC %f]\n", i, step, site->th->position_adc);
-
   }
 
   printf("Обратный ход\n");
@@ -157,7 +156,6 @@ void test_throttle() {
 
     step = i2c_get_th_data(strtol(a_th_adc, NULL, 16));
     printf("Шаг %d: заслонка в %d [ADC %f]\n", i, step, site->th->position_adc);
-
   }
 
   i2cClose();

@@ -165,6 +165,20 @@ int get_i2c_register_adc(int file, unsigned char addr, unsigned char reg,
   return 0;
 }
 
+void test_relay(){
+
+  char *a_relay = getStr(site->cfg, (void *) "a_relay");
+
+  i2cOpen();
+
+  set_i2c_register(g_i2cFile, a_relay, 1, 1);
+
+
+  i2cClose();
+
+
+}
+
 /*
  *
  *
@@ -173,6 +187,7 @@ int get_i2c_register_adc(int file, unsigned char addr, unsigned char reg,
 void i2cTestHardware() {
   test_vents();
   test_throttle();
+  test_relay();
 }
 
 
