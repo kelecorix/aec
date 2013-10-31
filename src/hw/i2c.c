@@ -175,7 +175,7 @@ void test_relay(){
     printf("Failed to acquire bus access and/or talk to slave.\n");
     return;
   }
-
+  printf("установка регистра\n");
   set_i2c_register(g_i2cFile, a_relay, 1, 1);
 
 
