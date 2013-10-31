@@ -167,20 +167,19 @@ int get_i2c_register_adc(int file, unsigned char addr, unsigned char reg,
 
 void test_relay(){
 
-  char *a_relay = getStr(site->cfg, (void *) "a_relay");
+  int a_relay = strtol(getStr(site->cfg, (void *) "a_throttle"), NULL, 16);
 
   i2cOpen();
 
   if (ioctl(g_i2cFile, I2C_SLAVE, a_relay) < 0) {
     printf("Failed to acquire bus access and/or talk to slave.\n");
+    return;
   }
 
   set_i2c_register(g_i2cFile, a_relay, 1, 1);
 
 
   i2cClose();
-
-
 }
 
 /*
