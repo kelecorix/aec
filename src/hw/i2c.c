@@ -171,6 +171,10 @@ void test_relay(){
 
   i2cOpen();
 
+  if (ioctl(g_i2cFile, I2C_SLAVE, a_relay) < 0) {
+    printf("Failed to acquire bus access and/or talk to slave.\n");
+  }
+
   set_i2c_register(g_i2cFile, a_relay, 1, 1);
 
 
