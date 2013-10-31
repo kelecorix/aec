@@ -185,9 +185,10 @@ void test_relay(){
  *
  */
 void i2cTestHardware() {
-  test_vents();
+
   test_relay();
-  test_throttle();
+  //test_vents();
+  //test_throttle();
 }
 
 
