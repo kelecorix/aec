@@ -167,7 +167,7 @@ int get_i2c_register_adc(int file, unsigned char addr, unsigned char reg,
 
 void test_relay(){
 
-  int addr, value, bit, i;
+  int addr, value, bit, i, ret;
   addr = strtol(getStr(site->cfg, "a_relay"), NULL, 16);
   char buf[1];
 
@@ -186,11 +186,9 @@ void test_relay(){
   value = (int) buf[0];
 
   for(i=0; i<8; i++){
-    value &= ~(1 << bit); // очистим бит
-    set_i2c_register(g_i2cFile, addr, value, value);
-  }
-
-  for(i=0; i<8; i++){
+    ret = read(g_i2cFile, buf, 1);
+    printf("read: %d", ret);
+    value = (int) buf[0];
     bit=i;
     value |= (1 << bit); // установим бит
     set_i2c_register(g_i2cFile, addr, value, value);
