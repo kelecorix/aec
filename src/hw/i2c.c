@@ -190,10 +190,12 @@ void test_relay(){
     printf("read: %d", ret);
     value = (int) buf[0];
     bit=i;
-//    value |= (1 << bit); // установим бит
-//    set_i2c_register(g_i2cFile, addr, value, value);
-//    sleep(1);
-    value &= ~(1 << bit); // очистим бит
+    value |= (1 << bit);
+    printf("val: %x", value);
+    set_i2c_register(g_i2cFile, addr, value, value);
+    sleep(1);
+    value &= ~(1 << bit);
+    printf("val %x", value);
     set_i2c_register(g_i2cFile, addr, value, value);
   }
 
