@@ -186,6 +186,11 @@ void test_relay(){
   value = (int) buf[0];
 
   for(i=0; i<8; i++){
+    value &= ~(1 << bit); // очистим бит
+    set_i2c_register(g_i2cFile, addr, value, value);
+  }
+
+  for(i=0; i<8; i++){
     bit=i;
     value |= (1 << bit); // установим бит
     set_i2c_register(g_i2cFile, addr, value, value);
