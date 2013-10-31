@@ -187,7 +187,7 @@ void test_relay(){
 
   set_i2c_register(g_i2cFile, addr, 0xFF, 0xFF);
 
-  for(i=0; i<7; i++){
+  for(i=0; i<8; i++){
     ret = read(g_i2cFile, buf, 1);
     printf("read: %d\n", ret);
     value = (int) buf[0];
