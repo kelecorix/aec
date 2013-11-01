@@ -169,7 +169,8 @@ void create_node(int id, int parent, int min, int max, char* ctext, char* cn, vo
     node->childs[i] = malloc(sizeof(Node));
   }
 
-  if (strcmp(node->cn, "") != 0)
+  if ((strcmp(node->cn, "") != 0) && (strcmp(node->cn, "l") != 0) && (strcmp(node->cn, "cl") != 0) &&
+      (strcmp(node->cn, "i") != 0) && (strcmp(node->cn, "d") != 0) && (strcmp(node->cn, "t") != 0))
     node->val = strtol(getStr(site->cfg, (void *) cn), (char **) NULL, 10);
 
 //
