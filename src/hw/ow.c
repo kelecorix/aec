@@ -121,8 +121,9 @@ int list_sensors(char *tokens[]) {
 
   int i;
   char **dirs = NULL;
+  printf("точка монтирования %s\n", gcfg->mpoint);
   OWNET_dirlist(gcfg->conn, gcfg->mpoint, dirs);
-  //splitString(dirs, tokens, ',');
+  printf("перед циклом\n");
   for (i=0;i<12;i++){
     tokens[i] = dirs[i];
     printf("sens %d: %s\n", i, dirs[i]);
