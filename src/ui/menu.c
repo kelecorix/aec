@@ -26,6 +26,7 @@ int pre_chld;
 
 char *lines[3]; // массив полных линий для лога
 int lmc;
+int lpage; //log page
 
 Menu* menu;
 OutNode** outs;
@@ -422,7 +423,9 @@ void disp_log(Disp* lcd){
   if (fp == NULL)
     exit(EXIT_FAILURE);
 
-  lcd_line(lcd, "Лог: ", 0); // Всегда стоит наверху
+  sprintf (out, "Лог: cтраница %d", lpage);
+  lcd_line(lcd, out, 0); // Всегда стоит наверху
+  lpage++;
 
   for(i=0, j=1; i<lpos+3; i++){
     getline(&line, &len, fp);
@@ -443,7 +446,9 @@ void disp_log_move(Disp* lcd, int direct){
   int i,j;
   char *buf[16];
   char *line;
-  lcd_line(lcd, "Лог: ", 0); // Всегда стоит наверху
+  char *out;
+  sprintf (out, "Лог: cтраница %d", lpage);
+  lcd_line(lcd, out, 0); // Всегда стоит наверху
   for(i=0, j=1;i<3;i++, j++){
     if(direct==0){
       line = lines[i];
@@ -761,6 +766,7 @@ void select_item(Disp* lcd) {
     lpos=0;
     smode=1;
     lmc=0;
+    lpage=0;
     disp_log(lcd);
     return;
   }
