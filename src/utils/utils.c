@@ -183,7 +183,7 @@ void strip_log(char* s){
   if ((pos = strchr(s, '\n')) != NULL)
     *pos = ' ';
 
-  if ((pos = strchr(s, '\n')) != NULL)
+  if ((pos = strchr(s, '\t')) != NULL)
     *pos = ' ';
 
   if ((pos = strchr(s, '|')) != NULL)

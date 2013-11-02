@@ -406,13 +406,11 @@ void disp_log(Disp* lcd){
 
   printf("режим вывода лога\n");
 
-  int cpos;
-
   char *buf[32]; // буфер вывода
   char *out[32];
 
   reset(lcd);
-  int i, k, j, rd;
+  int i, k, j;
   //char *z, *out;
 
   FILE *fp;
@@ -433,7 +431,7 @@ void disp_log(Disp* lcd){
     strip_log(line);
     if (i>=lpos){
       lines[k]=line;
-      memcpy(buf, line, 32);
+      memcpy(buf, line, 31);
       lcd_line(lcd, buf, j);
       j++;
       k++;
@@ -460,9 +458,9 @@ void disp_log_move(Disp* lcd, int direct){
   for(i=0, j=1;i<3;i++, j++){
     line = lines[i];
     if(direct==0){
-      memcpy(buf, line-(lmc*32), 32);
+      memcpy(buf, line-(lmc*31), 31);
     }else{
-      memcpy(buf, line+(lmc*32), 32);
+      memcpy(buf, line+(lmc*31), 31);
     }
     lcd_line(lcd, buf, j);
   }
