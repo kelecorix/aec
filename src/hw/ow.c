@@ -119,11 +119,12 @@ float get_data(OWNET_HANDLE conn, char* mnt, char* filename, int lim) {
  */
 int list_sensors(char *tokens[]) {
 
-  int i;
+  int i, ret;
   char **dirs = malloc(12*sizeof(char));
   printf("точка монтирования %s\n", gcfg->mpoint);
   //OWNET_dirlist(gcfg->conn, NULL, dirs);
-  OWNET_dirlist(gcfg->conn, gcfg->mpoint, dirs);
+  ret = OWNET_dirlist(gcfg->conn, gcfg->mpoint, dirs);
+  printf("возвр %d\n", ret);
   printf("перед циклом\n");
   for (i=0;i<12;i++){
     tokens[i] = dirs[i];
