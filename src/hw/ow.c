@@ -129,10 +129,15 @@ int list_sensors(char *tokens[]) {
   splitString(dirs[0], tokens, ',');
 
   for (i=0;i<12;i++){
+    if(strstr(tokens[i]), "alarm"){
+      break;
+    }
+
     if(strstr(tokens[i], "28") != NULL) {
       printf("sens %d: %s\n", i, tokens[i]);
     }
   }
+
   return 0;
 }
 
