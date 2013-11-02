@@ -711,7 +711,7 @@ void select_item(Disp* lcd) {
   //
   char *nm = menu->curr->childs[chld + pos]->cn;
 
-  if (strcmp(nm, "l")){
+  if (strcmp(nm, "l")==0){
     //показ лога
     lpos=0;
     smode=1;
@@ -719,13 +719,13 @@ void select_item(Disp* lcd) {
     return;
   }
 
-  if (strcmp(nm, "cl")){
+  if (strcmp(nm, "cl")==0){
     //очистка лога
     clear_log();
     return;
   }
 
-  if (strcmp(nm, "i")){
+  if (strcmp(nm, "i")==0){
    //установка датчиков
     lpos=0;
     smode=2;
@@ -733,14 +733,14 @@ void select_item(Disp* lcd) {
     return;
   }
 
-  if (strcmp(nm, "d")){
+  if (strcmp(nm, "d")==0){
    //установка даты
     smode=3;
     disp_date(lcd);
     return;
   }
 
-  if (strcmp(nm, "t")){
+  if (strcmp(nm, "t")==0){
     // установка времени
     smode=4;
     disp_time(lcd);
@@ -756,9 +756,4 @@ void select_item(Disp* lcd) {
     mval = menu->curr->childs[chld + pos]->val;
     disp_item_edit(lcd, mval);
   }
-
-
-
-
-
 }
