@@ -428,9 +428,9 @@ void disp_log(Disp* lcd){
     getline(&line, &len, fp);
     if (i>=lpos){
       lines[j-1]=line;
-      memcpy(buf, line, 16);
-      j++;
+      memcpy(buf, line, 15);
       lcd_line(lcd, buf, j);
+      j++;
     }
   }
   fclose(fp);
@@ -443,12 +443,13 @@ void disp_log_move(Disp* lcd, int direct){
   int i,j;
   char *buf[16];
   char *line;
+  lcd_line(lcd, "Лог: ", 0); // Всегда стоит наверху
   for(i=0, j=1;i<3;i++, j++){
     if(direct==0){
       line = lines[i];
-      memcpy(buf, line-(lmc*16), 16);
+      memcpy(buf, line-(lmc*15), 15);
     }else{
-      memcpy(buf, line+(lmc*16), 16);
+      memcpy(buf, line+(lmc*15), 15);
     }
     lcd_line(lcd, buf, j);
   }
