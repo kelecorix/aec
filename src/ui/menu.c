@@ -433,6 +433,18 @@ void disp_log(Disp* lcd){
  */
 void disp_sens(){
 
+  char *tokens[12];
+  list_sensors(tokens);
+
+
+
+
+}
+
+/*  Изменение конкретного датчика
+ *
+ */
+void disp_sens_edit(){
 
 
 }

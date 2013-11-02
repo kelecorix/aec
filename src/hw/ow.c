@@ -124,6 +124,7 @@ int list_sensors(char *tokens[]) {
   OWNET_dirlist(gcfg->conn, gcfg->mpoint, dirs);
   //splitString(dirs, tokens, ',');
   for (i=0;i<12;i++){
+    tokens[i] = dirs[i];
     printf("sens %d: %s\n", i, dirs[i]);
   }
   return 0;
