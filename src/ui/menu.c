@@ -430,6 +430,8 @@ void disp_log(Disp* lcd){
 
   for(i=0, j=1; i<lpos+3; i++){
     getline(&line, &len, fp);
+    strip_n(line);
+    strip_t(line);
     if (i>=lpos){
       lines[j-1]=line;
       memcpy(buf, line, 15);
@@ -453,9 +455,9 @@ void disp_log_move(Disp* lcd, int direct){
   for(i=0, j=1;i<3;i++, j++){
     if(direct==0){
       line = lines[i];
-      memcpy(buf, line-(lmc*15), 15);
+      memcpy(buf, line-(lmc*16), 16);
     }else{
-      memcpy(buf, line+(lmc*15), 15);
+      memcpy(buf, line+(lmc*16), 16);
     }
     lcd_line(lcd, buf, j);
   }

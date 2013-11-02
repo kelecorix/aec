@@ -165,6 +165,12 @@ void strip_n(char* s) {
     *pos = '\0';
 }
 
+void strip_t(char* s) {
+  char *pos;
+  if ((pos = strchr(s, '\t')) != NULL)
+    *pos = ' ';
+}
+
 /*
  *
  *

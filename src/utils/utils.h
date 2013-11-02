@@ -14,6 +14,7 @@ char* trim(char *s);
 char* ltrim(char *s);
 char* rtrim(char *s);
 void strip_n(char* s);
+void strip_t(char* s);
 void revS(char str[]);
 void reverse(char s[]);
 void itoa(int n, char s[]);
