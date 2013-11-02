@@ -112,6 +112,27 @@ float get_data(OWNET_HANDLE conn, char* mnt, char* filename, int lim) {
   }
 }
 
+float get_data_by_name(OWNET_HANDLE conn, char* name){
+
+  char *data = NULL;
+  char* fn1 = concat(gcfg->mpoint, name);
+  char* fn2 = concat(fn1, "/temperature");
+
+  int length = OWNET_read(conn, fn2, &data);
+
+  if (length < 0) {
+    // произошла ошибка доступа к серверу
+    printf("OWNET_read error!\n");
+    return -100.f;
+  }
+
+  char *datat = ltrim(data);
+  float d = atof(datat);
+
+  return d;
+
+}
+
 /*
  *
  *
@@ -119,13 +140,13 @@ float get_data(OWNET_HANDLE conn, char* mnt, char* filename, int lim) {
  */
 int list_sensors(char *tokens[]) {
 
-  int i, ret;
+  int i,k;
   char **dirs[3];
-  printf("точка монтирования %s\n", gcfg->mpoint);
+  //printf("точка монтирования %s\n", gcfg->mpoint);
   //OWNET_dirlist(gcfg->conn, NULL, dirs);
-  ret = OWNET_dirlist(gcfg->conn, gcfg->mpoint, dirs);
+  OWNET_dirlist(gcfg->conn, gcfg->mpoint, dirs);
   //printf("возвр %d\n", ret);
-  printf("перед циклом %s \n\n", dirs[0]);
+  //printf("перед циклом %s \n\n", dirs[0]);
   splitString(dirs[0], tokens, ',');
 
   for (i=0;i<12;i++){
@@ -135,10 +156,11 @@ int list_sensors(char *tokens[]) {
 
     if(strstr(tokens[i], "28") != NULL) {
       printf("sens %d: %s\n", i, tokens[i]);
+      k++;
     }
   }
 
-  return 0;
+  return k;//length of tokens array
 }
 
 

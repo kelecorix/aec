@@ -9,5 +9,6 @@ OWNET_HANDLE create_server_conn(char *addr);
 int close_server_conn(OWNET_HANDLE srv);
 float get_data(OWNET_HANDLE conn, char *mnt, char *filename, int lim);
 int list_sensors(char *tokens[]);
+float get_data_by_name(OWNET_HANDLE conn, char* name);
 
 #endif /* OW_H_ */

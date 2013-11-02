@@ -272,12 +272,6 @@ int main(int argc, char *argv[]) {
   else
     log_4("OWFS connection not fins. Fire up OWFS server!\n");
 
-  //
-  char *tokens[12];
-  list_sensors(tokens);
-  return 0;
-  //
-
   sleep(4);
 
   // Выполняем тестирование оборудования

@@ -431,10 +431,32 @@ void disp_log(Disp* lcd){
 /*  Установка датчиков
  *
  */
-void disp_sens(){
+void disp_sens(Disp* lcd){
 
+  int i, j, len;
   char *tokens[12];
-  list_sensors(tokens);
+  // прочитаем датчики доступные на плате
+  len = list_sensors(tokens);
+
+  // попробуем найти эти датчики в конфиге
+
+
+
+
+  lcd_line(lcd, "Лог: ", 0); // Всегда стоит наверху
+//
+//  for(i=0, j=0; i<lpos+3; i++){
+//    getline(&line, &len, fp);
+//    if (i>=lpos){
+//      j++;
+//      lcd_line(lcd, line, j);
+//      }
+//   }
+//
+
+
+
+  get_data_by_name(gcfg->conn, tokens[i]);
 
 
 
@@ -444,7 +466,7 @@ void disp_sens(){
 /*  Изменение конкретного датчика
  *
  */
-void disp_sens_edit(){
+void disp_sens_edit(Disp* lcd){
 
 
 }
@@ -452,14 +474,14 @@ void disp_sens_edit(){
 /*  Установка даты
  *
  */
-void disp_date(){
+void disp_date(Disp* lcd){
 
 
 }
 /*  Установка времени
  *
  */
-void disp_time(){
+void disp_time(Disp* lcd){
 
 
 }
@@ -705,22 +727,23 @@ void select_item(Disp* lcd) {
 
   if (strcmp(nm, "i")){
    //установка датчиков
+    lpos=0;
     smode=2;
-    disp_sens();
+    disp_sens(lcd);
     return;
   }
 
   if (strcmp(nm, "d")){
    //установка даты
     smode=3;
-    disp_date();
+    disp_date(lcd);
     return;
   }
 
   if (strcmp(nm, "t")){
     // установка времени
     smode=4;
-    disp_time();
+    disp_time(lcd);
     return;
   }
 
