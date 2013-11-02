@@ -129,7 +129,7 @@ int list_sensors(char *tokens[]) {
   //sensors_list = dirs;
   for (i=0;i<12;i++){
     tokens[i] = dirs[0][i];
-    printf("sens %d: %s\n", i, dirs[i]);
+    printf("sens %d: %s\n", i, dirs[0][i]);
   }
   return 0;
 }
