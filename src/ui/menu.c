@@ -537,6 +537,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
 
     if(smode==1){
       disp_log_move(lcd, 0);
+      break;
     }
 
     if (mnmode == 0)
