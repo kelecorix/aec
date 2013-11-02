@@ -444,6 +444,9 @@ void disp_log(Disp* lcd){
 
 void disp_log_move(Disp* lcd, int direct){
 
+  if(lmc<0)
+    return;
+
   // direct 0 - left
   // direct 1 - right
   int i,j, shift;
