@@ -129,7 +129,7 @@ int list_sensors(char *tokens[]) {
   splitString(dirs[0], tokens, ',');
 
   for (i=0;i<12;i++){
-    if(strstr(tokens[i]), "alarm"){
+    if(strstr(tokens[i], "alarm")!=NULL){
       break;
     }
 
