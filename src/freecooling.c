@@ -259,12 +259,6 @@ int main(int argc, char *argv[]) {
   printf("обработали опции\n");
   gcfg->logger = create_logger();
 
-  //
-  char *tokens[12];
-  list_sensors(tokens);
-  return 0;
-  //
-
   site = site_new();
   pop_hw();
   printf("создали оборудование\n");
@@ -277,6 +271,12 @@ int main(int argc, char *argv[]) {
     log_4("OWFS connection established!\n");
   else
     log_4("OWFS connection not fins. Fire up OWFS server!\n");
+
+  //
+  char *tokens[12];
+  list_sensors(tokens);
+  return 0;
+  //
 
   sleep(4);
 
