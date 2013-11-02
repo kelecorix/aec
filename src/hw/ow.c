@@ -126,8 +126,9 @@ int list_sensors(char *tokens[]) {
   ret = OWNET_dirlist(gcfg->conn, gcfg->mpoint, dirs);
   printf("возвр %d\n", ret);
   printf("перед циклом\n");
+  //sensors_list = dirs;
   for (i=0;i<12;i++){
-    tokens[i] = dirs[i];
+    tokens[i] = dirs[0][i];
     printf("sens %d: %s\n", i, dirs[i]);
   }
   return 0;
