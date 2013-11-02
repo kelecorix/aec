@@ -458,8 +458,8 @@ void disp_log_move(Disp* lcd, int direct){
   sprintf (out, "Лог: cтр. %d %s %d", lpage, symb, lmc);
   lcd_line(lcd, out, 0); // Всегда стоит наверху
   for(i=0, j=1;i<3;i++, j++){
+    line = lines[i];
     if(direct==0){
-      line = lines[i];
       memcpy(buf, line-(lmc*16), 16);
     }else{
       memcpy(buf, line+(lmc*16), 16);
