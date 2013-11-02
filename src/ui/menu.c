@@ -430,8 +430,7 @@ void disp_log(Disp* lcd){
 
   for(i=0, j=1; i<lpos+3; i++){
     getline(&line, &len, fp);
-    strip_n(line);
-    strip_t(line);
+    strip_log(line);
     if (i>=lpos){
       lines[j-1]=line;
       memcpy(buf, line, 15);

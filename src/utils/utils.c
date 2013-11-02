@@ -171,6 +171,29 @@ void strip_t(char* s) {
     *pos = ' ';
 }
 
+void strip_bar(char* s) {
+  char *pos;
+  if ((pos = strchr(s, '|')) != NULL)
+    *pos = ' ';
+}
+
+void strip_log(char* s){
+
+  char *pos;
+  if ((pos = strchr(s, '\n')) != NULL)
+    *pos = ' ';
+
+  if ((pos = strchr(s, '\n')) != NULL)
+    *pos = ' ';
+
+  if ((pos = strchr(s, '|')) != NULL)
+      *pos = ' ';
+
+  if ((pos = strchr(s, '*')) != NULL)
+    *pos = "";
+
+}
+
 /*
  *
  *
