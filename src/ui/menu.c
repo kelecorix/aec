@@ -443,10 +443,11 @@ void disp_log_move(Disp* lcd, int direct){
   int i;
   char *buf[16];
   for(i=0;i<3;i++){
-    if(direct==0)
+    if(direct==0){
       memcpy(buf, lines[i]-(lmc*16), 16);
-    else
+    }else{
       memcpy(buf, lines[i]+(lmc*16), 16);
+    }
     lcd_line(lcd, buf, i);
   }
 
@@ -536,6 +537,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
     }
 
     if(smode==1){
+      lmc--;
       disp_log_move(lcd, 0);
       break;
     }
@@ -572,6 +574,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
       break;
 
     if(smode==1){
+      lmc++;
       disp_log_move(lcd, 1);
       break;
     }
@@ -611,7 +614,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
 
     if(smode==1){
       //в режиме просмотра лога
-      lpos=lpos+3;
+      lpos=lpos-3;
       disp_log(lcd);
       break;
     }
@@ -754,6 +757,7 @@ void select_item(Disp* lcd) {
     //показ лога
     lpos=0;
     smode=1;
+    lmc=1;
     disp_log(lcd);
     return;
   }
