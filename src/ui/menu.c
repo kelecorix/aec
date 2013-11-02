@@ -412,7 +412,7 @@ void disp_log(Disp* lcd){
   char *out[32];
 
   reset(lcd);
-  int i, j, rd;
+  int i, k, j, rd;
   //char *z, *out;
 
   FILE *fp;
@@ -428,14 +428,15 @@ void disp_log(Disp* lcd){
   lcd_line(lcd, out, 0); // Всегда стоит наверху
 
 
-  for(i=0, j=1; i<lpos+3; i++){
+  for(i=0, j=1, k=0; i<lpos+3; i++){
     getline(&line, &len, fp);
     strip_log(line);
     if (i>=lpos){
-      lines[j-1]=line;
-      memcpy(buf, line, 15);
+      lines[k]=line;
+      memcpy(buf, line, 32);
       lcd_line(lcd, buf, j);
       j++;
+      k++;
     }
   }
   fclose(fp);
@@ -459,9 +460,9 @@ void disp_log_move(Disp* lcd, int direct){
   for(i=0, j=1;i<3;i++, j++){
     line = lines[i];
     if(direct==0){
-      memcpy(buf, line-(lmc*16), 16);
+      memcpy(buf, line-(lmc*32), 32);
     }else{
-      memcpy(buf, line+(lmc*16), 16);
+      memcpy(buf, line+(lmc*32), 32);
     }
     lcd_line(lcd, buf, j);
   }
