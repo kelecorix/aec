@@ -572,6 +572,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
 
     if(smode==1){
       disp_log_move(lcd, 1);
+      break;
     }
 
     if (mnmode == 0) {
@@ -611,6 +612,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
       //в режиме просмотра лога
       lpos=lpos+3;
       disp_log(lcd);
+      break;
     }
 
     if (mnmode == 1) {
@@ -655,6 +657,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
       //в режиме просмотра лога
       lpos=lpos+3;
       disp_log(lcd);
+      break;
     }
 
     if (mnmode == 1) {
@@ -687,6 +690,9 @@ void onKeyClicked(Disp* lcd, int key_code) {
       // TODO: вернуться в предыдущее меню
       disp_item(lcd);
     }
+
+    if(smode==1)
+      smode=0;
 
     printf("Меню - %s %d\n", menu->curr->childs[chld + pos]->text, menu->curr->childs[chld + pos]->lenght);
     if (isLeaf(menu->curr->childs[chld + pos])) {
