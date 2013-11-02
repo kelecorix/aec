@@ -409,10 +409,11 @@ void disp_log(Disp* lcd){
   int cpos;
 
   char *buf[16]; // буфер вывода
+  char *out[16];
 
   reset(lcd);
   int i, j, rd;
-  char *z, *out;
+  //char *z, *out;
 
   FILE *fp;
   char *line = NULL;
@@ -423,7 +424,7 @@ void disp_log(Disp* lcd){
   if (fp == NULL)
     exit(EXIT_FAILURE);
 
-  sprintf (out, "Лог: cтраница %d", lpage);
+  sprintf (out, "Лог: cтр. %d", lpage);
   lcd_line(lcd, out, 0); // Всегда стоит наверху
   lpage++;
 
@@ -445,9 +446,9 @@ void disp_log_move(Disp* lcd, int direct){
   // direct 1 - right
   int i,j;
   char *buf[16];
+  char *out[16];
   char *line;
-  char *out;
-  sprintf (out, "Лог: cтраница %d", lpage);
+  sprintf (out, "Лог: cтр. %d", lpage);
   lcd_line(lcd, out, 0); // Всегда стоит наверху
   for(i=0, j=1;i<3;i++, j++){
     if(direct==0){
