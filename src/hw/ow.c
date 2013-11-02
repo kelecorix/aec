@@ -120,7 +120,7 @@ float get_data(OWNET_HANDLE conn, char* mnt, char* filename, int lim) {
 int list_sensors(char *tokens[]) {
 
   int i, ret;
-  char **dirs;
+  char **dirs[3];
   printf("точка монтирования %s\n", gcfg->mpoint);
   //OWNET_dirlist(gcfg->conn, NULL, dirs);
   ret = OWNET_dirlist(gcfg->conn, gcfg->mpoint, dirs);
