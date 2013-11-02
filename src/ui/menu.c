@@ -424,10 +424,10 @@ void disp_log(Disp* lcd){
 
   lcd_line(lcd, "Лог: ", 0); // Всегда стоит наверху
 
-  for(i=0, j=0; i<lpos+3; i++){
+  for(i=0, j=1; i<lpos+3; i++){
     getline(&line, &len, fp);
     if (i>=lpos){
-      lines[j]=line;
+      lines[j-1]=line;
       memcpy(buf, line, 16);
       j++;
       lcd_line(lcd, buf, j);
@@ -440,15 +440,17 @@ void disp_log_move(Disp* lcd, int direct){
 
   // direct 0 - left
   // direct 1 - right
-  int i;
+  int i,j;
   char *buf[16];
-  for(i=0;i<3;i++){
+  char *line;
+  for(i=0, j=1;i<3;i++, j++){
     if(direct==0){
-      memcpy(buf, lines[i]-(lmc*16), 16);
+      line = lines[i];
+      memcpy(buf, line-(lmc*16), 16);
     }else{
-      memcpy(buf, lines[i]+(lmc*16), 16);
+      memcpy(buf, line+(lmc*16), 16);
     }
-    lcd_line(lcd, buf, i);
+    lcd_line(lcd, buf, j);
   }
 
 }
@@ -757,7 +759,7 @@ void select_item(Disp* lcd) {
     //показ лога
     lpos=0;
     smode=1;
-    lmc=1;
+    lmc=0;
     disp_log(lcd);
     return;
   }
