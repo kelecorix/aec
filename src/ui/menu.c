@@ -426,7 +426,7 @@ void disp_log(Disp* lcd){
 
   sprintf (out, "Лог: cтр. %d", lpage);
   lcd_line(lcd, out, 0); // Всегда стоит наверху
-  lpage++;
+
 
   for(i=0, j=1; i<lpos+3; i++){
     getline(&line, &len, fp);
@@ -624,6 +624,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if(smode==1){
       //в режиме просмотра лога
       lpos=lpos-3;
+      lpage--;
       disp_log(lcd);
       break;
     }
@@ -669,6 +670,7 @@ void onKeyClicked(Disp* lcd, int key_code) {
     if(smode==1){
       //в режиме просмотра лога
       lpos=lpos+3;
+      lpage++;
       disp_log(lcd);
       break;
     }
