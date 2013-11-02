@@ -77,6 +77,7 @@ void disp_sens(Disp* lcd);
 void disp_sens_edit(Disp* lcd);
 void disp_date(Disp* lcd);
 void disp_time(Disp* lcd);
+void disp_log_move(Disp* lcd, int direct);
 void change_value();
 void select_item();
 void onKeyClicked(Disp* lcd, int key_code);

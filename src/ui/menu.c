@@ -24,6 +24,9 @@ int omode; // Режим вывода
 int pre_pos;
 int pre_chld;
 
+char *lines[3]; // массив полных линий для лога
+int lmc;
+
 Menu* menu;
 OutNode** outs;
 
@@ -403,7 +406,8 @@ void disp_log(Disp* lcd){
   printf("режим вывода лога\n");
 
   int cpos;
-  char *lines[3];
+
+  char *buf[16]; // буфер вывода
 
   reset(lcd);
   int i, j, rd;
@@ -423,11 +427,29 @@ void disp_log(Disp* lcd){
   for(i=0, j=0; i<lpos+3; i++){
     getline(&line, &len, fp);
     if (i>=lpos){
+      lines[j]=line;
+      memcpy(buf, line, 16);
       j++;
-      lcd_line(lcd, line, j);
+      lcd_line(lcd, buf, j);
     }
   }
   fclose(fp);
+}
+
+void disp_log_move(Disp* lcd, int direct){
+
+  // direct 0 - left
+  // direct 1 - right
+  int i;
+  char *buf[16];
+  for(i=0;i<3;i++){
+    if(direct==0)
+      memcpy(buf, lines[i]-(lmc*16), 16);
+    else
+      memcpy(buf, lines[i]+(lmc*16), 16);
+    lcd_line(lcd, buf, i);
+  }
+
 }
 
 /*  Установка датчиков
@@ -513,6 +535,10 @@ void onKeyClicked(Disp* lcd, int key_code) {
       break;
     }
 
+    if(smode==1){
+      disp_log_move(lcd, 0);
+    }
+
     if (mnmode == 0)
       break;
 
@@ -543,6 +569,10 @@ void onKeyClicked(Disp* lcd, int key_code) {
 
     if(emode==1)
       break;
+
+    if(smode==1){
+      disp_log_move(lcd, 1);
+    }
 
     if (mnmode == 0) {
       mnmode = 1;
