@@ -408,8 +408,8 @@ void disp_log(Disp* lcd){
 
   int cpos;
 
-  char *buf[16]; // буфер вывода
-  char *out[16];
+  char *buf[32]; // буфер вывода
+  char *out[32];
 
   reset(lcd);
   int i, j, rd;
@@ -446,8 +446,8 @@ void disp_log_move(Disp* lcd, int direct){
   // direct 0 - left
   // direct 1 - right
   int i,j, shift;
-  char *buf[16];
-  char *out[16];
+  char *buf[32];
+  char *out[32];
   char *line, *symb;
   if(direct==0)
     symb="<";
