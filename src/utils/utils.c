@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <unistd.h>
 #include "utils.h"
 
 /*
@@ -283,5 +284,4 @@ void itoa(int n, char s[]) {
   s[i] = '\0';
   reverse(s);
 }
-
 

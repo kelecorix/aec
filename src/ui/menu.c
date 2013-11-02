@@ -12,9 +12,11 @@
 #include "menu.h"
 
 int mnmode; // режим меню или вывод экрана на дисплей
-int emode;
+int emode;  // режим редактирования
+int smode;  // спец режим: 1,2,3,4 - режим лога, режим уст. датчиков, режим уст. даты, режим уст. времени
 int mval;
 int pos;   // текущая позиция от 1 до 3
+int lpos;  // текущая позиция лога
 int chld;  // id текущего нода
 int entr;
 int nempty;
@@ -398,13 +400,12 @@ void disp_item_edit(Disp* lcd, int num) {
 
 void disp_log(Disp* lcd){
 
+  int cpos;
+  char *lines[3];
+
   reset(lcd);
-  int i, rd;
+  int i, j, rd;
   char *z, *out;
-
-  lcd_line(lcd, "Лог: ", 0);
-
-  // выводим по 3 строки
 
   FILE *fp;
   char *line = NULL;
@@ -415,27 +416,40 @@ void disp_log(Disp* lcd){
   if (fp == NULL)
     exit(EXIT_FAILURE);
 
+  lcd_line(lcd, "Лог: ", 0); // Всегда стоит наверху
 
-  while ((read = getline(&line, &len, fp)) != -1) {
-
-    if (i == pos) {
-      z = ">";
-    } else
-      z = " ";
-
-    out = concat(z, "");
-    lcd_line(lcd, out, i + 1);
-
-
-
-
-
-
-    // обнулим счетчик вывода строка
-    if (rd==3)
-      rd=0;
-
+  for(i=0, j=0; i<lpos+3; i++){
+    getline(&line, &len, fp);
+    if (i>=lpos){
+      j++;
+      lcd_line(lcd, line, j);
+    }
   }
+  fclose(fp);
+}
+
+/*  Установка датчиков
+ *
+ */
+void disp_sens(){
+
+
+
+}
+
+/*  Установка даты
+ *
+ */
+void disp_date(){
+
+
+}
+/*  Установка времени
+ *
+ */
+void disp_time(){
+
+
 }
 
 void clear_log(){
@@ -527,6 +541,12 @@ void onKeyClicked(Disp* lcd, int key_code) {
       break;
     }
 
+    if(smode==1){
+      //в режиме просмотра лога
+      lpos=lpos+3;
+      disp_log(lcd);
+    }
+
     if (mnmode == 1) {
 
       if (pos == 0) {
@@ -563,6 +583,12 @@ void onKeyClicked(Disp* lcd, int key_code) {
       mval--;
       disp_item_edit(lcd, mval);
       break;
+    }
+
+    if(smode==1){
+      //в режиме просмотра лога
+      lpos=lpos+3;
+      disp_log(lcd);
     }
 
     if (mnmode == 1) {
@@ -647,32 +673,57 @@ void change_value(int direct) {
 void select_item(Disp* lcd) {
   printf("установим режим выбора\n");
 
+  // Переходим в специфические режимы
+  //
+  char *nm = menu->curr->childs[chld + pos]->cn;
+
+  if (strcmp(nm, "l")){
+    //показ лога
+    lpos=0;
+    smode=1;
+    disp_log(lcd);
+    return;
+  }
+
+  if (strcmp(nm, "cl")){
+    //очистка лога
+    clear_log();
+    return;
+  }
+
+  if (strcmp(nm, "i")){
+   //установка датчиков
+    smode=2;
+    disp_sens();
+    return;
+  }
+
+  if (strcmp(nm, "d")){
+   //установка даты
+    smode=3;
+    disp_date();
+    return;
+  }
+
+  if (strcmp(nm, "t")){
+    // установка времени
+    smode=4;
+    disp_time();
+    return;
+  }
+
   if (emode == 1) {
     // сохраняем значения выходим обратно
     emode = 0;
     disp_item(lcd);
   } else {
-
-// TODO: Переходим в специфические режимы
-//
-
-//  if (strcmp(node->cn, "l"))
-//    node->val = -100;
-//
-//  if (strcmp(node->cn, "cl"))
-//    node->val = -200;
-//
-//  if (strcmp(node->cn, "i"))
-//    node->val = -300;
-//
-//  if (strcmp(node->cn, "d"))
-//    node->val = -400;
-//
-//  if (strcmp(node->cn, "t"))
-//    node->val = -500;
-
     emode = 1;
     mval = menu->curr->childs[chld + pos]->val;
     disp_item_edit(lcd, mval);
   }
+
+
+
+
+
 }

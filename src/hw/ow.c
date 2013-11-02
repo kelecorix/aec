@@ -117,12 +117,15 @@ float get_data(OWNET_HANDLE conn, char* mnt, char* filename, int lim) {
  *
  *
  */
-int list_sensors(Site* site, char *tokens[]) {
+int list_sensors(char *tokens[]) {
 
-//  char *dirs = NULL;
-//  OWNET_dirlist(site->conn, site->mount_point, dirs);
-//  splitString(dirs, tokens, ',');
-//
+  int i;
+  char **dirs = NULL;
+  OWNET_dirlist(gcfg->conn, gcfg->mpoint, dirs);
+  //splitString(dirs, tokens, ',');
+  for (i=0;i<12;i++){
+    printf("sens %d: %s\n", i, dirs[i]);
+  }
   return 0;
 }
 
