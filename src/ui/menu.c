@@ -446,11 +446,16 @@ void disp_log_move(Disp* lcd, int direct){
 
   // direct 0 - left
   // direct 1 - right
-  int i,j;
+  int i,j, shift;
   char *buf[16];
   char *out[16];
-  char *line;
-  sprintf (out, "Лог: cтр. %d", lpage);
+  char *line, *symb;
+  if(direct==0)
+    symb="<";
+  else
+    symb=">";
+
+  sprintf (out, "Лог: cтр. %d %s %d", lpage, symb, lmc);
   lcd_line(lcd, out, 0); // Всегда стоит наверху
   for(i=0, j=1;i<3;i++, j++){
     if(direct==0){
