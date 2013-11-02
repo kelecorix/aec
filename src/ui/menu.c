@@ -400,6 +400,8 @@ void disp_item_edit(Disp* lcd, int num) {
 
 void disp_log(Disp* lcd){
 
+  printf("режим вывода лога\n");
+
   int cpos;
   char *lines[3];
 
